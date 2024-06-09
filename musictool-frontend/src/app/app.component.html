@@ -1,0 +1,21 @@
+<audio #audioPlayer></audio>
+<div class="flex h-screen">
+
+  <div class="m-auto flex flex-wrap flex-col space-y-5 content-center">
+    <div>Title: {{songTitle}}</div>
+    <div>Artist: {{songArtist}}</div>
+    <div>Album: {{songAblum}}</div>
+    <div>Album Art URL: {{songArtUrl}}</div>
+
+    <img *ngIf="songArtUrl" [src]="songArtUrl">
+
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      (click)="playAudio()">▶️ PLAY</button>
+    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+      (click)="pauseAudio()">⏸️ PAUSE </button>
+
+    <pre class="whitespace-pre-wrap">{{mediaSessionState | json}}</pre>
+  </div>
+</div>
+
+<router-outlet />
