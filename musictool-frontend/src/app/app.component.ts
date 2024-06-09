@@ -59,10 +59,16 @@ export class AppComponent {
     };
   }
 
+  getMusic() {
+    this.http.get(`${this.apiRoot}/music_list`).subscribe(musicList => {
+      console.log(musicList)
+    })
+  }
+
   async playAudio() {
     this.audioPlayerElement.src = `/api/download/${this.songName}`;
     await this.audioPlayerElement.play();
-    await this.updateMetadata();
+    this.updateMetadata();
 
   }
 
@@ -70,21 +76,21 @@ export class AppComponent {
     this.audioPlayerElement.pause()
   }
 
-  async updateMetadata() {
-    const track = await firstValueFrom(this.http.get<{ title: string, artist: string, album: string, artwork: MediaImage[] }>(`${this.apiRoot}/media_metadata/${this.songName}`, {}))
+  updateMetadata() {
+    this.http.get<{ title: string, artist: string, album: string, artwork: MediaImage[] }>(`${this.apiRoot}/media_metadata/${this.songName}`).subscribe(track => {
+      console.log('Playing ' + track.title + ' track...');
+      console.log(navigator.mediaSession)
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: track.title,
+        artist: track.artist,
+        album: track.album,
+        artwork: track.artwork
+      });
+      console.log(navigator.mediaSession)
 
-    console.log('Playing ' + track.title + ' track...');
-    console.log(navigator.mediaSession)
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: track.title,
-      artist: track.artist,
-      album: track.album,
-      artwork: track.artwork
-    });
-    console.log(navigator.mediaSession)
-
-    // Media is loaded, set the duration.
-    this.updatePositionState();
+      // Media is loaded, set the duration.
+      this.updatePositionState();
+    })
   }
 
   /* Position state (supported since Chrome 81) */

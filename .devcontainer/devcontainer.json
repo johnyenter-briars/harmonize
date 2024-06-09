@@ -22,7 +22,8 @@
         "vscode": {
             "extensions": [
                 "charliermarsh.ruff",
-                "Angular.ng-template"
+                "Angular.ng-template",
+                "bradlc.vscode-tailwindcss"
             ],
             "settings": {
                 "python.defaultInterpreterPath": ".venv/bin/python",

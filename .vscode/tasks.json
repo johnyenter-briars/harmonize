@@ -17,7 +17,7 @@
         {
             "label": "api-dev",
             "type": "shell",
-            "command": "fastapi dev",
+            "command": "fastapi dev api/api.py",
             "presentation": {
                 "group": "development"
             }
@@ -45,7 +45,7 @@
         {
             "label": "api-dev-public",
             "type": "shell",
-            "command": "fastapi dev --host 0.0.0.0",
+            "command": "fastapi dev api/api.py --host 0.0.0.0",
             "presentation": {
                 "group": "development"
             }

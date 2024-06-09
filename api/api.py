@@ -28,6 +28,15 @@ def root() -> Literal["Hello world"]:
     return "Hello world"
 
 
+@app.get("/list_music")
+def list_music() -> dict[str, list[str]]:
+    albums: dict[str, list[str]] = {}
+    for item in MUSIC_ROOT.iterdir():
+        if item.is_dir():
+            albums[item.name] = [song.name for song in item.iterdir()]
+    return albums
+
+
 @app.get("/stream/{filename}")
 def stream(filename: str) -> StreamingResponse:
     return StreamingResponse(
