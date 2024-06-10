@@ -4,9 +4,6 @@
     "tasks": [
         {
             "label": "Run Development",
-            "runOptions": {
-                "runOn": "folderOpen"
-            },
             "dependsOrder": "parallel",
             "dependsOn": [
                 "api-dev",
@@ -20,7 +17,8 @@
             "command": "fastapi dev api/api.py",
             "presentation": {
                 "group": "development"
-            }
+            },
+            "problemMatcher": []
         },
         {
             "label": "frontend-dev",
@@ -28,13 +26,11 @@
             "command": "cd musictool-frontend; npx ng serve",
             "presentation": {
                 "group": "development"
-            }
+            },
+            "problemMatcher": []
         },
         {
             "label": "Run Development (Public)",
-            "runOptions": {
-                "runOn": "folderOpen"
-            },
             "dependsOrder": "parallel",
             "dependsOn": [
                 "api-dev-public",
@@ -48,7 +44,8 @@
             "command": "fastapi dev api/api.py --host 0.0.0.0",
             "presentation": {
                 "group": "development"
-            }
+            },
+            "problemMatcher": []
         },
         {
             "label": "frontend-dev-public",
@@ -56,7 +53,8 @@
             "command": "cd musictool-frontend; npx ng serve --host 0.0.0.0",
             "presentation": {
                 "group": "development"
-            }
+            },
+            "problemMatcher": []
         }
     ]
 }

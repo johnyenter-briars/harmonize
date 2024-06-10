@@ -1,2 +1,2 @@
-fastapi
-mutagen
+fastapi==0.111.0
+mutagen==1.47.0
