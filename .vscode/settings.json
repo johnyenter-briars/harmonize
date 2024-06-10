@@ -32,5 +32,6 @@
     "editor.defaultFormatter": "charliermarsh.ruff",
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
-    }
+    },
+    "python.terminal.activateEnvInCurrentTerminal": true
 }
