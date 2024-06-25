@@ -32,5 +32,7 @@
 	<array>
 		<string>audio</string>
 	</array>
+	<key>CFBundleIdentifier</key>
+	<string>com.companyname.torrejams</string>
 </dict>
 </plist>
