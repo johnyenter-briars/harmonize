@@ -65,7 +65,7 @@ def media_metadata(filename: str) -> MediaMetadata:
     temp_albumart_name = f"{filename}_{datetime.datetime.now().timestamp()}.png"
     Path(TMP_ALBUM_ART_DIR / temp_albumart_name).write_bytes(pict)
 
-    src_url = f"http://205.178.113.247:8000/album_art/{temp_albumart_name}"
+    src_url = f"album_art/{temp_albumart_name}"
 
     return {
         "title": get_str_tag(tags, "title"),
