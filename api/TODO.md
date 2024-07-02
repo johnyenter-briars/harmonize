@@ -9,6 +9,7 @@
 - [ ] Implement https + private keys
 
 ### Back End
+- [ ] Test initial manual deployment on server
 - [ ] Integrate with QBT
 - [ ] Integrate with youtube-dl
 - [ ] Integrate media art with youtube-dl
