@@ -3,3 +3,5 @@ obj/
 bin/
 *.user
 .vs/
+*.mp4
+*.info.json
