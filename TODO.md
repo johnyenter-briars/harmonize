@@ -5,6 +5,9 @@
 - [ ] Search media
 - [ ] Stream any media
 - [ ] Search magnet links across different search platforms
+- [ ] search youtube dl
+- [ ] search youtube dl in different regions
+- [ ] option to integration with custom media system / fullsail
 - [ ] Option to download
 - [ ] Implement https + private keys
 

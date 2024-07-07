@@ -3,7 +3,6 @@
         "source.fixAll": "explicit"
     },
     "python.analysis.typeCheckingMode": "basic",
-    "ruff.nativeServer": true,
     "[python]": {
         "diffEditor.ignoreTrimWhitespace": false,
         "editor.formatOnType": true,
@@ -29,7 +28,6 @@
     "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
     "typescript.inlayHints.enumMemberValues.enabled": true,
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "charliermarsh.ruff",
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
