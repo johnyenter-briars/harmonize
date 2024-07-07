@@ -89,7 +89,6 @@ namespace Harmonize
             var domainName = PreferenceManager.GetDomainName();
             try
             {
-                var foo = $"http://{domainName}:{PORT}/metadata/media/{fileName}";
                 using var httpClient = new HttpClient();
                 var response = await httpClient.GetAsync(foo);
                 response.EnsureSuccessStatusCode();
@@ -99,8 +98,6 @@ namespace Harmonize
                 {
                     string trackURL = $"http://{domainName}:{PORT}/stream/{fileName}";
                     var mediaMetadata = MediaMetaData.FromJson(responseStr);
-
-                    var bar = $"http://{domainName}/{mediaMetadata.Artwork[0].Src}";
 
                     TestMediaElement.ShouldShowPlaybackControls = true;
                     TestMediaElement.MetadataArtist = mediaMetadata.Artist;
