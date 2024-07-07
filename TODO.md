@@ -4,6 +4,7 @@
 - [ ] List media 
 - [ ] Search media
 - [ ] Stream any media
+- [ ] Support fast forwarding
 - [ ] Search magnet links across different search platforms
 - [ ] search youtube dl
 - [ ] search youtube dl in different regions
@@ -12,6 +13,7 @@
 - [ ] Implement https + private keys
 
 ### Back End
+- [ ] Support fast forwarding
 - [ ] Test initial manual deployment on server
 - [ ] Integrate with QBT
 - [ ] Integrate with youtube-dl

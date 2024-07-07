@@ -32,6 +32,8 @@ namespace Harmonize
 
         [JsonProperty("type")]
         public required string Type { get; set; }
+        [JsonProperty("name")]
+        public required string Name { get; set; }
     }
 
     public partial class MediaMetaData
@@ -58,8 +60,7 @@ namespace Harmonize
     }
     public partial class MainPage : ContentPage
     {
-        readonly string BaseURL = $"http://192.168.0.2:8000";
-
+        const int PORT = 8000;
         public MainPage()
         {
             InitializeComponent();
@@ -83,24 +84,28 @@ namespace Harmonize
             throw new Exception("No network adapters with an IPv4 address in the system!");
         }
 
-        private async Task GetMusicAndMetadataAsync(string songFile)
+        private async Task GetMusicAndMetadataAsync(string fileName)
         {
+            var domainName = PreferenceManager.GetDomainName();
             try
             {
+                var foo = $"http://{domainName}:{PORT}/metadata/media/{fileName}";
                 using var httpClient = new HttpClient();
-                var response = await httpClient.GetAsync($"{BaseURL}/media_metadata/{songFile}");
+                var response = await httpClient.GetAsync(foo);
                 response.EnsureSuccessStatusCode();
 
                 string? responseStr = await response.Content.ReadAsStringAsync();
                 if (responseStr != null)
                 {
-                    string trackURL = $"{BaseURL}/stream/{songFile}";
+                    string trackURL = $"http://{domainName}:{PORT}/stream/{fileName}";
                     var mediaMetadata = MediaMetaData.FromJson(responseStr);
+
+                    var bar = $"http://{domainName}/{mediaMetadata.Artwork[0].Src}";
 
                     TestMediaElement.ShouldShowPlaybackControls = true;
                     TestMediaElement.MetadataArtist = mediaMetadata.Artist;
                     TestMediaElement.MetadataTitle = mediaMetadata.Title;
-                    TestMediaElement.MetadataArtworkUrl = $"{BaseURL}/{mediaMetadata.Artwork[0].Src}";
+                    TestMediaElement.MetadataArtworkUrl = $"http://{domainName}:{PORT}/{mediaMetadata.Artwork[0].Src}";
                     TestMediaElement.Source = MediaSource.FromUri(trackURL);
 
                     await DisplayAlert("Success", $"{responseStr}", "OK");

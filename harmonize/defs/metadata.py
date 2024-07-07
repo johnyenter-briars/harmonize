@@ -5,6 +5,7 @@ class ArtworkMetadata(TypedDict):
     src: str
     sizes: str
     type: str
+    name: str
 
 
 class MediaMetadata(TypedDict):

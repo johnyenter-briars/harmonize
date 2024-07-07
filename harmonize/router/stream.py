@@ -2,7 +2,6 @@ from pathlib import Path
 from typing import Any, Generator
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
-
 from ..const import MUSIC_ROOT
 
 router = APIRouter()

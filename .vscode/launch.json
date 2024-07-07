@@ -5,10 +5,12 @@
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
-            "cwd": "${workspaceFolder}/api",
+            "cwd": "${workspaceFolder}",
             "args": [
-                "api:app",
-                "--reload"
+                "harmonize.main:app",
+                "--reload",
+                "--host",
+                "0.0.0.0"
             ],
             "jinja": true
         }
