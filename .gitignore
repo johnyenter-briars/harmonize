@@ -8,3 +8,4 @@ bin/
 *.m4a
 *.info.json
 *.png
+.venv/

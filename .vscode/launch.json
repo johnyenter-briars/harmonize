@@ -5,9 +5,10 @@
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/harmonize",
+            "python": "${command:python.interpreterPath}",
             "args": [
-                "harmonize.main:app",
+                "main:app",
                 "--reload",
                 "--host",
                 "0.0.0.0"

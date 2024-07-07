@@ -2,5 +2,3 @@ fastapi==0.111.0
 mutagen==1.47.0
 yt-dlp==2024.7.1
 youtube-search-python==1.6.6
-ffprobe==0.5
-ffmpeg==1.4
