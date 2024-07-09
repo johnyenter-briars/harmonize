@@ -1,4 +1,6 @@
 FROM python:3.12
+
+COPY ./music /code/music
  
 ADD --chmod=755 https://astral.sh/uv/install.sh /install.sh
 
