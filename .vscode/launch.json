@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "Python Debugger: FastAPI",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "cwd": "${workspaceFolder}/harmonize",
+            "python": "${command:python.interpreterPath}",
+            "args": [
+                "main:app",
+                "--reload",
+                "--host",
+                "0.0.0.0"
+            ],
+            "jinja": true
+        }
+    ]
+}

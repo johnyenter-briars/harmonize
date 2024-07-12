@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ViewModel="clr-namespace:Harmonize.ViewModel"
+             x:DataType="{x:Type ViewModel:SettingsViewModel}"
+             x:Class="Harmonize.View.SettingsPage">
+    <StackLayout Padding="20">
+
+        <Label 
+                   Text="{Binding BuildVersion}" 
+                   FontSize="Medium" 
+                   VerticalOptions="Center" 
+                   Margin="0,10,0,0"/>
+
+        <Label Text="Domain Name" 
+                   FontSize="Medium" 
+                   VerticalOptions="Center" 
+                   Margin="0,10,0,0"/>
+
+        <Entry x:Name="DomainNameEntriy" 
+                   Placeholder="Enter the domain name" 
+                   Text="{Binding DomainName}"
+                   VerticalOptions="Center"/>
+
+        <Button Text="Save Changes" 
+                    VerticalOptions="EndAndExpand" 
+                    HorizontalOptions="FillAndExpand"
+                    Command="{Binding SaveChangesCommand}"
+                    Clicked="ScaleButton"
+                    Margin="0,30,0,0"/>
+
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Harmonize.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Harmonize"
+    xmlns:view="clr-namespace:Harmonize.View"
+    Shell.FlyoutBehavior="Flyout"
+    Shell.BackgroundColor="{StaticResource PrimaryDark}"
+    FlyoutBackgroundColor="{StaticResource PrimaryDark}"
+    Shell.FlyoutWidth="50"
+    Title="Harmonize">
+
+    <FlyoutItem 
+                Title="Main Page" 
+                Icon="dotnet_bot.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Home"
+                ContentTemplate="{DataTemplate local:MainPage}"
+                Route="MainPage" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
+                Title="Settings" 
+                Icon="dotnet_bot.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Settings"
+                ContentTemplate="{DataTemplate view:SettingsPage}"
+                Route="Settings" />
+        </Tab>
+    </FlyoutItem>
+
+</Shell>

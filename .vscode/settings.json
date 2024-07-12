@@ -3,12 +3,11 @@
         "source.fixAll": "explicit"
     },
     "python.analysis.typeCheckingMode": "basic",
-    "ruff.nativeServer": true,
     "[python]": {
         "diffEditor.ignoreTrimWhitespace": false,
         "editor.formatOnType": true,
         "editor.wordBasedSuggestions": "off",
-        "editor.defaultFormatter": "charliermarsh.ruff"
+        "editor.defaultFormatter": "ms-python.autopep8"
     },
     "files.associations": {
         "*.scss": "tailwindcss"
@@ -29,9 +28,13 @@
     "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
     "typescript.inlayHints.enumMemberValues.enabled": true,
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "charliermarsh.ruff",
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
-    "python.terminal.activateEnvInCurrentTerminal": true
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.testing.pytestArgs": [
+        "test"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }
