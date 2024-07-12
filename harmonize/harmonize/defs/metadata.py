@@ -16,6 +16,12 @@ class ArtworkMetadata(TypedDict):
     name: str
 
 
+class HarmonizeThumbnails(TypedDict):
+    xl: str
+    large: str
+    small: str
+
+
 class MediaMetadata(TypedDict):
     title: str
     artist: str
