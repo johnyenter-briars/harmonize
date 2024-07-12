@@ -6,7 +6,7 @@ from fastapi.responses import FileResponse
 import yt_dlp
 from harmonize.const import MUSIC_ROOT_LEGACY
 from harmonize.defs.media import MediaDownload, MediaElement
-from harmonize.defs.job import Job
+from harmonize.defs.job import Job, Status
 from harmonize.job import start_job
 
 router = APIRouter()
@@ -52,7 +52,7 @@ def _download_youtube(id: str, job_info: Job):
         error_code = ydl.download([url])
     
 
-    job_info["status"] = 1
+    job_info["status"] = Status.SUCCEEDED
 
 
 

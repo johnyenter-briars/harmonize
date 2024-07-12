@@ -3,7 +3,7 @@ import asyncio
 import threading
 from typing import Any, Awaitable, Callable, Never, Tuple
 import uuid
-from harmonize.defs.job import Job
+from harmonize.defs.job import Job, Status
 
 Jobs: dict[uuid.UUID, Tuple[threading.Thread, Job]] = {}
 async def send_file_to_laptop(file_name_with_dir):  
@@ -15,7 +15,7 @@ async def start_job(job, input_args:Tuple[str]) -> Job:
         "id": uuid.uuid4(),
         "description": "idk",
         "started_on": datetime.datetime.now(),
-        "status": 0
+        "status": Status.RUNNING
     }
 
     args = input_args + (job_info, )
