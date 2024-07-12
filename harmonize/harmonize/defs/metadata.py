@@ -1,5 +1,13 @@
 from typing import TypedDict
 
+class ApicData:
+    data: bytes
+
+
+class HarmonizeThumbnail(TypedDict):
+    xl: str
+    large: str
+    small: str
 
 class ArtworkMetadata(TypedDict):
     src: str
@@ -12,4 +20,4 @@ class MediaMetadata(TypedDict):
     title: str
     artist: str
     album: str
-    artwork: list[ArtworkMetadata]
+    artwork: HarmonizeThumbnail
