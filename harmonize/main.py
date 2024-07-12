@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from harmonize.router import download, metadata, search, stream, list
+from harmonize.router import download, metadata, search, stream, list, job
 
 app = FastAPI()
 
@@ -8,6 +8,7 @@ app.include_router(list.router)
 app.include_router(metadata.router)
 app.include_router(search.router)
 app.include_router(stream.router)
+app.include_router(job.router)
 
 
 @app.get("/")

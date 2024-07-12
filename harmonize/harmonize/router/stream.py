@@ -13,7 +13,7 @@ def _stream_file(path: Path) -> Generator[bytes, Any, None]:
 
 
 @router.get("/stream/{filename}")
-def stream_file(filename: str) -> StreamingResponse:
+async def stream_file(filename: str) -> StreamingResponse:
     foo = MUSIC_ROOT / Path(filename)
     return StreamingResponse(
         _stream_file(MUSIC_ROOT / Path(filename)), media_type="audio/mp3"

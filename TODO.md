@@ -17,6 +17,7 @@
 - [ ] Test initial manual deployment on server
 - [ ] Integrate with QBT
 - [ ] Integrate with youtube-dl
+- [ ] Set / query long running jobs
 - [ ] Integrate media art with youtube-dl
 - [ ] Search magnet links across different 
 - [ ] Search magnet links across different search platforms

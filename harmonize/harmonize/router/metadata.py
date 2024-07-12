@@ -1,4 +1,5 @@
 import datetime
+import os
 from pathlib import Path
 from typing import Literal, cast
 from fastapi import APIRouter
@@ -12,7 +13,7 @@ router = APIRouter()
 
 
 @router.get("/metadata/media/{filename}")
-def media_metadata(filename: str) -> MediaMetadata:
+async def media_metadata(filename: str) -> MediaMetadata:
     track = MP3(MUSIC_ROOT / filename)
     tags = EasyID3(MUSIC_ROOT / filename)
 
@@ -46,5 +47,5 @@ def _get_str_tag(tags: EasyID3, tag: Literal["title", "album", "artist"]) -> str
 
 
 @router.get("/metadata/albumart/{filename}")
-def album_art(filename: str) -> FileResponse:
+async def album_art(filename: str) -> FileResponse:
     return FileResponse(TMP_ALBUM_ART_DIR / filename)

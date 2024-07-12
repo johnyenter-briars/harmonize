@@ -7,7 +7,7 @@ router = APIRouter()
 
 
 @router.get("/search/youtube/{search_keywords}")
-def search_youtube(search_keywords: str) -> dict:
+async def search_youtube(search_keywords: str) -> dict:
     videosSearch = VideosSearch(search_keywords, limit=10)
 
     search_result: dict = videosSearch.result()  # type: ignore
