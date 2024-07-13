@@ -1,3 +1,8 @@
+import logging
+
+logger = logging.getLogger('yt_dlp')
+
+
 class YtDlpLogger:
     def debug(self, msg):
         # For compatibility with youtube-dl, both debug and info are passed into debug
@@ -8,10 +13,10 @@ class YtDlpLogger:
             self.info(msg)
 
     def info(self, msg):
-        pass
+        logger.info(msg)
 
     def warning(self, msg):
-        pass
+        logger.warning(msg)
 
     def error(self, msg):
-        print(msg)
+        logger.error(msg)
