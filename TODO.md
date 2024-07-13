@@ -5,9 +5,14 @@
 - [ ] Search media
 - [ ] Stream any media
 - [ ] Support fast forwarding
+- [ ] Playlists
 - [ ] Search magnet links across different search platforms
-- [ ] search youtube dl
+- [ ] Search youtube dl
+    - [ ] Simple keyword search
+    - [ ] Simple file search and play
+    - [ ] Save files in main DB
 - [ ] search youtube dl in different regions
+- [ ] Set / query long running jobs
 - [ ] option to integration with custom media system / fullsail
 - [ ] Option to download
 - [ ] Implement https + private keys
@@ -17,7 +22,10 @@
 - [ ] Test initial manual deployment on server
 - [ ] Integrate with QBT
 - [ ] Integrate with youtube-dl
-- [ ] Set / query long running jobs
+    - [X] MVP file search + download via API 
+    - [ ] Save + query to DB
+- [ ] Playlists
+- [X] Set / query long running jobs
 - [ ] Integrate media art with youtube-dl
 - [ ] Search magnet links across different 
 - [ ] Search magnet links across different search platforms
