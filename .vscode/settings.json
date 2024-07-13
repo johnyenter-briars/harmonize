@@ -5,16 +5,10 @@
     "python.analysis.typeCheckingMode": "basic",
     "[python]": {
         "diffEditor.ignoreTrimWhitespace": false,
-        "editor.formatOnType": true,
         "editor.wordBasedSuggestions": "off",
-        "editor.defaultFormatter": "ms-python.autopep8"
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true
     },
-    "files.associations": {
-        "*.scss": "tailwindcss"
-    },
-    "css.customData": [
-        ".vscode/tailwind.json"
-    ],
     "remote.localPortHost": "allInterfaces",
     "editor.inlayHints.enabled": "on",
     "python.analysis.inlayHints.callArgumentNames": "all",
@@ -36,5 +30,10 @@
         "test"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "ruff.fixAll": true,
+    "ruff.organizeImports": true,
+    "ruff.nativeServer": true,
+    "ruff.configuration": "${workspaceFolder}/harmonize/pyproject.toml",
+    "ruff.configurationPreference": "filesystemFirst",
 }
