@@ -1,9 +1,12 @@
 ﻿using System.Globalization;
 using System.Net;
+using System.Net.Http.Json;
 using System.Net.Sockets;
+using System.Web;
 using CommunityToolkit.Maui.Views;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+
 
 namespace Harmonize
 {
@@ -19,21 +22,19 @@ namespace Harmonize
         public required string Album { get; set; }
 
         [JsonProperty("artwork")]
-        public required Artwork[] Artwork { get; set; }
+        public required Artwork Artwork { get; set; }
     }
 
     public partial class Artwork
     {
-        [JsonProperty("src")]
-        public required Uri Src { get; set; }
+        [JsonProperty("xl")]
+        public required string Xl { get; set; }
 
-        [JsonProperty("sizes")]
-        public required string Sizes { get; set; }
+        [JsonProperty("large")]
+        public required string Large { get; set; }
 
-        [JsonProperty("type")]
-        public required string Type { get; set; }
-        [JsonProperty("name")]
-        public required string Name { get; set; }
+        [JsonProperty("small")]
+        public required string Small { get; set; }
     }
 
     public partial class MediaMetaData
@@ -90,22 +91,27 @@ namespace Harmonize
             try
             {
                 using var httpClient = new HttpClient();
-                var response = await httpClient.GetAsync(foo);
+                var metadataUrl = $"http://{domainName}:{PORT}/metadata/media/{fileName}";
+                var response = await httpClient.GetAsync(metadataUrl);
                 response.EnsureSuccessStatusCode();
 
-                string? responseStr = await response.Content.ReadAsStringAsync();
-                if (responseStr != null)
+                MediaMetaData? mediaMetadata = await response.Content.ReadFromJsonAsync<MediaMetaData>();
+
+                if (mediaMetadata != null)
                 {
+                    Console.WriteLine(mediaMetadata.ToJson());
                     string trackURL = $"http://{domainName}:{PORT}/stream/{fileName}";
-                    var mediaMetadata = MediaMetaData.FromJson(responseStr);
 
-                    TestMediaElement.ShouldShowPlaybackControls = true;
-                    TestMediaElement.MetadataArtist = mediaMetadata.Artist;
-                    TestMediaElement.MetadataTitle = mediaMetadata.Title;
-                    TestMediaElement.MetadataArtworkUrl = $"http://{domainName}:{PORT}/{mediaMetadata.Artwork[0].Src}";
-                    TestMediaElement.Source = MediaSource.FromUri(trackURL);
+                    string xlMediaUrl = $"http://{domainName}:{PORT}/{mediaMetadata.Artwork.Xl}";
+                    Console.WriteLine(xlMediaUrl);
 
-                    await DisplayAlert("Success", $"{responseStr}", "OK");
+                    PlaybackMediaElement.ShouldShowPlaybackControls = true;
+                    PlaybackMediaElement.MetadataArtist = mediaMetadata.Artist;
+                    PlaybackMediaElement.MetadataTitle = mediaMetadata.Title;
+                    PlaybackMediaElement.MetadataArtworkUrl = xlMediaUrl;
+                    PlaybackMediaElement.Source = MediaSource.FromUri(trackURL);
+
+                    await DisplayAlert("Success", $"{mediaMetadata.ToJson()}", "OK");
                 }
             }
             catch (Exception ex)
