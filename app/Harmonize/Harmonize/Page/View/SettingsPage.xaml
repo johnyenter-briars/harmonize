@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ViewModel="clr-namespace:Harmonize.ViewModel"
              x:DataType="{x:Type ViewModel:SettingsViewModel}"
-             x:Class="Harmonize.View.SettingsPage">
+             x:Class="Harmonize.Page.View.SettingsPage">
     <StackLayout Padding="20">
 
         <Label 

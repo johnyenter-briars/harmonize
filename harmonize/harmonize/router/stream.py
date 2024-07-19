@@ -7,7 +7,7 @@ from fastapi.responses import StreamingResponse
 
 from harmonize.const import MUSIC_ROOT
 
-router = APIRouter()
+router = APIRouter(prefix='/api')
 
 
 def _stream_file(path: Path) -> Generator[bytes, Any, None]:

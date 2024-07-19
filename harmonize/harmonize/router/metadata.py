@@ -27,7 +27,7 @@ MUSTICBRAINZ_RELEASE_ROOT: Final = (
 
 THUMBNAIL_SIZES: Final = (1200, 500, 250)
 
-router = APIRouter()
+router = APIRouter(prefix='/api')
 
 
 def get_musicbrainz_releases(

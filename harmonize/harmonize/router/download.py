@@ -11,7 +11,7 @@ from harmonize.defs.job import Job, Status
 from harmonize.job import start_job
 
 logger = logging.getLogger('harmonize')
-router = APIRouter()
+router = APIRouter(prefix='/api')
 
 _audio_format = 'm4a'
 

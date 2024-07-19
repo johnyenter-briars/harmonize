@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Harmonize.ViewModel;
 
-public class BaseViewModel : INotifyPropertyChanged
+public abstract partial class BaseViewModel : INotifyPropertyChanged
 {
 	bool isBusy = false;
 	public bool IsBusy

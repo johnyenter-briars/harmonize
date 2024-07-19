@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Maui;
+using Harmonize.Page.View;
+using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
 
 namespace Harmonize
@@ -20,6 +22,12 @@ namespace Harmonize
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+
+            builder.Services.AddSingleton<MediaElementViewModel>();
+            builder.Services.AddSingleton<SettingsViewModel>();
+
+            builder.Services.AddSingleton<MediaElementPage>();
+            builder.Services.AddSingleton<SettingsPage>();
 
             return builder.Build();
         }

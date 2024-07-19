@@ -5,7 +5,7 @@ import anyio
 from fastapi import APIRouter
 from youtubesearchpython import VideosSearch
 
-router = APIRouter()
+router = APIRouter(prefix='/api')
 
 
 @router.get('/search/youtube/{search_keywords}')

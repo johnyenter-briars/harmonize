@@ -75,13 +75,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="View\SettingsPage.xaml.cs">
+	  <ProjectReference Include="..\Harmonize.Client\Harmonize.Client.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Page\View\SettingsPage.xaml.cs">
 	    <DependentUpon>SettingsPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="View\SettingsPage.xaml">
+	  <MauiXaml Update="Page\View\MediaElementPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\SettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

@@ -2,7 +2,7 @@ using Harmonize.ViewModel;
 using AlohaKit.Animations;
 using Microsoft.Maui.Controls;
 
-namespace Harmonize.View;
+namespace Harmonize.Page.View;
 
 public partial class SettingsPage : ContentPage
 {
