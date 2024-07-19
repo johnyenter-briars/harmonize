@@ -4,6 +4,7 @@ using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Core.Primitives;
 using CommunityToolkit.Maui.Views;
 using Harmonize.Client;
+using Harmonize.Client.Model.Response;
 using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
 using LayoutAlignment = Microsoft.Maui.Primitives.LayoutAlignment;
@@ -13,30 +14,44 @@ namespace Harmonize.Page.View;
 public partial class MediaElementPage : BasePage<MediaElementViewModel>
 {
     readonly ILogger logger;
+    private readonly HarmonizeClient harmonizeClient;
     const string loadOnlineMp4 = "Load Online MP4";
     const string loadHls = "Load HTTP Live Stream (HLS)";
     const string loadLocalResource = "Load Local Resource";
     const string resetSource = "Reset Source to null";
+    Playlist playlist;
+    int currentIndex;
 
-    public MediaElementPage(MediaElementViewModel viewModel, ILogger<MediaElementPage> logger) : base(viewModel)
+    public MediaElementPage(
+        MediaElementViewModel viewModel,
+        ILogger<MediaElementPage> logger,
+        HarmonizeClient harmonizeClient
+        ) : base(viewModel)
     {
         InitializeComponent();
 
         this.logger = logger;
+        this.harmonizeClient = harmonizeClient;
         MediaElement.PropertyChanged += MediaElement_PropertyChanged;
     }
     protected override async void OnAppearing()
     {
+        playlist = await harmonizeClient.GetPlaylist("foo");
+
+        var firstItem = playlist.Files.First();
+        currentIndex = 0;
+
+        await UpdateMediaElementFile(firstItem);
+    }
+    async Task UpdateMediaElementFile(string file)
+    {
         var domainName = PreferenceManager.GetDomainName();
+
         var port = 8000;
 
-        var client = new HarmonizeClient(domainName, port);
+        string trackURL = $"http://{domainName}:{port}/api/stream/{file}";
 
-        var playlist = await client.GetPlaylist("foo");
-
-        string trackURL = $"http://{domainName}:{port}/api/stream/{"Sense.mp3"}";
-
-        var mediaMetadata = await client.GetMediaMetadata("Sense.mp3");
+        var mediaMetadata = await harmonizeClient.GetMediaMetadata(file);
 
         string xlMediaUrl = $"http://{domainName}:{port}/api/{mediaMetadata.Artwork.Xl}";
 
@@ -47,6 +62,7 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
         MediaElement.MetadataTitle = mediaMetadata.Title;
         MediaElement.MetadataArtworkUrl = xlMediaUrl;
         MediaElement.Source = MediaSource.FromUri(trackURL);
+
     }
     void MediaElement_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -164,92 +180,52 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
 
     void Button_Clicked(object? sender, EventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(CustomSourceEntry.Text))
-        {
-            DisplayAlert("Error Loading URL Source", "No value was found to load as a media source. " +
-                "When you do enter a value, make sure it's a valid URL. No additional validation is done.",
-                "OK");
+        //if (string.IsNullOrWhiteSpace(CustomSourceEntry.Text))
+        //{
+        //    DisplayAlert("Error Loading URL Source", "No value was found to load as a media source. " +
+        //        "When you do enter a value, make sure it's a valid URL. No additional validation is done.",
+        //        "OK");
 
-            return;
-        }
+        //    return;
+        //}
 
-        MediaElement.Source = MediaSource.FromUri(CustomSourceEntry.Text);
+        //MediaElement.Source = MediaSource.FromUri(CustomSourceEntry.Text);
     }
 
-    async void ChangeSourceClicked(Object sender, EventArgs e)
+    async void SkipForwardClicked(Object sender, EventArgs e)
     {
-        var result = await DisplayActionSheet("Choose a source", "Cancel", null,
-            loadOnlineMp4, loadHls, loadLocalResource, resetSource);
-
-        switch (result)
-        {
-            case loadOnlineMp4:
-                MediaElement.MetadataTitle = "Big Buck Bunny";
-                MediaElement.MetadataArtworkUrl = "https://lh3.googleusercontent.com/pw/AP1GczNRrebWCJvfdIau1EbsyyYiwAfwHS0JXjbioXvHqEwYIIdCzuLodQCZmA57GADIo5iB3yMMx3t_vsefbfoHwSg0jfUjIXaI83xpiih6d-oT7qD_slR0VgNtfAwJhDBU09kS5V2T5ZML-WWZn8IrjD4J-g=w1792-h1024-s-no-gm";
-                MediaElement.MetadataArtist = "Big Buck Bunny Album";
-                MediaElement.Source =
-                    MediaSource.FromUri(
-                        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4");
-                return;
-
-            case loadHls:
-                MediaElement.MetadataArtist = "HLS Album";
-                MediaElement.MetadataArtworkUrl = "https://lh3.googleusercontent.com/pw/AP1GczNRrebWCJvfdIau1EbsyyYiwAfwHS0JXjbioXvHqEwYIIdCzuLodQCZmA57GADIo5iB3yMMx3t_vsefbfoHwSg0jfUjIXaI83xpiih6d-oT7qD_slR0VgNtfAwJhDBU09kS5V2T5ZML-WWZn8IrjD4J-g=w1792-h1024-s-no-gm";
-                MediaElement.MetadataTitle = "HLS Title";
-                MediaElement.Source
-                    = MediaSource.FromUri(
-                        "https://mtoczko.github.io/hls-test-streams/test-gap/playlist.m3u8");
-                return;
-
-            case resetSource:
-                MediaElement.MetadataArtworkUrl = string.Empty;
-                MediaElement.MetadataTitle = string.Empty;
-                MediaElement.MetadataArtist = string.Empty;
-                MediaElement.Source = null;
-                return;
-
-            case loadLocalResource:
-                MediaElement.MetadataArtworkUrl = "https://lh3.googleusercontent.com/pw/AP1GczNRrebWCJvfdIau1EbsyyYiwAfwHS0JXjbioXvHqEwYIIdCzuLodQCZmA57GADIo5iB3yMMx3t_vsefbfoHwSg0jfUjIXaI83xpiih6d-oT7qD_slR0VgNtfAwJhDBU09kS5V2T5ZML-WWZn8IrjD4J-g=w1792-h1024-s-no-gm";
-                MediaElement.MetadataTitle = "Local Resource Title";
-                MediaElement.MetadataArtist = "Local Resource Album";
-
-                if (DeviceInfo.Platform == DevicePlatform.MacCatalyst
-                    || DeviceInfo.Platform == DevicePlatform.iOS)
-                {
-                    MediaElement.Source = MediaSource.FromResource("AppleVideo.mp4");
-                }
-                else if (DeviceInfo.Platform == DevicePlatform.Android)
-                {
-                    MediaElement.Source = MediaSource.FromResource("AndroidVideo.mp4");
-                }
-                else if (DeviceInfo.Platform == DevicePlatform.WinUI)
-                {
-                    MediaElement.Source = MediaSource.FromResource("WindowsVideo.mp4");
-                }
-                return;
-        }
+        currentIndex++;
+        var item = playlist.Files[currentIndex];
+        await UpdateMediaElementFile(item);
     }
 
-    async void ChangeAspectClicked(object? sender, EventArgs e)
+    async void  SkipBackClicked(object? sender, EventArgs e)
     {
-        var resultAspect = await DisplayActionSheet("Choose aspect ratio",
-            "Cancel", null, Aspect.AspectFit.ToString(),
-            Aspect.AspectFill.ToString(), Aspect.Fill.ToString());
-
-        if (resultAspect is null || resultAspect.Equals("Cancel"))
-        {
-            return;
-        }
-
-        if (!Enum.TryParse(typeof(Aspect), resultAspect, true, out var aspectEnum))
-        {
-            await DisplayAlert("Error", "There was an error determining the selected aspect", "OK");
-
-            return;
-        }
-
-        MediaElement.Aspect = (Aspect)aspectEnum;
+        currentIndex--;
+        var item = playlist.Files[currentIndex];
+        await UpdateMediaElementFile(item);
     }
+
+    //async void ChangeAspectClicked(object? sender, EventArgs e)
+    //{
+    //    var resultAspect = await DisplayActionSheet("Choose aspect ratio",
+    //        "Cancel", null, Aspect.AspectFit.ToString(),
+    //        Aspect.AspectFill.ToString(), Aspect.Fill.ToString());
+
+    //    if (resultAspect is null || resultAspect.Equals("Cancel"))
+    //    {
+    //        return;
+    //    }
+
+    //    if (!Enum.TryParse(typeof(Aspect), resultAspect, true, out var aspectEnum))
+    //    {
+    //        await DisplayAlert("Error", "There was an error determining the selected aspect", "OK");
+
+    //        return;
+    //    }
+
+    //    MediaElement.Aspect = (Aspect)aspectEnum;
+    //}
 
     void DisplayPopup(object sender, EventArgs e)
     {
