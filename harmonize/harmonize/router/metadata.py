@@ -106,7 +106,10 @@ async def media_metadata(filename: str) -> MediaMetadata:
     tags = EasyID3(MUSIC_ROOT / filename)
 
     album_name = _get_str_tag(tags, 'album')
-    album_dir = TMP_ALBUM_ART_DIR / album_name
+
+    if album_name is not None:
+        album_dir = TMP_ALBUM_ART_DIR / album_name
+
     img_data = cast(ApicData | None, track.get('APIC:'))
 
     thumbnails: HarmonizeThumbnail
@@ -133,7 +136,10 @@ async def media_metadata(filename: str) -> MediaMetadata:
     }
 
 
-def _get_str_tag(tags: EasyID3, tag: Literal['title', 'album', 'artist']) -> str:
+def _get_str_tag(tags: EasyID3, tag: Literal['title', 'album', 'artist']) -> str | None:
+    if tags.get(tag) is None:
+        return None
+
     return cast(list[str], tags.get(tag))[0]
 
 

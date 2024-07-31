@@ -4,7 +4,7 @@ from logging.config import dictConfig
 from fastapi import FastAPI
 
 from harmonize.config import LogConfig
-from harmonize.router import download, job, list, metadata, playlist, search, stream
+from harmonize.router import download, job, list, metadata, playlist, search, stream  # type: ignore
 
 dictConfig(LogConfig().model_dump())
 logger = logging.getLogger('harmonize')

@@ -34,7 +34,9 @@
                 MediaOpened="OnMediaOpened"
                 PositionChanged="OnPositionChanged"
                 StateChanged="OnStateChanged"
-                SeekCompleted="OnSeekCompleted"/>
+                SeekCompleted="OnSeekCompleted"
+                
+                />
 
             <HorizontalStackLayout Grid.Row="1" Padding="0,0,0,15">
                 <Label HorizontalOptions="Center">
@@ -75,6 +77,7 @@
                 Grid.Row="3"
                 MinimumTrackColor="Gray"
                 DragStarted="Slider_DragStarted"
+                Value="10"
                 DragCompleted="Slider_DragCompleted"/>
 
             <Grid Grid.Row="4" HorizontalOptions="Fill">

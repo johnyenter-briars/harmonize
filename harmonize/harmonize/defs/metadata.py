@@ -10,6 +10,7 @@ class HarmonizeThumbnail(TypedDict):
     large: str
     small: str
 
+
 class ArtworkMetadata(TypedDict):
     src: str
     sizes: str
@@ -24,7 +25,7 @@ class HarmonizeThumbnails(TypedDict):
 
 
 class MediaMetadata(TypedDict):
-    title: str
-    artist: str
-    album: str
-    artwork: HarmonizeThumbnail
+    title: str | None
+    artist: str | None
+    album: str | None
+    artwork: HarmonizeThumbnail | None

@@ -13,7 +13,7 @@ from harmonize.job import start_job
 logger = logging.getLogger('harmonize')
 router = APIRouter(prefix='/api')
 
-_audio_format = 'm4a'
+_audio_format = 'mp3'
 
 
 @router.post('/download/youtube/{id}', status_code=201)
@@ -43,6 +43,7 @@ def _download_youtube(id: str, job_info: Job):
         'postprocessors': [
             {  # Extract audio using ffmpeg
                 'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
                 'preferredcodec': _audio_format,
             }
         ],

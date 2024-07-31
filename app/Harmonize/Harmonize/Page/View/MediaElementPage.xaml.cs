@@ -61,7 +61,7 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
         MediaElement.MetadataArtist = mediaMetadata.Artist;
         MediaElement.MetadataTitle = mediaMetadata.Title;
         MediaElement.MetadataArtworkUrl = xlMediaUrl;
-        MediaElement.Source = MediaSource.FromUri(trackURL);
+        MediaElement.Source = MediaSource.FromResource(file);
 
     }
     void MediaElement_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -168,6 +168,7 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
         ArgumentNullException.ThrowIfNull(sender);
 
         var newValue = ((Slider)sender).Value;
+        var foo = MediaElement.Duration;
         await MediaElement.SeekTo(TimeSpan.FromSeconds(newValue), CancellationToken.None);
 
         MediaElement.Play();

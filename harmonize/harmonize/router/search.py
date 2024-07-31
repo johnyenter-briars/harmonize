@@ -12,9 +12,12 @@ router = APIRouter(prefix='/api')
 async def search_youtube(search_keywords: str) -> str | dict[Any, Any]:
     videos_search = VideosSearch(search_keywords, limit=10)
 
-    search_result = videos_search.result()
+    search_results = videos_search.result()
 
-    async with await anyio.open_file(f'./cache/{search_keywords}.info.json', 'w') as f:
-        await f.write(json.dumps(search_result))
+    for search_result in search_results['result']:  # type: ignore
+        yt_id = search_result['id']  # type: ignore
 
-    return search_result
+        async with await anyio.open_file(f'./cache/youtube/{yt_id}.info.json', 'w') as f:
+            await f.write(json.dumps(search_results))
+
+    return search_results
