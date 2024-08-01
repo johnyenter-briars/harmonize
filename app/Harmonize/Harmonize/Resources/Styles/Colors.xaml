@@ -9,12 +9,12 @@
     
     <!--https://pigment.shapefactory.co/?d=2&s=2&a=1C223A&b=BE9922-->
 
-    <Color x:Key="Primary">#E2C042</Color>
-    <Color x:Key="PrimaryDark">#856306</Color>
-    <Color x:Key="PrimaryDarkText">#A27A07</Color>
-    <Color x:Key="Secondary">#3A4661</Color>
-    <Color x:Key="SecondaryDark">#1C223A</Color>
-    <Color x:Key="SecondaryDarkText">#2B334D</Color>
+    <Color x:Key="Primary">#C45A5F</Color>
+    <Color x:Key="PrimaryDark">#963236</Color>
+    <Color x:Key="PrimaryDarkText">#DF797E</Color>
+    <Color x:Key="Secondary">#471D3E</Color>
+    <Color x:Key="SecondaryDark">#3D1534</Color>
+    <Color x:Key="SecondaryDarkText">#6B3864</Color>
     <Color x:Key="Tertiary">#2B0B98</Color>
 
     <Color x:Key="White">White</Color>
@@ -22,6 +22,7 @@
     <Color x:Key="Magenta">#D600AA</Color>
     <Color x:Key="MidnightBlue">#190649</Color>
     <Color x:Key="OffBlack">#1f1f1f</Color>
+    <Color x:Key="OffWhite">#F0F8FF</Color>
 
     <Color x:Key="Gray100">#E1E1E1</Color>
     <Color x:Key="Gray200">#C8C8C8</Color>

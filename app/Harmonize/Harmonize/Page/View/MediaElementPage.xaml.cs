@@ -167,6 +167,7 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
     {
         base.OnNavigatedFrom(args);
         MediaElement.Stop();
+        viewModel.IsPlaying = false;
         MediaElement.Handler?.DisconnectHandler();
     }
 

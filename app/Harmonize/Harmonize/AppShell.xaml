@@ -8,12 +8,12 @@
     Shell.FlyoutBehavior="Flyout"
     Shell.BackgroundColor="{StaticResource PrimaryDark}"
     FlyoutBackgroundColor="{StaticResource PrimaryDark}"
-    Shell.FlyoutWidth="50"
+    Shell.FlyoutWidth="250"
     Title="Harmonize">
 
     <FlyoutItem 
                 Title="Main Page" 
-                Icon="dotnet_bot.png"
+                Icon="icons8_home_50.png"
                 >
         <Tab>
             <ShellContent
@@ -24,7 +24,7 @@
     </FlyoutItem>
     <FlyoutItem 
                 Title="Settings" 
-                Icon="dotnet_bot.png"
+                Icon="icons8_automatic_50.png"
                 >
         <Tab>
             <ShellContent
@@ -34,8 +34,8 @@
         </Tab>
     </FlyoutItem>
     <FlyoutItem 
-                Title="MediaElementTest" 
-                Icon="dotnet_bot.png"
+                Title="MediaElement" 
+                Icon="icons8_music_note_50.png"
                 >
         <Tab>
             <ShellContent
