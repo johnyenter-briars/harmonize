@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <pages:BasePage  
-             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:views="clr-namespace:Harmonize.Page.View"
-             xmlns:pages="clr-namespace:Harmonize.Page"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
-             x:TypeArguments="viewModels:MediaElementViewModel"
-             x:DataType="viewModels:MediaElementViewModel"
-             x:Class="Harmonize.Page.View.MediaElementPage"
-             Title="MediaElement"
-    
-    >
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Harmonize.Page.View"
+    xmlns:pages="clr-namespace:Harmonize.Page"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+    x:TypeArguments="viewModels:MediaElementViewModel"
+    x:DataType="viewModels:MediaElementViewModel"
+    x:Class="Harmonize.Page.View.MediaElementPage"
+    Title="MediaElement"
+>
     <ScrollView>
-        <Grid>
+        <Grid Padding="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="220" />
+                <RowDefinition Height="300" />
+                <!-- Larger media element -->
                 <RowDefinition Height="50" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="50" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <toolkit:MediaElement
                 x:Name="MediaElement"
+                Grid.Row="0"
                 ShouldAutoPlay="True"
                 MediaEnded="OnMediaEnded"
                 MediaFailed="OnMediaFailed"
@@ -35,10 +32,13 @@
                 PositionChanged="OnPositionChanged"
                 StateChanged="OnStateChanged"
                 SeekCompleted="OnSeekCompleted"
-                
-                />
+                WidthRequest="300"
+                HeightRequest="300"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+            />
 
-            <HorizontalStackLayout Grid.Row="1" Padding="0,0,0,15">
+            <HorizontalStackLayout Grid.Row="1" Padding="0,0,0,15" HorizontalOptions="Center">
                 <Label HorizontalOptions="Center">
                     <Label.Text>
                         <MultiBinding StringFormat="{}Current State: {0} - Dimensions: {1}x{2}">
@@ -48,109 +48,43 @@
                         </MultiBinding>
                     </Label.Text>
                 </Label>
-
             </HorizontalStackLayout>
-
-            <Grid Grid.Row="2" Padding="0,10,0,10" ColumnDefinitions="*,*,*,*,*" ColumnSpacing="5">
-                <Button Grid.Column="0" Text="Play" Clicked="OnPlayClicked" />
-                <Button Grid.Column="1" Text="Pause" Clicked="OnPauseClicked" />
-                <Button Grid.Column="2" Text="Stop" Clicked="OnStopClicked" />
-                <Button Grid.Column="3" Text="Mute" Clicked="OnMuteClicked">
-                    <Button.Triggers>
-                        <DataTrigger TargetType="Button"
-                                     Binding="{Binding ShouldMute, Source={x:Reference MediaElement}}"
-                                     Value="True">
-                            <Setter Property="Text" Value="Unmute" />
-                        </DataTrigger>
-                        <DataTrigger TargetType="Button"
-                                     Binding="{Binding ShouldMute, Source={x:Reference MediaElement}}"
-                                     Value="False">
-                            <Setter Property="Text" Value="Mute" />
-                        </DataTrigger>
-                    </Button.Triggers>
-                </Button>
-                <Button Grid.Column="4" Text="Popup" Clicked="DisplayPopup" />
-            </Grid>
 
             <Slider
                 x:Name="PositionSlider"
-                Grid.Row="3"
+                Grid.Row="2"
                 MinimumTrackColor="Gray"
                 DragStarted="Slider_DragStarted"
                 Value="10"
-                DragCompleted="Slider_DragCompleted"/>
+                DragCompleted="Slider_DragCompleted"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="Center"
+            />
 
-            <Grid Grid.Row="4" HorizontalOptions="Fill">
-                <Label HorizontalOptions="Start"  Text="{Binding Position, Source={x:Reference MediaElement}, Converter={StaticResource SecondsToStringConverter}}" />
+            <Grid Grid.Row="3" HorizontalOptions="Fill">
+                <Label HorizontalOptions="Start" Text="{Binding Position, Source={x:Reference MediaElement}, Converter={StaticResource SecondsToStringConverter}}" />
                 <Label HorizontalOptions="End" HorizontalTextAlignment="End" Text="{Binding Duration, Source={x:Reference MediaElement}, Converter={StaticResource SecondsToStringConverter}}" />
             </Grid>
 
-            <VerticalStackLayout Padding="0,20,0,0" Grid.Row="5" Spacing="5">
-                <Button Text="Skip Forward" Clicked="SkipForwardClicked" />
-
-                <Button Text="Skip Backward" Clicked="SkipBackClicked" />
-            </VerticalStackLayout>
-
-            <HorizontalStackLayout Grid.Row="6" Padding="0,10,0,10" Spacing="5">
-                <Label Margin="20,10">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Speed:" />
-                            <Span Text="{Binding Source={x:Reference MediaElement}, Path=Speed}" />
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-
-                <Button Text="-" Clicked="OnSpeedMinusClicked" />
-                <Button Text="+" Clicked="OnSpeedPlusClicked" />
+            <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center" Padding="0,10,0,10" Spacing="10">
+                <Button Text="Skip Backward" Clicked="SkipBackClicked" WidthRequest="100" />
+                <Button Text="Play" Clicked="OnPlayPauseClicked" WidthRequest="100">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                     Binding="{Binding IsPlaying}"
+                     Value="True">
+                            <Setter Property="Text" Value="Pause" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button"
+                     Binding="{Binding IsPlaying}"
+                     Value="False">
+                            <Setter Property="Text" Value="Play" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+                <Button Text="Skip Forward" Clicked="SkipForwardClicked" WidthRequest="100" />
             </HorizontalStackLayout>
-
-            <HorizontalStackLayout Grid.Row="7" Padding="0,10,0,10" Spacing="5">
-                <Label Margin="20,10">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Volume:" />
-                            <Span Text="{Binding Source={x:Reference MediaElement}, Path=Volume, StringFormat='{}{0:P0}'}" />
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-
-                <Button Text="-" Clicked="OnVolumeMinusClicked" />
-                <Button Text="+" Clicked="OnVolumePlusClicked" />
-            </HorizontalStackLayout>
-
-            <VerticalStackLayout Grid.Row="8">
-                <HorizontalStackLayout Padding="0,0,0,10">
-                    <Switch
-                        Margin="0,0,5,0"
-                        ThumbColor="White"
-                        OnColor="LimeGreen"
-                        IsToggled="{Binding Source={x:Reference MediaElement}, Path=ShouldShowPlaybackControls}" />
-                    <Label
-                        VerticalOptions="Center"
-                        Text="Show playback controls" />
-                </HorizontalStackLayout>
-                <HorizontalStackLayout Padding="0,0,0,10">
-                    <Switch
-                        Margin="0,0,5,0"
-                        ThumbColor="White"
-                        OnColor="LimeGreen"
-                        IsToggled="{Binding Source={x:Reference MediaElement}, Path=ShouldLoopPlayback}" />
-                    <Label
-                        VerticalOptions="Center"
-                        Text="Loop media" />
-                </HorizontalStackLayout>
-                <HorizontalStackLayout>
-                    <Switch
-                        Margin="0,0,5,0"
-                        ThumbColor="White"
-                        OnColor="LimeGreen"
-                        IsToggled="{Binding Source={x:Reference MediaElement}, Path=ShouldKeepScreenOn}" />
-                    <Label
-                        VerticalOptions="Center"
-                        Text="Keep screen on" />
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
         </Grid>
     </ScrollView>
 </pages:BasePage>
+

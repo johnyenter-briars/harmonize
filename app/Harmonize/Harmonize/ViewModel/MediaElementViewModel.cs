@@ -2,8 +2,23 @@
 
 public partial class MediaElementViewModel : BaseViewModel
 {
-	public MediaElementViewModel()
-	{
 
-	}
+    private bool isPlaying;
+    public bool IsPlaying
+    {
+        get => isPlaying;
+        set
+        {
+            if (isPlaying != value)
+            {
+                isPlaying = value;
+                OnPropertyChanged(nameof(IsPlaying));
+            }
+        }
+    }
+    public MediaElementViewModel()
+    {
+
+
+    }
 }

@@ -13,6 +13,7 @@ namespace Harmonize.Page.View;
 
 public partial class MediaElementPage : BasePage<MediaElementViewModel>
 {
+    private readonly MediaElementViewModel viewModel;
     readonly ILogger logger;
     private readonly HarmonizeClient harmonizeClient;
     const string loadOnlineMp4 = "Load Online MP4";
@@ -29,7 +30,7 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
         ) : base(viewModel)
     {
         InitializeComponent();
-
+        this.viewModel = viewModel;
         this.logger = logger;
         this.harmonizeClient = harmonizeClient;
         MediaElement.PropertyChanged += MediaElement_PropertyChanged;
@@ -63,6 +64,7 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
         MediaElement.MetadataArtworkUrl = xlMediaUrl;
         MediaElement.Source = MediaSource.FromResource(file);
 
+        viewModel.IsPlaying = true;
     }
     void MediaElement_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -136,14 +138,19 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
         }
     }
 
-    void OnPlayClicked(object? sender, EventArgs e)
+    void OnPlayPauseClicked(object? sender, EventArgs e)
     {
-        MediaElement.Play();
-    }
+        if (viewModel.IsPlaying)
+        {
+            MediaElement.Pause();
+            viewModel.IsPlaying = false;
 
-    void OnPauseClicked(object? sender, EventArgs e)
-    {
-        MediaElement.Pause();
+        }
+        else
+        {
+            MediaElement.Play();
+            viewModel.IsPlaying = true;
+        }
     }
 
     void OnStopClicked(object? sender, EventArgs e)
@@ -200,7 +207,7 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
         await UpdateMediaElementFile(item);
     }
 
-    async void  SkipBackClicked(object? sender, EventArgs e)
+    async void SkipBackClicked(object? sender, EventArgs e)
     {
         currentIndex--;
         var item = playlist.Files[currentIndex];
