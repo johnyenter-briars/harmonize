@@ -2,12 +2,14 @@
 using System.Diagnostics;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Core.Primitives;
+using CommunityToolkit.Maui.Core.Views;
 using CommunityToolkit.Maui.Views;
 using Harmonize.Client;
 using Harmonize.Client.Model.Response;
 using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
 using LayoutAlignment = Microsoft.Maui.Primitives.LayoutAlignment;
+using MediaManager = Harmonize.Service.MediaManager;
 
 namespace Harmonize.Page.View;
 
@@ -15,6 +17,7 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
 {
     private readonly MediaElementViewModel viewModel;
     readonly ILogger logger;
+    private readonly MediaManager mediaManager;
     private readonly HarmonizeClient harmonizeClient;
     const string loadOnlineMp4 = "Load Online MP4";
     const string loadHls = "Load HTTP Live Stream (HLS)";
@@ -26,18 +29,18 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
     public MediaElementPage(
         MediaElementViewModel viewModel,
         ILogger<MediaElementPage> logger,
-        HarmonizeClient harmonizeClient
+        MediaManager mediaManager
         ) : base(viewModel)
     {
         InitializeComponent();
         this.viewModel = viewModel;
         this.logger = logger;
-        this.harmonizeClient = harmonizeClient;
+        this.mediaManager = mediaManager;
         MediaElement.PropertyChanged += MediaElement_PropertyChanged;
     }
     protected override async void OnAppearing()
     {
-        playlist = await harmonizeClient.GetPlaylist("foo");
+        playlist = await mediaManager.GetPlaylist("foo");
 
         var firstItem = playlist.Files.First();
         currentIndex = 0;
@@ -46,23 +49,15 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
     }
     async Task UpdateMediaElementFile(string file)
     {
-        var domainName = PreferenceManager.GetDomainName();
+        var mediaMetadata = await mediaManager.GetMediaMetadata(file);
 
-        var port = 8000;
-
-        string trackURL = $"http://{domainName}:{port}/api/stream/{file}";
-
-        var mediaMetadata = await harmonizeClient.GetMediaMetadata(file);
-
-        string xlMediaUrl = $"http://{domainName}:{port}/api/{mediaMetadata.Artwork.Xl}";
-
-        Debug.WriteLine(xlMediaUrl);
+        var xlMediaUrl = mediaManager.GetMediaMetadataArtworkUrl(mediaMetadata, "Xl");
 
         MediaElement.ShouldShowPlaybackControls = true;
         MediaElement.MetadataArtist = mediaMetadata.Artist;
         MediaElement.MetadataTitle = mediaMetadata.Title;
         MediaElement.MetadataArtworkUrl = xlMediaUrl;
-        MediaElement.Source = MediaSource.FromResource(file);
+        MediaElement.Source = await mediaManager.GetMediaResource(file);
 
         viewModel.IsPlaying = true;
     }

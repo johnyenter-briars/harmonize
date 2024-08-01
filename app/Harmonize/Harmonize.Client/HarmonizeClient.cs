@@ -2,6 +2,7 @@
 using Harmonize.Client.Model.Response;
 using System.Text;
 using System.Text.Json;
+using static Harmonize.Client.Utility.Utility;
 
 namespace Harmonize.Client;
 
@@ -27,7 +28,20 @@ public class HarmonizeClient
         this.hostName = hostName;
         this.port = port;
     }
+    public string GetMediaMetadataArtworkUrl(MediaMetadata mediaMetadata, string artworkSize)
+    {
+        var artwork = mediaMetadata.Artwork;
 
+        var artworkProperty = GetPropertyValue(artwork, artworkSize);
+
+        var xlMediaUrl = $"http://{hostName}:{port}/api/{mediaMetadata.Artwork}";
+
+        return xlMediaUrl;
+    }
+    public async Task<byte[]> GetMedia(string fileName)
+    {
+        return await HarmonizeRequestBytes($"stream/{fileName}", HttpMethod.Get);
+    }
     public async Task<Playlist> GetPlaylist(string playlistName)
     {
         return await HarmonizeRequest<Playlist>($"playlist/{playlistName}", HttpMethod.Get);
@@ -49,6 +63,15 @@ public class HarmonizeClient
 
         return await SendRequest<TResponse>(request);
     }
+    private async Task<byte[]> HarmonizeRequestBytes(string path, HttpMethod httpMethod)
+    {
+        var request = new HttpRequestMessage(httpMethod, $"http://{hostName}:{port}/api/" + path);
+        request.Headers.Accept.Clear();
+        //request.Headers.Add("x-api-key", _apiKey);
+        //request.Headers.Add("x-user-id", _userId);
+
+        return await SendRequestBytes(request);
+    }
     private async Task<TResponse> HarmonizeRequest<TRequest, TResponse>(TRequest requestObject, string path, HttpMethod httpMethod)
     {
         var request = new HttpRequestMessage(httpMethod, $"http://{hostName}:{port}/api/" + path);
@@ -65,17 +88,20 @@ public class HarmonizeClient
     {
         var clientResponse = await httpClient.SendAsync(request, CancellationToken.None);
 
+        clientResponse.EnsureSuccessStatusCode();
 
-        if (clientResponse.IsSuccessStatusCode)
-        {
-            var str = await clientResponse.Content.ReadAsStringAsync();
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(str));
-            return await JsonSerializer.DeserializeAsync<TResponse>(stream, serializeOptions) ?? throw new NullReferenceException(nameof(JsonSerializer.DeserializeAsync));
-        }
-        else
-        {
-            var message = $"Failure to complete action. Reason phrase: {clientResponse.ReasonPhrase}, Raw response: {await clientResponse.Content.ReadAsStringAsync()}, Endpoint: {request.RequestUri}";
-            throw new Exception(message);
-        }
+        var str = await clientResponse.Content.ReadAsStringAsync();
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(str));
+        return await JsonSerializer.DeserializeAsync<TResponse>(stream, serializeOptions) ?? throw new NullReferenceException(nameof(JsonSerializer.DeserializeAsync));
+    }
+    private async Task<byte[]> SendRequestBytes(HttpRequestMessage request)
+    {
+        var clientResponse = await httpClient.SendAsync(request, CancellationToken.None);
+
+        clientResponse.EnsureSuccessStatusCode();
+
+        var fileBytes = await clientResponse.Content.ReadAsByteArrayAsync();
+
+        return fileBytes; 
     }
 }

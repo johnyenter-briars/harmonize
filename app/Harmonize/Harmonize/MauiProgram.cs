@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Core.Views;
 using Harmonize.Client;
 using Harmonize.Page.View;
 using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
+using MediaManager = Harmonize.Service.MediaManager;
 
 namespace Harmonize
 {
@@ -39,6 +41,8 @@ namespace Harmonize
 
                 return client;
             });
+
+            builder.Services.AddSingleton<MediaManager>();
 
             return builder.Build();
         }
