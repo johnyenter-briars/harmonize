@@ -2,6 +2,7 @@
 using Harmonize.Client;
 using Harmonize.Client.Model.Media;
 using Harmonize.Client.Model.Response;
+using Harmonize.Model;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,20 +16,31 @@ public class MediaManager
 {
     readonly ILogger logger;
     readonly HarmonizeClient harmonizeClient;
+    readonly HarmonizeDatabase harmonizeDatabase;
+    public string MediaPath => Path.Combine(FileSystem.AppDataDirectory, "media");
+    public string AudioPath => Path.Combine(FileSystem.AppDataDirectory, "media", "audio");
+    public string VideoPath => Path.Combine(FileSystem.AppDataDirectory, "media", "video");
 
     public MediaManager(
         ILogger<MediaManager> logger,
-        HarmonizeClient harmonizeClient
+        HarmonizeClient harmonizeClient,
+        HarmonizeDatabase harmonizeDatabase
         )
     {
         this.logger = logger;
         this.harmonizeClient = harmonizeClient;
-
+        this.harmonizeDatabase = harmonizeDatabase;
         CreateMediaFolders();
     }
     void CreateMediaFolders()
     {
-
+        foreach (var path in new[] { MediaPath, AudioPath, VideoPath })
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+        }
     }
     public async Task<Playlist> GetPlaylist(string name)
     {
@@ -38,18 +50,36 @@ public class MediaManager
     }
     public async Task<MediaSource> GetMediaResource(string name)
     {
-        var localPath = Path.Combine(FileSystem.AppDataDirectory, name);
+        var mediaEntry = await harmonizeDatabase.GetMediaEntry(name);
 
-        if (Path.Exists(localPath))
+        if (Path.Exists(mediaEntry?.LocalPath))
         {
-            return MediaSource.FromFile(localPath);
+            return MediaSource.FromFile(mediaEntry.LocalPath);
         }
 
-        var fileBytes = await harmonizeClient.GetMedia(name);
+        if (mediaEntry == null)
+        {
+            var localPath = Path.Combine(AudioPath, name);
 
-        await File.WriteAllBytesAsync(localPath, fileBytes);
+            var fileBytes = await harmonizeClient.GetMedia(name);
 
-        return MediaSource.FromFile(localPath);
+            await File.WriteAllBytesAsync(localPath, fileBytes);
+
+            var newMediaElement = new MediaEntry
+            {
+                LocalPath = localPath,
+                Name = name,
+            };
+
+            await harmonizeDatabase.SaveMediaEntry(newMediaElement);
+
+            return MediaSource.FromFile(localPath);
+        }
+        else
+        {
+            logger.LogError($"Media entry is not null - has path: {mediaEntry.LocalPath} but path doesnt exist.");
+            throw new DirectoryNotFoundException(mediaEntry?.LocalPath);
+        }
     }
     public async Task<MediaMetadata> GetMediaMetadata(string name)
     {

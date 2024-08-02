@@ -28,6 +28,7 @@ namespace Harmonize
 #endif
 
             builder.Services.AddSingleton<PreferenceManager>();
+            builder.Services.AddSingleton<HarmonizeDatabase>();
 
             builder.Services.AddSingleton<MediaElementViewModel>();
             builder.Services.AddSingleton<SettingsViewModel>();
