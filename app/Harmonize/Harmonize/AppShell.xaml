@@ -12,7 +12,7 @@
     Title="Harmonize">
 
     <FlyoutItem 
-                Title="Main Page" 
+                Title="Home" 
                 Icon="icons8_home_50.png"
                 >
         <Tab>

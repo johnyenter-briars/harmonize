@@ -5,16 +5,15 @@ using Harmonize.Service;
 
 namespace Harmonize.Page.View;
 
-public partial class SettingsPage : ContentPage
+public partial class SettingsPage : BasePage<SettingsViewModel>
 {
 	public SettingsPage(
         MediaManager mediaManager,
-        PreferenceManager preferenceManager
-        )
+        PreferenceManager preferenceManager,
+        SettingsViewModel viewModel
+        ) : base(viewModel)
 	{
 		InitializeComponent();
-
-		BindingContext = new SettingsViewModel(mediaManager, preferenceManager);
 	}
 	private void ScaleButton(object sender, EventArgs e)
     {

@@ -1,4 +1,5 @@
-﻿using Harmonize.Service;
+﻿using Harmonize.Model;
+using Harmonize.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,34 +10,32 @@ using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
 
-internal class SettingsViewModel : BaseViewModel
+public class SettingsViewModel : BaseViewModel
 {
-    private string buildVersion = Assembly.GetExecutingAssembly().GetName().ToString();
-    public string BuildVersion { get => buildVersion; set => SetProperty(ref buildVersion, value); }
-    private string? domainName;
-    public string DomainName
+    private UserSettings? userSettings;
+    public UserSettings UserSettings
     {
         get
         {
-            if (domainName == null)
-            {
-                domainName = preferenceManager.GetDomainName();
-            }
+            userSettings ??= preferenceManager.UserSettings;
 
-            return domainName;
+            return userSettings;
         }
-        set => SetProperty(ref domainName, value);
+        set => SetProperty(ref userSettings, value);
     }
 
+    private string buildVersion = Assembly.GetExecutingAssembly().GetName().ToString();
+    public string BuildVersion { get => buildVersion; set => SetProperty(ref buildVersion, value); }
     private Command? saveChangesCommand;
     public ICommand SaveChangesCommand
     {
         get
         {
-            if (saveChangesCommand == null)
+            saveChangesCommand ??= new Command(() =>
             {
-                saveChangesCommand = new Command(SaveChanges);
-            }
+                preferenceManager
+                    .SetUserSetttings(UserSettings);
+            });
 
             return saveChangesCommand;
         }
@@ -46,10 +45,5 @@ internal class SettingsViewModel : BaseViewModel
         PreferenceManager preferenceManager
         ) : base(mediaManager, preferenceManager)
     {
-    }
-
-    private void SaveChanges()
-    {
-        preferenceManager.SetPreferences(DomainName);
     }
 }

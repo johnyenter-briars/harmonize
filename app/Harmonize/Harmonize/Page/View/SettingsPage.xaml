@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<pages:BasePage 
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:ViewModel="clr-namespace:Harmonize.ViewModel"
-             x:DataType="{x:Type ViewModel:SettingsViewModel}"
-             x:Class="Harmonize.Page.View.SettingsPage">
+             xmlns:views="clr-namespace:Harmonize.Page.View"
+             xmlns:pages="clr-namespace:Harmonize.Page"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+             x:TypeArguments="viewModels:SettingsViewModel"
+             x:DataType="viewModels:SettingsViewModel"
+             x:Class="Harmonize.Page.View.SettingsPage"
+             xmlns:model="clr-namespace:Harmonize.Model"
+             Title="Settings">
+
     <StackLayout Padding="20">
 
         <Label 
@@ -17,9 +25,30 @@
                    VerticalOptions="Center" 
                    Margin="0,10,0,0"/>
 
-        <Entry x:Name="DomainNameEntriy" 
+        <Entry x:Name="DomainNameEntry"
                    Placeholder="Enter the domain name" 
-                   Text="{Binding DomainName}"
+                   Text="{Binding UserSettings.DomainName}"
+                   VerticalOptions="Center"/>
+
+        <Label Text="Port" 
+                   FontSize="Medium" 
+                   VerticalOptions="Center" 
+                   Margin="0,10,0,0"/>
+
+        <Entry x:Name="PortEntry"
+                   Placeholder="Enter the port" 
+                   Text="{Binding UserSettings.Port}"
+                   Keyboard="Numeric"
+                   VerticalOptions="Center"/>
+
+        <Label Text="Default Page on Launch" 
+                   FontSize="Medium" 
+                   VerticalOptions="Center" 
+                   Margin="0,10,0,0"/>
+
+        <Entry x:Name="DefaultPageOnLaunch" 
+                   Placeholder="Enter the domain name" 
+                   Text="{Binding UserSettings.DefaultPageOnLaunch}"
                    VerticalOptions="Center"/>
 
         <Button Text="Save Changes" 
@@ -30,4 +59,4 @@
                     Margin="0,30,0,0"/>
 
     </StackLayout>
-</ContentPage>
+</pages:BasePage>

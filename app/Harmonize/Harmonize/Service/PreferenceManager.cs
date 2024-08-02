@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Harmonize.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,13 +10,27 @@ namespace Harmonize.Service
     public class PreferenceManager
     {
         const string DomainNameKey = nameof(DomainNameKey);
-        internal void SetPreferences(string domainName)
+        const string DefaultPageOnLaunchKey = nameof(DefaultPageOnLaunchKey);
+        const string PortKey = nameof(PortKey);
+        public UserSettings UserSettings { get; private set; }
+        public PreferenceManager()
         {
-            Preferences.Default.Set(DomainNameKey, domainName);
+            UserSettings = new()
+            {
+                Port = Preferences.Default.Get(PortKey, 8000),
+                DomainName = Preferences.Default.Get(DomainNameKey, "127.0.0.1"),
+                DefaultPageOnLaunch = Preferences.Default.Get(DefaultPageOnLaunchKey, "Home"),
+            };
         }
-        internal string GetDomainName()
+        internal PreferenceManager SetUserSetttings(UserSettings userSettings)
         {
-            return Preferences.Default.Get(DomainNameKey, string.Empty);
+            UserSettings = userSettings;
+
+            Preferences.Default.Set(DomainNameKey, userSettings.DomainName);
+            Preferences.Default.Set(DefaultPageOnLaunchKey, userSettings.DefaultPageOnLaunch);
+            Preferences.Default.Set(PortKey, userSettings.Port);
+
+            return this;
         }
     }
 }

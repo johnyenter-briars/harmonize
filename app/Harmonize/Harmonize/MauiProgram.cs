@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Core.Views;
 using Harmonize.Client;
+using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
 using Harmonize.ViewModel;
@@ -41,11 +42,10 @@ namespace Harmonize
             builder.Services.AddSingleton(service =>
             {
                 var preferenceManager = service.GetService<PreferenceManager>() ?? throw new NullReferenceException($"{nameof(PreferenceManager)} is not registered");
-                var domainName = preferenceManager.GetDomainName();
 
-                var port = 8000;
+                var userSettings = preferenceManager.UserSettings;
 
-                var client = new HarmonizeClient(domainName, port);
+                var client = new HarmonizeClient(userSettings.DomainName, userSettings.Port);
 
                 return client;
             });
