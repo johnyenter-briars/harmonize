@@ -19,7 +19,7 @@
             <ShellContent
                 Title="Home"
                 ContentTemplate="{DataTemplate local:MainPage}"
-                Route="MainPage" />
+                Route="Main" />
         </Tab>
     </FlyoutItem>
     <FlyoutItem 
@@ -34,14 +34,25 @@
         </Tab>
     </FlyoutItem>
     <FlyoutItem 
-                Title="MediaElement" 
+                Title="Media Element" 
                 Icon="icons8_music_note_50.png"
                 >
         <Tab>
             <ShellContent
-                Title="MediaElementPage"
+                Title="Media Element"
                 ContentTemplate="{DataTemplate view:MediaElementPage}"
-                Route="Settings" />
+                Route="MediaElement" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
+                Title="Media List" 
+                Icon="icons8_list_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Media List"
+                ContentTemplate="{DataTemplate view:MediaListPage}"
+                Route="MediaList" />
         </Tab>
     </FlyoutItem>
 

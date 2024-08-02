@@ -88,6 +88,7 @@
 	  <None Remove="Resources\Images\icons8_home_50.png" />
 	  <None Remove="Resources\Images\icons8_laptop_play_video_64.png" />
 	  <None Remove="Resources\Images\icons8_left_arrow_60.png" />
+	  <None Remove="Resources\Images\icons8_list_50.png" />
 	  <None Remove="Resources\Images\icons8_memory_slot_50.png" />
 	  <None Remove="Resources\Images\icons8_move_up_row_50.png" />
 	  <None Remove="Resources\Images\icons8_music_album_50.png" />
@@ -151,6 +152,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Page\View\MediaElementPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\MediaListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\SettingsPage.xaml">

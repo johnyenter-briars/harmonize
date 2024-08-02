@@ -32,9 +32,11 @@ namespace Harmonize
 
             builder.Services.AddSingleton<MediaElementViewModel>();
             builder.Services.AddSingleton<SettingsViewModel>();
+            builder.Services.AddSingleton<MediaListViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();
+            builder.Services.AddSingleton<MediaListPage>();
 
             builder.Services.AddSingleton(service =>
             {
