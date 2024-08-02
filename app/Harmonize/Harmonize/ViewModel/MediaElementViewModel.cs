@@ -1,4 +1,6 @@
-﻿namespace Harmonize.ViewModel;
+﻿using Harmonize.Service;
+
+namespace Harmonize.ViewModel;
 
 public partial class MediaElementViewModel : BaseViewModel
 {
@@ -16,9 +18,10 @@ public partial class MediaElementViewModel : BaseViewModel
             }
         }
     }
-    public MediaElementViewModel()
+    public MediaElementViewModel(
+        MediaManager mediaManager,
+        PreferenceManager preferenceManager
+        ) : base(mediaManager, preferenceManager)
     {
-
-
     }
 }

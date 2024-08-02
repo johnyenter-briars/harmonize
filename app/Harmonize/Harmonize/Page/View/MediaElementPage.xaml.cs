@@ -18,11 +18,6 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
     private readonly MediaElementViewModel viewModel;
     readonly ILogger logger;
     private readonly MediaManager mediaManager;
-    private readonly HarmonizeClient harmonizeClient;
-    const string loadOnlineMp4 = "Load Online MP4";
-    const string loadHls = "Load HTTP Live Stream (HLS)";
-    const string loadLocalResource = "Load Local Resource";
-    const string resetSource = "Reset Source to null";
     Playlist playlist;
     int currentIndex;
 
@@ -171,7 +166,7 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
         ArgumentNullException.ThrowIfNull(sender);
 
         var newValue = ((Slider)sender).Value;
-        var foo = MediaElement.Duration;
+
         await MediaElement.SeekTo(TimeSpan.FromSeconds(newValue), CancellationToken.None);
 
         MediaElement.Play();

@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Harmonize
+namespace Harmonize.Service
 {
-    internal static class PreferenceManager
+    public class PreferenceManager
     {
         const string DomainNameKey = nameof(DomainNameKey);
-        internal static void SetPreferences(string domainName)
+        internal void SetPreferences(string domainName)
         {
             Preferences.Default.Set(DomainNameKey, domainName);
         }
-        internal static string GetDomainName()
+        internal string GetDomainName()
         {
             return Preferences.Default.Get(DomainNameKey, string.Empty);
         }

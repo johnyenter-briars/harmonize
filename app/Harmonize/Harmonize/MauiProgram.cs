@@ -2,6 +2,7 @@
 using CommunityToolkit.Maui.Core.Views;
 using Harmonize.Client;
 using Harmonize.Page.View;
+using Harmonize.Service;
 using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
 using MediaManager = Harmonize.Service.MediaManager;
@@ -26,6 +27,8 @@ namespace Harmonize
             builder.Logging.AddDebug();
 #endif
 
+            builder.Services.AddSingleton<PreferenceManager>();
+
             builder.Services.AddSingleton<MediaElementViewModel>();
             builder.Services.AddSingleton<SettingsViewModel>();
 
@@ -34,7 +37,9 @@ namespace Harmonize
 
             builder.Services.AddSingleton(service =>
             {
-                var domainName = PreferenceManager.GetDomainName();
+                var preferenceManager = service.GetService<PreferenceManager>() ?? throw new NullReferenceException($"{nameof(PreferenceManager)} is not registered");
+                var domainName = preferenceManager.GetDomainName();
+
                 var port = 8000;
 
                 var client = new HarmonizeClient(domainName, port);

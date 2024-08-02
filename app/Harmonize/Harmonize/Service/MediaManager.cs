@@ -23,6 +23,12 @@ public class MediaManager
     {
         this.logger = logger;
         this.harmonizeClient = harmonizeClient;
+
+        CreateMediaFolders();
+    }
+    void CreateMediaFolders()
+    {
+
     }
     public async Task<Playlist> GetPlaylist(string name)
     {
