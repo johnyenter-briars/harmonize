@@ -48,6 +48,12 @@ public class MediaManager
 
         return media;
     }
+    public async Task<MediaEntry> GetMediaEntry(string name)
+    {
+        var media = await harmonizeDatabase.GetMediaEntry(name);
+
+        return media;
+    }
     public async Task<Playlist> GetPlaylist(string name)
     {
         var playlist = await harmonizeClient.GetPlaylist("foo");

@@ -96,7 +96,9 @@
 	  <None Remove="Resources\Images\icons8_music_album_50_purple.png" />
 	  <None Remove="Resources\Images\icons8_music_note_50.png" />
 	  <None Remove="Resources\Images\icons8_nordvpn_50.png" />
+	  <None Remove="Resources\Images\icons8_pause_50.png" />
 	  <None Remove="Resources\Images\icons8_pause_button_50.png" />
+	  <None Remove="Resources\Images\icons8_play_50.png" />
 	  <None Remove="Resources\Images\icons8_play_pause_24.png" />
 	  <None Remove="Resources\Images\icons8_play_pause_48.png" />
 	  <None Remove="Resources\Images\icons8_play_pause_48_2.png" />
@@ -112,6 +114,8 @@
 	  <None Remove="Resources\Images\icons8_search_more_50.png" />
 	  <None Remove="Resources\Images\icons8_search_more_50_bak.png" />
 	  <None Remove="Resources\Images\icons8_send_file_50.png" />
+	  <None Remove="Resources\Images\icons8_skip_50.png" />
+	  <None Remove="Resources\Images\icons8_skip_to_start_50.png" />
 	  <None Remove="Resources\Images\icons8_slider_48.png" />
 	  <None Remove="Resources\Images\icons8_slide_up_50.png" />
 	  <None Remove="Resources\Images\icons8_subtitle_64.png" />

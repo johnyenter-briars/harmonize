@@ -9,7 +9,7 @@
     x:TypeArguments="viewModels:MediaElementViewModel"
     x:DataType="viewModels:MediaElementViewModel"
     x:Class="Harmonize.Page.View.MediaElementPage"
-    Title="MediaElement"
+    Title="{Binding MediaEntry.Name}"
 >
     <ScrollView>
         <Grid Padding="10" VerticalOptions="FillAndExpand">
@@ -65,22 +65,42 @@
             </Grid>
 
             <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center" Padding="0,10,0,10" Spacing="10">
-                <Button Text="⏮" Clicked="SkipBackClicked" WidthRequest="100" HeightRequest="100" CornerRadius="50" />
-                <Button Text="▶️" Clicked="OnPlayPauseClicked" WidthRequest="100" HeightRequest="100" CornerRadius="50">
+                <Button 
+                    Clicked="SkipBackClicked" 
+                    ImageSource="icons8_skip_to_start_50.png"
+                    WidthRequest="100" 
+                    HeightRequest="100" 
+                    CornerRadius="50" />
+                <Button 
+                    Clicked="OnPlayPauseClicked" 
+                    WidthRequest="100" 
+                    HeightRequest="100" 
+                    CornerRadius="50">
                     <Button.Triggers>
-                        <DataTrigger TargetType="Button"
-                     Binding="{Binding IsPlaying}"
-                     Value="True">
-                            <Setter Property="Text" Value="⏸" />
+                        <DataTrigger 
+                             TargetType="Button"
+                             Binding="{Binding IsPlaying}"
+                             Value="True">
+                            <Setter 
+                                Property="ImageSource" 
+                                Value="icons8_pause_50.png" />
                         </DataTrigger>
-                        <DataTrigger TargetType="Button"
-                     Binding="{Binding IsPlaying}"
-                     Value="False">
-                            <Setter Property="Text" Value="▶️" />
+                        <DataTrigger 
+                            TargetType="Button"
+                            Binding="{Binding IsPlaying}"
+                            Value="False">
+                            <Setter 
+                                Property="ImageSource" 
+                                Value="icons8_play_50.png" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
-                <Button Text="⏭" Clicked="SkipForwardClicked" WidthRequest="100" HeightRequest="100" CornerRadius="50" />
+                <Button 
+                    Clicked="SkipForwardClicked" 
+                    ImageSource="icons8_skip_50.png"
+                    WidthRequest="100" 
+                    HeightRequest="100" 
+                    CornerRadius="50" />
             </HorizontalStackLayout>
         </Grid>
     </ScrollView>

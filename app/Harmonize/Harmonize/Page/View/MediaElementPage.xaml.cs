@@ -42,9 +42,11 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
 
         await UpdateMediaElementFile(firstItem);
     }
-    async Task UpdateMediaElementFile(string file)
+    async Task UpdateMediaElementFile(string name)
     {
-        var mediaMetadata = await mediaManager.GetMediaMetadata(file);
+        var mediaEntry = await mediaManager.GetMediaEntry(name);
+
+        var mediaMetadata = await mediaManager.GetMediaMetadata(name);
 
         var xlMediaUrl = mediaManager.GetMediaMetadataArtworkUrl(mediaMetadata, "Xl");
 
@@ -52,9 +54,10 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
         MediaElement.MetadataArtist = mediaMetadata.Artist;
         MediaElement.MetadataTitle = mediaMetadata.Title;
         MediaElement.MetadataArtworkUrl = xlMediaUrl;
-        MediaElement.Source = await mediaManager.GetMediaResource(file);
+        MediaElement.Source = await mediaManager.GetMediaResource(name);
 
         viewModel.IsPlaying = true;
+        viewModel.MediaEntry = mediaEntry;
     }
     void MediaElement_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
