@@ -10,3 +10,10 @@ bin/
 *.png
 .venv/
 *.webm
+*.part
+*.ytdl
+
+!app/Harmonize/Harmonize/Resources/Raw/*.mp3
+!app/Harmonize/Harmonize/Resources/Images/*.png
+
+!app/Harmonize/Harmonize/Resources/Raw

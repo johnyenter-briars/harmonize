@@ -66,22 +66,102 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="4.0.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="AlohaKit.Animations" Version="1.0.0" />
+	  <None Remove="Resources\Images\icons8_automatic_50.png" />
+	  <None Remove="Resources\Images\icons8_checked_checkbox_50.png" />
+	  <None Remove="Resources\Images\icons8_clock_50.png" />
+	  <None Remove="Resources\Images\icons8_closed_captioning_48.png" />
+	  <None Remove="Resources\Images\icons8_closed_captioning_50.png" />
+	  <None Remove="Resources\Images\icons8_controls_64.png" />
+	  <None Remove="Resources\Images\icons8_database_export_50.png" />
+	  <None Remove="Resources\Images\icons8_data_pending_50.png" />
+	  <None Remove="Resources\Images\icons8_data_transfer_50.png" />
+	  <None Remove="Resources\Images\icons8_downloading_updates_50.png" />
+	  <None Remove="Resources\Images\icons8_down_arrow_60.png" />
+	  <None Remove="Resources\Images\icons8_down_button_50.png" />
+	  <None Remove="Resources\Images\icons8_earth_planet_50.png" />
+	  <None Remove="Resources\Images\icons8_enter_50.png" />
+	  <None Remove="Resources\Images\icons8_enter_mac_key_50.png" />
+	  <None Remove="Resources\Images\icons8_fast_forward_30.png" />
+	  <None Remove="Resources\Images\icons8_fast_forward_50.png" />
+	  <None Remove="Resources\Images\icons8_file_50.png" />
+	  <None Remove="Resources\Images\icons8_heart_with_pulse_50.png" />
+	  <None Remove="Resources\Images\icons8_home_50.png" />
+	  <None Remove="Resources\Images\icons8_laptop_play_video_64.png" />
+	  <None Remove="Resources\Images\icons8_left_arrow_60.png" />
+	  <None Remove="Resources\Images\icons8_list_50.png" />
+	  <None Remove="Resources\Images\icons8_memory_slot_50.png" />
+	  <None Remove="Resources\Images\icons8_move_up_row_50.png" />
+	  <None Remove="Resources\Images\icons8_music_album_50.png" />
+	  <None Remove="Resources\Images\icons8_music_album_50_pink.png" />
+	  <None Remove="Resources\Images\icons8_music_album_50_purple.png" />
+	  <None Remove="Resources\Images\icons8_music_note_50.png" />
+	  <None Remove="Resources\Images\icons8_nordvpn_50.png" />
+	  <None Remove="Resources\Images\icons8_pause_50.png" />
+	  <None Remove="Resources\Images\icons8_pause_button_50.png" />
+	  <None Remove="Resources\Images\icons8_play_50.png" />
+	  <None Remove="Resources\Images\icons8_play_pause_24.png" />
+	  <None Remove="Resources\Images\icons8_play_pause_48.png" />
+	  <None Remove="Resources\Images\icons8_play_pause_48_2.png" />
+	  <None Remove="Resources\Images\icons8_play_pause_96.png" />
+	  <None Remove="Resources\Images\icons8_power_off_button_50.png" />
+	  <None Remove="Resources\Images\icons8_processor_50.png" />
+	  <None Remove="Resources\Images\icons8_progress_indicator_50.png" />
+	  <None Remove="Resources\Images\icons8_reboot_50.png" />
+	  <None Remove="Resources\Images\icons8_restart_50.png" />
+	  <None Remove="Resources\Images\icons8_rewind_50.png" />
+	  <None Remove="Resources\Images\icons8_right_arrow_60.png" />
+	  <None Remove="Resources\Images\icons8_right_arrow_64.png" />
+	  <None Remove="Resources\Images\icons8_search_more_50.png" />
+	  <None Remove="Resources\Images\icons8_search_more_50_bak.png" />
+	  <None Remove="Resources\Images\icons8_send_file_50.png" />
+	  <None Remove="Resources\Images\icons8_skip_50.png" />
+	  <None Remove="Resources\Images\icons8_skip_to_start_50.png" />
+	  <None Remove="Resources\Images\icons8_slider_48.png" />
+	  <None Remove="Resources\Images\icons8_slide_up_50.png" />
+	  <None Remove="Resources\Images\icons8_subtitle_64.png" />
+	  <None Remove="Resources\Images\icons8_subtitle_better_64.png" />
+	  <None Remove="Resources\Images\icons8_tear_off_calendar_50.png" />
+	  <None Remove="Resources\Images\icons8_torrent_50.png" />
+	  <None Remove="Resources\Images\icons8_trash_50.png" />
+	  <None Remove="Resources\Images\icons8_update_left_rotation_50.png" />
+	  <None Remove="Resources\Images\icons8_upload_to_cloud_50.png" />
+	  <None Remove="Resources\Images\icons8_up_arrow_60.png" />
+	  <None Remove="Resources\Images\icons8_u_turn_to_left_64.png" />
+	  <None Remove="Resources\Images\icons8_voice_50.png" />
+	  <None Remove="Resources\Images\icons8_voice_50_pink.png" />
+	  <None Remove="Resources\Images\icons8_youtube_50.png" />
+	  <None Remove="Resources\Raw\Lo-fi Hip Hop 30 second Loop.mp3" />
+	  <None Remove="Resources\Raw\Sense.mp3" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="View\SettingsPage.xaml.cs">
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="4.0.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="AlohaKit.Animations" Version="1.0.0" />
+		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Harmonize.Client\Harmonize.Client.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Page\View\SettingsPage.xaml.cs">
 	    <DependentUpon>SettingsPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="View\SettingsPage.xaml">
+	  <MauiXaml Update="Page\View\MediaElementPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\MediaListPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\SettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

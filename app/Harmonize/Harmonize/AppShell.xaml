@@ -4,33 +4,55 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Harmonize"
-    xmlns:view="clr-namespace:Harmonize.View"
+    xmlns:view="clr-namespace:Harmonize.Page.View"
     Shell.FlyoutBehavior="Flyout"
     Shell.BackgroundColor="{StaticResource PrimaryDark}"
     FlyoutBackgroundColor="{StaticResource PrimaryDark}"
-    Shell.FlyoutWidth="50"
+    Shell.FlyoutWidth="250"
     Title="Harmonize">
 
     <FlyoutItem 
-                Title="Main Page" 
-                Icon="dotnet_bot.png"
+                Title="Home" 
+                Icon="icons8_home_50.png"
                 >
         <Tab>
             <ShellContent
                 Title="Home"
                 ContentTemplate="{DataTemplate local:MainPage}"
-                Route="MainPage" />
+                Route="Main" />
         </Tab>
     </FlyoutItem>
     <FlyoutItem 
                 Title="Settings" 
-                Icon="dotnet_bot.png"
+                Icon="icons8_automatic_50.png"
                 >
         <Tab>
             <ShellContent
                 Title="Settings"
                 ContentTemplate="{DataTemplate view:SettingsPage}"
                 Route="Settings" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
+                Title="Media Element" 
+                Icon="icons8_music_note_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Media Element"
+                ContentTemplate="{DataTemplate view:MediaElementPage}"
+                Route="MediaElement" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
+                Title="Media List" 
+                Icon="icons8_list_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Media List"
+                ContentTemplate="{DataTemplate view:MediaListPage}"
+                Route="MediaList" />
         </Tab>
     </FlyoutItem>
 

@@ -5,7 +5,7 @@ from fastapi import APIRouter
 from harmonize.const import MEDIA_ROOT, MUSIC_ROOT_LEGACY
 
 logger = logging.getLogger('harmonize')
-router = APIRouter()
+router = APIRouter(prefix='/api')
 
 
 @router.get('/media')

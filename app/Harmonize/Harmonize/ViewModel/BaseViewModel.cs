@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Harmonize.Service;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,44 +9,55 @@ using System.Threading.Tasks;
 
 namespace Harmonize.ViewModel;
 
-public class BaseViewModel : INotifyPropertyChanged
+public abstract partial class BaseViewModel : INotifyPropertyChanged
 {
-	bool isBusy = false;
-	public bool IsBusy
-	{
-		get { return isBusy; }
-		set { SetProperty(ref isBusy, value); }
-	}
+    public BaseViewModel(
+        MediaManager mediaManager,
+        PreferenceManager preferenceManager
+        )
+    {
+        this.mediaManager = mediaManager;
+        this.preferenceManager = preferenceManager;
+    }
+    bool isBusy = false;
+    public bool IsBusy
+    {
+        get { return isBusy; }
+        set { SetProperty(ref isBusy, value); }
+    }
 
-	string title = string.Empty;
-	public string Title
-	{
-		get { return title; }
-		set { SetProperty(ref title, value); }
-	}
+    string title = string.Empty;
+    protected readonly MediaManager mediaManager;
+    protected readonly PreferenceManager preferenceManager;
 
-	protected bool SetProperty<T>(ref T backingStore, T value,
-		[CallerMemberName] string propertyName = "",
-		Action onChanged = null)
-	{
-		if (EqualityComparer<T>.Default.Equals(backingStore, value))
-			return false;
+    public string Title
+    {
+        get { return title; }
+        set { SetProperty(ref title, value); }
+    }
 
-		backingStore = value;
-		onChanged?.Invoke();
-		OnPropertyChanged(propertyName);
-		return true;
-	}
+    protected bool SetProperty<T>(ref T backingStore, T value,
+        [CallerMemberName] string propertyName = "",
+        Action? onChanged = null) 
+    {
+        if (EqualityComparer<T>.Default.Equals(backingStore, value))
+            return false;
 
-	#region INotifyPropertyChanged
-	public event PropertyChangedEventHandler PropertyChanged;
-	protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-	{
-		var changed = PropertyChanged;
-		if (changed == null)
-			return;
+        backingStore = value;
+        onChanged?.Invoke();
+        OnPropertyChanged(propertyName);
+        return true;
+    }
 
-		changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
-	#endregion
+    #region INotifyPropertyChanged
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+    {
+        var changed = PropertyChanged;
+        if (changed == null)
+            return;
+
+        changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+    #endregion
 }

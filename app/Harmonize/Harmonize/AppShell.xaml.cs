@@ -1,10 +1,16 @@
-﻿namespace Harmonize
+﻿using Harmonize.Service;
+
+namespace Harmonize
 {
     public partial class AppShell : Shell
     {
-        public AppShell()
+        public AppShell(PreferenceManager preferenceManager)
         {
             InitializeComponent();
+
+            var defaultPage = preferenceManager.UserSettings.DefaultPageOnLaunch;
+
+            CurrentItem = Items.FirstOrDefault(item => item.Title == defaultPage);
         }
     }
 }

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BasePage  
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Harmonize.Page.View"
+    xmlns:pages="clr-namespace:Harmonize.Page"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+    x:TypeArguments="viewModels:MediaElementViewModel"
+    x:DataType="viewModels:MediaElementViewModel"
+    x:Class="Harmonize.Page.View.MediaElementPage"
+    Title="{Binding MediaEntry.Name}"
+>
+    <ScrollView>
+        <Grid Padding="10" VerticalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <toolkit:MediaElement
+                x:Name="MediaElement"
+                Grid.Row="0"
+                ShouldAutoPlay="True"
+                MediaEnded="OnMediaEnded"
+                MediaFailed="OnMediaFailed"
+                MediaOpened="OnMediaOpened"
+                PositionChanged="OnPositionChanged"
+                StateChanged="OnStateChanged"
+                SeekCompleted="OnSeekCompleted"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Aspect="AspectFit"
+            />
+
+            <HorizontalStackLayout Grid.Row="1" Padding="0,0,0,15" HorizontalOptions="Center">
+                <Label HorizontalOptions="Center">
+                    <Label.Text>
+                        <MultiBinding StringFormat="{}Current State: {0} - Dimensions: {1}x{2}">
+                            <Binding Path="CurrentState" Source="{x:Reference MediaElement}" />
+                            <Binding Path="MediaWidth" Source="{x:Reference MediaElement}" />
+                            <Binding Path="MediaHeight" Source="{x:Reference MediaElement}" />
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+            </HorizontalStackLayout>
+
+            <Slider
+                x:Name="PositionSlider"
+                Grid.Row="2"
+                MinimumTrackColor="Gray"
+                DragStarted="Slider_DragStarted"
+                Value="10"
+                DragCompleted="Slider_DragCompleted"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="Center"
+            />
+
+            <Grid Grid.Row="3" HorizontalOptions="Fill">
+                <Label HorizontalOptions="Start" Text="{Binding Position, Source={x:Reference MediaElement}, Converter={StaticResource SecondsToStringConverter}}" />
+                <Label HorizontalOptions="End" HorizontalTextAlignment="End" Text="{Binding Duration, Source={x:Reference MediaElement}, Converter={StaticResource SecondsToStringConverter}}" />
+            </Grid>
+
+            <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center" Padding="0,10,0,10" Spacing="10">
+                <Button 
+                    Clicked="SkipBackClicked" 
+                    ImageSource="icons8_skip_to_start_50.png"
+                    WidthRequest="100" 
+                    HeightRequest="100" 
+                    CornerRadius="50" />
+                <Button 
+                    Clicked="OnPlayPauseClicked" 
+                    WidthRequest="100" 
+                    HeightRequest="100" 
+                    CornerRadius="50">
+                    <Button.Triggers>
+                        <DataTrigger 
+                             TargetType="Button"
+                             Binding="{Binding IsPlaying}"
+                             Value="True">
+                            <Setter 
+                                Property="ImageSource" 
+                                Value="icons8_pause_50.png" />
+                        </DataTrigger>
+                        <DataTrigger 
+                            TargetType="Button"
+                            Binding="{Binding IsPlaying}"
+                            Value="False">
+                            <Setter 
+                                Property="ImageSource" 
+                                Value="icons8_play_50.png" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+                <Button 
+                    Clicked="SkipForwardClicked" 
+                    ImageSource="icons8_skip_50.png"
+                    WidthRequest="100" 
+                    HeightRequest="100" 
+                    CornerRadius="50" />
+            </HorizontalStackLayout>
+        </Grid>
+    </ScrollView>
+</pages:BasePage>
+
