@@ -18,6 +18,7 @@
 - [ ] option to integration with custom media system / fullsail
 - [ ] Option to download
 - [ ] Implement https + private keys
+- [ ] Splash screen icon weirdly cut off
 
 ### Back End
 - [ ] Support fast forwarding
