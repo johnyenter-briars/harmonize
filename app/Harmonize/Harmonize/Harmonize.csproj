@@ -149,6 +149,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Page\View\HomePage.xaml.cs">
+	    <DependentUpon>HomePage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Page\View\SettingsPage.xaml.cs">
 	    <DependentUpon>SettingsPage.xaml</DependentUpon>
 	  </Compile>
