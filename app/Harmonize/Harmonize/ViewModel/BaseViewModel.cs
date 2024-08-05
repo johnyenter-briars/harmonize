@@ -9,16 +9,11 @@ using System.Threading.Tasks;
 
 namespace Harmonize.ViewModel;
 
-public abstract partial class BaseViewModel : INotifyPropertyChanged
+public abstract partial class BaseViewModel(
+    MediaManager mediaManager,
+    PreferenceManager preferenceManager
+        ) : INotifyPropertyChanged
 {
-    public BaseViewModel(
-        MediaManager mediaManager,
-        PreferenceManager preferenceManager
-        )
-    {
-        this.mediaManager = mediaManager;
-        this.preferenceManager = preferenceManager;
-    }
     bool isBusy = false;
     public bool IsBusy
     {
@@ -27,8 +22,8 @@ public abstract partial class BaseViewModel : INotifyPropertyChanged
     }
 
     string title = string.Empty;
-    protected readonly MediaManager mediaManager;
-    protected readonly PreferenceManager preferenceManager;
+    protected readonly MediaManager mediaManager = mediaManager;
+    protected readonly PreferenceManager preferenceManager = preferenceManager;
 
     public string Title
     {

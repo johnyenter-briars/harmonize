@@ -11,7 +11,6 @@ namespace Harmonize.ViewModel;
 
 public class MediaListViewModel : BaseViewModel
 {
-    //public ObservableCollection<MediaEntry> MediaEntries { get; set; }
     private ObservableCollection<MediaEntry> mediaEntries  = [];
     public ObservableCollection<MediaEntry> MediaEntries 
     {

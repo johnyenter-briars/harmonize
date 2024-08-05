@@ -8,10 +8,11 @@ class Status(Enum):
     SUCCEEDED = 0
     RUNNING = 1
     FAILED = 2
+    Canceled = 3
+
 
 class Job(TypedDict):
     id: uuid.UUID
     started_on: datetime
     description: str
     status: Status
-

@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace Harmonize.ViewModel;
 
-public class HomePageViewModel : BaseViewModel
+public class HomePageViewModel(
+    MediaManager mediaManager,
+    PreferenceManager preferenceManager) : BaseViewModel(mediaManager, preferenceManager)
 {
-    public HomePageViewModel(
-        MediaManager mediaManager, 
-        PreferenceManager preferenceManager) : base(mediaManager, preferenceManager)
-    {
-    }
 }

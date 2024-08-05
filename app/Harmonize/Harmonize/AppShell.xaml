@@ -55,5 +55,16 @@
                 Route="MediaList" />
         </Tab>
     </FlyoutItem>
+    <FlyoutItem 
+                Title="Job List" 
+                Icon="icons8_job_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Job List"
+                ContentTemplate="{DataTemplate view:JobListPage}"
+                Route="JobList" />
+        </Tab>
+    </FlyoutItem>
 
 </Shell>

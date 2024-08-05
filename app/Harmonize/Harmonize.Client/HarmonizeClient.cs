@@ -1,7 +1,9 @@
 ﻿using Harmonize.Client.Model.Media;
 using Harmonize.Client.Model.Response;
+using Harmonize.Client.Model.System;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using static Harmonize.Client.Utility.Utility;
 
 namespace Harmonize.Client;
@@ -12,10 +14,11 @@ public class HarmonizeClient
     private int port;
     private static readonly JsonSerializerOptions serializeOptions = new JsonSerializerOptions
     {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        WriteIndented = true
+        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+        WriteIndented = true,
+        Converters = { new JsonStringEnumConverter() }
     };
-    private static HttpClientHandler handler = new HttpClientHandler()
+    private static HttpClientHandler handler = new()
     {
         ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
     };
@@ -28,6 +31,7 @@ public class HarmonizeClient
         this.hostName = hostName;
         this.port = port;
     }
+    #region GET
     public string GetMediaMetadataArtworkUrl(MediaMetadata mediaMetadata, string artworkSize)
     {
         var artwork = mediaMetadata.Artwork;
@@ -50,10 +54,20 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<MediaMetadata>($"metadata/media/{fileName}", HttpMethod.Get);
     }
-    public async Task<Playlist> StreamItem(string playlistName)
+    public async Task<List<Job>> GetJobs()
     {
-        return await HarmonizeRequest<Playlist>($"media/playlist/{playlistName}", HttpMethod.Get);
+        return await HarmonizeRequest<List<Job>>($"job", HttpMethod.Get);
     }
+    #endregion
+    #region POST
+    public async Task<BaseResponse<Job>> CancelJob(Guid jobId)
+    {
+        return await HarmonizeRequest<BaseResponse<Job>>($"job/cancel/{jobId}", HttpMethod.Post);
+    }
+    #endregion
+
+
+    #region BASE REQUESTS
     private async Task<TResponse> HarmonizeRequest<TResponse>(string path, HttpMethod httpMethod)
     {
         var request = new HttpRequestMessage(httpMethod, $"http://{hostName}:{port}/api/" + path);
@@ -102,6 +116,7 @@ public class HarmonizeClient
 
         var fileBytes = await clientResponse.Content.ReadAsByteArrayAsync();
 
-        return fileBytes; 
+        return fileBytes;
     }
+    #endregion
 }
