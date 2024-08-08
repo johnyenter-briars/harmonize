@@ -23,9 +23,16 @@
         <ListView ItemTapped="OnItemTapped" ItemsSource="{Binding Jobs}">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="harmonizeSystem:Job">
-                    <ViewCell>
+                    <ViewCell
+                       Height="100"
+                        >
                         <StackLayout Orientation="Horizontal">
-                            <Label Text="{Binding Description}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
+                            <Label 
+                                Text="{Binding Description}" 
+                                VerticalOptions="Center" 
+                                HorizontalOptions="StartAndExpand" 
+                                HeightRequest="75" 
+                                />
                             <Label Text="{Binding Status}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
                             <Label Text="{Binding StartedOn}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
                         </StackLayout>
