@@ -1,3 +1,5 @@
+import uuid
+
 from fastapi import APIRouter
 
 from harmonize.defs.job import Job
@@ -10,6 +12,14 @@ router = APIRouter(prefix='/api')
 @router.get('/job')
 async def jobs() -> list[Job]:
     return [job_value[1] for job_value in Jobs.values()]
+
+
+# TODO: return 404
+@router.get('/job/{job_id}')
+async def get_job(job_id) -> Job:
+    parsed_id = uuid.UUID(job_id)
+    (_, job) = Jobs[parsed_id]
+    return job
 
 
 @router.post('/job/cancel/{job_id}')

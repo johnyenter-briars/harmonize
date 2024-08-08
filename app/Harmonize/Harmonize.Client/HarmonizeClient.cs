@@ -58,6 +58,10 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<List<Job>>($"job", HttpMethod.Get);
     }
+    public async Task<Job> GetJob(Guid jobId)
+    {
+        return await HarmonizeRequest<Job>($"job/{jobId}", HttpMethod.Get);
+    }
     #endregion
     #region POST
     public async Task<BaseResponse<Job>> CancelJob(Guid jobId)

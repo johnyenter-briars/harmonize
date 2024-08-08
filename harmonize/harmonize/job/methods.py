@@ -12,10 +12,10 @@ Jobs: dict[uuid.UUID, tuple[StoppableThread, Job]] = {}
 FuncType = Callable[[Any, Any], Awaitable[Any]]
 
 
-async def start_job(job_function, input_args: tuple[str]) -> Job:
+async def start_job(job_function, description: str, input_args: tuple[str]) -> Job:
     job_info: Job = {
         'id': uuid.uuid4(),
-        'description': 'idk',
+        'description': description,
         'started_on': datetime.datetime.now(datetime.UTC),
         'status': Status.RUNNING,
     }

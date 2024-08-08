@@ -1,3 +1,4 @@
+using Harmonize.Client.Model.System;
 using Harmonize.Model;
 using Harmonize.Service;
 using Harmonize.ViewModel;
@@ -25,19 +26,11 @@ public partial class JobListPage : BasePage<JobListViewModel>
     {
         await viewModel.PopulateJobs();
     }
-    private void OnItemTapped(object sender, ItemTappedEventArgs e)
+    private async void OnItemTapped(object sender, ItemTappedEventArgs e)
     {
-        if (e.Item is MediaEntry mediaEntry)
+        if (e.Item is Job job)
         {
-            DisplayAlert("Media Tapped", $"You tapped on {mediaEntry.Name}", "OK");
-        }
-    }
-
-    private void OnButtonClicked(object sender, EventArgs e)
-    {
-        if (sender is Button button && button.BindingContext is MediaEntry mediaEntry)
-        {
-            DisplayAlert("Play Media", $"Playing {mediaEntry.Name}", "OK");
+            await viewModel.ItemTapped(job);
         }
     }
 }

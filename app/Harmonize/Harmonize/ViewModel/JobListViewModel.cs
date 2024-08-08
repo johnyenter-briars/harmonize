@@ -1,6 +1,7 @@
 ﻿using Harmonize.Client;
 using Harmonize.Client.Model.System;
 using Harmonize.Model;
+using Harmonize.Page.View;
 using Harmonize.Service;
 using System;
 using System.Collections.Generic;
@@ -12,19 +13,14 @@ using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
 
-public class JobListViewModel : BaseViewModel
+public class JobListViewModel(
+    MediaManager mediaManager,
+    PreferenceManager preferenceManager,
+    HarmonizeClient harmonizeClient
+        ) : BaseViewModel(mediaManager, preferenceManager)
 {
-    public JobListViewModel(
-        MediaManager mediaManager,
-        PreferenceManager preferenceManager,
-        HarmonizeClient harmonizeClient
-        ) : base(mediaManager, preferenceManager)
-    {
-        this.harmonizeClient = harmonizeClient;
-    }
-
     private ObservableCollection<Job> jobs = [];
-    private readonly HarmonizeClient harmonizeClient;
+    private readonly HarmonizeClient harmonizeClient = harmonizeClient;
 
     public ObservableCollection<Job> Jobs
     {
@@ -43,10 +39,16 @@ public class JobListViewModel : BaseViewModel
             Jobs.Add(m);
         }
     }
-    public ICommand CancelJob => new Command<Job>(async (job) =>
+    public async Task ItemTapped(Job job)
     {
-        var _ = await harmonizeClient.CancelJob(job.Id);
-    });
+        if (job != null)
+        {
+            await Shell.Current.GoToAsync(nameof(EditJobPage), new Dictionary<string, object>
+            {
+                { nameof(EditJobViewModel.JobId), job.Id }
+            });
+        }
+    }
     public ICommand Refresh => new Command<Job>(async (job) =>
     {
         await PopulateJobs();

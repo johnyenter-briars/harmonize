@@ -150,28 +150,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Page\View\HomePage.xaml.cs">
-	    <DependentUpon>HomePage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Page\View\JobListPage.xaml.cs">
-	    <DependentUpon>JobListPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Page\View\SettingsPage.xaml.cs">
-	    <DependentUpon>SettingsPage.xaml</DependentUpon>
+	  <Compile Update="Page\View\EditJobPage.xaml.cs">
+	    <DependentUpon>EditJobPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Page\View\MediaElementPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Page\View\JobListPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Page\View\MediaListPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Page\View\SettingsPage.xaml">
+	  <MauiXaml Update="Page\View\EditJobPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

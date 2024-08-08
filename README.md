@@ -15,6 +15,11 @@
     - [ ] Save files in main DB
 - [ ] search youtube dl in different regions
 - [ ] Set / query long running jobs
+    -  [X] Basic read
+    -  [X] Basic cancel
+    -  [X] Job details / page
+    -  [ ] Job details update
+    -  [ ] Finish formatting edit page / list page
 - [ ] option to integration with custom media system / fullsail
 - [ ] Option to download
 - [ ] Implement https + private keys

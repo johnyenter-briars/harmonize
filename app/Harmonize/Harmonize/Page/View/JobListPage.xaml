@@ -28,12 +28,6 @@
                             <Label Text="{Binding Description}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
                             <Label Text="{Binding Status}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
                             <Label Text="{Binding StartedOn}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
-                            <Button 
-                                ImageSource="icons8_trash_50.png"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:JobListViewModel}}, Path=CancelJob }"
-                                CommandParameter="{Binding}"
-                                VerticalOptions="Center" 
-                                HorizontalOptions="End" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
