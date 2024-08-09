@@ -3,10 +3,13 @@ using Harmonize.Service;
 
 namespace Harmonize.ViewModel;
 
-public partial class MediaElementViewModel : BaseViewModel
+public partial class MediaElementViewModel(
+    MediaManager mediaManager,
+    PreferenceManager preferenceManager
+        ) : BaseViewModel(mediaManager, preferenceManager)
 {
-    private MediaEntry mediaEntry;
-    public MediaEntry MediaEntry
+    private MediaEntry? mediaEntry;
+    public MediaEntry? MediaEntry
     {
         get => mediaEntry;
         set
@@ -31,11 +34,5 @@ public partial class MediaElementViewModel : BaseViewModel
                 OnPropertyChanged(nameof(IsPlaying));
             }
         }
-    }
-    public MediaElementViewModel(
-        MediaManager mediaManager,
-        PreferenceManager preferenceManager
-        ) : base(mediaManager, preferenceManager)
-    {
     }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BasePage 
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Harmonize.Page.View"
+             xmlns:pages="clr-namespace:Harmonize.Page"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+             x:TypeArguments="viewModels:JobListViewModel"
+             x:DataType="viewModels:JobListViewModel"
+             x:Class="Harmonize.Page.View.JobListPage"
+             xmlns:model="clr-namespace:Harmonize.Model"
+             xmlns:harmonizeSystem="clr-namespace:Harmonize.Client.Model.System;assembly=Harmonize.Client"
+             Title="Job List">
+
+    <StackLayout Padding="10">
+        <StackLayout Orientation="Horizontal">
+            <Button 
+                ImageSource="icons8_update_left_rotation_50.png"
+                Command="{Binding Refresh}"
+                />
+        </StackLayout>
+        <ListView ItemTapped="OnItemTapped" ItemsSource="{Binding Jobs}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="harmonizeSystem:Job">
+                    <ViewCell
+                       Height="100"
+                        >
+                        <StackLayout Orientation="Horizontal">
+                            <Label 
+                                Text="{Binding Description}" 
+                                VerticalOptions="Center" 
+                                HorizontalOptions="StartAndExpand" 
+                                HeightRequest="75" 
+                                />
+                            <Label Text="{Binding Status}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
+                            <Label Text="{Binding StartedOn}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</pages:BasePage>

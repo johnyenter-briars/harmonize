@@ -18,7 +18,7 @@
         <Tab>
             <ShellContent
                 Title="Home"
-                ContentTemplate="{DataTemplate local:MainPage}"
+                ContentTemplate="{DataTemplate view:HomePage}"
                 Route="Main" />
         </Tab>
     </FlyoutItem>
@@ -53,6 +53,17 @@
                 Title="Media List"
                 ContentTemplate="{DataTemplate view:MediaListPage}"
                 Route="MediaList" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
+                Title="Job List" 
+                Icon="icons8_job_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Job List"
+                ContentTemplate="{DataTemplate view:JobListPage}"
+                Route="JobList" />
         </Tab>
     </FlyoutItem>
 

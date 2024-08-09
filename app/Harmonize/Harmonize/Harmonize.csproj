@@ -49,10 +49,10 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\tuningforksvgrepocom.svg" ForegroundScale="0.5" Color="#513BD4" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\tuningforksvgrepocom.svg" Color="#512BD4" BaseSize="64,64" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -86,6 +86,7 @@
 	  <None Remove="Resources\Images\icons8_file_50.png" />
 	  <None Remove="Resources\Images\icons8_heart_with_pulse_50.png" />
 	  <None Remove="Resources\Images\icons8_home_50.png" />
+	  <None Remove="Resources\Images\icons8_job_50.png" />
 	  <None Remove="Resources\Images\icons8_laptop_play_video_64.png" />
 	  <None Remove="Resources\Images\icons8_left_arrow_60.png" />
 	  <None Remove="Resources\Images\icons8_list_50.png" />
@@ -149,19 +150,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Page\View\SettingsPage.xaml.cs">
-	    <DependentUpon>SettingsPage.xaml</DependentUpon>
+	  <Compile Update="Page\View\EditJobPage.xaml.cs">
+	    <DependentUpon>EditJobPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Page\View\MediaElementPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Page\View\MediaListPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Page\View\SettingsPage.xaml">
+	  <MauiXaml Update="Page\View\EditJobPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
