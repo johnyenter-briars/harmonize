@@ -26,8 +26,8 @@
 - [ ] Splash screen icon weirdly cut off
 
 ### Back End
-- [ ] Support fast forwarding
-- [ ] Test initial manual deployment on server
+- [X] Support fast forwarding
+- [X] Test initial manual deployment on server
 - [ ] Integrate with QBT
 - [ ] Integrate with youtube-dl
     - [X] MVP file search + download via API 
@@ -35,7 +35,6 @@
 - [ ] Playlists
 - [X] Set / query long running jobs
 - [ ] Integrate media art with youtube-dl
-- [ ] Search magnet links across different 
 - [ ] Search magnet links across different search platforms
 - [ ] Setup easy deployment / redeployment on server
 - [ ] Automatic media art when not found?

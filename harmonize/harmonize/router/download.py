@@ -68,5 +68,5 @@ def _download_youtube(id: str, job: Job):
                 job['status'] = Status.FAILED
                 return
         job['status'] = Status.SUCCEEDED
-    except:
+    except Exception:
         job['status'] = Status.FAILED
