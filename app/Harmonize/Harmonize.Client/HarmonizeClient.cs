@@ -1,6 +1,7 @@
 ﻿using Harmonize.Client.Model.Media;
 using Harmonize.Client.Model.Response;
 using Harmonize.Client.Model.System;
+using Harmonize.Client.Model.Youtube;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -12,9 +13,15 @@ public class HarmonizeClient
 {
     private string hostName;
     private int port;
-    private static readonly JsonSerializerOptions serializeOptions = new JsonSerializerOptions
+    private static readonly JsonSerializerOptions SnakeCaseOptions = new JsonSerializerOptions
     {
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+        WriteIndented = true,
+        Converters = { new JsonStringEnumConverter() }
+    };
+    private static readonly JsonSerializerOptions CamelCaseOptions = new JsonSerializerOptions
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         WriteIndented = true,
         Converters = { new JsonStringEnumConverter() }
     };
@@ -62,6 +69,10 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<Job>($"job/{jobId}", HttpMethod.Get);
     }
+    public async Task<YoutubeSearchResults> GetYoutubeSearchResults(string query)
+    {
+        return await HarmonizeRequest<YoutubeSearchResults>($"search/youtube/{query}", HttpMethod.Get, CamelCaseOptions);
+    }
     #endregion
     #region POST
     public async Task<BaseResponse<Job>> CancelJob(Guid jobId)
@@ -72,14 +83,16 @@ public class HarmonizeClient
 
 
     #region BASE REQUESTS
-    private async Task<TResponse> HarmonizeRequest<TResponse>(string path, HttpMethod httpMethod)
+    private async Task<TResponse> HarmonizeRequest<TResponse>(string path, HttpMethod httpMethod, JsonSerializerOptions? serializerOptions = null)
     {
         var request = new HttpRequestMessage(httpMethod, $"http://{hostName}:{port}/api/" + path);
         request.Headers.Accept.Clear();
         //request.Headers.Add("x-api-key", _apiKey);
         //request.Headers.Add("x-user-id", _userId);
 
-        return await SendRequest<TResponse>(request);
+        var options = serializerOptions ?? SnakeCaseOptions;
+
+        return await SendRequest<TResponse>(request, options);
     }
     private async Task<byte[]> HarmonizeRequestBytes(string path, HttpMethod httpMethod)
     {
@@ -90,19 +103,21 @@ public class HarmonizeClient
 
         return await SendRequestBytes(request);
     }
-    private async Task<TResponse> HarmonizeRequest<TRequest, TResponse>(TRequest requestObject, string path, HttpMethod httpMethod)
+    private async Task<TResponse> HarmonizeRequest<TRequest, TResponse>(TRequest requestObject, string path, HttpMethod httpMethod, JsonSerializerOptions? serializerOptions = null)
     {
         var request = new HttpRequestMessage(httpMethod, $"http://{hostName}:{port}/api/" + path);
         request.Headers.Accept.Clear();
         //request.Headers.Add("x-api-key", _apiKey);
         //request.Headers.Add("x-user-id", _userId);
 
-        request.Content = new StringContent(JsonSerializer.Serialize(requestObject, serializeOptions), Encoding.UTF8, "application/json");
+        var options = serializerOptions ?? SnakeCaseOptions;
 
-        return await SendRequest<TResponse>(request);
+        request.Content = new StringContent(JsonSerializer.Serialize(requestObject, CamelCaseOptions), Encoding.UTF8, "application/json");
+
+        return await SendRequest<TResponse>(request, options);
     }
     //TODO: return a monad
-    private async Task<TResponse> SendRequest<TResponse>(HttpRequestMessage request)
+    private async Task<TResponse> SendRequest<TResponse>(HttpRequestMessage request, JsonSerializerOptions settings)
     {
         var clientResponse = await httpClient.SendAsync(request, CancellationToken.None);
 
@@ -110,7 +125,7 @@ public class HarmonizeClient
 
         var str = await clientResponse.Content.ReadAsStringAsync();
         using var stream = new MemoryStream(Encoding.UTF8.GetBytes(str));
-        return await JsonSerializer.DeserializeAsync<TResponse>(stream, serializeOptions) ?? throw new NullReferenceException(nameof(JsonSerializer.DeserializeAsync));
+        return await JsonSerializer.DeserializeAsync<TResponse>(stream, settings) ?? throw new NullReferenceException(nameof(JsonSerializer.DeserializeAsync));
     }
     private async Task<byte[]> SendRequestBytes(HttpRequestMessage request)
     {

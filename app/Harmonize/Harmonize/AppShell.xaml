@@ -66,5 +66,16 @@
                 Route="JobList" />
         </Tab>
     </FlyoutItem>
+    <FlyoutItem 
+                Title="Youtube Search" 
+                Icon="icons8_youtube_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Youtube Search"
+                ContentTemplate="{DataTemplate view:YouTubeSearchPage}"
+                Route="YoutubeSearch" />
+        </Tab>
+    </FlyoutItem>
 
 </Shell>
