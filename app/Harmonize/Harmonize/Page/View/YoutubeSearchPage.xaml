@@ -37,9 +37,10 @@
             ItemsSource="{Binding SearchResults}"
             VerticalOptions="FillAndExpand"
             RowHeight="100"
+            ItemTapped="OnItemTapped"
             >
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="youtube:YoutubeSearchResult">
+                <DataTemplate x:DataType="youtube:YouTubeSearchResult">
                     <ViewCell>
                         <StackLayout 
                             Orientation="Horizontal" 
@@ -49,6 +50,7 @@
                             <StackLayout Orientation="Vertical" Padding="10,0,0,0">
                                 <Label Text="{Binding Title}" FontAttributes="Bold" />
                                 <Label Text="{Binding Channel.Name}" FontSize="Small" />
+                                <Label Text="{Binding Duration}" FontSize="Small" />
                                 <Label Text="{Binding PublishedTime}" FontSize="Small" />
                             </StackLayout>
                         </StackLayout>

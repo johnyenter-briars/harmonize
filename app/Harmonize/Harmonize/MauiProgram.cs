@@ -38,6 +38,7 @@ namespace Harmonize
             builder.Services.AddSingleton<JobListViewModel>();
             builder.Services.AddSingleton<EditJobViewModel>();
             builder.Services.AddSingleton<YouTubeSearchViewModel>();
+            builder.Services.AddSingleton<YouTubeSearchResultEditViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();
@@ -46,6 +47,7 @@ namespace Harmonize
             builder.Services.AddSingleton<JobListPage>();
             builder.Services.AddSingleton<EditJobPage>();
             builder.Services.AddSingleton<YouTubeSearchPage>();
+            builder.Services.AddSingleton<YouTubeSearchResultEditPage>();
 
             builder.Services.AddSingleton(service =>
             {

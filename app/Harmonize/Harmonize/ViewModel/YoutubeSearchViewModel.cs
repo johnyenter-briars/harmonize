@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Linq;
 using Harmonize.Client.Model.Youtube;
+using Harmonize.Page.View;
 
 namespace Harmonize.ViewModel;
 
@@ -14,15 +15,15 @@ public class YouTubeSearchViewModel(
     HarmonizeClient harmonizeClient
 ) : BaseViewModel(mediaManager, preferenceManager)
 {
-    private string searchQuery;
-    public string SearchQuery
+    private string? searchQuery;
+    public string? SearchQuery
     {
         get => searchQuery;
         set => SetProperty(ref searchQuery, value);
     }
 
-    private ObservableCollection<YoutubeSearchResult> searchResults = [];
-    public ObservableCollection<YoutubeSearchResult> SearchResults
+    private ObservableCollection<YouTubeSearchResult> searchResults = [];
+    public ObservableCollection<YouTubeSearchResult> SearchResults
     {
         get => searchResults;
         set => SetProperty(ref searchResults, value);
@@ -41,5 +42,15 @@ public class YouTubeSearchViewModel(
             SearchResults.Add(video);
         }
     });
+    public async Task ItemTapped(YouTubeSearchResult youTubeSearchResult)
+    {
+        if (youTubeSearchResult != null)
+        {
+            await Shell.Current.GoToAsync(nameof(YouTubeSearchResultEditPage), new Dictionary<string, object>
+            {
+                { nameof(YouTubeSearchResultEditViewModel.YoutubeSearchResult), youTubeSearchResult }
+            });
+        }
+    }
 }
 

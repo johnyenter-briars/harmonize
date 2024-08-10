@@ -69,15 +69,19 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<Job>($"job/{jobId}", HttpMethod.Get);
     }
-    public async Task<YoutubeSearchResults> GetYoutubeSearchResults(string query)
+    public async Task<YouTubeSearchResults> GetYoutubeSearchResults(string query)
     {
-        return await HarmonizeRequest<YoutubeSearchResults>($"search/youtube/{query}", HttpMethod.Get, CamelCaseOptions);
+        return await HarmonizeRequest<YouTubeSearchResults>($"search/youtube/{query}", HttpMethod.Get, CamelCaseOptions);
     }
     #endregion
     #region POST
     public async Task<BaseResponse<Job>> CancelJob(Guid jobId)
     {
         return await HarmonizeRequest<BaseResponse<Job>>($"job/cancel/{jobId}", HttpMethod.Post);
+    }
+    public async Task<BaseResponse<Job>> DownloadYoutube(string youtubeId)
+    {
+        return await HarmonizeRequest<BaseResponse<Job>>($"download/youtube/{youtubeId}", HttpMethod.Post);
     }
     #endregion
 

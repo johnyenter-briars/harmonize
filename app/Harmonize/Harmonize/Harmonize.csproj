@@ -153,13 +153,19 @@
 	  <Compile Update="Page\View\EditJobPage.xaml.cs">
 	    <DependentUpon>EditJobPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Page\View\YoutubeSearchPage.xaml.cs">
+	    <DependentUpon>YouTubeSearchPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="Page\View\EditJobPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Page\View\YoutubeSearchPage.xaml">
+	  <MauiXaml Update="Page\View\YouTubeSearchPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\YouTubeSearchResultEditPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

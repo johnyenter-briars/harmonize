@@ -20,7 +20,11 @@
                 Command="{Binding Refresh}"
                 />
         </StackLayout>
-        <ListView ItemTapped="OnItemTapped" ItemsSource="{Binding Jobs}">
+        <ListView 
+            ItemTapped="OnItemTapped" 
+            ItemsSource="{Binding Jobs}"
+            RowHeight="100"
+            >
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="harmonizeSystem:Job">
                     <ViewCell
