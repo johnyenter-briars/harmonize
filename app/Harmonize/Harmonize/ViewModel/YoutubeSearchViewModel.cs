@@ -52,5 +52,10 @@ public class YouTubeSearchViewModel(
             });
         }
     }
+
+    public override Task OnAppearingAsync()
+    {
+        throw new NotImplementedException();
+    }
 }
 

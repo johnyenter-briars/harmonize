@@ -44,6 +44,8 @@ public abstract partial class BaseViewModel(
         return true;
     }
 
+    public abstract Task OnAppearingAsync();
+
     #region INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string propertyName = "")

@@ -36,4 +36,9 @@ public class MediaListViewModel : BaseViewModel
             MediaEntries.Add(m);
         }
     }
+
+    public override Task OnAppearingAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

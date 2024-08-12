@@ -41,5 +41,10 @@ public class YouTubeSearchResultEditViewModel : BaseViewModel
 
         await mainPage.DisplayAlert(response.SuccessMessage, response.Message, "OK");
     });
+
+    public override Task OnAppearingAsync()
+    {
+        throw new NotImplementedException();
+    }
 }
 

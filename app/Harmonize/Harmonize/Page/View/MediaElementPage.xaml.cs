@@ -13,9 +13,6 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
     private readonly MediaElementViewModel viewModel;
     readonly ILogger logger;
     private readonly MediaManager mediaManager;
-    Playlist playlist;
-    int currentIndex;
-
     public MediaElementPage(
         MediaElementViewModel viewModel,
         ILogger<MediaElementPage> logger,
@@ -30,52 +27,25 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
     }
     protected override async void OnAppearing()
     {
-        playlist = await mediaManager.GetPlaylist("foo");
-
-        var firstItem = playlist.Files.First();
-        currentIndex = 0;
-
-        await UpdateMediaElementFile(firstItem);
-    }
-    async Task UpdateMediaElementFile(string name)
-    {
-        var mediaEntry = await mediaManager.GetMediaEntry(name);
-
-        var mediaMetadata = await mediaManager.GetMediaMetadata(name);
-
-        var xlMediaUrl = mediaManager.GetMediaMetadataArtworkUrl(mediaMetadata, "Xl");
-
-        MediaElement.ShouldShowPlaybackControls = true;
-        MediaElement.MetadataArtist = mediaMetadata.Artist;
-        MediaElement.MetadataTitle = mediaMetadata.Title;
-        MediaElement.MetadataArtworkUrl = xlMediaUrl;
-        MediaElement.Source = await mediaManager.GetMediaResource(name);
-
-        viewModel.IsPlaying = true;
-        viewModel.MediaEntry = mediaEntry;
+        await viewModel.OnAppearingAsync();
     }
     void MediaElement_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == MediaElement.DurationProperty.PropertyName)
-        {
-            logger.LogInformation("Duration: {newDuration}", MediaElement.Duration);
-            PositionSlider.Maximum = MediaElement.Duration.TotalSeconds;
-        }
+        viewModel.MediaElementPropertyChanged(e, MediaElement);
     }
 
-    void OnMediaOpened(object? sender, EventArgs e) => logger.LogInformation("Media opened.");
+    //void OnMediaOpened(object? sender, EventArgs e) => logger.LogInformation("Media opened.");
 
-    void OnStateChanged(object? sender, MediaStateChangedEventArgs e) =>
-        logger.LogInformation("Media State Changed. Old State: {PreviousState}, New State: {NewState}", e.PreviousState, e.NewState);
+    //void OnStateChanged(object? sender, MediaStateChangedEventArgs e) =>
+    //    logger.LogInformation("Media State Changed. Old State: {PreviousState}, New State: {NewState}", e.PreviousState, e.NewState);
 
-    void OnMediaFailed(object? sender, MediaFailedEventArgs e) => logger.LogInformation("Media failed. Error: {ErrorMessage}", e.ErrorMessage);
+    //void OnMediaFailed(object? sender, MediaFailedEventArgs e) => logger.LogInformation("Media failed. Error: {ErrorMessage}", e.ErrorMessage);
 
-    void OnMediaEnded(object? sender, EventArgs e) => logger.LogInformation("Media ended.");
+    //void OnMediaEnded(object? sender, EventArgs e) => logger.LogInformation("Media ended.");
 
     void OnPositionChanged(object? sender, MediaPositionChangedEventArgs e)
     {
-        logger.LogInformation("Position changed to {position}", e.Position);
-        PositionSlider.Value = e.Position.TotalSeconds;
+        viewModel.OnPositionChanged(e);
     }
 
     void OnSeekCompleted(object? sender, EventArgs e) => logger.LogInformation("Seek completed.");
@@ -175,84 +145,17 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
         MediaElement.Pause();
     }
 
-    void Button_Clicked(object? sender, EventArgs e)
+    async void SkipForwardClicked(object sender, EventArgs e)
     {
-        //if (string.IsNullOrWhiteSpace(CustomSourceEntry.Text))
-        //{
-        //    DisplayAlert("Error Loading URL Source", "No value was found to load as a media source. " +
-        //        "When you do enter a value, make sure it's a valid URL. No additional validation is done.",
-        //        "OK");
-
-        //    return;
-        //}
-
-        //MediaElement.Source = MediaSource.FromUri(CustomSourceEntry.Text);
-    }
-
-    async void SkipForwardClicked(Object sender, EventArgs e)
-    {
-        currentIndex++;
-        var item = playlist.Files[currentIndex];
-        await UpdateMediaElementFile(item);
+        //currentIndex++;
+        //var item = playlist.Files[currentIndex];
+        //await UpdateMediaElementFile(item);
     }
 
     async void SkipBackClicked(object? sender, EventArgs e)
     {
-        currentIndex--;
-        var item = playlist.Files[currentIndex];
-        await UpdateMediaElementFile(item);
-    }
-
-    //async void ChangeAspectClicked(object? sender, EventArgs e)
-    //{
-    //    var resultAspect = await DisplayActionSheet("Choose aspect ratio",
-    //        "Cancel", null, Aspect.AspectFit.ToString(),
-    //        Aspect.AspectFill.ToString(), Aspect.Fill.ToString());
-
-    //    if (resultAspect is null || resultAspect.Equals("Cancel"))
-    //    {
-    //        return;
-    //    }
-
-    //    if (!Enum.TryParse(typeof(Aspect), resultAspect, true, out var aspectEnum))
-    //    {
-    //        await DisplayAlert("Error", "There was an error determining the selected aspect", "OK");
-
-    //        return;
-    //    }
-
-    //    MediaElement.Aspect = (Aspect)aspectEnum;
-    //}
-
-    void DisplayPopup(object sender, EventArgs e)
-    {
-        MediaElement.Pause();
-        MediaElement popupMediaElement = new MediaElement
-        {
-            Source = MediaSource.FromResource("AppleVideo.mp4"),
-            HeightRequest = 600,
-            WidthRequest = 600,
-            ShouldAutoPlay = true,
-            ShouldShowPlaybackControls = true,
-        };
-        //var popup = new Popup
-        //{
-        //	VerticalOptions = LayoutAlignment.Center,
-        //	HorizontalOptions = LayoutAlignment.Center,
-        //};
-        //popup.Content = new StackLayout
-        //{
-        //	Children =
-        //	{
-        //		popupMediaElement,
-        //	}
-        //};
-
-        //this.ShowPopup(popup);
-        //popup.Closed += (s, e) =>
-        //{
-        //	popupMediaElement.Stop();
-        //	popupMediaElement.Handler?.DisconnectHandler();
-        //};
+        //currentIndex--;
+        //var item = playlist.Files[currentIndex];
+        //await UpdateMediaElementFile(item);
     }
 }
