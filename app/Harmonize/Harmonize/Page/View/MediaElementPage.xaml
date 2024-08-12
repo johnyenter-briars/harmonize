@@ -31,7 +31,6 @@
                 Source="{Binding MediaSource}"
                 ShouldAutoPlay="True"
                 PositionChanged="OnPositionChanged"
-                SeekCompleted="OnSeekCompleted"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
                 Aspect="AspectFit"
@@ -68,7 +67,7 @@
 
             <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center" Padding="0,10,0,10" Spacing="10">
                 <Button 
-                    Clicked="SkipBackClicked" 
+                    Command="{Binding SkipBackCommand}"
                     ImageSource="icons8_skip_to_start_50.png"
                     WidthRequest="100" 
                     HeightRequest="100" 
@@ -98,7 +97,7 @@
                     </Button.Triggers>
                 </Button>
                 <Button 
-                    Clicked="SkipForwardClicked" 
+                    Command="{Binding SkipFowardCommand}"
                     ImageSource="icons8_skip_50.png"
                     WidthRequest="100" 
                     HeightRequest="100" 

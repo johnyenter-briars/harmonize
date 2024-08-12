@@ -4,6 +4,7 @@ using Harmonize.Client.Model.Response;
 using Harmonize.Model;
 using Harmonize.Service;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
 
@@ -169,9 +170,63 @@ public partial class MediaElementViewModel(
             PositionSliderMaximum = mediaElement.Duration.TotalSeconds;
         }
     }
-    public void OnPositionChanged(MediaPositionChangedEventArgs e)
+    public void PositionChanged(MediaPositionChangedEventArgs e)
     {
         PositionSliderValue = e.Position.TotalSeconds;
     }
+    public async Task SliderDragCompleted(object? sender, MediaElement mediaElement)
+    {
+        ArgumentNullException.ThrowIfNull(sender);
+
+        if (sender is Slider slider)
+        {
+            var newValue = slider.Value;
+
+            await mediaElement.SeekTo(TimeSpan.FromSeconds(newValue), CancellationToken.None);
+
+            mediaElement.Play();
+        }
+    }
+    public void SliderDragStarted(MediaElement mediaElement)
+    {
+        mediaElement.Pause();
+    }
     #endregion
+
+    public ICommand SkipFowardCommand => new Command(async () =>
+    {
+        currentIndex++;
+
+        var item = playlist.Files[currentIndex];
+
+        await UpdateMediaElementFile(item);
+    });
+    public ICommand SkipBackCommand => new Command(async () =>
+    {
+        currentIndex--;
+
+        var item = playlist.Files[currentIndex];
+
+        await UpdateMediaElementFile(item);
+    });
+    public void PlayPauseClicked(MediaElement mediaElement)
+    {
+        if (IsPlaying)
+        {
+            mediaElement.Pause();
+            IsPlaying = false;
+
+        }
+        else
+        {
+            mediaElement.Play();
+            IsPlaying = true;
+        }
+    }
+    public void NavigatedFrom(MediaElement mediaElement)
+    {
+        mediaElement.Stop();
+        IsPlaying = false;
+        mediaElement.Handler?.DisconnectHandler();
+    }
 }
