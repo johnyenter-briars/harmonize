@@ -1,0 +1,15 @@
+version: '3'
+services:
+  api:
+    container_name: harmonize-fastapi
+    build: .
+    ports:
+      - "8000:8000"
+    command: fastapi dev main.py --host 0.0.0.0 --port 8000
+    develop:
+      watch:
+        - action: sync
+          path: ./harmonize
+          target: /harmonize/api
+        - action: rebuild
+          path: ./harmonize/requirements.txt
