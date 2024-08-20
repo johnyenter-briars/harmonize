@@ -5,8 +5,9 @@ from pathlib import Path
 import yt_dlp
 from fastapi import APIRouter, HTTPException
 
-from harmonize.const import YOUTUBE_METADATA
+from harmonize.const import YOUTUBE_SEARCH_METADATA
 from harmonize.defs.job import Job, Status
+from harmonize.defs.response import BaseResponse
 from harmonize.job.methods import start_job
 
 logger = logging.getLogger('harmonize')
@@ -16,10 +17,10 @@ _audio_format = 'mp3'
 
 
 @router.post('/download/youtube/{id}', status_code=201)
-async def download_youtube(id: str) -> Job:
+async def download_youtube(id: str) -> BaseResponse[Job]:
     args: tuple[str] = (id,)
 
-    metadata_file = YOUTUBE_METADATA / f'{id}.info.json'
+    metadata_file = YOUTUBE_SEARCH_METADATA / f'{id}.search.info.json'
 
     if not Path.exists(metadata_file):
         raise HTTPException(status_code=400, detail='Youtube metadata not present')
@@ -29,7 +30,9 @@ async def download_youtube(id: str) -> Job:
         title = metadata['title']
         description = f'download youtube video: {title}'
 
-    return await start_job(_download_youtube, description, args)
+    job = await start_job(_download_youtube, description, args)
+
+    return {'message': 'Job created', 'status_code': 201, 'value': job}
 
 
 def _download_youtube(id: str, job: Job):

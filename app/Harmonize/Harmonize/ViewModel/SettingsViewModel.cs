@@ -46,4 +46,9 @@ public class SettingsViewModel : BaseViewModel
         ) : base(mediaManager, preferenceManager)
     {
     }
+
+    public override Task OnAppearingAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

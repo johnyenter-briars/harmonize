@@ -14,6 +14,7 @@ namespace Harmonize
             CurrentItem = Items.FirstOrDefault(item => item.Title == defaultPage);
             
             Routing.RegisterRoute(nameof(EditJobPage), typeof(EditJobPage));
+            Routing.RegisterRoute(nameof(YouTubeSearchResultEditPage), typeof(YouTubeSearchResultEditPage));
         }
     }
 }

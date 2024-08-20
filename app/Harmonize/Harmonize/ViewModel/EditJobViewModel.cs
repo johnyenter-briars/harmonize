@@ -64,6 +64,11 @@ public class EditJobViewModel(
         Job = await harmonizeClient.GetJob(JobId);
     }
 
+    public override Task OnAppearingAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public ICommand CancelJob => new Command<Job>(async (job) =>
     {
         if (job != null)
@@ -73,7 +78,7 @@ public class EditJobViewModel(
             {
                 await harmonizeClient.CancelJob(job.Id);
 
-                await mainPage.DisplayAlert("Success", "Job updated successfully.", "OK");
+                await mainPage.DisplayAlert("Success", "Job canceled successfully.", "OK");
             }
         }
     });

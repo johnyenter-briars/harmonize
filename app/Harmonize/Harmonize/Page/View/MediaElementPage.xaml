@@ -24,13 +24,13 @@
             <toolkit:MediaElement
                 x:Name="MediaElement"
                 Grid.Row="0"
+                ShouldShowPlaybackControls="False"
+                MetadataArtist="{Binding MetadataArtist}"
+                MetadataTitle="{Binding MetadataTitle}"
+                MetadataArtworkUrl="{Binding MetadataArtworkUrl}"
+                Source="{Binding MediaSource}"
                 ShouldAutoPlay="True"
-                MediaEnded="OnMediaEnded"
-                MediaFailed="OnMediaFailed"
-                MediaOpened="OnMediaOpened"
                 PositionChanged="OnPositionChanged"
-                StateChanged="OnStateChanged"
-                SeekCompleted="OnSeekCompleted"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
                 Aspect="AspectFit"
@@ -50,10 +50,11 @@
 
             <Slider
                 x:Name="PositionSlider"
+                Maximum="{Binding PositionSliderMaximum}"
                 Grid.Row="2"
                 MinimumTrackColor="Gray"
                 DragStarted="Slider_DragStarted"
-                Value="10"
+                Value="{Binding PositionSliderValue}"
                 DragCompleted="Slider_DragCompleted"
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="Center"
@@ -66,7 +67,7 @@
 
             <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center" Padding="0,10,0,10" Spacing="10">
                 <Button 
-                    Clicked="SkipBackClicked" 
+                    Command="{Binding SkipBackCommand}"
                     ImageSource="icons8_skip_to_start_50.png"
                     WidthRequest="100" 
                     HeightRequest="100" 
@@ -96,7 +97,7 @@
                     </Button.Triggers>
                 </Button>
                 <Button 
-                    Clicked="SkipForwardClicked" 
+                    Command="{Binding SkipFowardCommand}"
                     ImageSource="icons8_skip_50.png"
                     WidthRequest="100" 
                     HeightRequest="100" 

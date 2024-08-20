@@ -12,7 +12,7 @@
              xmlns:model="clr-namespace:Harmonize.Model"
              Title="Settings">
 
-    <StackLayout Padding="20">
+    <StackLayout>
 
         <Label 
                    Text="{Binding BuildVersion}" 

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BasePage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Harmonize.Page.View"
+    xmlns:pages="clr-namespace:Harmonize.Page"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+    xmlns:youtube="clr-namespace:Harmonize.Client.Model.Youtube;assembly=Harmonize.Client"
+    x:TypeArguments="viewModels:YouTubeSearchResultEditViewModel"
+    x:DataType="viewModels:YouTubeSearchResultEditViewModel"
+    x:Class="Harmonize.Page.View.YouTubeSearchResultEditPage"
+    Title="Edit YouTube Search Result">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="10">
+
+            <Image Source="{Binding YoutubeSearchResult.Thumbnails[1].Url}" />
+            <Label Text="Video ID" FontSize="Medium" />
+            <Entry Text="{Binding YoutubeSearchResult.Id, Mode=OneWay}" IsReadOnly="True" />
+
+            <Label Text="Title" FontSize="Medium" />
+            <Editor 
+            Text="{Binding YoutubeSearchResult.Title, Mode=OneWay}" IsReadOnly="True" />
+
+            <Label Text="Channel Name" FontSize="Medium" />
+            <Entry 
+            Text="{Binding YoutubeSearchResult.Channel.Name, Mode=OneWay}" 
+            IsReadOnly="True" />
+
+            <Label Text="Duration" FontSize="Medium" />
+            <Entry 
+            Text="{Binding YoutubeSearchResult.Duration, Mode=OneWay}" 
+            IsReadOnly="True" />
+
+            <Label Text="Published Time" FontSize="Medium" />
+            <Entry 
+            Text="{Binding YoutubeSearchResult.PublishedTime, Mode=OneWay}" 
+            IsReadOnly="True" />
+
+            <Label Text="Description" FontSize="Medium" />
+            <Editor 
+            Text="{Binding YoutubeSearchResult.DescriptionSnippet[0].Text, Mode=OneWay}"
+            IsReadOnly="True"
+            AutoSize="TextChanges"
+            />
+
+            <Button 
+                Text="Download" 
+                Command="{Binding DownloadCommand}" 
+                CommandParameter="{Binding YoutubeSearchResult}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</pages:BasePage>
+

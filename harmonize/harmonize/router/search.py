@@ -5,6 +5,8 @@ import anyio
 from fastapi import APIRouter
 from youtubesearchpython import VideosSearch
 
+from harmonize.const import YOUTUBE_SEARCH_METADATA
+
 router = APIRouter(prefix='/api')
 
 
@@ -17,7 +19,9 @@ async def search_youtube(search_keywords: str) -> str | dict[Any, Any]:
     for search_result in search_results['result']:  # type: ignore
         yt_id = search_result['id']  # type: ignore
 
-        async with await anyio.open_file(f'./cache/youtube/{yt_id}.info.json', 'w') as f:
-            await f.write(json.dumps(search_results))
+        metadata_file = YOUTUBE_SEARCH_METADATA / f'{yt_id}.search.info.json'
+
+        async with await anyio.open_file(metadata_file, 'w') as f:
+            await f.write(json.dumps(search_result))
 
     return search_results

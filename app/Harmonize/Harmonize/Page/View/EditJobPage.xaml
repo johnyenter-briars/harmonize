@@ -11,7 +11,7 @@
     x:Class="Harmonize.Page.View.EditJobPage"
     Title="Edit Job Page"
     >
-    <VerticalStackLayout Padding="20" Spacing="10">
+    <VerticalStackLayout Spacing="10">
 
         <Label Text="Job ID" FontSize="Medium" />
         <Entry Text="{Binding Job.Id, Mode=OneWay}" IsReadOnly="True" />

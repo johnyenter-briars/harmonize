@@ -11,4 +11,8 @@ public class HomePageViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager) : BaseViewModel(mediaManager, preferenceManager)
 {
+    public override Task OnAppearingAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

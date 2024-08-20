@@ -49,6 +49,12 @@ public class JobListViewModel(
             });
         }
     }
+
+    public override Task OnAppearingAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public ICommand Refresh => new Command<Job>(async (job) =>
     {
         await PopulateJobs();
