@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using CommunityToolkit.Maui.Core.Primitives;
 using CommunityToolkit.Maui.Views;
 using Harmonize.Client.Model.Response;
@@ -11,18 +12,16 @@ namespace Harmonize.Page.View;
 public partial class MediaElementPage : BasePage<MediaElementViewModel>
 {
     private readonly MediaElementViewModel viewModel;
-    readonly ILogger logger;
-    private readonly MediaManager mediaManager;
+    private readonly ILogger logger;
     public MediaElementPage(
         MediaElementViewModel viewModel,
-        ILogger<MediaElementPage> logger,
-        MediaManager mediaManager
+        ILogger<MediaElementPage> logger
         ) : base(viewModel)
     {
         InitializeComponent();
         this.viewModel = viewModel;
         this.logger = logger;
-        this.mediaManager = mediaManager;
+
         MediaElement.PropertyChanged += MediaElement_PropertyChanged;
     }
     protected override async void OnAppearing()
@@ -86,11 +85,11 @@ public partial class MediaElementPage : BasePage<MediaElementViewModel>
 
     async void Slider_DragCompleted(object? sender, EventArgs e)
     {
-        await viewModel.SliderDragCompleted(sender, MediaElement);
+        await MediaElementViewModel.SliderDragCompleted(sender, MediaElement);
     }
 
     void Slider_DragStarted(object sender, EventArgs e)
     {
-        viewModel.SliderDragStarted(MediaElement);
+        MediaElementViewModel.SliderDragStarted(MediaElement);
     }
 }

@@ -50,8 +50,8 @@ public partial class MediaElementViewModel(
             }
         }
     }
-    private Playlist playlist;
-    public Playlist Playlist
+    private Playlist? playlist;
+    public Playlist? Playlist
     {
         get => playlist;
         set
@@ -91,8 +91,8 @@ public partial class MediaElementViewModel(
     }
     #endregion
     #region MediaElementBindings
-    private string metadataArtist;
-    public string MetadataArtist
+    private string? metadataArtist;
+    public string? MetadataArtist
     {
         get => metadataArtist;
         set
@@ -104,8 +104,8 @@ public partial class MediaElementViewModel(
             }
         }
     }
-    private string metadataTitle;
-    public string MetadataTitle
+    private string? metadataTitle;
+    public string? MetadataTitle
     {
         get => metadataTitle;
         set
@@ -117,8 +117,8 @@ public partial class MediaElementViewModel(
             }
         }
     }
-    private string metadataArtworkUrl;
-    public string MetadataArtworkUrl
+    private string? metadataArtworkUrl;
+    public string? MetadataArtworkUrl
     {
         get => metadataArtworkUrl;
         set
@@ -130,8 +130,8 @@ public partial class MediaElementViewModel(
             }
         }
     }
-    private MediaSource mediaSource;
-    public MediaSource MediaSource
+    private MediaSource? mediaSource;
+    public MediaSource? MediaSource
     {
         get => mediaSource;
         set
@@ -174,7 +174,7 @@ public partial class MediaElementViewModel(
     {
         PositionSliderValue = e.Position.TotalSeconds;
     }
-    public async Task SliderDragCompleted(object? sender, MediaElement mediaElement)
+    public static async Task SliderDragCompleted(object? sender, MediaElement mediaElement)
     {
         ArgumentNullException.ThrowIfNull(sender);
 
@@ -187,7 +187,7 @@ public partial class MediaElementViewModel(
             mediaElement.Play();
         }
     }
-    public void SliderDragStarted(MediaElement mediaElement)
+    public static void SliderDragStarted(MediaElement mediaElement)
     {
         mediaElement.Pause();
     }
@@ -195,6 +195,11 @@ public partial class MediaElementViewModel(
 
     public ICommand SkipFowardCommand => new Command(async () =>
     {
+        if (playlist == null)
+        {
+            return;
+        }
+
         currentIndex++;
 
         var item = playlist.Files[currentIndex];
@@ -203,6 +208,11 @@ public partial class MediaElementViewModel(
     });
     public ICommand SkipBackCommand => new Command(async () =>
     {
+        if (playlist == null)
+        {
+            return;
+        }
+
         currentIndex--;
 
         var item = playlist.Files[currentIndex];
@@ -215,7 +225,6 @@ public partial class MediaElementViewModel(
         {
             mediaElement.Pause();
             IsPlaying = false;
-
         }
         else
         {
@@ -227,6 +236,5 @@ public partial class MediaElementViewModel(
     {
         mediaElement.Stop();
         IsPlaying = false;
-        mediaElement.Handler?.DisconnectHandler();
     }
 }
