@@ -3,30 +3,39 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "api-dev",
+            "type": "shell",
+            "command": "fastapi dev .\\harmonize\\main.py",
+            "presentation": {
+                "group": "development"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "api-dev-public",
+            "type": "shell",
+            "command": "fastapi dev .\\harmonize\\main.py --host 0.0.0.0",
+            "presentation": {
+                "group": "development"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "maui-windows",
+            "type": "shell",
+            "command": ".\\scripts\\run-maui-windows.ps1",
+            "presentation": {
+                "group": "development"
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Run Development",
             "dependsOrder": "parallel",
             "dependsOn": [
                 "api-dev",
-                "frontend-dev"
+                "maui-windows"
             ],
-            "problemMatcher": []
-        },
-        {
-            "label": "api-dev",
-            "type": "shell",
-            "command": "fastapi dev api/api.py",
-            "presentation": {
-                "group": "development"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "frontend-dev",
-            "type": "shell",
-            "command": "cd musictool-frontend; npx ng serve",
-            "presentation": {
-                "group": "development"
-            },
             "problemMatcher": []
         },
         {
@@ -34,26 +43,14 @@
             "dependsOrder": "parallel",
             "dependsOn": [
                 "api-dev-public",
-                "frontend-dev-public"
+                "maui-windows"
             ],
             "problemMatcher": []
         },
         {
-            "label": "api-dev-public",
+            "label": "Docker Compose Watch",
             "type": "shell",
-            "command": "fastapi dev api/api.py --host 0.0.0.0",
-            "presentation": {
-                "group": "development"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "frontend-dev-public",
-            "type": "shell",
-            "command": "cd musictool-frontend; npx ng serve --host 0.0.0.0",
-            "presentation": {
-                "group": "development"
-            },
+            "command": "docker-compose up --watch",
             "problemMatcher": []
         }
     ]
