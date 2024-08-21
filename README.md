@@ -6,11 +6,12 @@
 - [ ] List media 
 - [ ] Search media
 - [ ] Stream any media
-- [ ] Support fast forwarding
+- [X] Support fast forwarding
 - [ ] Playlists
 - [ ] Search magnet links across different search platforms
 - [ ] Search youtube dl
-    - [ ] Simple keyword search
+    - [X] Simple keyword search
+    - [X] Simple download on backend
     - [ ] Simple file search and play
     - [ ] Save files in main DB
 - [ ] search youtube dl in different regions
