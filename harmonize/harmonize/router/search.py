@@ -25,3 +25,8 @@ async def search_youtube(search_keywords: str) -> str | dict[Any, Any]:
             await f.write(json.dumps(search_result))
 
     return search_results
+
+
+@router.get('/search/piratebay/{search_keywords}')
+async def search_piratebay(search_keywords: str) -> str | dict[Any, Any]:
+    return ''

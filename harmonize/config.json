@@ -1,3 +1,7 @@
 {
-    "media-root": "./media"
+    "media-root": "./media",
+    "qbt-run": false,
+    "qbt-domain-name": "localhost",
+    "qbt-port": 8080,
+    "qbt-version": "v2"
 }

@@ -3,11 +3,18 @@ from logging.config import dictConfig
 
 from fastapi import FastAPI
 
-from harmonize.config import LogConfig
+import harmonize.config
+import harmonize.config.harmonizeconfig
+from harmonize.config.logconfig import LogConfig
 from harmonize.router import download, job, list, metadata, playlist, search, stream  # type: ignore
 
+config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
+
 dictConfig(LogConfig().model_dump())
+
 logger = logging.getLogger('harmonize')
+
+config.log_config()
 
 app = FastAPI(debug=True)
 
