@@ -12,6 +12,8 @@ dependencies = [
     "requests",
     "ruff",
     "sqlmodel",
+    "beautifulsoup4",
+    "aiohttp",
 ]
 [build-system]
 requires = ["hatchling"]
