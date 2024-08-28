@@ -6,3 +6,4 @@ Pillow==10.4.0
 requests==2.32.3
 ruff>=0.5.1
 beautifulsoup4==4.11.2
+aiohttp>=3.8.5

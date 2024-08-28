@@ -6,6 +6,9 @@ from fastapi import APIRouter
 from youtubesearchpython import VideosSearch
 
 from harmonize.const import YOUTUBE_SEARCH_METADATA
+from harmonize.defs.magnetlinksearchresult import MagnetLinkSearchResult
+from harmonize.defs.response import BaseResponse
+from harmonize.scrape.piratebay import piratebay_search
 
 router = APIRouter(prefix='/api')
 
@@ -28,5 +31,6 @@ async def search_youtube(search_keywords: str) -> str | dict[Any, Any]:
 
 
 @router.get('/search/piratebay/{search_keywords}')
-async def search_piratebay(search_keywords: str) -> str | dict[Any, Any]:
-    return ''
+async def search_piratebay(search_keywords: str) -> BaseResponse[list[MagnetLinkSearchResult]]:
+    results = await piratebay_search(search_keywords)
+    return {'status_code': 200, 'message': 'success', 'value': results}

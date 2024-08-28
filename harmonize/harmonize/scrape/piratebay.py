@@ -1,17 +1,19 @@
-import requests
+import re
+
 from bs4 import BeautifulSoup as bs
 
 from harmonize.defs.magnetlinksearchresult import MagnetLinkSearchResult
+from harmonize.util.fetch import get
 
 
-def piratebay_search(query) -> list[MagnetLinkSearchResult]:
+async def piratebay_search(query) -> list[MagnetLinkSearchResult]:
     query = query.replace('+', ' ')
     url = f'https://tpb.party/search/{query}/1/99/0'
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.2840.71 Safari/539.36'
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'
     }
 
-    source = requests.get(url, headers=headers)
+    (_, text) = await get(url, headers)
 
     seeders = []
     leechers = []
@@ -20,7 +22,7 @@ def piratebay_search(query) -> list[MagnetLinkSearchResult]:
     downloads = []
     sizes = []
     date_posteds = []
-    soup = bs(source.text, 'html.parser')
+    soup = bs(text, 'html.parser')
 
     a_tags = soup.find_all('a')  # for find href links
     font_tags = soup.find_all('font', {'class': 'detDesc'})
@@ -54,10 +56,16 @@ def piratebay_search(query) -> list[MagnetLinkSearchResult]:
         sizes.append(size)
 
     return [
-        MagnetLinkSearchResult(
-            magnet_link, number_seeders, number_leechers, name, download, size, date_posted
-        )
-        for magnet_link, number_seeders, number_leechers, name, download, size, date_posted in zip(
+        {
+            'magnet_link': magnet_link,
+            'number_seeders': number_seeders,
+            'number_leachers': number_leechers,
+            'name': name,
+            'number_downloads': number_downloads,
+            'size': size,
+            'date_posted': date_posted,
+        }
+        for magnet_link, number_seeders, number_leechers, name, number_downloads, size, date_posted in zip(
             magnet_links, seeders, leechers, names, downloads, sizes, date_posteds, strict=False
         )
     ]
