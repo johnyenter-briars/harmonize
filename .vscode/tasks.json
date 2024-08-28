@@ -50,7 +50,13 @@
         {
             "label": "Docker Compose Watch",
             "type": "shell",
-            "command": "docker-compose up --watch",
+            "command": "docker-compose --profile dev up --watch",
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker Compose Prod",
+            "type": "shell",
+            "command": "docker-compose --profile prod up",
             "problemMatcher": []
         }
     ]

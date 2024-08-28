@@ -1,15 +1,16 @@
-FROM python:3.12
+FROM python:3.12-slim
 
-COPY ./harmonize /harmonize/api
+COPY --from=ghcr.io/astral-sh/uv:0.3.5 /uv /bin/uv
 
-ADD --chmod=755 https://astral.sh/uv/install.sh /install.sh
+COPY ./harmonize /harmonize
 
-RUN /install.sh && rm /install.sh
+ENV LD_LIBRARY_PATH=/usr/local/lib
 
-COPY ./harmonize/requirements.txt requirements.txt
+WORKDIR /harmonize
 
-RUN /root/.cargo/bin/uv pip install --system --no-cache -r requirements.txt
+RUN uv sync --frozen --no-cache
 
-WORKDIR /harmonize/api
-
-CMD ["fastapi", "run", "main.py", "--port", "8000"]
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ffmpeg \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
