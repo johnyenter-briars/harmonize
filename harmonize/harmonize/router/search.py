@@ -9,6 +9,7 @@ from harmonize.const import YOUTUBE_SEARCH_METADATA
 from harmonize.defs.magnetlinksearchresult import MagnetLinkSearchResult
 from harmonize.defs.response import BaseResponse
 from harmonize.scrape.piratebay import piratebay_search
+from harmonize.scrape.xt1337 import t1337x_search
 
 router = APIRouter(prefix='/api')
 
@@ -33,4 +34,10 @@ async def search_youtube(search_keywords: str) -> str | dict[Any, Any]:
 @router.get('/search/piratebay/{search_keywords}')
 async def search_piratebay(search_keywords: str) -> BaseResponse[list[MagnetLinkSearchResult]]:
     results = await piratebay_search(search_keywords)
+    return {'status_code': 200, 'message': 'success', 'value': results}
+
+
+@router.get('/search/xt1337/{search_keywords}')
+async def search_xt1337(search_keywords: str) -> BaseResponse[list[MagnetLinkSearchResult]]:
+    results = await t1337x_search(search_keywords)
     return {'status_code': 200, 'message': 'success', 'value': results}
