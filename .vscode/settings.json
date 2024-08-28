@@ -2,7 +2,7 @@
     "editor.codeActionsOnSave": {
         "source.fixAll": "explicit"
     },
-    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.typeCheckingMode": "standard",
     "[python]": {
         "diffEditor.ignoreTrimWhitespace": false,
         "editor.wordBasedSuggestions": "off",
@@ -36,4 +36,5 @@
     "ruff.nativeServer": true,
     "ruff.configuration": "${workspaceFolder}/harmonize/pyproject.toml",
     "ruff.configurationPreference": "filesystemFirst",
+    "python.defaultInterpreterPath": "./harmonize/.venv/Scripts/python.exe",
 }

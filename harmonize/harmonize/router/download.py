@@ -1,12 +1,15 @@
+import datetime
 import json
 import logging
 from pathlib import Path
 
 import yt_dlp
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import Session
 
 from harmonize.const import YOUTUBE_SEARCH_METADATA
-from harmonize.defs.job import Job, Status
+from harmonize.db.database import get_session
+from harmonize.db.models import Job, Status
 from harmonize.defs.response import BaseResponse
 from harmonize.job.methods import start_job
 
@@ -17,7 +20,10 @@ _audio_format = 'mp3'
 
 
 @router.post('/download/youtube/{id}', status_code=201)
-async def download_youtube(id: str) -> BaseResponse[Job]:
+async def download_youtube(
+    id: str,
+    session: Session = Depends(get_session),
+) -> BaseResponse[Job]:
     args: tuple[str] = (id,)
 
     metadata_file = YOUTUBE_SEARCH_METADATA / f'{id}.search.info.json'
@@ -30,12 +36,24 @@ async def download_youtube(id: str) -> BaseResponse[Job]:
         title = metadata['title']
         description = f'download youtube video: {title}'
 
-    job = await start_job(_download_youtube, description, args)
+    job = Job(
+        description=description,
+        status=Status.RUNNING,
+        started_on=datetime.datetime.now(datetime.UTC),
+    )
+    session.add(job)
+    session.commit()
+
+    job = await start_job(_download_youtube, job, session, args)
 
     return {'message': 'Job created', 'status_code': 201, 'value': job}
 
 
-def _download_youtube(id: str, job: Job):
+def _download_youtube(
+    id: str,
+    job: Job,
+    session: Session,
+):
     try:
         url = f'https://www.youtube.com/watch?v={id}'
         ydl_opts = {
@@ -68,8 +86,11 @@ def _download_youtube(id: str, job: Job):
                 logger.error(
                     'Youtube Download Failed with error code', extra={'error_code': error_code}
                 )
-                job['status'] = Status.FAILED
+                job.status = Status.FAILED
                 return
-        job['status'] = Status.SUCCEEDED
+        job.status = Status.SUCCEEDED
     except Exception:
-        job['status'] = Status.FAILED
+        job.status = Status.FAILED
+    finally:
+        session.add(job)
+        session.commit()
