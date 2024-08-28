@@ -1,3 +1,22 @@
+[project]
+name = "harmonize"
+version = "0.1.0"
+description = "API for harmonize frontend"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]",
+    "mutagen",
+    "yt-dlp",
+    "youtube-search-python",
+    "Pillow",
+    "requests",
+    "ruff",
+    "sqlmodel",
+]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [tool.uv.pip]
 python = "3.12"
 
@@ -6,6 +25,14 @@ python = "3.12"
 line-length = 100
 indent-width = 4
 target-version = "py312"
+
+[tool.ruff.flake8-bugbear]
+extend-immutable-calls = [
+    "fastapi.Depends",
+    "fastapi.params.Depends",
+    "fastapi.Query",
+    "fastapi.params.Query",
+]
 
 
 [tool.ruff.lint]
@@ -32,6 +59,8 @@ ignore = [
     "COM819",
     "ISC001",
     "ISC002",
+    "RET504",
+    "BLE",
 ]
 
 fixable = ["ALL"]
