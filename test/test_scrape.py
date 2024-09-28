@@ -1,11 +1,8 @@
 import requests
 
-public_ip = '0.0.0.0'
-port = 8000
 
-
-def test_search_piratebay():
-    url = f'http://{public_ip}:{port}/api/search/piratebay/starwars'
+def test_search_piratebay(setup):
+    url = f'{setup['base_url']}/search/piratebay/starwars'
 
     response = requests.get(url)
 
@@ -16,8 +13,8 @@ def test_search_piratebay():
     assert isinstance(data['value'], list), 'Response data should be a list'
 
 
-def test_search_t1337x():
-    url = f'http://{public_ip}:{port}/api/search/xt1337/starwars'
+def test_search_t1337x(setup):
+    url = f'{setup['base_url']}/search/xt1337/starwars'
 
     response = requests.get(url)
 
