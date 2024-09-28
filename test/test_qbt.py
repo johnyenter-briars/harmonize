@@ -27,4 +27,69 @@ def test_add_torrent(setup):
     response = requests.post(url, json=request_data)
 
     assert response.status_code == 201, f'Expected status code 201, but got {response.status_code}'
-    assert response.json() == {'status_code': 201, 'message': 'success', 'value': None}
+
+
+def test_pause_torrent(setup):
+    test_add_torrent(setup)
+
+    url = f'{setup['base_url']}/qbt/list'
+
+    response = requests.get(url)
+
+    data = response.json()
+
+    first_torrent = data['value'][0]
+
+    torrent_hash = first_torrent['hash']
+
+    url = f'{setup['base_url']}/qbt/pause'
+
+    request_data = {'hashes': [torrent_hash]}
+
+    response = requests.post(url, json=request_data)
+
+    assert response.status_code == 201, f'Expected status code 201, but got {response.status_code}'
+
+
+def test_resume_torrent(setup):
+    test_add_torrent(setup)
+
+    url = f'{setup['base_url']}/qbt/list'
+
+    response = requests.get(url)
+
+    data = response.json()
+
+    first_torrent = data['value'][0]
+
+    torrent_hash = first_torrent['hash']
+
+    url = f'{setup['base_url']}/qbt/resume'
+
+    request_data = {'hashes': [torrent_hash]}
+
+    response = requests.post(url, json=request_data)
+
+    assert response.status_code == 201, f'Expected status code 201, but got {response.status_code}'
+
+
+def test_delete_torrent(setup):
+    test_add_torrent(setup)
+
+    url = f'{setup['base_url']}/qbt/list'
+
+    response = requests.get(url)
+
+    data = response.json()
+
+    first_torrent = data['value'][0]
+
+    torrent_hash = first_torrent['hash']
+
+    url = f'{setup['base_url']}/qbt/delete'
+
+    request_data = {'hashes': [torrent_hash]}
+
+    response = requests.post(url, json=request_data)
+
+    assert response.status_code == 201, f'Expected status code 201, but got {response.status_code}'

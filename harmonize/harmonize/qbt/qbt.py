@@ -3,16 +3,17 @@ from codecs import encode
 import aiohttp
 
 from harmonize.config.harmonizeconfig import HARMONIZE_CONFIG
+from harmonize.defs.qbt import TorrentData
 
 
-async def list_torrents() -> list[dict]:
+async def list_torrents() -> list[TorrentData]:
     qbt_domain_name = HARMONIZE_CONFIG.qbt_domain_name
     qbt_port = HARMONIZE_CONFIG.qbt_port
     qbt_api_version = HARMONIZE_CONFIG.qbt_version
     async with aiohttp.ClientSession() as session:
         qbittorrent_url = f'http://{qbt_domain_name}:{qbt_port}/api/{qbt_api_version}/torrents/info'
         async with session.get(qbittorrent_url) as resp:
-            raw_json: list[dict] = await resp.json()
+            raw_json: list[TorrentData] = await resp.json()
             return raw_json
 
 
@@ -41,7 +42,7 @@ async def add_torrent(magnet_link: str) -> str:
             return response_text
 
 
-async def pause_torrent(hash: str) -> str:
+async def pause_torrent(torrent_hash: str) -> str:
     qbt_domain_name = HARMONIZE_CONFIG.qbt_domain_name
     qbt_port = HARMONIZE_CONFIG.qbt_port
     qbt_api_version = HARMONIZE_CONFIG.qbt_version
@@ -54,7 +55,7 @@ async def pause_torrent(hash: str) -> str:
     dataList.append(encode('Content-Disposition: form-data; name=hashes;'))
     dataList.append(encode('Content-Type: {}'.format('text/plain')))
     dataList.append(encode(''))
-    dataList.append(encode(hash))
+    dataList.append(encode(torrent_hash))
     dataList.append(encode('--' + boundary + '--'))
     dataList.append(encode(''))
     body = b'\r\n'.join(dataList)
@@ -66,7 +67,7 @@ async def pause_torrent(hash: str) -> str:
             return response_text
 
 
-async def resume_torrent(hash: str) -> str:
+async def resume_torrent(torrent_hash: str) -> str:
     qbt_domain_name = HARMONIZE_CONFIG.qbt_domain_name
     qbt_port = HARMONIZE_CONFIG.qbt_port
     qbt_api_version = HARMONIZE_CONFIG.qbt_version
@@ -79,7 +80,7 @@ async def resume_torrent(hash: str) -> str:
     dataList.append(encode('Content-Disposition: form-data; name=hashes;'))
     dataList.append(encode('Content-Type: {}'.format('text/plain')))
     dataList.append(encode(''))
-    dataList.append(encode(hash))
+    dataList.append(encode(torrent_hash))
     dataList.append(encode('--' + boundary + '--'))
     dataList.append(encode(''))
     body = b'\r\n'.join(dataList)
@@ -91,7 +92,7 @@ async def resume_torrent(hash: str) -> str:
             return response_text
 
 
-async def delete_torrent(hash: str):
+async def delete_torrent(torrent_hash: str):
     qbt_domain_name = HARMONIZE_CONFIG.qbt_domain_name
     qbt_port = HARMONIZE_CONFIG.qbt_port
     qbt_api_version = HARMONIZE_CONFIG.qbt_version
@@ -105,7 +106,7 @@ async def delete_torrent(hash: str):
         dataList.append('Content-Disposition: form-data; name=hashes;')
         dataList.append('Content-Type: {}'.format('text/plain'))
         dataList.append('')
-        dataList.append(hash)
+        dataList.append(torrent_hash)
 
         dataList.append('--' + boundary)
         dataList.append('Content-Disposition: form-data; name=deleteFiles;')
