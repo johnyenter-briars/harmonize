@@ -57,3 +57,4 @@ NOTE: This is for running with docker for devleopment.
 - [ ] Automatic media art when not found?
 - [ ] Test kill switch
 - [ ] Implement https + private keys
+- [ ] All 'async with ClientSession' use the 'get' helper in 'util'
