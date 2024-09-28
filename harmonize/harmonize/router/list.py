@@ -8,7 +8,7 @@ from harmonize.db.database import get_session
 from harmonize.db.models import Job
 
 logger = logging.getLogger('harmonize')
-router = APIRouter(prefix='/api')
+router = APIRouter(prefix='/api/list')
 
 
 @router.get('/media')
@@ -21,7 +21,7 @@ async def list_media() -> dict[str, list[str]]:
     return albums
 
 
-@router.get('/list_music')
+@router.get('/music')
 async def list_music() -> dict[str, list[str]]:
     albums: dict[str, list[str]] = {}
     for item in MUSIC_ROOT_LEGACY.iterdir():
@@ -30,7 +30,7 @@ async def list_music() -> dict[str, list[str]]:
     return albums
 
 
-@router.get('/list_jobs', response_model=list[Job])
+@router.get('/jobs', response_model=list[Job])
 async def list_jobs(
     *,
     session: Session = Depends(get_session),

@@ -50,6 +50,7 @@ NOTE: This is for running with docker for devleopment.
   - [ ] Save + query to DB
 - [ ] Playlists
 - [x] Set / query long running jobs
+- [ ] Update storing / saving jobs in database
 - [ ] Integrate media art with youtube-dl
 - [ ] Search magnet links across different search platforms
 - [ ] Setup easy deployment / redeployment on server
