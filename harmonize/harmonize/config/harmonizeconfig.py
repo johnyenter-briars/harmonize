@@ -16,6 +16,7 @@ class HarmonizeConfig:
     qbt_domain_name: str = field()
     qbt_port: int = field()
     qbt_version: str = field()
+    run_qbt: bool = field()
 
     def __init__(self, config_file: Path):
         with config_file.open('r') as f:

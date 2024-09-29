@@ -25,7 +25,9 @@ app.include_router(search.router, dependencies=[Depends(get_session)])
 app.include_router(stream.router, dependencies=[Depends(get_session)])
 app.include_router(job.router, dependencies=[Depends(get_session)])
 app.include_router(playlist.router, dependencies=[Depends(get_session)])
-app.include_router(qbt.router, dependencies=[Depends(get_session)])
+
+if config.run_qbt:
+    app.include_router(qbt.router, dependencies=[Depends(get_session)])
 
 
 @app.get('/')

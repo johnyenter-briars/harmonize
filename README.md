@@ -58,3 +58,4 @@ NOTE: This is for running with docker for devleopment.
 - [ ] Test kill switch
 - [ ] Implement https + private keys
 - [ ] All 'async with ClientSession' use the 'get' helper in 'util'
+- [ ] Run check for VPN when running QBT
