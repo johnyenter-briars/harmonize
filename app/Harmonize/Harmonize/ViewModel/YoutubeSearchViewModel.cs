@@ -35,12 +35,18 @@ public class YouTubeSearchViewModel(
         if (string.IsNullOrWhiteSpace(query))
             return;
 
-        var results = await harmonizeClient.GetYoutubeSearchResults(query);
-
-        SearchResults.Clear();
-        foreach (var video in results.Result)
+        var (results, success) = await failsafeService.Fallback(async () =>
         {
-            SearchResults.Add(video);
+            return await harmonizeClient.GetYoutubeSearchResults(query);
+        }, null);
+
+        if (success)
+        {
+            SearchResults.Clear();
+            foreach (var video in results.Result)
+            {
+                SearchResults.Add(video);
+            }
         }
     });
     public async Task ItemTapped(YouTubeSearchResult youTubeSearchResult)

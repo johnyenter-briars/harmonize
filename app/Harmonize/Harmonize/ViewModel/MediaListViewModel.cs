@@ -30,7 +30,7 @@ public class MediaListViewModel : BaseViewModel
     }
     async Task PopulateEntries()
     {
-        var media = await mediaManager.GetMediaEntries();
+        var (media, success) = await failsafeService.Fallback(mediaManager.GetMediaEntries, []);
 
         foreach (var m in media)
         {

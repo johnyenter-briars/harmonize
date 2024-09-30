@@ -28,7 +28,7 @@ public class JobListViewModel(
     {
         Jobs.Clear();
 
-        var jobs = await failsafeService.ErrorFallback(harmonizeClient.GetJobs, []);
+        var (jobs, success) = await failsafeService.Fallback(harmonizeClient.GetJobs, []);
 
         foreach (var m in jobs)
         {
