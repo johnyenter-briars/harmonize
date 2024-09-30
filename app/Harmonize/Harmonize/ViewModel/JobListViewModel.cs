@@ -1,14 +1,9 @@
-﻿using Harmonize.Client;
+﻿using CommunityToolkit.Maui.Core;
+using Harmonize.Client;
 using Harmonize.Client.Model.System;
-using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
@@ -17,6 +12,7 @@ public class JobListViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
     HarmonizeClient harmonizeClient
+    //IPopupService popupService
         ) : BaseViewModel(mediaManager, preferenceManager)
 {
     private ObservableCollection<Job> jobs = [];
@@ -38,6 +34,8 @@ public class JobListViewModel(
         {
             Jobs.Add(m);
         }
+
+       //popupService.ShowPopup<ErrorPopup>();
     }
     public async Task ItemTapped(Job job)
     {

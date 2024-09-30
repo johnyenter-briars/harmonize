@@ -49,10 +49,10 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\tuningforksvgrepocom.svg" ForegroundScale="0.5" Color="#513BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\harmonize2.svg" ForegroundScale="0.75" Color="#A3CCC0" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\tuningforksvgrepocom.svg" Color="#512BD4" BaseSize="64,64" />
+		<MauiSplashScreen Include="Resources\Splash\harmonize2.svg" Color="#A3CCC0" BaseSize="64,64" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -168,6 +168,10 @@
 	  <MauiXaml Update="Page\View\YouTubeSearchResultEditPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Page\HPopup\" />
 	</ItemGroup>
 
 </Project>

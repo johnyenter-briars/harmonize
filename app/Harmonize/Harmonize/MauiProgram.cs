@@ -16,8 +16,9 @@ namespace Harmonize
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiApp<App>()
+                //.UseMauiCommunityToolkit()
                 .UseMauiCommunityToolkitMediaElement()
+                .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -27,6 +28,9 @@ namespace Harmonize
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+
+
+            //builder.Services.AddTransientPopup<ErrorPopup, ErrorPopupViewModel>();
 
             builder.Services.AddSingleton<PreferenceManager>();
             builder.Services.AddSingleton<HarmonizeDatabase>();
