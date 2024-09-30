@@ -17,6 +17,8 @@ public class MediaManager
     readonly ILogger logger;
     readonly HarmonizeClient harmonizeClient;
     readonly HarmonizeDatabase harmonizeDatabase;
+    readonly FailsafeService failsafeService;
+
     public string MediaPath => Path.Combine(FileSystem.AppDataDirectory, "media");
     public string AudioPath => Path.Combine(FileSystem.AppDataDirectory, "media", "audio");
     public string VideoPath => Path.Combine(FileSystem.AppDataDirectory, "media", "video");
@@ -24,12 +26,14 @@ public class MediaManager
     public MediaManager(
         ILogger<MediaManager> logger,
         HarmonizeClient harmonizeClient,
-        HarmonizeDatabase harmonizeDatabase
+        HarmonizeDatabase harmonizeDatabase,
+        FailsafeService failsafeService
         )
     {
         this.logger = logger;
         this.harmonizeClient = harmonizeClient;
         this.harmonizeDatabase = harmonizeDatabase;
+        this.failsafeService = failsafeService;
         CreateMediaFolders();
     }
     void CreateMediaFolders()
@@ -54,9 +58,12 @@ public class MediaManager
 
         return media;
     }
-    public async Task<Playlist> GetPlaylist(string name)
+    public async Task<Playlist?> GetPlaylist(string name)
     {
-        var playlist = await harmonizeClient.GetPlaylist("foo");
+        var (playlist, _) = await failsafeService.Fallback(async () =>
+        {
+            return await harmonizeClient.GetPlaylist(name);
+        }, null);
 
         return playlist;
     }
@@ -73,7 +80,10 @@ public class MediaManager
         {
             var localPath = Path.Combine(AudioPath, name);
 
-            var fileBytes = await harmonizeClient.GetMedia(name);
+            var (fileBytes, _) = await failsafeService.Fallback(async () =>
+            {
+                return await harmonizeClient.GetMedia(name);
+            }, null);
 
             await File.WriteAllBytesAsync(localPath, fileBytes);
 
@@ -93,9 +103,12 @@ public class MediaManager
             throw new DirectoryNotFoundException(mediaEntry?.LocalPath);
         }
     }
-    public async Task<MediaMetadata> GetMediaMetadata(string name)
+    public async Task<MediaMetadata?> GetMediaMetadata(string name)
     {
-        var mediaMetadata = await harmonizeClient.GetMediaMetadata(name);
+        var (mediaMetadata, _) = await failsafeService.Fallback(async () =>
+        {
+            return await harmonizeClient.GetMediaMetadata(name);
+        }, null);
 
         return mediaMetadata;
     }
