@@ -11,9 +11,9 @@ namespace Harmonize.ViewModel;
 public class JobListViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
-    HarmonizeClient harmonizeClient
-    //IPopupService popupService
-        ) : BaseViewModel(mediaManager, preferenceManager)
+    HarmonizeClient harmonizeClient,
+    FailsafeService failsafeService
+        ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     private ObservableCollection<Job> jobs = [];
     private readonly HarmonizeClient harmonizeClient = harmonizeClient;
@@ -28,14 +28,12 @@ public class JobListViewModel(
     {
         Jobs.Clear();
 
-        var jobs = await harmonizeClient.GetJobs();
+        var jobs = await failsafeService.ErrorFallback(harmonizeClient.GetJobs, []);
 
         foreach (var m in jobs)
         {
             Jobs.Add(m);
         }
-
-       //popupService.ShowPopup<ErrorPopup>();
     }
     public async Task ItemTapped(Job job)
     {
@@ -48,9 +46,9 @@ public class JobListViewModel(
         }
     }
 
-    public override Task OnAppearingAsync()
+    public override async Task OnAppearingAsync()
     {
-        throw new NotImplementedException();
+        await PopulateJobs();
     }
 
     public ICommand Refresh => new Command<Job>(async (job) =>

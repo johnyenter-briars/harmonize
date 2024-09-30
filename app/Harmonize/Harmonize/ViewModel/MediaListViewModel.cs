@@ -20,8 +20,9 @@ public class MediaListViewModel : BaseViewModel
 
     public MediaListViewModel(
         MediaManager mediaManager,
-        PreferenceManager preferenceManager
-        ) : base(mediaManager, preferenceManager)
+        PreferenceManager preferenceManager,
+        FailsafeService failsafeService
+        ) : base(mediaManager, preferenceManager, failsafeService)
     {
         MediaEntries = [];
 

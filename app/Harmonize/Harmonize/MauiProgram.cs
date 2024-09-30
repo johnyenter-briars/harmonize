@@ -30,7 +30,8 @@ namespace Harmonize
 #endif
 
 
-            //builder.Services.AddTransientPopup<ErrorPopup, ErrorPopupViewModel>();
+            builder.Services.AddSingleton<AlertService>();
+            builder.Services.AddSingleton<FailsafeService>();
 
             builder.Services.AddSingleton<PreferenceManager>();
             builder.Services.AddSingleton<HarmonizeDatabase>();

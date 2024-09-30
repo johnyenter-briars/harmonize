@@ -10,8 +10,9 @@ namespace Harmonize.ViewModel;
 
 public partial class MediaElementViewModel(
     MediaManager mediaManager,
-    PreferenceManager preferenceManager
-        ) : BaseViewModel(mediaManager, preferenceManager)
+    PreferenceManager preferenceManager,
+    FailsafeService failsafeService
+        ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     int currentIndex;
     public override async Task OnAppearingAsync()

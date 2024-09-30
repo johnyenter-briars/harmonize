@@ -11,7 +11,8 @@ namespace Harmonize.ViewModel;
 
 public abstract partial class BaseViewModel(
     MediaManager mediaManager,
-    PreferenceManager preferenceManager
+    PreferenceManager preferenceManager,
+    FailsafeService failsafeService
         ) : INotifyPropertyChanged
 {
     bool isBusy = false;
@@ -24,6 +25,7 @@ public abstract partial class BaseViewModel(
     string title = string.Empty;
     protected readonly MediaManager mediaManager = mediaManager;
     protected readonly PreferenceManager preferenceManager = preferenceManager;
+    protected readonly FailsafeService failsafeService = failsafeService;
 
     public string Title
     {

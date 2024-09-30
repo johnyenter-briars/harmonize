@@ -1,12 +1,37 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Harmonize.Service
+namespace Harmonize.Service;
+
+public class FailsafeService(
+    AlertService alertService,
+    ILogger<FailsafeService> logger
+    )
 {
-    static class FailsafeService
+    public async Task<TResult> ErrorFallback<TResult>(
+        Func<Task<TResult>> callback,
+        TResult defaultValueIfFailed,
+        string? title = null,
+        string? message = null
+        )
     {
+        try
+        {
+            TResult result = await callback();
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            await alertService.ShowAlertAsync(title ?? "Error", ex.Message ?? "Failure to perform action");
+
+            logger.LogError("idk");
+
+            return defaultValueIfFailed;
+        }
     }
 }

@@ -10,8 +10,9 @@ namespace Harmonize.ViewModel;
 public class EditJobViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
-    HarmonizeClient harmonizeClient
-    ) : BaseViewModel(mediaManager, preferenceManager)
+    HarmonizeClient harmonizeClient,
+    FailsafeService failsafeService
+    ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     private ObservableCollection<JobStatus> statusOptions =
     [

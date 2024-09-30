@@ -7,15 +7,12 @@ using System.Threading.Tasks;
 
 namespace Harmonize.ViewModel;
 
-public class ErrorPopupViewModel : BaseViewModel
-{
-    public ErrorPopupViewModel(
+public class ErrorPopupViewModel(
         MediaManager mediaManager,
-        PreferenceManager preferenceManager
-        ) : base(mediaManager, preferenceManager)
-    {
-    }
-
+        PreferenceManager preferenceManager,
+        FailsafeService failsafeService
+    ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
+{
     public override Task OnAppearingAsync()
     {
         return Task.CompletedTask;

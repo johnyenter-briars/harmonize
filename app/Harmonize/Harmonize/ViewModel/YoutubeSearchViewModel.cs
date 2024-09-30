@@ -12,8 +12,9 @@ namespace Harmonize.ViewModel;
 public class YouTubeSearchViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
-    HarmonizeClient harmonizeClient
-) : BaseViewModel(mediaManager, preferenceManager)
+    HarmonizeClient harmonizeClient,
+    FailsafeService failsafeService
+) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     private string? searchQuery;
     public string? SearchQuery
