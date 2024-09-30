@@ -9,28 +9,22 @@ using System.Threading.Tasks;
 
 namespace Harmonize.ViewModel;
 
-public class MediaListViewModel : BaseViewModel
+public class MediaListViewModel(
+    MediaManager mediaManager,
+    PreferenceManager preferenceManager,
+    FailsafeService failsafeService
+    ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
-    private ObservableCollection<MediaEntry> mediaEntries  = [];
-    public ObservableCollection<MediaEntry> MediaEntries 
+    private ObservableCollection<MediaEntry> mediaEntries = [];
+    public ObservableCollection<MediaEntry> MediaEntries
     {
         get { return mediaEntries; }
         set { SetProperty(ref mediaEntries, value); }
     }
 
-    public MediaListViewModel(
-        MediaManager mediaManager,
-        PreferenceManager preferenceManager,
-        FailsafeService failsafeService
-        ) : base(mediaManager, preferenceManager, failsafeService)
-    {
-        MediaEntries = [];
-
-        Task.Run(PopulateEntries);
-    }
     async Task PopulateEntries()
     {
-        var (media, success) = await failsafeService.Fallback(mediaManager.GetMediaEntries, []);
+        var media = await mediaManager.GetMediaEntries();
 
         foreach (var m in media)
         {
@@ -38,8 +32,8 @@ public class MediaListViewModel : BaseViewModel
         }
     }
 
-    public override Task OnAppearingAsync()
+    public override async Task OnAppearingAsync()
     {
-        throw new NotImplementedException();
+        await PopulateEntries();
     }
 }
