@@ -18,7 +18,7 @@ async def t1337x_search(query) -> list[MagnetLinkSearchResult]:
 
     magnet_links = []
     seeders = []
-    leachers = []
+    leechers = []
     names = []
     downloads = []
     sizes = []
@@ -37,7 +37,7 @@ async def t1337x_search(query) -> list[MagnetLinkSearchResult]:
         seeders.append(td.text)
 
     for td in soup.find_all('td', {'class': 'coll-3 leeches'}):
-        leachers.append(td.text)
+        leechers.append(td.text)
 
     for td in soup.find_all('td', {'class': 'coll-date'}):
         date_posteds.append(td.text)
@@ -46,7 +46,7 @@ async def t1337x_search(query) -> list[MagnetLinkSearchResult]:
         sizes.append(td.next)
 
     return transform_torrent_data(
-        magnet_links, seeders, leachers, names, downloads, sizes, date_posteds
+        magnet_links, seeders, leechers, names, downloads, sizes, date_posteds
     )
 
 
