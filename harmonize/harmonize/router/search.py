@@ -5,8 +5,8 @@ from fastapi import APIRouter
 from youtubesearchpython import VideosSearch
 
 from harmonize.const import YOUTUBE_SEARCH_METADATA
-from harmonize.defs.magnetlinksearchresult import MagnetLinkSearchResult
 from harmonize.defs.response import BaseResponse
+from harmonize.harmonize.defs.magnetlink import MagnetLinkSearchResult
 from harmonize.scrape.piratebay import piratebay_search
 from harmonize.scrape.xt1337 import t1337x_search
 
