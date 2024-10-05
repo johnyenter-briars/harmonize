@@ -1,15 +1,13 @@
 ﻿using Harmonize.Client;
 using Harmonize.Service;
-using Harmonize.Model;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using System.Linq;
-using Harmonize.Client.Model.Youtube;
 using Harmonize.Page.View;
+using Harmonize.Client.Model.QBT;
 
 namespace Harmonize.ViewModel;
 
-public class YouTubeSearchViewModel(
+public class MagnetLinkSearchViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
     HarmonizeClient harmonizeClient,
@@ -23,8 +21,8 @@ public class YouTubeSearchViewModel(
         set => SetProperty(ref searchQuery, value);
     }
 
-    private ObservableCollection<YouTubeSearchResult> searchResults = [];
-    public ObservableCollection<YouTubeSearchResult> SearchResults
+    private ObservableCollection<MagnetLinkSearchResult> searchResults = [];
+    public ObservableCollection<MagnetLinkSearchResult> SearchResults
     {
         get => searchResults;
         set => SetProperty(ref searchResults, value);
@@ -37,7 +35,7 @@ public class YouTubeSearchViewModel(
 
         var (results, success) = await failsafeService.Fallback(async () =>
         {
-            return await harmonizeClient.GetYoutubeSearchResults(query);
+            return await harmonizeClient.GetPiratebaySearchResults(query);
         }, null);
 
         if (success)
@@ -49,13 +47,13 @@ public class YouTubeSearchViewModel(
             }
         }
     });
-    public async Task ItemTapped(YouTubeSearchResult youTubeSearchResult)
+    public async Task ItemTapped(MagnetLinkSearchResult magnetlinkSearchResult)
     {
-        if (youTubeSearchResult != null)
+        if (magnetlinkSearchResult != null)
         {
             await Shell.Current.GoToAsync(nameof(YouTubeSearchResultEditPage), new Dictionary<string, object>
             {
-                { nameof(YouTubeSearchResultEditViewModel.YoutubeSearchResult), youTubeSearchResult }
+                { nameof(YouTubeSearchResultEditViewModel.YoutubeSearchResult), magnetlinkSearchResult }
             });
         }
     }

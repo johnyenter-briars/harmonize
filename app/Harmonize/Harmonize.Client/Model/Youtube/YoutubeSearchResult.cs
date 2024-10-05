@@ -1,10 +1,5 @@
 ﻿namespace Harmonize.Client.Model.Youtube;
 
-public class YouTubeSearchResults
-{
-    public required List<YouTubeSearchResult> Result { get; set; }
-}
-
 public class Accessibility
 {
     public string? Title { get; set; }

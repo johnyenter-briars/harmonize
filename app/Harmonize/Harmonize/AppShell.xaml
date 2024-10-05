@@ -77,5 +77,16 @@
                 Route="YoutubeSearch" />
         </Tab>
     </FlyoutItem>
+    <FlyoutItem 
+                Title="Magnet Link Search" 
+                Icon="icons8_search_more_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Magnet Link Search"
+                ContentTemplate="{DataTemplate view:MagnetLinkSearchPage}"
+                Route="MagnetLinkSearch" />
+        </Tab>
+    </FlyoutItem>
 
 </Shell>

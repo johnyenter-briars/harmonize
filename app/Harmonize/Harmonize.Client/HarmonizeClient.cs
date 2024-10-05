@@ -1,4 +1,5 @@
 ﻿using Harmonize.Client.Model.Media;
+using Harmonize.Client.Model.QBT;
 using Harmonize.Client.Model.Response;
 using Harmonize.Client.Model.System;
 using Harmonize.Client.Model.Youtube;
@@ -71,7 +72,15 @@ public class HarmonizeClient
     }
     public async Task<YouTubeSearchResults> GetYoutubeSearchResults(string query)
     {
-        return await HarmonizeRequest<YouTubeSearchResults>($"search/youtube/{query}", HttpMethod.Get, CamelCaseOptions);
+        return await HarmonizeRequest<YouTubeSearchResults>($"search/youtube/{query}", HttpMethod.Get, SnakeCaseOptions);
+    }
+    public async Task<MagnetLinkSearchResults> GetPiratebaySearchResults(string query)
+    {
+        return await HarmonizeRequest<MagnetLinkSearchResults>($"search/piratebay/{query}", HttpMethod.Get, SnakeCaseOptions);
+    }
+    public async Task<MagnetLinkSearchResults> GetXT1337SearchResults(string query)
+    {
+        return await HarmonizeRequest<MagnetLinkSearchResults>($"search/xt1337/{query}", HttpMethod.Get, SnakeCaseOptions);
     }
     #endregion
     #region POST

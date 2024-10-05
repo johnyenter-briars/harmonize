@@ -153,6 +153,9 @@
 	  <Compile Update="Page\View\EditJobPage.xaml.cs">
 	    <DependentUpon>EditJobPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Page\View\MagnetLinkSearchPage.xaml.cs">
+	    <DependentUpon>MagnetLinkSearchPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Page\View\YoutubeSearchPage.xaml.cs">
 	    <DependentUpon>YouTubeSearchPage.xaml</DependentUpon>
 	  </Compile>
@@ -160,6 +163,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Page\View\EditJobPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\MagnetLinkSearchPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\YouTubeSearchPage.xaml">
