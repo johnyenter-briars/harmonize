@@ -2,7 +2,7 @@ import re
 
 from bs4 import BeautifulSoup as bs
 
-from harmonize.harmonize.defs.magnetlink import MagnetLinkSearchResult
+from harmonize.defs.magnetlink import MagnetLinkSearchResult
 from harmonize.scrape import transform_torrent_data
 from harmonize.util.fetch import get
 

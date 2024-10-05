@@ -1,4 +1,4 @@
-from harmonize.harmonize.defs.magnetlink import MagnetLinkSearchResult
+from harmonize.defs.magnetlink import MagnetLinkSearchResult
 
 
 def transform_torrent_data(
