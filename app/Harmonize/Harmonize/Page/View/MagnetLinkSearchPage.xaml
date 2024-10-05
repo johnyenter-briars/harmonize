@@ -13,50 +13,121 @@
     Title="YouTube Search">
 
     <Grid Padding="0">
-        <!-- Row definitions to control space -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Search Bar at the top -->
-        <SearchBar 
-            Grid.Row="0"
-            Placeholder="Search YouTube"
-            SearchCommand="{Binding SearchCommand}"
-            SearchCommandParameter="{Binding SearchQuery}"
-            Text="{Binding SearchQuery}" 
-            FontSize="18"
-            HeightRequest="40"
-            VerticalOptions="Start"
-            HorizontalOptions="FillAndExpand"
-            />
+        <Grid 
+            Grid.Row="0" 
+            ColumnDefinitions="*, *"
+            RowDefinitions="Auto, Auto"
+        >
+            <SearchBar 
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Placeholder="Search YouTube"
+                SearchCommand="{Binding SearchCommand}"
+                SearchCommandParameter="{Binding SearchQuery}"
+                Text="{Binding SearchQuery}" 
+                FontSize="18"
+                HeightRequest="40"
+                VerticalOptions="Start"
+                HorizontalOptions="FillAndExpand"
+                />
+
+            <HorizontalStackLayout
+                Grid.Row="1"
+                Grid.Column="0"
+                >
+                <CheckBox 
+                    Color="{StaticResource PrimaryDark}"  
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    IsChecked="{Binding PiratebayChecked, Mode=TwoWay}" 
+                    />
+                <Label 
+                    Text="Piratebay"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    FontSize="20"
+                    />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout
+                Grid.Row="1"
+                Grid.Column="1"
+                >
+                <CheckBox 
+                    Color="{StaticResource SecondaryDark}"  
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    IsChecked="{Binding Xt1337Checked, Mode=TwoWay}" 
+                    />
+                <Label 
+                    Text="xt1337"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    FontSize="20"
+                    />
+            </HorizontalStackLayout>
+        </Grid>
+
+
 
         <ListView 
             Grid.Row="1" 
-            ItemsSource="{Binding SearchResults}"
+            ItemsSource="{Binding SearchResults}" 
             VerticalOptions="FillAndExpand"
-            RowHeight="100"
-            ItemTapped="OnItemTapped"
+            RowHeight="75"
             >
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup Name="CommonStates">
+                    <VisualState Name="Normal" />
+                    <VisualState Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="Aqua" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="qbt:MagnetLinkSearchResult">
                     <ViewCell>
-                        <StackLayout 
-                            Orientation="Horizontal" 
-                            Padding="10"
+                        <Grid 
+                            ColumnDefinitions="*, Auto"
+                            RowDefinitions="Auto, *, *"
                             >
-                            <StackLayout Orientation="Vertical" Padding="10,0,0,0">
-                                <Label Text="{Binding Name}" FontAttributes="Bold" />
-                                <Label Text="{Binding NumberDownloads}" FontSize="Small" />
-                                <Label Text="{Binding Size}" FontSize="Small" />
-                                <Label Text="{Binding DatePosted}" FontSize="Small" />
-                            </StackLayout>
-                        </StackLayout>
+                            <Label
+                                Grid.Row="0"
+                                Grid.ColumnSpan="2"
+                                Text="{Binding Name}" 
+                                FontAttributes="Bold" />
+                            <Label 
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Text="{Binding NumberDownloads}" 
+                                FontSize="Small" />
+                            <Label 
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Text="{Binding Size}" 
+                                FontSize="Small" />
+                            <Label 
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Text="{Binding DatePosted}" 
+                                FontSize="Small" />
+                            <Label 
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Text="{Binding DatePosted}" 
+                                FontSize="Small" />
+                        </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
     </Grid>
+
 </pages:BasePage>
 
