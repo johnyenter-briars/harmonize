@@ -41,7 +41,7 @@ class TorrentData(BaseModel):
     last_activity: int
     magnet_uri: str
     max_inactive_seeding_time: int
-    max_ratio: int
+    max_ratio: float
     max_seeding_time: int
     name: str
     num_complete: int
@@ -50,8 +50,8 @@ class TorrentData(BaseModel):
     num_seeds: int
     priority: int
     progress: float
-    ratio: int
-    ratio_limit: int
+    ratio: float
+    ratio_limit: float
     save_path: str
     seeding_time: int
     seeding_time_limit: int
