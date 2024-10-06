@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BasePage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Harmonize.Page.View"
+    xmlns:pages="clr-namespace:Harmonize.Page"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+    x:TypeArguments="viewModels:ManageQbtViewModel"
+    x:DataType="viewModels:ManageQbtViewModel"
+    x:Class="Harmonize.Page.View.ManageQbtPage"
+    xmlns:qbt="clr-namespace:Harmonize.Client.Model.QBT;assembly=Harmonize.Client"
+    Title="Manage QBT">
+
+    <Grid Padding="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid 
+            Grid.Row="0" 
+            ColumnDefinitions="100, *"
+            RowDefinitions="*, *"
+        >
+            <ImageButton 
+                    Grid.RowSpan="2"
+                    Grid.Column="0"
+                    Source="icons8_update_left_rotation_50.png"
+                    Command="{Binding RetrieveQbtDownloads}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Scale="1.5"
+                >
+                <ImageButton.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
+                </ImageButton.Behaviors>
+            </ImageButton>
+
+            <HorizontalStackLayout
+                Grid.Row="0"
+                Grid.Column="1"
+                >
+                <CheckBox 
+                    Color="{StaticResource Primary}"  
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    IsChecked="{Binding OrderByName, Mode=TwoWay}" 
+                    />
+                <Label 
+                    Text="Order by Name"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    FontSize="15"
+                    />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout
+                Grid.Row="1"
+                Grid.Column="1"
+                >
+                <CheckBox 
+                    Color="{StaticResource Secondary}"  
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    IsChecked="{Binding OrderByPercentage, Mode=TwoWay}" 
+                    />
+                <Label 
+                    Text="Order by Percentage"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    FontSize="15"
+                    />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <ActivityIndicator
+            Grid.Row="1" 
+            IsVisible="{Binding FetchingData}"
+            IsRunning="{Binding FetchingData}"
+            Color="{StaticResource Primary}"
+            Scale="0.7"
+        />
+
+        <ListView 
+            Grid.Row="1" 
+            ItemsSource="{Binding ActiveDownloads}" 
+            VerticalOptions="FillAndExpand"
+            ItemSelected="OnItemSelected"
+            IsVisible="{Binding NotFetchingData}"
+            ItemTapped="OnItemTapped"
+            SeparatorVisibility="None"
+            HasUnevenRows="True"
+            >
+            <ListView.ItemTemplate>
+                <DataTemplate 
+                    x:DataType="qbt:QbtDownloadData">
+                    <ViewCell>
+                        <Grid>
+                            <Frame 
+                                Margin="5"
+                                Padding="10" 
+                                HasShadow="True" 
+                                CornerRadius="5" 
+                                BackgroundColor="{StaticResource Gray600}">
+                                <Grid
+                                    ColumnDefinitions="*, *"
+                                    RowDefinitions="Auto, *, *, *"
+                                >
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.ColumnSpan="2"
+                                        Text="{Binding Name}" 
+                                        FontAttributes="Bold" 
+                                    />
+                                    <BoxView
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        HeightRequest="1" Color="{StaticResource Gray400}"/>
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.ColumnSpan="2"
+                                        TextColor="{StaticResource Gray200}"
+                                        Text="{Binding FullItemDescription}" 
+                                        VerticalOptions="Center"
+                                    />
+                                    <HorizontalStackLayout
+                                        Grid.Row="3"
+                                        Grid.ColumnSpan="2"
+                                        HorizontalOptions="CenterAndExpand"
+                                        Margin="5"
+                                        >
+                                        <ImageButton 
+                                            Grid.RowSpan="2"
+                                            Grid.Column="0"
+                                            Margin="30, 0, 30, 0"
+                                            Source="icons8_play_pause_48_2.png"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                        >
+                                            <ImageButton.Behaviors>
+                                                <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                                            </ImageButton.Behaviors>
+                                            <ImageButton.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ManageQbtViewModel}}, Path=PlayPauseDownload }"
+                                                    CommandParameter="{Binding}"
+                                                />
+                                            </ImageButton.GestureRecognizers>
+                                        </ImageButton>
+
+                                        <ImageButton 
+                                            Grid.RowSpan="2"
+                                            Grid.Column="0"
+                                            Margin="30, 0, 30, 0"
+                                            Source="icons8_trash_26.png"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                        >
+                                            <ImageButton.Behaviors>
+                                                <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
+                                            </ImageButton.Behaviors>
+                                            <ImageButton.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ManageQbtViewModel}}, Path=DeleteDownload}"
+                                                    CommandParameter="{Binding}"
+                                                />
+                                            </ImageButton.GestureRecognizers>
+                                        </ImageButton>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </Grid>
+</pages:BasePage>
+

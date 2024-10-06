@@ -1,6 +1,6 @@
 ﻿namespace Harmonize.Client.Model.QBT;
 
-public class AddTorrentsRequest
+public class AddQbtDownloadsRequest
 {
     public required List<string> MagnetLinks { get; set; }
 }

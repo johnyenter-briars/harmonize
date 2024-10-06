@@ -88,5 +88,16 @@
                 Route="MagnetLinkSearch" />
         </Tab>
     </FlyoutItem>
+    <FlyoutItem 
+                Title="Manage QBT" 
+                Icon="icons8_updownarrows_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Manage QBT"
+                ContentTemplate="{DataTemplate view:ManageQbtPage}"
+                Route="MangeQbt" />
+        </Tab>
+    </FlyoutItem>
 
 </Shell>

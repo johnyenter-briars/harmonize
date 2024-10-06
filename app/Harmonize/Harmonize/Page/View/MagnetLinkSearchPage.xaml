@@ -85,32 +85,48 @@
             Grid.Row="1" 
             ItemsSource="{Binding SearchResults}" 
             VerticalOptions="FillAndExpand"
-            RowHeight="75"
             ItemSelected="OnItemSelected"
             IsVisible="{Binding NotFetchingData}"
             ItemTapped="OnItemTapped"
+            SeparatorVisibility="None"
+            HasUnevenRows="True"
             >
             <ListView.ItemTemplate>
                 <DataTemplate 
                     x:DataType="qbt:MagnetLinkSearchResult">
                     <ViewCell>
-                        <Grid 
-                            ColumnDefinitions="*, Auto"
-                            RowDefinitions="Auto, *, *"
-                            >
-                            <Label
-                                Grid.Row="0"
-                                Grid.ColumnSpan="2"
-                                Text="{Binding Name}" 
-                                FontAttributes="Bold" 
-                                />
-                            <Label
-                                Grid.Row="1"
-                                Grid.ColumnSpan="2"
-                                TextColor="{StaticResource Secondary}"
-                                Text="{Binding FullItem}" 
-                                VerticalOptions="Center"
-                                />
+                        <Grid>
+                            <Frame 
+                                Margin="5"
+                                Padding="10" 
+                                HasShadow="True" 
+                                CornerRadius="5" 
+                                BackgroundColor="{StaticResource Gray600}">
+                                <Grid 
+                                    ColumnDefinitions="*, Auto"
+                                    RowDefinitions="Auto, Auto, Auto"
+                                    >
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.ColumnSpan="2"
+                                        Text="{Binding Name}" 
+                                        FontAttributes="Bold" 
+                                        LineBreakMode="WordWrap"
+                                    />
+                                    <BoxView
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        HeightRequest="1" Color="{StaticResource Gray400}"/>
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.ColumnSpan="2"
+                                        TextColor="{StaticResource Gray200}"
+                                        Text="{Binding FullItem}" 
+                                        VerticalOptions="Center"
+                                        FontSize="13"
+                                        />
+                                </Grid>
+                            </Frame>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

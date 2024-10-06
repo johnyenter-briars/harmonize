@@ -1,37 +1,44 @@
-using Harmonize.ViewModel;
-using AlohaKit.Animations;
-using Harmonize.Service;
-using Harmonize.Client.Model.Youtube;
 using Harmonize.Client.Model.QBT;
+using Harmonize.Service;
+using Harmonize.ViewModel;
 
 namespace Harmonize.Page.View;
 
-public partial class MagnetLinkSearchPage : BasePage<MagnetLinkSearchViewModel>
+public partial class ManageQbtPage : BasePage<ManageQbtViewModel>
 {
-    private readonly MagnetLinkSearchViewModel viewModel;
+    private readonly ManageQbtViewModel viewModel;
 
-    public MagnetLinkSearchPage(
+    public ManageQbtPage(
         MediaManager mediaManager,
         PreferenceManager preferenceManager,
-        MagnetLinkSearchViewModel viewModel
+        ManageQbtViewModel viewModel
         ) : base(viewModel)
     {
         InitializeComponent();
         this.viewModel = viewModel;
     }
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is ManageQbtViewModel viewModel)
+        {
+            await viewModel.OnAppearingAsync();
+        }
+    }
     private async void OnItemTapped(object sender, ItemTappedEventArgs e)
     {
-        if (e.Item is MagnetLinkSearchResult magnetlinkSearchResult)
-        {
-            await viewModel.ItemTapped(magnetlinkSearchResult);
-        }
+        //if (e.Item is MagnetLinkSearchResult magnetlinkSearchResult)
+        //{
+        //    await viewModel.ItemTapped(magnetlinkSearchResult);
+        //}
     }
     void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
         if (e.SelectedItem == null)
             return;
-       
-        var selectedItem = e.SelectedItem as MagnetLinkSearchResult;
+
+        var selectedItem = e.SelectedItem as QbtDownloadData;
 
         var listView = sender as ListView;
 
@@ -42,10 +49,12 @@ public partial class MagnetLinkSearchPage : BasePage<MagnetLinkSearchViewModel>
                 viewCell.View.BackgroundColor = null;
             }
         }
+
         var selectedViewCell = listView.TemplatedItems[e.SelectedItemIndex] as ViewCell;
 
         if (selectedViewCell != null)
         {
+            //selectedViewCell.View.BackgroundColor = (Color)Application.Current.Resources["Primary"]; ;
             selectedViewCell.View.BackgroundColor = null;
         }
 

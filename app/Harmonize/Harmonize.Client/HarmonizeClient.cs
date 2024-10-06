@@ -92,13 +92,27 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<BaseResponse<Job>>($"download/youtube/{youtubeId}", HttpMethod.Post);
     }
-    public async Task<AddTorrentResponse> AddTorrentResponse(AddTorrentsRequest request)
+    public async Task<AddQbtDownloadsResponse> AddQbtDownload(AddQbtDownloadsRequest request)
     {
-        return await HarmonizeRequest<AddTorrentsRequest, AddTorrentResponse>(request, $"qbt/add", HttpMethod.Post, SnakeCaseOptions);
+        return await HarmonizeRequest<AddQbtDownloadsRequest, AddQbtDownloadsResponse>(request, $"qbt/add", HttpMethod.Post, SnakeCaseOptions);
+    }
+    public async Task<ListQbtDownloadsResponse> GetQbtDownloads()
+    {
+        return await HarmonizeRequest<ListQbtDownloadsResponse>($"qbt/list", HttpMethod.Get, SnakeCaseOptions);
+    }
+    public async Task<DeleteDownloadsResponse> DeleteQbtDownloads(DeleteDownloadsRequest request)
+    {
+        return await HarmonizeRequest<DeleteDownloadsRequest, DeleteDownloadsResponse>(request, $"qbt/delete", HttpMethod.Post, SnakeCaseOptions);
+    }
+    public async Task<PauseDownloadsResponse> PauseQbtDownloads(PauseDownloadsRequest request)
+    {
+        return await HarmonizeRequest<PauseDownloadsRequest, PauseDownloadsResponse>(request, $"qbt/pause", HttpMethod.Post, SnakeCaseOptions);
+    }
+    public async Task<ResumeDownloadsResponse> ResumeQbtDownloads(ResumeDownloadsRequest request)
+    {
+        return await HarmonizeRequest<ResumeDownloadsRequest, ResumeDownloadsResponse>(request, $"qbt/resume", HttpMethod.Post, SnakeCaseOptions);
     }
     #endregion
-
-
     #region BASE REQUESTS
     private async Task<TResponse> HarmonizeRequest<TResponse>(string path, HttpMethod httpMethod, JsonSerializerOptions? serializerOptions = null)
     {

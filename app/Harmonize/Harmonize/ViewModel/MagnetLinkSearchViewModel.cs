@@ -2,7 +2,6 @@
 using Harmonize.Service;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Harmonize.Page.View;
 using Harmonize.Client.Model.QBT;
 
 namespace Harmonize.ViewModel;
@@ -64,24 +63,6 @@ public class MagnetLinkSearchViewModel(
         get => searchResults;
         set => SetProperty(ref searchResults, value);
     }
-    private bool fetchingData = false;
-    public bool FetchingData
-    {
-        get { return fetchingData; }
-        set { SetProperty(ref fetchingData, value); }
-    }
-    private bool notFetchingData = true;
-    public bool NotFetchingData
-    {
-        get { return notFetchingData; }
-        set { SetProperty(ref notFetchingData, value); }
-    }
-    private MagnetLinkSearchResult selectedSearchResult;
-    public MagnetLinkSearchResult SelectedSearchResult
-    {
-        get { return selectedSearchResult; }
-        set { SetProperty(ref selectedSearchResult, value); }
-    }
     #endregion
 
     public ICommand SearchCommand => new Command<SearchBar>(async (searchBar) =>
@@ -126,7 +107,7 @@ public class MagnetLinkSearchViewModel(
         {
             var (results, success) = await failsafeService.Fallback(async () =>
             {
-                return await harmonizeClient.AddTorrentResponse(new AddTorrentsRequest
+                return await harmonizeClient.AddQbtDownload(new AddQbtDownloadsRequest
                 {
                     MagnetLinks = [magnetlinkSearchResult.MagnetLink]
                 });
@@ -134,23 +115,14 @@ public class MagnetLinkSearchViewModel(
 
             if (success)
             {
-                await alertService.ShowAlertAsync("Success!", "Torrent added");
+                await alertService.ShowAlertAsync("Success!", "Download added");
+            }
+            else
+            {
+                await alertService.ShowAlertAsync("Failure", results.Message);
             }
         }
     }
-    async Task<T> FetchData<T>(Func<Task<T>> callback)
-    {
-        FetchingData = true;
-        NotFetchingData = false;
-
-        T response = await callback();
-
-        FetchingData = false;
-        NotFetchingData = true;
-
-        return response;
-    }
-
     public override Task OnAppearingAsync()
     {
         throw new NotImplementedException();

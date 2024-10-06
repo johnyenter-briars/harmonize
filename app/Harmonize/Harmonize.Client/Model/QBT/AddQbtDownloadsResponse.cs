@@ -2,6 +2,6 @@
 
 namespace Harmonize.Client.Model.QBT;
 
-public class AddTorrentResponse : BaseResponse<int?>
+public class AddQbtDownloadsResponse : BaseResponse<int?>
 {
 }

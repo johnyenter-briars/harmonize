@@ -16,6 +16,7 @@
     <Color x:Key="SecondaryDark">#4A355A</Color>
     <Color x:Key="SecondaryDarkText">#E1E1E1</Color>
     <Color x:Key="Tertiary">#2B0B98</Color>
+    <Color x:Key="Delete">#db1f48</Color>
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">#32261A</Color>
