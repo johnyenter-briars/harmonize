@@ -50,9 +50,12 @@ NOTE: This is for running with docker for devleopment.
   - [ ] Save + query to DB
 - [ ] Playlists
 - [x] Set / query long running jobs
+- [ ] Update storing / saving jobs in database
 - [ ] Integrate media art with youtube-dl
 - [ ] Search magnet links across different search platforms
 - [ ] Setup easy deployment / redeployment on server
 - [ ] Automatic media art when not found?
 - [ ] Test kill switch
 - [ ] Implement https + private keys
+- [ ] All 'async with ClientSession' use the 'get' helper in 'util'
+- [ ] Run check for VPN when running QBT
