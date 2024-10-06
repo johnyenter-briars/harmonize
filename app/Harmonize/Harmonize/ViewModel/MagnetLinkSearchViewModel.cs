@@ -11,7 +11,8 @@ public class MagnetLinkSearchViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
     HarmonizeClient harmonizeClient,
-    FailsafeService failsafeService
+    FailsafeService failsafeService,
+    AlertService alertService
 ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     #region Bindings
@@ -119,12 +120,22 @@ public class MagnetLinkSearchViewModel(
     });
     public async Task ItemTapped(MagnetLinkSearchResult magnetlinkSearchResult)
     {
-        if (magnetlinkSearchResult != null)
+        bool startDownload = await alertService.ShowConfirmationAsync("Confirm", "Are you sure you want to start this download?", "Yes", "No");
+
+        if (startDownload)
         {
-            await Shell.Current.GoToAsync(nameof(YouTubeSearchResultEditPage), new Dictionary<string, object>
+            var (results, success) = await failsafeService.Fallback(async () =>
             {
-                { nameof(YouTubeSearchResultEditViewModel.YoutubeSearchResult), magnetlinkSearchResult }
-            });
+                return await harmonizeClient.AddTorrentResponse(new AddTorrentsRequest
+                {
+                    MagnetLinks = [magnetlinkSearchResult.MagnetLink]
+                });
+            }, null);
+
+            if (success)
+            {
+                await alertService.ShowAlertAsync("Success!", "Torrent added");
+            }
         }
     }
     async Task<T> FetchData<T>(Func<Task<T>> callback)

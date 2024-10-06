@@ -30,7 +30,7 @@ public partial class MagnetLinkSearchPage : BasePage<MagnetLinkSearchViewModel>
     {
         if (e.SelectedItem == null)
             return;
-
+       
         var selectedItem = e.SelectedItem as MagnetLinkSearchResult;
 
         var listView = sender as ListView;

@@ -92,6 +92,10 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<BaseResponse<Job>>($"download/youtube/{youtubeId}", HttpMethod.Post);
     }
+    public async Task<AddTorrentResponse> AddTorrentResponse(AddTorrentsRequest request)
+    {
+        return await HarmonizeRequest<AddTorrentsRequest, AddTorrentResponse>(request, $"qbt/add", HttpMethod.Post, SnakeCaseOptions);
+    }
     #endregion
 
 
@@ -125,7 +129,8 @@ public class HarmonizeClient
 
         var options = serializerOptions ?? SnakeCaseOptions;
 
-        request.Content = new StringContent(JsonSerializer.Serialize(requestObject, CamelCaseOptions), Encoding.UTF8, "application/json");
+        var str = JsonSerializer.Serialize(requestObject, options);
+        request.Content = new StringContent(str, Encoding.UTF8, "application/json");
 
         return await SendRequest<TResponse>(request, options);
     }

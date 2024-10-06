@@ -88,6 +88,7 @@
             RowHeight="75"
             ItemSelected="OnItemSelected"
             IsVisible="{Binding NotFetchingData}"
+            ItemTapped="OnItemTapped"
             >
             <ListView.ItemTemplate>
                 <DataTemplate 
