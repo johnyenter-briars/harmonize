@@ -59,8 +59,11 @@ public class ManageQbtViewModel(
     }
     #endregion
 
-    public ICommand RetrieveQbtDownloads => new Command(async () =>
+    public ICommand RetrieveQbtDownloads => new Command<ImageButton>(async (imageButton) =>
     {
+        await imageButton.RotateTo(100, 300, Easing.CubicInOut);
+        await imageButton.RotateTo(0, 300, Easing.CubicInOut);
+
         await RefreshQbtDownloads();
     });
     public ICommand DeleteDownload => new Command<QbtDownloadData>(async (downloadData) =>
@@ -105,9 +108,10 @@ public class ManageQbtViewModel(
                     Hashes = [downloadData.Hash]
                 });
             }, null);
-            
+
             if (success)
             {
+                await Task.Delay(1500);
                 await RefreshQbtDownloads();
             }
         }

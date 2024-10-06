@@ -26,29 +26,4 @@ public partial class MagnetLinkSearchPage : BasePage<MagnetLinkSearchViewModel>
             await viewModel.ItemTapped(magnetlinkSearchResult);
         }
     }
-    void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
-    {
-        if (e.SelectedItem == null)
-            return;
-       
-        var selectedItem = e.SelectedItem as MagnetLinkSearchResult;
-
-        var listView = sender as ListView;
-
-        foreach (ViewCell viewCell in listView.TemplatedItems)
-        {
-            if (viewCell != null)
-            {
-                viewCell.View.BackgroundColor = null;
-            }
-        }
-        var selectedViewCell = listView.TemplatedItems[e.SelectedItemIndex] as ViewCell;
-
-        if (selectedViewCell != null)
-        {
-            selectedViewCell.View.BackgroundColor = null;
-        }
-
-        listView.SelectedItem = null;
-    }
 }

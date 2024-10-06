@@ -23,14 +23,14 @@ class TorrentData(BaseModel):
     auto_tmm: bool
     availability: float
     category: str
-    completed: int
+    completed: float
     completion_on: int
     content_path: str
     dl_limit: int
     dlspeed: int
     download_path: str | None
-    downloaded: int
-    downloaded_session: int
+    downloaded: float
+    downloaded_session: float
     eta: int
     f_l_piece_prio: bool
     force_start: bool

@@ -7,14 +7,14 @@ public class QbtDownloadData
     public bool AutoTmm { get; set; }
     public float Availability { get; set; }
     public string Category { get; set; }
-    public int Completed { get; set; }
+    public float Completed { get; set; }
     public int CompletionOn { get; set; }
     public string ContentPath { get; set; }
     public int DlLimit { get; set; }
     public int DlSpeed { get; set; }
     public string? DownloadPath { get; set; }
-    public int Downloaded { get; set; }
-    public int DownloadedSession { get; set; }
+    public float Downloaded { get; set; }
+    public float DownloadedSession { get; set; }
     public int Eta { get; set; }
     public bool FlPiecePrio { get; set; }
     public bool ForceStart { get; set; }

@@ -30,15 +30,20 @@ public class YouTubeSearchViewModel(
         set => SetProperty(ref searchResults, value);
     }
 
-    public ICommand SearchCommand => new Command<string>(async (query) =>
+    public ICommand SearchCommand => new Command<SearchBar>(async (searchBar) =>
     {
-        if (string.IsNullOrWhiteSpace(query))
+        if (string.IsNullOrWhiteSpace(SearchQuery))
             return;
 
-        var (results, success) = await failsafeService.Fallback(async () =>
+        searchBar?.Unfocus();
+
+        var (results, success) = await FetchData(async () =>
         {
-            return await harmonizeClient.GetYoutubeSearchResults(query);
-        }, null);
+            return await failsafeService.Fallback(async () =>
+            {
+                return await harmonizeClient.GetYoutubeSearchResults(SearchQuery);
+            }, null);
+        });
 
         if (success)
         {

@@ -72,19 +72,17 @@ public class MagnetLinkSearchViewModel(
 
         searchBar?.Unfocus();
 
-        var query = SearchQuery;
-
         var (results, success) = await FetchData(async () =>
         {
             return await failsafeService.Fallback(async () =>
             {
                 if (PiratebayChecked)
                 {
-                    return await harmonizeClient.GetPiratebaySearchResults(query);
+                    return await harmonizeClient.GetPiratebaySearchResults(SearchQuery);
                 }
                 else if (Xt1337Checked)
                 {
-                    return await harmonizeClient.GetXT1337SearchResults(query);
+                    return await harmonizeClient.GetXT1337SearchResults(SearchQuery);
                 }
                 else return null;
             }, null);
