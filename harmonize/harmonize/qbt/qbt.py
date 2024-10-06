@@ -71,7 +71,7 @@ async def resume_torrent(torrent_hash: str) -> str:
     qbt_domain_name = HARMONIZE_CONFIG.qbt_domain_name
     qbt_port = HARMONIZE_CONFIG.qbt_port
     qbt_api_version = HARMONIZE_CONFIG.qbt_version
-    url = f'http://{qbt_domain_name}:{qbt_port}/api/{qbt_api_version}/torrents/resume'
+    url = f'http://{qbt_domain_name}:{qbt_port}/api/{qbt_api_version}/torrents/start'
     headers = {'Content-type': 'multipart/form-data; boundary=wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T'}
 
     dataList = []
