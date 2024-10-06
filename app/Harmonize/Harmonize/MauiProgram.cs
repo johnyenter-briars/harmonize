@@ -16,7 +16,7 @@ namespace Harmonize
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                //.UseMauiCommunityToolkit()
+                .UseMauiCommunityToolkit()
                 .UseMauiCommunityToolkitMediaElement()
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>

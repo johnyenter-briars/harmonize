@@ -49,9 +49,21 @@
                             <Image Source="{Binding Thumbnails[0].Url}" WidthRequest="100" HeightRequest="75"/>
                             <StackLayout Orientation="Vertical" Padding="10,0,0,0">
                                 <Label Text="{Binding Title}" FontAttributes="Bold" />
-                                <Label Text="{Binding Channel.Name}" FontSize="Small" />
-                                <Label Text="{Binding Duration}" FontSize="Small" />
-                                <Label Text="{Binding PublishedTime}" FontSize="Small" />
+                                <Label 
+                                    Text="{Binding Channel.Name}" 
+                                    TextColor="{StaticResource Gray300}"
+                                    FontSize="Small" 
+                                    />
+                                <Label 
+                                    TextColor="{StaticResource Gray300}"
+                                    Text="{Binding Duration}" 
+                                    FontSize="Small" 
+                                    />
+                                <Label 
+                                    TextColor="{StaticResource Gray300}"
+                                    Text="{Binding PublishedTime}" 
+                                    FontSize="Small" 
+                                    />
                             </StackLayout>
                         </StackLayout>
                     </ViewCell>

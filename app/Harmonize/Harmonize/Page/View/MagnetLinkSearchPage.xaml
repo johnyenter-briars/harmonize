@@ -10,7 +10,7 @@
     x:DataType="viewModels:MagnetLinkSearchViewModel"
     x:Class="Harmonize.Page.View.MagnetLinkSearchPage"
     xmlns:qbt="clr-namespace:Harmonize.Client.Model.QBT;assembly=Harmonize.Client"
-    Title="YouTube Search">
+    Title="Magnet Link Search">
 
     <Grid Padding="0">
         <Grid.RowDefinitions>
@@ -28,12 +28,13 @@
                 Grid.ColumnSpan="2"
                 Placeholder="Search YouTube"
                 SearchCommand="{Binding SearchCommand}"
-                SearchCommandParameter="{Binding SearchQuery}"
+                SearchCommandParameter="{Binding ., Source={x:Reference searchBar}}"
                 Text="{Binding SearchQuery}" 
                 FontSize="18"
                 HeightRequest="40"
                 VerticalOptions="Start"
                 HorizontalOptions="FillAndExpand"
+                x:Name="searchBar"
                 />
 
             <HorizontalStackLayout
@@ -72,26 +73,25 @@
             </HorizontalStackLayout>
         </Grid>
 
-
+        <ActivityIndicator
+            Grid.Row="1" 
+            IsVisible="{Binding FetchingData}"
+            IsRunning="{Binding FetchingData}"
+            Color="{StaticResource Primary}"
+            Scale="0.7"
+        />
 
         <ListView 
             Grid.Row="1" 
             ItemsSource="{Binding SearchResults}" 
             VerticalOptions="FillAndExpand"
             RowHeight="75"
+            ItemSelected="OnItemSelected"
+            IsVisible="{Binding NotFetchingData}"
             >
-            <VisualStateManager.VisualStateGroups>
-                <VisualStateGroup Name="CommonStates">
-                    <VisualState Name="Normal" />
-                    <VisualState Name="Selected">
-                        <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="Aqua" />
-                        </VisualState.Setters>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateManager.VisualStateGroups>
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="qbt:MagnetLinkSearchResult">
+                <DataTemplate 
+                    x:DataType="qbt:MagnetLinkSearchResult">
                     <ViewCell>
                         <Grid 
                             ColumnDefinitions="*, Auto"
@@ -101,27 +101,15 @@
                                 Grid.Row="0"
                                 Grid.ColumnSpan="2"
                                 Text="{Binding Name}" 
-                                FontAttributes="Bold" />
-                            <Label 
+                                FontAttributes="Bold" 
+                                />
+                            <Label
                                 Grid.Row="1"
-                                Grid.Column="0"
-                                Text="{Binding NumberDownloads}" 
-                                FontSize="Small" />
-                            <Label 
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Text="{Binding Size}" 
-                                FontSize="Small" />
-                            <Label 
-                                Grid.Row="2"
-                                Grid.Column="0"
-                                Text="{Binding DatePosted}" 
-                                FontSize="Small" />
-                            <Label 
-                                Grid.Row="2"
-                                Grid.Column="1"
-                                Text="{Binding DatePosted}" 
-                                FontSize="Small" />
+                                Grid.ColumnSpan="2"
+                                TextColor="{StaticResource Secondary}"
+                                Text="{Binding FullItem}" 
+                                VerticalOptions="Center"
+                                />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

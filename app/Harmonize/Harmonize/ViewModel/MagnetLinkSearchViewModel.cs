@@ -40,7 +40,6 @@ public class MagnetLinkSearchViewModel(
             }
         }
     }
-
     public bool Xt1337Checked
     {
         get => xt1337Checked;
@@ -64,25 +63,50 @@ public class MagnetLinkSearchViewModel(
         get => searchResults;
         set => SetProperty(ref searchResults, value);
     }
+    private bool fetchingData = false;
+    public bool FetchingData
+    {
+        get { return fetchingData; }
+        set { SetProperty(ref fetchingData, value); }
+    }
+    private bool notFetchingData = true;
+    public bool NotFetchingData
+    {
+        get { return notFetchingData; }
+        set { SetProperty(ref notFetchingData, value); }
+    }
+    private MagnetLinkSearchResult selectedSearchResult;
+    public MagnetLinkSearchResult SelectedSearchResult
+    {
+        get { return selectedSearchResult; }
+        set { SetProperty(ref selectedSearchResult, value); }
+    }
     #endregion
 
-    public ICommand SearchCommand => new Command<string>(async (query) =>
+    public ICommand SearchCommand => new Command<SearchBar>(async (searchBar) =>
     {
-        if (string.IsNullOrWhiteSpace(query))
+        if (string.IsNullOrWhiteSpace(SearchQuery))
             return;
 
-        var (results, success) = await failsafeService.Fallback(async () =>
+        searchBar?.Unfocus();
+
+        var query = SearchQuery;
+
+        var (results, success) = await FetchData(async () =>
         {
-            if (PiratebayChecked)
+            return await failsafeService.Fallback(async () =>
             {
-                return await harmonizeClient.GetPiratebaySearchResults(query);
-            }
-            else if (Xt1337Checked)
-            {
-                return await harmonizeClient.GetXT1337SearchResults(query);
-            }
-            else return null;
-        }, null);
+                if (PiratebayChecked)
+                {
+                    return await harmonizeClient.GetPiratebaySearchResults(query);
+                }
+                else if (Xt1337Checked)
+                {
+                    return await harmonizeClient.GetXT1337SearchResults(query);
+                }
+                else return null;
+            }, null);
+        });
 
         if (success)
         {
@@ -102,6 +126,18 @@ public class MagnetLinkSearchViewModel(
                 { nameof(YouTubeSearchResultEditViewModel.YoutubeSearchResult), magnetlinkSearchResult }
             });
         }
+    }
+    async Task<T> FetchData<T>(Func<Task<T>> callback)
+    {
+        FetchingData = true;
+        NotFetchingData = false;
+
+        T response = await callback();
+
+        FetchingData = false;
+        NotFetchingData = true;
+
+        return response;
     }
 
     public override Task OnAppearingAsync()

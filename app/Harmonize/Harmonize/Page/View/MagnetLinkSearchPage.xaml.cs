@@ -15,8 +15,8 @@ public partial class MagnetLinkSearchPage : BasePage<MagnetLinkSearchViewModel>
         PreferenceManager preferenceManager,
         MagnetLinkSearchViewModel viewModel
         ) : base(viewModel)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         this.viewModel = viewModel;
     }
     private async void OnItemTapped(object sender, ItemTappedEventArgs e)
@@ -25,5 +25,30 @@ public partial class MagnetLinkSearchPage : BasePage<MagnetLinkSearchViewModel>
         {
             await viewModel.ItemTapped(magnetlinkSearchResult);
         }
+    }
+    void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        if (e.SelectedItem == null)
+            return;
+
+        var selectedItem = e.SelectedItem as MagnetLinkSearchResult;
+
+        var listView = sender as ListView;
+
+        foreach (ViewCell viewCell in listView.TemplatedItems)
+        {
+            if (viewCell != null)
+            {
+                viewCell.View.BackgroundColor = null;
+            }
+        }
+        var selectedViewCell = listView.TemplatedItems[e.SelectedItemIndex] as ViewCell;
+
+        if (selectedViewCell != null)
+        {
+            selectedViewCell.View.BackgroundColor = (Color)Application.Current.Resources["Primary"]; ;
+        }
+
+        listView.SelectedItem = null;
     }
 }

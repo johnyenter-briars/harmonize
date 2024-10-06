@@ -9,4 +9,6 @@ public class MagnetLinkSearchResult
     public required int? NumberDownloads { get; set; }
     public required string? Size { get; set; }
     public required string? DatePosted { get; set; }
+
+    public string FullItem => $"{NumberSeeders} seeders | {NumberLeechers} leechers | {Size} | {DatePosted}";
 }
