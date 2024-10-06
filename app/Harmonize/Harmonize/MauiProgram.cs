@@ -16,8 +16,9 @@ namespace Harmonize
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .UseMauiCommunityToolkitMediaElement()
+                .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -27,6 +28,10 @@ namespace Harmonize
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+
+
+            builder.Services.AddSingleton<AlertService>();
+            builder.Services.AddSingleton<FailsafeService>();
 
             builder.Services.AddSingleton<PreferenceManager>();
             builder.Services.AddSingleton<HarmonizeDatabase>();
@@ -39,6 +44,8 @@ namespace Harmonize
             builder.Services.AddSingleton<EditJobViewModel>();
             builder.Services.AddSingleton<YouTubeSearchViewModel>();
             builder.Services.AddSingleton<YouTubeSearchResultEditViewModel>();
+            builder.Services.AddSingleton<MagnetLinkSearchViewModel>();
+            builder.Services.AddSingleton<ManageQbtViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();
@@ -48,6 +55,8 @@ namespace Harmonize
             builder.Services.AddSingleton<EditJobPage>();
             builder.Services.AddSingleton<YouTubeSearchPage>();
             builder.Services.AddSingleton<YouTubeSearchResultEditPage>();
+            builder.Services.AddSingleton<MagnetLinkSearchPage>();
+            builder.Services.AddSingleton<ManageQbtPage>();
 
             builder.Services.AddSingleton(service =>
             {

@@ -10,8 +10,10 @@ namespace Harmonize.ViewModel;
 public class EditJobViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
-    HarmonizeClient harmonizeClient
-    ) : BaseViewModel(mediaManager, preferenceManager)
+    HarmonizeClient harmonizeClient,
+    FailsafeService failsafeService,
+    AlertService alertService
+    ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     private ObservableCollection<JobStatus> statusOptions =
     [
@@ -61,7 +63,15 @@ public class EditJobViewModel(
 
     public async Task RetrieveJob()
     {
-        Job = await harmonizeClient.GetJob(JobId);
+        var (job, success) = await failsafeService.Fallback(async () =>
+        {
+            return await harmonizeClient.GetJob(JobId);
+        }, null);
+
+        if (success)
+        {
+            Job = job;
+        }
     }
 
     public override Task OnAppearingAsync()
@@ -73,12 +83,14 @@ public class EditJobViewModel(
     {
         if (job != null)
         {
-            var mainPage = Application.Current?.MainPage;
-            if (mainPage != null)
+            var (_, success) = await failsafeService.Fallback(async () =>
             {
-                await harmonizeClient.CancelJob(job.Id);
+                return await harmonizeClient.CancelJob(job.Id);
+            }, null);
 
-                await mainPage.DisplayAlert("Success", "Job canceled successfully.", "OK");
+            if (success)
+            {
+                await alertService.ShowConfirmationAsync("Success", "Job canceled successfully.", "Ok");
             }
         }
     });

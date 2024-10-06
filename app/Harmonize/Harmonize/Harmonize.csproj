@@ -24,7 +24,7 @@
 		<ApplicationTitle>Harmonize</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.harmonize</ApplicationId>
+		<ApplicationId>com.gg.harmonize</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -49,10 +49,10 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\tuningforksvgrepocom.svg" ForegroundScale="0.5" Color="#513BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\harmonize2.svg" ForegroundScale="0.75" Color="#A3CCC0" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\tuningforksvgrepocom.svg" Color="#512BD4" BaseSize="64,64" />
+		<MauiSplashScreen Include="Resources\Splash\harmonize2.svg" Color="#A3CCC0" BaseSize="64,64" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -122,9 +122,10 @@
 	  <None Remove="Resources\Images\icons8_subtitle_64.png" />
 	  <None Remove="Resources\Images\icons8_subtitle_better_64.png" />
 	  <None Remove="Resources\Images\icons8_tear_off_calendar_50.png" />
-	  <None Remove="Resources\Images\icons8_torrent_50.png" />
+	  <None Remove="Resources\Images\icons8_trash_26.png" />
 	  <None Remove="Resources\Images\icons8_trash_50.png" />
 	  <None Remove="Resources\Images\icons8_update_left_rotation_50.png" />
+	  <None Remove="Resources\Images\icons8_updownarrows_50.png" />
 	  <None Remove="Resources\Images\icons8_upload_to_cloud_50.png" />
 	  <None Remove="Resources\Images\icons8_up_arrow_60.png" />
 	  <None Remove="Resources\Images\icons8_u_turn_to_left_64.png" />
@@ -136,6 +137,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
@@ -153,6 +155,9 @@
 	  <Compile Update="Page\View\EditJobPage.xaml.cs">
 	    <DependentUpon>EditJobPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Page\View\MagnetLinkSearchPage.xaml.cs">
+	    <DependentUpon>MagnetLinkSearchPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Page\View\YoutubeSearchPage.xaml.cs">
 	    <DependentUpon>YouTubeSearchPage.xaml</DependentUpon>
 	  </Compile>
@@ -160,6 +165,12 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Page\View\EditJobPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\MagnetLinkSearchPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\MannageQbtPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\YouTubeSearchPage.xaml">

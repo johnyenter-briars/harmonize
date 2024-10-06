@@ -24,7 +24,7 @@ public partial class JobListPage : BasePage<JobListViewModel>
 
     protected override async void OnAppearing()
     {
-        await viewModel.PopulateJobs();
+        await viewModel.OnAppearingAsync();
     }
     private async void OnItemTapped(object sender, ItemTappedEventArgs e)
     {

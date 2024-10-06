@@ -12,8 +12,9 @@ namespace Harmonize.ViewModel;
 public class YouTubeSearchViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
-    HarmonizeClient harmonizeClient
-) : BaseViewModel(mediaManager, preferenceManager)
+    HarmonizeClient harmonizeClient,
+    FailsafeService failsafeService
+) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     private string? searchQuery;
     public string? SearchQuery
@@ -29,17 +30,28 @@ public class YouTubeSearchViewModel(
         set => SetProperty(ref searchResults, value);
     }
 
-    public ICommand SearchCommand => new Command<string>(async (query) =>
+    public ICommand SearchCommand => new Command<SearchBar>(async (searchBar) =>
     {
-        if (string.IsNullOrWhiteSpace(query))
+        if (string.IsNullOrWhiteSpace(SearchQuery))
             return;
 
-        var results = await harmonizeClient.GetYoutubeSearchResults(query);
+        searchBar?.Unfocus();
 
-        SearchResults.Clear();
-        foreach (var video in results.Result)
+        var (results, success) = await FetchData(async () =>
         {
-            SearchResults.Add(video);
+            return await failsafeService.Fallback(async () =>
+            {
+                return await harmonizeClient.GetYoutubeSearchResults(SearchQuery);
+            }, null);
+        });
+
+        if (success)
+        {
+            SearchResults.Clear();
+            foreach (var video in results.Value)
+            {
+                SearchResults.Add(video);
+            }
         }
     });
     public async Task ItemTapped(YouTubeSearchResult youTubeSearchResult)

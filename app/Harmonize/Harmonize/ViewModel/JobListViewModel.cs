@@ -1,14 +1,9 @@
-﻿using Harmonize.Client;
+﻿using CommunityToolkit.Maui.Core;
+using Harmonize.Client;
 using Harmonize.Client.Model.System;
-using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
@@ -16,8 +11,9 @@ namespace Harmonize.ViewModel;
 public class JobListViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
-    HarmonizeClient harmonizeClient
-        ) : BaseViewModel(mediaManager, preferenceManager)
+    HarmonizeClient harmonizeClient,
+    FailsafeService failsafeService
+        ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     private ObservableCollection<Job> jobs = [];
     private readonly HarmonizeClient harmonizeClient = harmonizeClient;
@@ -32,7 +28,7 @@ public class JobListViewModel(
     {
         Jobs.Clear();
 
-        var jobs = await harmonizeClient.GetJobs();
+        var (jobs, success) = await failsafeService.Fallback(harmonizeClient.GetJobs, []);
 
         foreach (var m in jobs)
         {
@@ -50,9 +46,9 @@ public class JobListViewModel(
         }
     }
 
-    public override Task OnAppearingAsync()
+    public override async Task OnAppearingAsync()
     {
-        throw new NotImplementedException();
+        await PopulateJobs();
     }
 
     public ICommand Refresh => new Command<Job>(async (job) =>

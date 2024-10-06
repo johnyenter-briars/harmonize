@@ -38,7 +38,10 @@ NOTE: This is for running with docker for devleopment.
 - [ ] option to integration with custom media system / fullsail
 - [ ] Option to download
 - [ ] Implement https + private keys
-- [ ] Splash screen icon weirdly cut off
+- [ ] Remove all null ref warnings
+- [ ] Fix all TODOs
+- [ ] Log to file
+- [X] Splash screen icon weirdly cut off
 
 ### Back End
 

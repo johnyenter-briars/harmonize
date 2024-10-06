@@ -23,14 +23,14 @@ class TorrentData(BaseModel):
     auto_tmm: bool
     availability: float
     category: str
-    completed: int
+    completed: float
     completion_on: int
     content_path: str
     dl_limit: int
     dlspeed: int
     download_path: str | None
-    downloaded: int
-    downloaded_session: int
+    downloaded: float
+    downloaded_session: float
     eta: int
     f_l_piece_prio: bool
     force_start: bool
@@ -41,7 +41,7 @@ class TorrentData(BaseModel):
     last_activity: int
     magnet_uri: str
     max_inactive_seeding_time: int
-    max_ratio: int
+    max_ratio: float
     max_seeding_time: int
     name: str
     num_complete: int
@@ -50,8 +50,8 @@ class TorrentData(BaseModel):
     num_seeds: int
     priority: int
     progress: float
-    ratio: int
-    ratio_limit: int
+    ratio: float
+    ratio_limit: float
     save_path: str
     seeding_time: int
     seeding_time_limit: int

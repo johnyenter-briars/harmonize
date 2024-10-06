@@ -10,8 +10,9 @@ namespace Harmonize.ViewModel;
 public class YouTubeSearchResultEditViewModel(
         MediaManager mediaManager,
         PreferenceManager preferenceManager,
-        HarmonizeClient harmonizeClient
-    ) : BaseViewModel(mediaManager, preferenceManager)
+        HarmonizeClient harmonizeClient,
+        FailsafeService failsafeService
+    ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     private YouTubeSearchResult? youtubeSearchResult;
     public YouTubeSearchResult? YoutubeSearchResult
@@ -28,9 +29,16 @@ public class YouTubeSearchResultEditViewModel(
             return;
         }
 
-        var response = await harmonizeClient.DownloadYoutube(result.Id ?? "");
+        var (response, success) = await failsafeService.Fallback(async () =>
+        {
+            return await harmonizeClient.DownloadYoutube(result.Id ?? "");
 
-        await mainPage.DisplayAlert(response.SuccessMessage, response.Message, "OK");
+        }, null);
+
+        if (success)
+        {
+            await mainPage.DisplayAlert(response.SuccessMessage, response.Message, "OK");
+        }
     });
 
     public override Task OnAppearingAsync()

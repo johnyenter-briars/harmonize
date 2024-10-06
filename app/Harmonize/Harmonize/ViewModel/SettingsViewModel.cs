@@ -42,8 +42,9 @@ public class SettingsViewModel : BaseViewModel
     }
     public SettingsViewModel(
         MediaManager mediaManager,
-        PreferenceManager preferenceManager
-        ) : base(mediaManager, preferenceManager)
+        PreferenceManager preferenceManager,
+        FailsafeService failsafeService
+        ) : base(mediaManager, preferenceManager, failsafeService)
     {
     }
 

@@ -21,6 +21,11 @@ public partial class MediaListPage : BasePage<MediaListViewModel>
         this.mediaManager = mediaManager;
 
     }
+
+    protected override async void OnAppearing()
+    {
+        await viewModel.OnAppearingAsync();
+    }
     private void OnMediaItemTapped(object sender, ItemTappedEventArgs e)
     {
         if (e.Item is MediaEntry mediaEntry)

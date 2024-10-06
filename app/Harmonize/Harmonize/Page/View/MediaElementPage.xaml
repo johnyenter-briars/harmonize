@@ -66,12 +66,16 @@
             </Grid>
 
             <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center" Padding="0,10,0,10" Spacing="10">
-                <Button 
+                <ImageButton 
+                    Source="icons8_skip_to_start_50.png"
                     Command="{Binding SkipBackCommand}"
-                    ImageSource="icons8_skip_to_start_50.png"
-                    WidthRequest="100" 
-                    HeightRequest="100" 
-                    CornerRadius="50" />
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
+                    </ImageButton.Behaviors>
+                </ImageButton>
+
                 <Button 
                     Clicked="OnPlayPauseClicked" 
                     WidthRequest="100" 

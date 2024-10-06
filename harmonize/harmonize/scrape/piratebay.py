@@ -2,7 +2,7 @@ import re
 
 from bs4 import BeautifulSoup as bs
 
-from harmonize.defs.magnetlinksearchresult import MagnetLinkSearchResult
+from harmonize.defs.magnetlink import MagnetLinkSearchResult
 from harmonize.scrape import transform_torrent_data
 from harmonize.util.fetch import get
 
@@ -17,7 +17,7 @@ async def piratebay_search(query) -> list[MagnetLinkSearchResult]:
     (_, text) = await get(url, headers)
 
     seeders = []
-    leachers = []
+    leechers = []
     names = []
     magnet_links = []
     downloads = []
@@ -35,7 +35,7 @@ async def piratebay_search(query) -> list[MagnetLinkSearchResult]:
 
     for seeder, leecher in paired:
         seeders.append(seeder)
-        leachers.append(leecher)
+        leechers.append(leecher)
 
     for link in a_tags:
         b: str = link.get('href')
@@ -57,5 +57,5 @@ async def piratebay_search(query) -> list[MagnetLinkSearchResult]:
         sizes.append(size)
 
     return transform_torrent_data(
-        magnet_links, seeders, leachers, names, downloads, sizes, date_posteds
+        magnet_links, seeders, leechers, names, downloads, sizes, date_posteds
     )

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BasePage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Harmonize.Page.View"
+    xmlns:pages="clr-namespace:Harmonize.Page"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+    x:TypeArguments="viewModels:MagnetLinkSearchViewModel"
+    x:DataType="viewModels:MagnetLinkSearchViewModel"
+    x:Class="Harmonize.Page.View.MagnetLinkSearchPage"
+    xmlns:qbt="clr-namespace:Harmonize.Client.Model.QBT;assembly=Harmonize.Client"
+    Title="Magnet Link Search">
+
+    <Grid Padding="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid 
+            Grid.Row="0" 
+            ColumnDefinitions="*, *"
+            RowDefinitions="Auto, Auto"
+        >
+            <SearchBar 
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Placeholder="Search YouTube"
+                SearchCommand="{Binding SearchCommand}"
+                SearchCommandParameter="{Binding ., Source={x:Reference searchBar}}"
+                Text="{Binding SearchQuery}" 
+                FontSize="18"
+                HeightRequest="40"
+                VerticalOptions="Start"
+                HorizontalOptions="FillAndExpand"
+                x:Name="searchBar"
+                />
+
+            <HorizontalStackLayout
+                Grid.Row="1"
+                Grid.Column="0"
+                >
+                <CheckBox 
+                    Color="{StaticResource PrimaryDark}"  
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    IsChecked="{Binding PiratebayChecked, Mode=TwoWay}" 
+                    />
+                <Label 
+                    Text="Piratebay"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    FontSize="20"
+                    />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout
+                Grid.Row="1"
+                Grid.Column="1"
+                >
+                <CheckBox 
+                    Color="{StaticResource SecondaryDark}"  
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    IsChecked="{Binding Xt1337Checked, Mode=TwoWay}" 
+                    />
+                <Label 
+                    Text="xt1337"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    FontSize="20"
+                    />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <ActivityIndicator
+            Grid.Row="1" 
+            IsVisible="{Binding FetchingData}"
+            IsRunning="{Binding FetchingData}"
+            Color="{StaticResource Primary}"
+            Scale="0.7"
+        />
+
+        <ListView 
+            Grid.Row="1" 
+            ItemsSource="{Binding SearchResults}" 
+            VerticalOptions="FillAndExpand"
+            ItemSelected="OnItemSelected"
+            IsVisible="{Binding NotFetchingData}"
+            ItemTapped="OnItemTapped"
+            SeparatorVisibility="None"
+            HasUnevenRows="True"
+            >
+            <ListView.ItemTemplate>
+                <DataTemplate 
+                    x:DataType="qbt:MagnetLinkSearchResult">
+                    <ViewCell>
+                        <Grid>
+                            <Frame 
+                                Margin="5"
+                                Padding="10" 
+                                HasShadow="True" 
+                                CornerRadius="5" 
+                                BackgroundColor="{StaticResource Gray600}">
+                                <Grid 
+                                    ColumnDefinitions="*, Auto"
+                                    RowDefinitions="Auto, Auto, Auto"
+                                    >
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.ColumnSpan="2"
+                                        Text="{Binding Name}" 
+                                        FontAttributes="Bold" 
+                                        LineBreakMode="WordWrap"
+                                    />
+                                    <BoxView
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        HeightRequest="1" Color="{StaticResource Gray400}"/>
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.ColumnSpan="2"
+                                        TextColor="{StaticResource Gray200}"
+                                        Text="{Binding FullItem}" 
+                                        VerticalOptions="Center"
+                                        FontSize="13"
+                                        />
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+
+</pages:BasePage>
+
