@@ -6,8 +6,7 @@ from fastapi import Depends, FastAPI
 import harmonize.config
 import harmonize.config.harmonizeconfig
 from harmonize.config.logconfig import LogConfig
-from harmonize.db.database import get_session
-from harmonize.db.wipe_and_seed import seed
+from harmonize.db.database import get_session, seed
 from harmonize.router import download, job, list, metadata, playlist, qbt, search, stream
 
 config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG

@@ -6,7 +6,7 @@ from typing import Any
 
 import yt_dlp
 from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from harmonize.const import (
     MUSIC_ROOT,
@@ -29,6 +29,12 @@ async def download_youtube_video(
     id: str,
     session: Session = Depends(get_session),
 ) -> BaseResponse[Job]:
+    statement = select(MediaEntry).where(MediaEntry.youtube_id == id)
+    media_entries = session.exec(statement).all()
+
+    if len(media_entries) > 0:
+        raise HTTPException(status_code=400, detail='Media entry already exists')
+
     metadata_file = YOUTUBE_VIDEO_SEARCH_METADATA / f'{id}.search.info.json'
 
     if not Path.exists(metadata_file):
