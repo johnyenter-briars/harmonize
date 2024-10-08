@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
 from harmonize.db.database import get_session
-from harmonize.db.models import Job, Status
+from harmonize.db.models import Job, JobStatus
 from harmonize.defs.response import BaseResponse
 from harmonize.job.methods import cancel_job
 
@@ -47,7 +47,7 @@ async def cancel_job_req(
 
     await cancel_job(job_id)
 
-    job.status = Status.CANCELED
+    job.status = JobStatus.CANCELED
 
     session.add(job)
     session.commit()

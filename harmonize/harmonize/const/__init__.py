@@ -3,6 +3,7 @@ from pathlib import Path
 MUSIC_ROOT_LEGACY = Path('./music')
 MEDIA_ROOT = Path('./media/audio/youtube')
 MUSIC_ROOT = Path('./media/audio')
+VIDEO_ROOT = Path('./media/video')
 TMP_ALBUM_ART_DIR = Path('./cache/tmp/album_art')
 YOUTUBE_METADATA = Path('./cache/youtube/metadata')
 YOUTUBE_VIDEO_SEARCH_METADATA = Path('./cache/youtube/metadata/search/result/video')

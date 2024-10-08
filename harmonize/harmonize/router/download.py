@@ -2,14 +2,19 @@ import datetime
 import json
 import logging
 from pathlib import Path
+from typing import Any
 
 import yt_dlp
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
-from harmonize.const import YOUTUBE_PLAYLIST_SEARCH_METADATA, YOUTUBE_VIDEO_SEARCH_METADATA
+from harmonize.const import (
+    MUSIC_ROOT,
+    YOUTUBE_PLAYLIST_SEARCH_METADATA,
+    YOUTUBE_VIDEO_SEARCH_METADATA,
+)
 from harmonize.db.database import get_session
-from harmonize.db.models import Job, Status
+from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaElementType, MediaEntry
 from harmonize.defs.response import BaseResponse
 from harmonize.job.methods import start_job
 
@@ -24,8 +29,6 @@ async def download_youtube_video(
     id: str,
     session: Session = Depends(get_session),
 ) -> BaseResponse[Job]:
-    args: tuple[str] = (id,)
-
     metadata_file = YOUTUBE_VIDEO_SEARCH_METADATA / f'{id}.search.info.json'
 
     if not Path.exists(metadata_file):
@@ -36,10 +39,13 @@ async def download_youtube_video(
         title = metadata['title']
         description = f'download youtube video: {title}'
 
+    args: tuple[str, Any] = (id, metadata)
+
     job = Job(
         description=description,
-        status=Status.RUNNING,
+        status=JobStatus.RUNNING,
         started_on=datetime.datetime.now(datetime.UTC),
+        error_message=None,
     )
     session.add(job)
     session.commit()
@@ -51,10 +57,13 @@ async def download_youtube_video(
 
 def _download_youtube_video(
     id: str,
+    yt_metadata: Any,
     job: Job,
     session: Session,
 ):
     try:
+        yt_title = yt_metadata['title']
+
         url = f'https://www.youtube.com/watch?v={id}'
         ydl_opts = {
             'outtmpl': './media/video/%(title)s.%(ext)s',
@@ -70,7 +79,7 @@ def _download_youtube_video(
 
         ydl_audo_opts = {
             'format': f'{_audio_format}/bestaudio/best',
-            'outtmpl': './media/audio/%(title)s.%(ext)s',
+            'outtmpl': (MUSIC_ROOT / f'{yt_title}').absolute().as_posix(),
             # See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
             'postprocessors': [
                 {  # Extract audio using ffmpeg
@@ -86,11 +95,25 @@ def _download_youtube_video(
                 logger.error(
                     'Youtube Download Failed with error code', extra={'error_code': error_code}
                 )
-                job.status = Status.FAILED
-                return
-        job.status = Status.SUCCEEDED
-    except Exception:
-        job.status = Status.FAILED
+                job.status = JobStatus.FAILED
+                job.error_message = f'Youtube Download Failed with error code {error_code}'
+
+        job.status = JobStatus.SUCCEEDED
+
+        media_element = MediaEntry(
+            name=yt_title,
+            relative_path=(MUSIC_ROOT / f'{yt_title}.mp3').absolute().as_posix(),
+            source=MediaElementSource.YOUTUBE,
+            youtube_id=id,
+            type=MediaElementType.MUSIC,
+            date_added=datetime.datetime.now(datetime.UTC),
+        )
+
+        session.add(media_element)
+
+    except Exception as e:
+        job.status = JobStatus.FAILED
+        job.error_message = str(e)
     finally:
         session.add(job)
         session.commit()
@@ -115,16 +138,17 @@ async def download_youtube_playlist(
 
     job = Job(
         description=description,
-        status=Status.RUNNING,
+        status=JobStatus.RUNNING,
         started_on=datetime.datetime.now(datetime.UTC),
         error_message=None,
     )
     session.add(job)
     session.commit()
 
-    job = await start_job(_download_youtube_playlist, job, session, args)
+    # job = await start_job(_download_youtube_playlist, job, session, args)
 
-    return {'message': 'Job created', 'status_code': 201, 'value': job}
+    # return {'message': 'Job created', 'status_code': 201, 'value': job}
+    return {'message': 'Job created', 'status_code': 201, 'value': None}
 
 
 def _download_youtube_playlist(
@@ -146,7 +170,7 @@ def _download_youtube_playlist(
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
 
-        ydl_audo_opts = {
+        ydl_audio_opts = {
             'format': f'{_audio_format}/bestaudio/best',
             'outtmpl': './media/audio/%(title)s.%(ext)s',
             # See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
@@ -158,17 +182,17 @@ def _download_youtube_playlist(
             ],
         }
 
-        with yt_dlp.YoutubeDL(ydl_audo_opts) as ydl:
+        with yt_dlp.YoutubeDL(ydl_audio_opts) as ydl:
             error_code = ydl.download([url])
             if error_code:
                 logger.error(
                     'Youtube Download Failed with error code', extra={'error_code': error_code}
                 )
-                job.status = Status.FAILED
+                job.status = JobStatus.FAILED
                 return
-        job.status = Status.SUCCEEDED
+        job.status = JobStatus.SUCCEEDED
     except Exception as e:
-        job.status = Status.FAILED
+        job.status = JobStatus.FAILED
         job.error_message = str(e)
     finally:
         session.add(job)
