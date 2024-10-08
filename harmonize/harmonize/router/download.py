@@ -7,7 +7,7 @@ import yt_dlp
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
-from harmonize.const import YOUTUBE_SEARCH_METADATA
+from harmonize.const import YOUTUBE_PLAYLIST_SEARCH_METADATA, YOUTUBE_VIDEO_SEARCH_METADATA
 from harmonize.db.database import get_session
 from harmonize.db.models import Job, Status
 from harmonize.defs.response import BaseResponse
@@ -19,14 +19,14 @@ router = APIRouter(prefix='/api')
 _audio_format = 'mp3'
 
 
-@router.post('/download/youtube/{id}', status_code=201)
-async def download_youtube(
+@router.post('/download/youtube/video/{id}', status_code=201)
+async def download_youtube_video(
     id: str,
     session: Session = Depends(get_session),
 ) -> BaseResponse[Job]:
     args: tuple[str] = (id,)
 
-    metadata_file = YOUTUBE_SEARCH_METADATA / f'{id}.search.info.json'
+    metadata_file = YOUTUBE_VIDEO_SEARCH_METADATA / f'{id}.search.info.json'
 
     if not Path.exists(metadata_file):
         raise HTTPException(status_code=400, detail='Youtube metadata not present')
@@ -44,12 +44,12 @@ async def download_youtube(
     session.add(job)
     session.commit()
 
-    job = await start_job(_download_youtube, job, session, args)
+    job = await start_job(_download_youtube_video, job, session, args)
 
     return {'message': 'Job created', 'status_code': 201, 'value': job}
 
 
-def _download_youtube(
+def _download_youtube_video(
     id: str,
     job: Job,
     session: Session,
@@ -91,6 +91,85 @@ def _download_youtube(
         job.status = Status.SUCCEEDED
     except Exception:
         job.status = Status.FAILED
+    finally:
+        session.add(job)
+        session.commit()
+
+
+@router.post('/download/youtube/playlist/{id}', status_code=201)
+async def download_youtube_playlist(
+    id: str,
+    session: Session = Depends(get_session),
+) -> BaseResponse[Job]:
+    args: tuple[str] = (id,)
+
+    metadata_file = YOUTUBE_PLAYLIST_SEARCH_METADATA / f'{id}.search.info.json'
+
+    if not Path.exists(metadata_file):
+        raise HTTPException(status_code=400, detail='Youtube metadata not present')
+
+    with metadata_file.open('r') as f:
+        metadata = json.loads(f.read())
+        title = metadata['title']
+        description = f'download youtube playlist: {title}'
+
+    job = Job(
+        description=description,
+        status=Status.RUNNING,
+        started_on=datetime.datetime.now(datetime.UTC),
+        error_message=None,
+    )
+    session.add(job)
+    session.commit()
+
+    job = await start_job(_download_youtube_playlist, job, session, args)
+
+    return {'message': 'Job created', 'status_code': 201, 'value': job}
+
+
+def _download_youtube_playlist(
+    id: str,
+    job: Job,
+    session: Session,
+):
+    try:
+        url = f'https://www.youtube.com/watch?v={id}'
+        ydl_opts = {
+            'outtmpl': './media/video/%(title)s.%(ext)s',
+        }
+
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            output = json.dumps(ydl.sanitize_info(info))
+            Path(f'./cache/youtube/metadata/{id}.info.json').write_text(output)
+
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+
+        ydl_audo_opts = {
+            'format': f'{_audio_format}/bestaudio/best',
+            'outtmpl': './media/audio/%(title)s.%(ext)s',
+            # See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
+            'postprocessors': [
+                {  # Extract audio using ffmpeg
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': _audio_format,
+                }
+            ],
+        }
+
+        with yt_dlp.YoutubeDL(ydl_audo_opts) as ydl:
+            error_code = ydl.download([url])
+            if error_code:
+                logger.error(
+                    'Youtube Download Failed with error code', extra={'error_code': error_code}
+                )
+                job.status = Status.FAILED
+                return
+        job.status = Status.SUCCEEDED
+    except Exception as e:
+        job.status = Status.FAILED
+        job.error_message = str(e)
     finally:
         session.add(job)
         session.commit()

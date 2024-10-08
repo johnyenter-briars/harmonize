@@ -16,4 +16,5 @@ class Job(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     started_on: datetime.datetime
     description: str
+    error_message: str | None
     status: Status

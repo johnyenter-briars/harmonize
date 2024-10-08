@@ -7,6 +7,7 @@ import harmonize.config
 import harmonize.config.harmonizeconfig
 from harmonize.config.logconfig import LogConfig
 from harmonize.db.database import get_session
+from harmonize.db.wipe_and_seed import seed
 from harmonize.router import download, job, list, metadata, playlist, qbt, search, stream
 
 config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
@@ -28,6 +29,8 @@ app.include_router(playlist.router, dependencies=[Depends(get_session)])
 
 if config.run_qbt:
     app.include_router(qbt.router, dependencies=[Depends(get_session)])
+
+seed()
 
 
 @app.get('/')
