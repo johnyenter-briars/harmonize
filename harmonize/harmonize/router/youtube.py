@@ -8,9 +8,12 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
 from harmonize.const import (
-    MUSIC_ROOT,
+    AUDIO_ROOT,
+    VIDEO_ROOT,
     YOUTUBE_PLAYLIST_SEARCH_METADATA,
+    YOUTUBE_PLAYLIST_YTDL_METADATA,
     YOUTUBE_VIDEO_SEARCH_METADATA,
+    YOUTUBE_VIDEO_YTDL_METADATA,
 )
 from harmonize.db.database import get_session
 from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaElementType, MediaEntry
@@ -80,11 +83,11 @@ def _download_youtube_video(
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             output = json.dumps(ydl.sanitize_info(info))
-            Path(f'./cache/youtube/metadata/ytdl/video/{video_id}.info.json').write_text(output)
+            (YOUTUBE_VIDEO_YTDL_METADATA / '{video_id}.info.json').write_text(output)
 
         ydl_audo_opts = {
             'format': f'{_audio_format}/bestaudio/best',
-            'outtmpl': (MUSIC_ROOT / f'{yt_title}').absolute().as_posix(),
+            'outtmpl': (AUDIO_ROOT / f'{yt_title}').absolute().as_posix(),
             # See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
             'postprocessors': [
                 {  # Extract audio using ffmpeg
@@ -107,7 +110,7 @@ def _download_youtube_video(
 
         media_element = MediaEntry(
             name=yt_title,
-            relative_path=(MUSIC_ROOT / f'{yt_title}.mp3').absolute().as_posix(),
+            absolute_path=(AUDIO_ROOT / f'{yt_title}.mp3').absolute().as_posix(),
             source=MediaElementSource.YOUTUBE,
             youtube_id=video_id,
             type=MediaElementType.MUSIC,
@@ -163,25 +166,30 @@ def _download_youtube_playlist(
     session: Session,
 ):
     playlist_id = download_playlist_arguments['playlist_id']
-    playlist_metadata = download_playlist_arguments['playlist_metadata']
+    _ = download_playlist_arguments['playlist_metadata']
     try:
         url = f'https://www.youtube.com/playlist?list={playlist_id}'
         ydl_opts = {
-            'outtmpl': './media/video/%(playlist)s/%(title)s.%(ext)s',
+            'outtmpl': (VIDEO_ROOT / '%(playlist)s/%(title)s.%(ext)s').absolute().as_posix(),
         }
 
-        # Extract playlist metadata and save it
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             playlist_info = ydl.extract_info(url, download=False)
-            output = json.dumps(ydl.sanitize_info(playlist_info))
-            Path(f'./cache/youtube/metadata/ytdl/playlist/{playlist_id}.info.json').write_text(
-                output
-            )
+            output = json.dumps(playlist_info)
+            (YOUTUBE_PLAYLIST_YTDL_METADATA / f'{playlist_id}.info.json').write_text(output)
 
-        # Audio download options
+        if playlist_info is None:
+            raise Exception('Playlist info malformed')
+
+        video_list = []
+        for entry in playlist_info['entries']:
+            video_title = entry.get('title')
+            video_id = entry.get('id')
+            video_list.append({'title': video_title, 'id': video_id})
+
         ydl_audio_opts = {
             'format': f'{_audio_format}/bestaudio/best',
-            'outtmpl': './media/audio/%(playlist)s/%(title)s.%(ext)s',
+            'outtmpl': (AUDIO_ROOT / '%(title)s.%(ext)s').absolute().as_posix(),
             'postprocessors': [
                 {  # Extract audio using ffmpeg
                     'key': 'FFmpegExtractAudio',
@@ -190,7 +198,6 @@ def _download_youtube_playlist(
             ],
         }
 
-        # Download audio for the playlist
         with yt_dlp.YoutubeDL(ydl_audio_opts) as ydl:
             error_code = ydl.download([url])
             if error_code:
@@ -200,6 +207,19 @@ def _download_youtube_playlist(
                 )
                 job.status = JobStatus.FAILED
                 return
+
+        for video in video_list:
+            video_file = AUDIO_ROOT / f"{video['title']}.mp3"
+            media_entry = MediaEntry(
+                name=video['title'],
+                absolute_path=video_file.absolute().as_posix(),
+                source=MediaElementSource.YOUTUBE,
+                youtube_id=video['id'],
+                type=MediaElementType.MUSIC,
+                date_added=datetime.datetime.now(datetime.UTC),
+            )
+            session.add(media_entry)
+
         job.status = JobStatus.SUCCEEDED
     except Exception as e:
         job.status = JobStatus.FAILED

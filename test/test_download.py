@@ -2,7 +2,7 @@ import requests
 
 
 def test_download_youtube_video(setup):
-    url = f"{setup['base_url']}/youtube/video/sdZ-yo6c4T8"
+    url = f"{setup['base_url']}/youtube/video/hwap5XZ5kSM"
 
     response = requests.post(url)
     assert response.status_code == 201, f'Expected status code 201, but got {response.status_code}'

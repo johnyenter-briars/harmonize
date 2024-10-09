@@ -11,7 +11,7 @@ from mutagen.mp3 import MP3
 from PIL import Image
 from PIL.ImageFile import ImageFile
 
-from harmonize.const import MUSIC_ROOT, TMP_ALBUM_ART_DIR
+from harmonize.const import AUDIO_ROOT, TMP_ALBUM_ART_DIR
 from harmonize.defs.metadata import ApicData, HarmonizeThumbnail, MediaMetadata
 from harmonize.defs.musicbrainz import (
     CoverArtArchiveResponse,
@@ -102,8 +102,8 @@ def make_thumbnails(album_dir: Path, original_im: ImageFile):
 
 @router.get('/metadata/media/{filename}')
 async def media_metadata(filename: str) -> MediaMetadata:
-    track = MP3(MUSIC_ROOT / filename)
-    tags = EasyID3(MUSIC_ROOT / filename)
+    track = MP3(AUDIO_ROOT / filename)
+    tags = EasyID3(AUDIO_ROOT / filename)
 
     album_name = _get_str_tag(tags, 'album')
 

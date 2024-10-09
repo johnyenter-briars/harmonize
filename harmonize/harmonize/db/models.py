@@ -33,7 +33,7 @@ class MediaElementType(Enum):
 class MediaEntry(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str
-    relative_path: str
+    absolute_path: str
     source: MediaElementSource
     youtube_id: str | None
     type: MediaElementType

@@ -34,7 +34,7 @@ async def stream_file(
     if len(media_entries) == 0:
         raise HTTPException(status_code=400, detail=f'No media entry found with id: {id}')
 
-    full_path = media_entries[0].relative_path
+    full_path = media_entries[0].absolute_path
 
     return StreamingResponse(
         _stream_file(Path(full_path)),
