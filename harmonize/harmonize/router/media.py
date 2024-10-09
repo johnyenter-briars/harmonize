@@ -20,8 +20,8 @@ async def list_video(
     return {'message': 'Media Entries Found', 'status_code': 200, 'value': list(media_entries)}
 
 
-@router.get('/music', status_code=200)
-async def list_music(
+@router.get('/audio', status_code=200)
+async def list_audio(
     session: Session = Depends(get_session),
 ) -> BaseResponse[list[MediaEntry]]:
     statement = select(MediaEntry).where()
