@@ -2,7 +2,6 @@ import datetime
 import json
 import logging
 from pathlib import Path
-from typing import Any
 
 import yt_dlp
 from fastapi import APIRouter, Depends, HTTPException
@@ -16,26 +15,27 @@ from harmonize.const import (
 from harmonize.db.database import get_session
 from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaElementType, MediaEntry
 from harmonize.defs.response import BaseResponse
+from harmonize.defs.youtube import DownloadPlaylistArguments, DownloadVideoArguments
 from harmonize.job.methods import start_job
 
 logger = logging.getLogger('harmonize')
-router = APIRouter(prefix='/api')
+router = APIRouter(prefix='/api/youtube')
 
 _audio_format = 'mp3'
 
 
-@router.post('/download/youtube/video/{id}', status_code=201)
+@router.post('/video/{video_id}', status_code=201)
 async def download_youtube_video(
-    id: str,
+    video_id: str,
     session: Session = Depends(get_session),
 ) -> BaseResponse[Job]:
-    statement = select(MediaEntry).where(MediaEntry.youtube_id == id)
+    statement = select(MediaEntry).where(MediaEntry.youtube_id == video_id)
     media_entries = session.exec(statement).all()
 
     if len(media_entries) > 0:
         raise HTTPException(status_code=400, detail='Media entry already exists')
 
-    metadata_file = YOUTUBE_VIDEO_SEARCH_METADATA / f'{id}.search.info.json'
+    metadata_file = YOUTUBE_VIDEO_SEARCH_METADATA / f'{video_id}.search.info.json'
 
     if not Path.exists(metadata_file):
         raise HTTPException(status_code=400, detail='Youtube metadata not present')
@@ -45,7 +45,7 @@ async def download_youtube_video(
         title = metadata['title']
         description = f'download youtube video: {title}'
 
-    args: tuple[str, Any] = (id, metadata)
+    args: tuple[DownloadVideoArguments] = ({'video_id': video_id, 'video_metadata': metadata},)
 
     job = Job(
         description=description,
@@ -62,15 +62,17 @@ async def download_youtube_video(
 
 
 def _download_youtube_video(
-    id: str,
-    yt_metadata: Any,
+    download_video_arguments: DownloadVideoArguments,
     job: Job,
     session: Session,
 ):
+    video_id = download_video_arguments['video_id']
+    yt_metadata = download_video_arguments['video_metadata']
+
     try:
         yt_title = yt_metadata['title']
 
-        url = f'https://www.youtube.com/watch?v={id}'
+        url = f'https://www.youtube.com/watch?v={video_id}'
         ydl_opts = {
             'outtmpl': './media/video/%(title)s.%(ext)s',
         }
@@ -78,10 +80,7 @@ def _download_youtube_video(
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             output = json.dumps(ydl.sanitize_info(info))
-            Path(f'./cache/youtube/metadata/{id}.info.json').write_text(output)
-
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
+            Path(f'./cache/youtube/metadata/ytdl/video/{video_id}.info.json').write_text(output)
 
         ydl_audo_opts = {
             'format': f'{_audio_format}/bestaudio/best',
@@ -110,7 +109,7 @@ def _download_youtube_video(
             name=yt_title,
             relative_path=(MUSIC_ROOT / f'{yt_title}.mp3').absolute().as_posix(),
             source=MediaElementSource.YOUTUBE,
-            youtube_id=id,
+            youtube_id=video_id,
             type=MediaElementType.MUSIC,
             date_added=datetime.datetime.now(datetime.UTC),
         )
@@ -125,14 +124,12 @@ def _download_youtube_video(
         session.commit()
 
 
-@router.post('/download/youtube/playlist/{id}', status_code=201)
+@router.post('/playlist/{playlist_id}', status_code=201)
 async def download_youtube_playlist(
-    id: str,
+    playlist_id: str,
     session: Session = Depends(get_session),
 ) -> BaseResponse[Job]:
-    args: tuple[str] = (id,)
-
-    metadata_file = YOUTUBE_PLAYLIST_SEARCH_METADATA / f'{id}.search.info.json'
+    metadata_file = YOUTUBE_PLAYLIST_SEARCH_METADATA / f'{playlist_id}.search.info.json'
 
     if not Path.exists(metadata_file):
         raise HTTPException(status_code=400, detail='Youtube metadata not present')
@@ -141,6 +138,10 @@ async def download_youtube_playlist(
         metadata = json.loads(f.read())
         title = metadata['title']
         description = f'download youtube playlist: {title}'
+
+    args: tuple[DownloadPlaylistArguments] = (
+        {'playlist_id': playlist_id, 'playlist_metadata': metadata},
+    )
 
     job = Job(
         description=description,
@@ -151,35 +152,36 @@ async def download_youtube_playlist(
     session.add(job)
     session.commit()
 
-    # job = await start_job(_download_youtube_playlist, job, session, args)
+    job = await start_job(_download_youtube_playlist, job, session, args)
 
-    # return {'message': 'Job created', 'status_code': 201, 'value': job}
-    return {'message': 'Job created', 'status_code': 201, 'value': None}
+    return {'message': 'Job created', 'status_code': 201, 'value': job}
 
 
 def _download_youtube_playlist(
-    id: str,
+    download_playlist_arguments: DownloadPlaylistArguments,
     job: Job,
     session: Session,
 ):
+    playlist_id = download_playlist_arguments['playlist_id']
+    playlist_metadata = download_playlist_arguments['playlist_metadata']
     try:
-        url = f'https://www.youtube.com/watch?v={id}'
+        url = f'https://www.youtube.com/playlist?list={playlist_id}'
         ydl_opts = {
-            'outtmpl': './media/video/%(title)s.%(ext)s',
+            'outtmpl': './media/video/%(playlist)s/%(title)s.%(ext)s',
         }
 
+        # Extract playlist metadata and save it
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
-            output = json.dumps(ydl.sanitize_info(info))
-            Path(f'./cache/youtube/metadata/{id}.info.json').write_text(output)
+            playlist_info = ydl.extract_info(url, download=False)
+            output = json.dumps(ydl.sanitize_info(playlist_info))
+            Path(f'./cache/youtube/metadata/ytdl/playlist/{playlist_id}.info.json').write_text(
+                output
+            )
 
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
-
+        # Audio download options
         ydl_audio_opts = {
             'format': f'{_audio_format}/bestaudio/best',
-            'outtmpl': './media/audio/%(title)s.%(ext)s',
-            # See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
+            'outtmpl': './media/audio/%(playlist)s/%(title)s.%(ext)s',
             'postprocessors': [
                 {  # Extract audio using ffmpeg
                     'key': 'FFmpegExtractAudio',
@@ -188,11 +190,13 @@ def _download_youtube_playlist(
             ],
         }
 
+        # Download audio for the playlist
         with yt_dlp.YoutubeDL(ydl_audio_opts) as ydl:
             error_code = ydl.download([url])
             if error_code:
                 logger.error(
-                    'Youtube Download Failed with error code', extra={'error_code': error_code}
+                    'YouTube playlist download failed with error code',
+                    extra={'error_code': error_code},
                 )
                 job.status = JobStatus.FAILED
                 return

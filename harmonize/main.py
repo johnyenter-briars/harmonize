@@ -7,7 +7,7 @@ import harmonize.config
 import harmonize.config.harmonizeconfig
 from harmonize.config.logconfig import LogConfig
 from harmonize.db.database import get_session, seed
-from harmonize.router import download, job, media, metadata, playlist, qbt, search, stream
+from harmonize.router import job, media, metadata, playlist, qbt, search, stream, youtube
 
 config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
 
@@ -18,7 +18,7 @@ logger = logging.getLogger('harmonize')
 config.log_config()
 
 app = FastAPI()
-app.include_router(download.router, dependencies=[Depends(get_session)])
+app.include_router(youtube.router, dependencies=[Depends(get_session)])
 app.include_router(media.router, dependencies=[Depends(get_session)])
 app.include_router(metadata.router, dependencies=[Depends(get_session)])
 app.include_router(search.router, dependencies=[Depends(get_session)])
