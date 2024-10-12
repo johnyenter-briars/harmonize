@@ -7,6 +7,7 @@ from youtubesearchpython import PlaylistsSearch, VideosSearch
 from harmonize.const import YOUTUBE_PLAYLIST_SEARCH_METADATA, YOUTUBE_VIDEO_SEARCH_METADATA
 from harmonize.defs.magnetlink import MagnetLinkSearchResult
 from harmonize.defs.response import BaseResponse
+from harmonize.defs.youtube import YoutubePlaylistSearchResult, YoutubeVideoSearchResult
 from harmonize.scrape.piratebay import piratebay_search
 from harmonize.scrape.xt1337 import t1337x_search
 
@@ -14,7 +15,9 @@ router = APIRouter(prefix='/api')
 
 
 @router.get('/search/youtube/playlist/{search_keywords}')
-async def search_youtube_playlist(search_keywords: str) -> BaseResponse[list[dict]]:
+async def search_youtube_playlist(
+    search_keywords: str,
+) -> BaseResponse[list[YoutubePlaylistSearchResult]]:
     playlist_search = PlaylistsSearch(search_keywords, limit=10)
 
     search_results = playlist_search.result()
@@ -38,8 +41,10 @@ async def search_youtube_playlist(search_keywords: str) -> BaseResponse[list[dic
 
 
 @router.get('/search/youtube/video/{search_keywords}')
-async def search_youtube_video(search_keywords: str) -> BaseResponse[list[dict]]:
-    videos_search = VideosSearch(search_keywords, limit=10)
+async def search_youtube_video(
+    search_keywords: str,
+) -> BaseResponse[list[YoutubeVideoSearchResult]]:
+    videos_search = VideosSearch(search_keywords, limit=1)
 
     search_results = videos_search.result()
 
@@ -58,7 +63,9 @@ async def search_youtube_video(search_keywords: str) -> BaseResponse[list[dict]]
         async with await anyio.open_file(metadata_file, 'w') as f:
             await f.write(json.dumps(search_result))
 
-    return {'status_code': 200, 'message': 'success', 'value': search_results['result']}
+    results: list[YoutubeVideoSearchResult] = search_results['result']
+
+    return {'status_code': 200, 'message': 'success', 'value': results}
 
 
 @router.get('/search/piratebay/{search_keywords}')
