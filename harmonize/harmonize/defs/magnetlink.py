@@ -1,7 +1,7 @@
-from typing import TypedDict
+from harmonize.defs.response import BaseSchema
 
 
-class MagnetLinkSearchResult(TypedDict, total=False):
+class MagnetLinkSearchResult(BaseSchema):
     magnet_link: str
     number_seeders: int | None
     number_leechers: int | None

@@ -1,8 +1,9 @@
-from typing import TypedDict
+from harmonize.harmonize.defs.response import BaseSchema
 
 
-class MediaElement(TypedDict):
+class MediaElement(BaseSchema):
     path: str
 
-class MediaDownload(TypedDict):
+
+class MediaDownload(BaseSchema):
     media_elements: list[MediaElement]

@@ -1,30 +1,30 @@
-from typing import TypedDict
+from harmonize.defs.response import BaseSchema
 
 
 class ApicData:
     data: bytes
 
 
-class HarmonizeThumbnail(TypedDict):
+class HarmonizeThumbnail(BaseSchema):
     xl: str
     large: str
     small: str
 
 
-class ArtworkMetadata(TypedDict):
+class ArtworkMetadata(BaseSchema):
     src: str
     sizes: str
     type: str
     name: str
 
 
-class HarmonizeThumbnails(TypedDict):
+class HarmonizeThumbnails(BaseSchema):
     xl: str
     large: str
     small: str
 
 
-class MediaMetadata(TypedDict):
+class MediaMetadata(BaseSchema):
     title: str | None
     artist: str | None
     album: str | None

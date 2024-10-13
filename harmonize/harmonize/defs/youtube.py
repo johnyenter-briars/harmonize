@@ -1,89 +1,91 @@
-from typing import Any, TypedDict
+from typing import Any
+
+from harmonize.defs.response import BaseSchema
 
 
-class ViewCount(TypedDict):
-    text: str
-    short: str
+class ViewCount(BaseSchema):
+    text: str | None
+    short: str | None
 
 
-class Thumbnail(TypedDict):
-    url: str
-    width: int
-    height: int
+class Thumbnail(BaseSchema):
+    url: str | None
+    width: int | None
+    height: int | None
 
 
-class RichThumbnail(TypedDict):
-    url: str
-    width: int
-    height: int
+class RichThumbnail(BaseSchema):
+    url: str | None
+    width: int | None
+    height: int | None
 
 
-class DescriptionSnippet(TypedDict):
+class DescriptionSnippet(BaseSchema):
     text: str | None
     # bold: bool | None
 
 
-class ChannelThumbnail(TypedDict):
-    url: str
-    width: int
-    height: int
+class ChannelThumbnail(BaseSchema):
+    url: str | None
+    width: int | None
+    height: int | None
 
 
-class Channel(TypedDict):
-    name: str
-    id: str
-    thumbnails: list[ChannelThumbnail]
-    link: str
+class Channel(BaseSchema):
+    name: str | None
+    id: str | None
+    thumbnails: list[ChannelThumbnail] | None
+    link: str | None
 
 
-class Accessibility(TypedDict):
-    title: str
-    duration: str
+class Accessibility(BaseSchema):
+    title: str | None
+    duration: str | None
 
 
-class YoutubeVideoSearchResult(TypedDict):
+class YoutubeVideoSearchResult(BaseSchema):
     type: str
     id: str
     title: str
-    publishedTime: str
-    duration: str
-    viewCount: ViewCount
+    published_time: str | None
+    duration: str | None
+    view_count: ViewCount | None
     thumbnails: list[Thumbnail]
-    richThumbnail: RichThumbnail | None
-    descriptionSnippet: list[DescriptionSnippet]
+    rich_thumbnail: RichThumbnail | None
+    description_snippet: list[DescriptionSnippet]
     channel: Channel
-    accessibility: Accessibility
-    link: str
-    shelfTitle: str | None
+    accessibility: Accessibility | None
+    link: str | None
+    shelf_title: str | None
 
 
-class PlaylistChannel(TypedDict):
-    name: str
-    id: str
-    link: str
+class PlaylistChannel(BaseSchema):
+    name: str | None
+    id: str | None
+    link: str | None
 
 
-class PlaylistThumbnail(TypedDict):
-    url: str
-    width: int
-    height: int
+class PlaylistThumbnail(BaseSchema):
+    url: str | None
+    width: int | None
+    height: int | None
 
 
-class YoutubePlaylistSearchResult(TypedDict):
+class YoutubePlaylistSearchResult(BaseSchema):
     type: str
     id: str
     title: str
-    videoCount: str
-    channel: PlaylistChannel
-    thumbnails: list[PlaylistThumbnail]
-    link: str
+    video_count: str
+    channel: PlaylistChannel | None
+    thumbnails: list[PlaylistThumbnail] | None
+    link: str | None
 
 
-class DownloadVideoArguments(TypedDict):
+class DownloadVideoArguments(BaseSchema):
     video_id: str
     video_metadata: Any
 
 
-class DownloadPlaylistArguments(TypedDict):
+class DownloadPlaylistArguments(BaseSchema):
     playlist_id: str
     playlist_metadata: Any

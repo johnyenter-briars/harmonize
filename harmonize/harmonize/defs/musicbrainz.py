@@ -1,7 +1,7 @@
-from typing import TypedDict
+from harmonize.defs.response import BaseSchema
 
 
-class Artist(TypedDict):
+class Artist(BaseSchema):
     id: str
     name: str
     sortname: str
@@ -9,33 +9,33 @@ class Artist(TypedDict):
     iso31661codes: list[str] | None
 
 
-class ArtistCredit(TypedDict):
+class ArtistCredit(BaseSchema):
     name: str
     artist: Artist
 
 
-class Label(TypedDict):
+class Label(BaseSchema):
     id: str
     name: str
 
 
-class LabelInfo(TypedDict):
+class LabelInfo(BaseSchema):
     label: Label
     catalognumber: str | None
 
 
-class Media(TypedDict):
+class Media(BaseSchema):
     disccount: int
     trackcount: int
     format: str | None
 
 
-class ReleaseEvent(TypedDict):
+class ReleaseEvent(BaseSchema):
     date: str
     area: Artist
 
 
-class ReleaseGroup(TypedDict):
+class ReleaseGroup(BaseSchema):
     id: str
     typeid: str
     primarytypeid: str
@@ -43,17 +43,17 @@ class ReleaseGroup(TypedDict):
     primarytype: str
 
 
-class Tag(TypedDict):
+class Tag(BaseSchema):
     count: int
     name: str
 
 
-class TextRepresentation(TypedDict):
+class TextRepresentation(BaseSchema):
     language: str
     script: str
 
 
-class Release(TypedDict):
+class Release(BaseSchema):
     id: str
     score: int
     statusid: str
@@ -76,7 +76,7 @@ class Release(TypedDict):
     asin: str | None
 
 
-class MusicBrainzReleaseResponse(TypedDict):
+class MusicBrainzReleaseResponse(BaseSchema):
     created: str
     count: int
     offset: int
@@ -86,7 +86,7 @@ class MusicBrainzReleaseResponse(TypedDict):
 # Cover Art Archive Defs
 
 
-class Thumbnails(TypedDict):
+class Thumbnails(BaseSchema):
     large: str
     small: str
     # Can't have python names start with numbers so can't type hint these properly
@@ -95,7 +95,7 @@ class Thumbnails(TypedDict):
     # 1200: str
 
 
-class Image(TypedDict):
+class Image(BaseSchema):
     approved: bool
     back: bool
     comment: str
@@ -107,6 +107,6 @@ class Image(TypedDict):
     types: list[str]
 
 
-class CoverArtArchiveResponse(TypedDict):
+class CoverArtArchiveResponse(BaseSchema):
     images: list[Image]
     release: str

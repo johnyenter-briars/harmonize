@@ -20,7 +20,7 @@ router = APIRouter(prefix='/api/qbt')
 async def list_torrents() -> BaseResponse[list[TorrentData]]:
     files: list[TorrentData] = await qbt.list_torrents()
 
-    return {'status_code': 200, 'message': 'Status found', 'value': files}
+    return BaseResponse[list[TorrentData]](message='Found', status_code=200, value=files)
 
 
 @router.post('/add', status_code=201)
@@ -33,7 +33,7 @@ async def add_torrent(request: AddTorrentRequest) -> BaseResponse[None]:
     for magnet_link in request.magnet_links:
         _ = await qbt.add_torrent(magnet_link)
 
-    return {'status_code': 201, 'message': 'Torrent added', 'value': None}
+    return BaseResponse[None](message='Added', status_code=201, value=None)
 
 
 @router.post('/resume', status_code=201)
@@ -41,7 +41,7 @@ async def resume_torrents(request: ResumeTorrentsRequest) -> BaseResponse[None]:
     for torrent_hash in request.hashes:
         _ = await qbt.resume_torrent(torrent_hash)
 
-    return {'status_code': 201, 'message': 'Torrents resumed', 'value': None}
+    return BaseResponse[None](message='Resumed', status_code=201, value=None)
 
 
 @router.post('/pause', status_code=201)
@@ -49,7 +49,7 @@ async def pause_torrents(request: PauseTorrentsRequest) -> BaseResponse[None]:
     for torrent_hash in request.hashes:
         _ = await qbt.pause_torrent(torrent_hash)
 
-    return {'status_code': 201, 'message': 'Torrents paused', 'value': None}
+    return BaseResponse[None](message='Paused', status_code=201, value=None)
 
 
 @router.post('/delete', status_code=201)
@@ -57,4 +57,4 @@ async def delete_torrents(request: DeleteTorrentsRequest) -> BaseResponse[None]:
     for torrent_hash in request.hashes:
         _ = await qbt.delete_torrent(torrent_hash)
 
-    return {'status_code': 201, 'message': 'Torrents deleted', 'value': None}
+    return BaseResponse[None](message='Deleted', status_code=201, value=None)

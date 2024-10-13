@@ -23,11 +23,9 @@ async def search_youtube_playlist(
     search_results = playlist_search.result()
 
     if isinstance(search_results, str):
-        return {
-            'status_code': 500,
-            'message': 'Unable to property parse youtube search results',
-            'value': None,
-        }
+        return BaseResponse[list[YoutubePlaylistSearchResult]](
+            message='Unable to property parse youtube search results', status_code=500, value=None
+        )
 
     for search_result in search_results['result']:
         playlist_id = search_result['id']
@@ -37,23 +35,25 @@ async def search_youtube_playlist(
         async with await anyio.open_file(metadata_file, 'w') as f:
             await f.write(json.dumps(search_result))
 
-    return {'status_code': 200, 'message': 'success', 'value': search_results['result']}
+    results: list[YoutubePlaylistSearchResult] = search_results['result']
+
+    return BaseResponse[list[YoutubePlaylistSearchResult]](
+        message='Success', status_code=200, value=results
+    )
 
 
 @router.get('/search/youtube/video/{search_keywords}')
 async def search_youtube_video(
     search_keywords: str,
 ) -> BaseResponse[list[YoutubeVideoSearchResult]]:
-    videos_search = VideosSearch(search_keywords, limit=1)
+    videos_search = VideosSearch(search_keywords, limit=10)
 
     search_results = videos_search.result()
 
     if isinstance(search_results, str):
-        return {
-            'status_code': 500,
-            'message': 'Unable to property parse youtube search results',
-            'value': None,
-        }
+        return BaseResponse[list[YoutubeVideoSearchResult]](
+            message='Unable to property parse youtube search results', status_code=500, value=None
+        )
 
     for search_result in search_results['result']:
         yt_id = search_result['id']
@@ -65,16 +65,22 @@ async def search_youtube_video(
 
     results: list[YoutubeVideoSearchResult] = search_results['result']
 
-    return {'status_code': 200, 'message': 'success', 'value': results}
+    return BaseResponse[list[YoutubeVideoSearchResult]](
+        message='Success', status_code=200, value=results
+    )
 
 
 @router.get('/search/piratebay/{search_keywords}')
 async def search_piratebay(search_keywords: str) -> BaseResponse[list[MagnetLinkSearchResult]]:
     results = await piratebay_search(search_keywords)
-    return {'status_code': 200, 'message': 'success', 'value': results}
+    return BaseResponse[list[MagnetLinkSearchResult]](
+        message='Success', status_code=200, value=results
+    )
 
 
 @router.get('/search/xt1337/{search_keywords}')
 async def search_xt1337(search_keywords: str) -> BaseResponse[list[MagnetLinkSearchResult]]:
     results = await t1337x_search(search_keywords)
-    return {'status_code': 200, 'message': 'success', 'value': results}
+    return BaseResponse[list[MagnetLinkSearchResult]](
+        message='Success', status_code=200, value=results
+    )

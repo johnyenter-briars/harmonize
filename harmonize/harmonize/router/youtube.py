@@ -48,7 +48,9 @@ async def download_youtube_video(
         title = metadata['title']
         description = f'download youtube video: {title}'
 
-    args: tuple[DownloadVideoArguments] = ({'video_id': video_id, 'video_metadata': metadata},)
+    args: tuple[DownloadVideoArguments] = (
+        DownloadVideoArguments(video_id=video_id, video_metadata=metadata),
+    )
 
     job = Job(
         description=description,
@@ -61,7 +63,7 @@ async def download_youtube_video(
 
     job = await start_job(_download_youtube_video, job, session, args)
 
-    return {'message': 'Job created', 'status_code': 201, 'value': job}
+    return BaseResponse[Job](message='Job created', status_code=201, value=job)
 
 
 def _download_youtube_video(
@@ -69,8 +71,8 @@ def _download_youtube_video(
     job: Job,
     session: Session,
 ):
-    video_id = download_video_arguments['video_id']
-    yt_metadata = download_video_arguments['video_metadata']
+    video_id = download_video_arguments.video_id
+    yt_metadata = download_video_arguments.video_metadata
 
     try:
         yt_title = yt_metadata['title']
@@ -143,7 +145,7 @@ async def download_youtube_playlist(
         description = f'download youtube playlist: {title}'
 
     args: tuple[DownloadPlaylistArguments] = (
-        {'playlist_id': playlist_id, 'playlist_metadata': metadata},
+        DownloadPlaylistArguments(playlist_id=playlist_id, playlist_metadata=metadata),
     )
 
     job = Job(
@@ -157,7 +159,7 @@ async def download_youtube_playlist(
 
     job = await start_job(_download_youtube_playlist, job, session, args)
 
-    return {'message': 'Job created', 'status_code': 201, 'value': job}
+    return BaseResponse[Job](message='Job created', status_code=201, value=job)
 
 
 def _download_youtube_playlist(
@@ -165,8 +167,8 @@ def _download_youtube_playlist(
     job: Job,
     session: Session,
 ):
-    playlist_id = download_playlist_arguments['playlist_id']
-    _ = download_playlist_arguments['playlist_metadata']
+    playlist_id = download_playlist_arguments.playlist_id
+    _ = download_playlist_arguments.playlist_metadata
     try:
         url = f'https://www.youtube.com/playlist?list={playlist_id}'
         ydl_opts = {

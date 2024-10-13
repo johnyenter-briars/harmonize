@@ -51,4 +51,4 @@ async def cancel_job_req(
 
     session.add(job)
     session.commit()
-    return {'message': 'Job canceled', 'status_code': 201, 'value': job}
+    return BaseResponse[Job](message='Success', status_code=201, value=job)
