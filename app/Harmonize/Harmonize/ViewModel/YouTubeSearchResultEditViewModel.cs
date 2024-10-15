@@ -14,13 +14,13 @@ public class YouTubeSearchResultEditViewModel(
         FailsafeService failsafeService
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
-    private YouTubeSearchResult? youtubeSearchResult;
-    public YouTubeSearchResult? YoutubeSearchResult
+    private YoutubeVideoSearchResult? youtubeSearchResult;
+    public YoutubeVideoSearchResult? YoutubeSearchResult
     {
         get => youtubeSearchResult;
         set => SetProperty(ref youtubeSearchResult, value);
     }
-    public ICommand DownloadCommand => new Command<YouTubeSearchResult>(async (result) =>
+    public ICommand DownloadCommand => new Command<YoutubeVideoSearchResult>(async (result) =>
     {
         var mainPage = Application.Current?.MainPage;
 
@@ -31,7 +31,7 @@ public class YouTubeSearchResultEditViewModel(
 
         var (response, success) = await failsafeService.Fallback(async () =>
         {
-            return await harmonizeClient.DownloadYoutube(result.Id ?? "");
+            return await harmonizeClient.DownloadYoutubeVideo(result.Id ?? "");
 
         }, null);
 

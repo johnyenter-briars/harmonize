@@ -70,9 +70,13 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<Job>($"job/{jobId}", HttpMethod.Get);
     }
-    public async Task<YouTubeSearchResults> GetYoutubeSearchResults(string query)
+    public async Task<YoutubeVideoSearchResponse> GetYoutubeVideoSearchResults(string query)
     {
-        return await HarmonizeRequest<YouTubeSearchResults>($"search/youtube/{query}", HttpMethod.Get, SnakeCaseOptions);
+        return await HarmonizeRequest<YoutubeVideoSearchResponse>($"search/youtube/video/{query}", HttpMethod.Get, CamelCaseOptions);
+    }
+    public async Task<YoutubePlaylistSearchResponse> GetYoutubePlaylistSearchResults(string query)
+    {
+        return await HarmonizeRequest<YoutubePlaylistSearchResponse>($"search/youtube/playlist/{query}", HttpMethod.Get, CamelCaseOptions);
     }
     public async Task<MagnetLinkSearchResults> GetPiratebaySearchResults(string query)
     {
@@ -88,9 +92,9 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<BaseResponse<Job>>($"job/cancel/{jobId}", HttpMethod.Post);
     }
-    public async Task<BaseResponse<Job>> DownloadYoutube(string youtubeId)
+    public async Task<BaseResponse<Job>> DownloadYoutubeVideo(string youtubeId)
     {
-        return await HarmonizeRequest<BaseResponse<Job>>($"download/youtube/{youtubeId}", HttpMethod.Post);
+        return await HarmonizeRequest<BaseResponse<Job>>($"youtube/video/{youtubeId}", HttpMethod.Post, CamelCaseOptions);
     }
     public async Task<AddQbtDownloadsResponse> AddQbtDownload(AddQbtDownloadsRequest request)
     {
