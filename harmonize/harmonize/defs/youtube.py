@@ -52,7 +52,7 @@ class YoutubeVideoSearchResult(BaseSchema):
     view_count: ViewCount | None
     thumbnails: list[Thumbnail]
     rich_thumbnail: RichThumbnail | None
-    description_snippet: list[DescriptionSnippet]
+    # description_snippet: list[DescriptionSnippet]
     channel: Channel
     accessibility: Accessibility | None
     link: str | None
