@@ -24,11 +24,11 @@ class Job(BaseSchema, SQLModel, table=True):
 
 class MediaElementSource(Enum):
     YOUTUBE = 0
-    MEDIALINK = 1
+    MAGNETLINK = 1
 
 
 class MediaElementType(Enum):
-    MUSIC = 0
+    AUDIO = 0
     VIDEO = 1
 
 

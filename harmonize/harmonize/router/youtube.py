@@ -115,7 +115,7 @@ def _download_youtube_video(
             absolute_path=(AUDIO_ROOT / f'{yt_title}.mp3').absolute().as_posix(),
             source=MediaElementSource.YOUTUBE,
             youtube_id=video_id,
-            type=MediaElementType.MUSIC,
+            type=MediaElementType.AUDIO,
             date_added=datetime.datetime.now(datetime.UTC),
         )
 
@@ -217,7 +217,7 @@ def _download_youtube_playlist(
                 absolute_path=video_file.absolute().as_posix(),
                 source=MediaElementSource.YOUTUBE,
                 youtube_id=video['id'],
-                type=MediaElementType.MUSIC,
+                type=MediaElementType.AUDIO,
                 date_added=datetime.datetime.now(datetime.UTC),
             )
             session.add(media_entry)

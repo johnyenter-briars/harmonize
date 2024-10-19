@@ -1,22 +1,25 @@
-import io
 import logging
+import uuid
 from pathlib import Path
 from typing import Final, Literal, cast
 
 import requests
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import FileResponse
 from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
-from PIL import Image
 from PIL.ImageFile import ImageFile
+from sqlmodel import Session, select
 
-from harmonize.const import AUDIO_ROOT, TMP_ALBUM_ART_DIR
+from harmonize.const import TMP_ALBUM_ART_DIR
+from harmonize.db.database import get_session
+from harmonize.db.models import MediaEntry
 from harmonize.defs.metadata import ApicData, HarmonizeThumbnail, MediaMetadata
 from harmonize.defs.musicbrainz import (
     CoverArtArchiveResponse,
     MusicBrainzReleaseResponse,
 )
+from harmonize.defs.response import BaseResponse
 
 logger = logging.getLogger('harmonize')
 COVERART_ARCHIVE_ROOT: Final = 'http://coverartarchive.org/release'
@@ -100,40 +103,75 @@ def make_thumbnails(album_dir: Path, original_im: ImageFile):
             logger.exception('Failed to create thumbnail for size', extra={'size': tn_size})
 
 
-@router.get('/metadata/media/{filename}')
-async def media_metadata(filename: str) -> MediaMetadata:
-    track = MP3(AUDIO_ROOT / filename)
-    tags = EasyID3(AUDIO_ROOT / filename)
+def get_album_artwork_itunes(song_title):
+    search_url = f'https://itunes.apple.com/search?term={song_title}&limit=1'
+    response = requests.get(search_url)
+
+    if response.status_code == 200:
+        data = response.json()
+        if data['resultCount'] > 0:
+            album_artwork_url = data['results'][0].get('artworkUrl100')
+            if album_artwork_url:
+                large_artwork_url = album_artwork_url.replace('100x100', '600x600')
+                return large_artwork_url
+            else:
+                return 'No artwork available'
+        else:
+            return 'No results found'
+    else:
+        return f'Error fetching data: {response.status_code}'
+
+
+@router.get('/metadata/media/{id}')
+async def media_metadata(
+    id: uuid.UUID, session: Session = Depends(get_session)
+) -> BaseResponse[MediaMetadata]:
+    statement = select(MediaEntry).where(MediaEntry.id == id)
+    media_entry = session.exec(statement).first()
+
+    if media_entry is None:
+        return BaseResponse[MediaMetadata](
+            message='Media entry not found', status_code=404, value=None
+        )
+
+    track = MP3(Path(media_entry.absolute_path))
+    tags = EasyID3(Path(media_entry.absolute_path))
 
     album_name = _get_str_tag(tags, 'album')
 
-    if album_name is not None:
+    if album_name is None:
+        album_dir = TMP_ALBUM_ART_DIR / media_entry.name
+    else:
         album_dir = TMP_ALBUM_ART_DIR / album_name
 
     img_data = cast(ApicData | None, track.get('APIC:'))
 
-    thumbnails: HarmonizeThumbnail
-    if img_data:
-        # Make album art dir in case it doesn't exist yet
-        album_dir.mkdir(parents=True, exist_ok=True)
-        with Image.open(io.BytesIO(img_data.data)) as original_im:
-            make_thumbnails(album_dir, original_im)
-        url_base = f'album_art/{album_name}'
-        thumbnails = {
-            'xl': f'{url_base}/1200',
-            'large': f'{url_base}/500',
-            'small': f'{url_base}/250',
-        }
-    else:
-        # Retrieve album art if no art is included in the file
-        thumbnails = find_album_art_thumbails(album=album_name)
+    # if img_data:
+    #     # Make album art dir in case it doesn't exist yet
+    #     album_dir.mkdir(parents=True, exist_ok=True)
+    #     with Image.open(io.BytesIO(img_data.data)) as original_im:
+    #         make_thumbnails(album_dir, original_im)
+    #     url_base = f'album_art/{album_name}'
+    #     thumbnail = HarmonizeThumbnail(
+    #         xl=f'{url_base}/1200', large=f'{url_base}/500', small=f'{url_base}/250'
+    #     )
+    # else:
+    #     # Retrieve album art if no art is included in the file
+    #     thumbnail: HarmonizeThumbnail = find_album_art_thumbails(song=media_entry.name)
+    large_thumbnail = get_album_artwork_itunes(media_entry.name)
 
-    return {
-        'title': _get_str_tag(tags, 'title'),
-        'album': album_name,
-        'artist': _get_str_tag(tags, 'artist'),
-        'artwork': thumbnails,
-    }
+    thumbnail = HarmonizeThumbnail(xl='', small='', large=large_thumbnail)
+
+    return BaseResponse[MediaMetadata](
+        message='Got metadata',
+        status_code=200,
+        value=MediaMetadata(
+            title='foo',
+            album='bar',
+            artist='bing',
+            artwork=thumbnail,
+        ),
+    )
 
 
 def _get_str_tag(tags: EasyID3, tag: Literal['title', 'album', 'artist']) -> str | None:
