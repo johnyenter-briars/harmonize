@@ -26,40 +26,36 @@ public class HarmonizeDatabase
 
         Database = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
 
-        var result = await Database.CreateTableAsync<MediaEntry>();
+        var result = await Database.CreateTableAsync<LocalMediaEntry>();
 
         logger.LogInformation($"Init database: {Constants.DatabaseFilename}");
     }
-    public async Task<List<MediaEntry>> GetMediaEntries()
+    public async Task<List<LocalMediaEntry>> GetMediaEntries()
     {
         await Init();
-        return await Database!.Table<MediaEntry>().ToListAsync();
+        return await Database!.Table<LocalMediaEntry>().ToListAsync();
     }
 
-    public async Task<MediaEntry> GetMediaEntry(int id)
+    public async Task<LocalMediaEntry> GetMediaEntry(Guid id)
     {
         await Init();
-        return await Database!.Table<MediaEntry>().Where(i => i.Id == id).FirstOrDefaultAsync();
+        return await Database!.Table<LocalMediaEntry>().Where(i => i.Id == id).FirstOrDefaultAsync();
     }
-    public async Task<MediaEntry> GetMediaEntry(string name)
+    public async Task<LocalMediaEntry> GetMediaEntry(string name)
     {
         await Init();
-        return await Database!.Table<MediaEntry>().Where(i => i.Name == name).FirstOrDefaultAsync();
-    }
-
-    public async Task<int> SaveMediaEntry(MediaEntry item)
-    {
-        await Init();
-        if (item.Id != 0)
-            return await Database!.UpdateAsync(item);
-        else
-            return await Database!.InsertAsync(item);
+        return await Database!.Table<LocalMediaEntry>().Where(i => i.Name == name).FirstOrDefaultAsync();
     }
 
-    public async Task<int> DeleteMediaEntry(MediaEntry item)
+    public async Task<int> CreateMediaEntry(LocalMediaEntry item)
+    {
+        await Init();
+        return await Database!.InsertAsync(item);
+    }
+
+    public async Task<int> DeleteMediaEntry(LocalMediaEntry item)
     {
         await Init();
         return await Database!.DeleteAsync(item);
-
     }
 }

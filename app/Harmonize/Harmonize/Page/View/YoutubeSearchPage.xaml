@@ -10,6 +10,7 @@
     x:DataType="viewModels:YouTubeSearchViewModel"
     x:Class="Harmonize.Page.View.YouTubeSearchPage"
     xmlns:youtube="clr-namespace:Harmonize.Client.Model.Youtube;assembly=Harmonize.Client"
+    xmlns:components="clr-namespace:Harmonize.Components"
     Title="YouTube Search">
 
     <Grid Padding="0">
@@ -96,18 +97,12 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="youtube:YoutubeVideoSearchResult">
                     <ViewCell>
-                        <Grid>
-                            <Frame
-                                Margin="5"
-                                Padding="10" 
-                                HasShadow="True" 
-                                CornerRadius="5" 
-                                BackgroundColor="{StaticResource Gray600}">
-                                <Grid
+                        <components:ListElement>
+                            <Grid
                                     RowDefinitions="Auto, Auto"
                                     ColumnDefinitions="*, *"
                                     >
-                                    <Label 
+                                <Label 
                                         Grid.Row="0"
                                         Grid.ColumnSpan="2"
                                         Text="{Binding Title}" 
@@ -115,46 +110,45 @@
                                         MaxLines="2"
                                         />
 
-                                    <Image 
+                                <Image 
                                         Grid.Row="1"
                                         Grid.Column="0"
                                         Source="{Binding Thumbnails[0].Url}" 
                                         HeightRequest="75"/>
 
-                                    <StackLayout 
+                                <StackLayout 
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         Orientation="Vertical" 
                                         Padding="10,0,0,0">
-                                        <BoxView
+                                    <BoxView
                                             Grid.Row="1"
                                             Grid.ColumnSpan="2"
                                             HeightRequest="1" Color="{StaticResource Gray400}"/>
-                                        <Label 
+                                    <Label 
                                             Text="{Binding Channel.Name}" 
                                             TextColor="{StaticResource Gray300}"
                                             FontSize="Small" 
                                             />
-                                        <Label 
+                                    <Label 
                                             TextColor="{StaticResource Gray300}"
                                             Text="{Binding Duration}" 
                                             FontSize="Small" 
                                             />
-                                        <Label 
+                                    <Label 
                                             TextColor="{StaticResource Gray300}"
                                             Text="{Binding PublishedTime}" 
                                             FontSize="Small" 
                                             />
-                                    </StackLayout>
-                                </Grid>
-                            </Frame>
-                        </Grid>
+                                </StackLayout>
+                            </Grid>
+                        </components:ListElement>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        
+
         <ListView 
             Grid.Row="1" 
             IsVisible="{Binding ShowPlaylistList}"
@@ -168,18 +162,12 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="youtube:YoutubePlaylistSearchResult">
                     <ViewCell>
-                        <Grid>
-                            <Frame
-                                Margin="5"
-                                Padding="10" 
-                                HasShadow="True" 
-                                CornerRadius="5" 
-                                BackgroundColor="{StaticResource Gray600}">
-                                <Grid
+                        <components:ListElement>
+                            <Grid
                                     RowDefinitions="Auto, Auto"
                                     ColumnDefinitions="*, *"
                                     >
-                                    <Label 
+                                <Label 
                                         Grid.Row="0"
                                         Grid.ColumnSpan="2"
                                         Text="{Binding Title}" 
@@ -187,41 +175,40 @@
                                         MaxLines="2"
                                         />
 
-                                    <Image 
+                                <Image 
                                         Grid.Row="1"
                                         Grid.Column="0"
                                         Source="{Binding Thumbnails[0].Url}" 
                                         HeightRequest="75"/>
 
-                                    <StackLayout 
+                                <StackLayout 
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         Orientation="Vertical" 
                                         Padding="10,0,0,0">
-                                        <BoxView
+                                    <BoxView
                                             Grid.Row="1"
                                             Grid.ColumnSpan="2"
                                             HeightRequest="1" Color="{StaticResource Gray400}"/>
-                                        <Label 
+                                    <Label 
                                             Text="{Binding Channel.Name}" 
                                             TextColor="{StaticResource Gray300}"
                                             FontSize="Small" 
                                             />
-                                        <Label 
+                                    <Label 
                                             TextColor="{StaticResource Gray300}"
                                             Text="{Binding VideoCount}" 
                                             FontSize="Small" 
                                             />
-                                    </StackLayout>
-                                </Grid>
-                            </Frame>
-                        </Grid>
+                                </StackLayout>
+                            </Grid>
+                        </components:ListElement>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
-        
+
+
     </Grid>
 </pages:BasePage>
 
