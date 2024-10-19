@@ -4,6 +4,8 @@ from enum import Enum
 
 from sqlmodel import Field, SQLModel
 
+from harmonize.defs.response import BaseSchema
+
 
 class JobStatus(Enum):
     SUCCEEDED = 0
@@ -12,7 +14,7 @@ class JobStatus(Enum):
     CANCELED = 3
 
 
-class Job(SQLModel, table=True):
+class Job(BaseSchema, SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     started_on: datetime.datetime
     description: str
@@ -30,7 +32,7 @@ class MediaElementType(Enum):
     VIDEO = 1
 
 
-class MediaEntry(SQLModel, table=True):
+class MediaEntry(BaseSchema, SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str
     absolute_path: str
