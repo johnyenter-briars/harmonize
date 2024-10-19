@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
-namespace Harmonize.Client.Model.System;
+namespace Harmonize.Client.Model.Job;
 
 public class Job
 {
@@ -18,8 +13,8 @@ public class Job
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum JobStatus
 {
-    Succeeded = 0, 
-    Running = 1, 
+    Succeeded = 0,
+    Running = 1,
     Failed = 2,
     Canceled = 3,
 }

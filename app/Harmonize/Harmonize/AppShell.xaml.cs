@@ -15,6 +15,7 @@ namespace Harmonize
             
             Routing.RegisterRoute(nameof(EditJobPage), typeof(EditJobPage));
             Routing.RegisterRoute(nameof(YouTubeSearchResultEditPage), typeof(YouTubeSearchResultEditPage));
+            Routing.RegisterRoute(nameof(YouTubePlaylistSearchResultEditPage), typeof(YouTubePlaylistSearchResultEditPage));
         }
     }
 }

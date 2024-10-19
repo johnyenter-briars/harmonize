@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Maui.Core;
 using Harmonize.Client;
-using Harmonize.Client.Model.System;
+using Harmonize.Client.Model.Job;
 using Harmonize.Page.View;
 using Harmonize.Service;
 using System.Collections.ObjectModel;
@@ -15,6 +15,7 @@ public class JobListViewModel(
     FailsafeService failsafeService
         ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
+    #region Bindings
     private ObservableCollection<Job> jobs = [];
     private readonly HarmonizeClient harmonizeClient = harmonizeClient;
 
@@ -23,16 +24,59 @@ public class JobListViewModel(
         get { return jobs; }
         set { SetProperty(ref jobs, value); }
     }
+    private bool orderByName;
+    public bool OrderByName
+    {
+        get => orderByName;
+        set
+        {
+            if (orderByName != value)
+            {
+                orderByName = value;
+                OnPropertyChanged();
+
+                if (orderByName)
+                {
+                    OrderByStatus = false;
+                }
+            }
+        }
+    }
+    private bool orderByStatus;
+    public bool OrderByStatus
+    {
+        get => orderByStatus;
+        set
+        {
+            if (orderByStatus != value)
+            {
+                orderByStatus = value;
+                OnPropertyChanged();
+
+                if (orderByStatus)
+                {
+                    OrderByName = false;
+                }
+            }
+        }
+    }
+    #endregion
 
     public async Task PopulateJobs()
     {
         Jobs.Clear();
 
-        var (jobs, success) = await failsafeService.Fallback(harmonizeClient.GetJobs, []);
-
-        foreach (var m in jobs)
+        var (response, success) = await FetchData(async () =>
         {
-            Jobs.Add(m);
+            return await failsafeService.Fallback(harmonizeClient.GetJobs, null);
+        });
+            
+        if (success)
+        {
+            foreach (var m in response?.Value ?? [])
+            {
+                Jobs.Add(m);
+            }
         }
     }
     public async Task ItemTapped(Job job)
@@ -51,8 +95,11 @@ public class JobListViewModel(
         await PopulateJobs();
     }
 
-    public ICommand Refresh => new Command<Job>(async (job) =>
+    public ICommand Refresh => new Command<ImageButton>(async (imageButton) =>
     {
+        await imageButton.RotateTo(100, 300, Easing.CubicInOut);
+        await imageButton.RotateTo(0, 300, Easing.CubicInOut);
+
         await PopulateJobs();
     });
 }

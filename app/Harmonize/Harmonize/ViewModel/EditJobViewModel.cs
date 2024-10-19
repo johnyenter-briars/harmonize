@@ -1,5 +1,5 @@
 using Harmonize.Client;
-using Harmonize.Client.Model.System;
+using Harmonize.Client.Model.Job;
 using Harmonize.Service;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -63,14 +63,14 @@ public class EditJobViewModel(
 
     public async Task RetrieveJob()
     {
-        var (job, success) = await failsafeService.Fallback(async () =>
+        var (response, success) = await failsafeService.Fallback(async () =>
         {
             return await harmonizeClient.GetJob(JobId);
         }, null);
 
         if (success)
         {
-            Job = job;
+            Job = response?.Value;
         }
     }
 

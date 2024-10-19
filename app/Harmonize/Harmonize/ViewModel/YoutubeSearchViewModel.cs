@@ -155,6 +155,16 @@ public class YouTubeSearchViewModel(
             });
         }
     }
+    public async Task ItemTapped(YoutubePlaylistSearchResult playlistSearchResult)
+    {
+        if (playlistSearchResult != null)
+        {
+            await Shell.Current.GoToAsync(nameof(YouTubePlaylistSearchResultEditPage), new Dictionary<string, object>
+            {
+                { nameof(YouTubePlaylistSearchResultEditViewModel.YoutubePlaylistSearchResult), playlistSearchResult }
+            });
+        }
+    }
 
     public override Task OnAppearingAsync()
     {

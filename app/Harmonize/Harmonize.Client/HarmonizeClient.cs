@@ -1,7 +1,7 @@
-﻿using Harmonize.Client.Model.Media;
+﻿using Harmonize.Client.Model.Job;
+using Harmonize.Client.Model.Media;
 using Harmonize.Client.Model.QBT;
 using Harmonize.Client.Model.Response;
-using Harmonize.Client.Model.System;
 using Harmonize.Client.Model.Youtube;
 using System.Text;
 using System.Text.Json;
@@ -62,29 +62,29 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<MediaMetadata>($"metadata/media/{fileName}", HttpMethod.Get);
     }
-    public async Task<List<Job>> GetJobs()
+    public async Task<JobsResponse> GetJobs()
     {
-        return await HarmonizeRequest<List<Job>>($"job", HttpMethod.Get);
+        return await HarmonizeRequest<JobsResponse>($"job", HttpMethod.Get);
     }
-    public async Task<Job> GetJob(Guid jobId)
+    public async Task<JobResponse> GetJob(Guid jobId)
     {
-        return await HarmonizeRequest<Job>($"job/{jobId}", HttpMethod.Get);
+        return await HarmonizeRequest<JobResponse>($"job/{jobId}", HttpMethod.Get);
     }
     public async Task<YoutubeVideoSearchResponse> GetYoutubeVideoSearchResults(string query)
     {
-        return await HarmonizeRequest<YoutubeVideoSearchResponse>($"search/youtube/video/{query}", HttpMethod.Get, CamelCaseOptions);
+        return await HarmonizeRequest<YoutubeVideoSearchResponse>($"search/youtube/video/{query}", HttpMethod.Get);
     }
     public async Task<YoutubePlaylistSearchResponse> GetYoutubePlaylistSearchResults(string query)
     {
-        return await HarmonizeRequest<YoutubePlaylistSearchResponse>($"search/youtube/playlist/{query}", HttpMethod.Get, CamelCaseOptions);
+        return await HarmonizeRequest<YoutubePlaylistSearchResponse>($"search/youtube/playlist/{query}", HttpMethod.Get);
     }
     public async Task<MagnetLinkSearchResults> GetPiratebaySearchResults(string query)
     {
-        return await HarmonizeRequest<MagnetLinkSearchResults>($"search/piratebay/{query}", HttpMethod.Get, SnakeCaseOptions);
+        return await HarmonizeRequest<MagnetLinkSearchResults>($"search/piratebay/{query}", HttpMethod.Get);
     }
     public async Task<MagnetLinkSearchResults> GetXT1337SearchResults(string query)
     {
-        return await HarmonizeRequest<MagnetLinkSearchResults>($"search/xt1337/{query}", HttpMethod.Get, SnakeCaseOptions);
+        return await HarmonizeRequest<MagnetLinkSearchResults>($"search/xt1337/{query}", HttpMethod.Get);
     }
     #endregion
     #region POST
@@ -94,40 +94,42 @@ public class HarmonizeClient
     }
     public async Task<BaseResponse<Job>> DownloadYoutubeVideo(string youtubeId)
     {
-        return await HarmonizeRequest<BaseResponse<Job>>($"youtube/video/{youtubeId}", HttpMethod.Post, CamelCaseOptions);
+        return await HarmonizeRequest<BaseResponse<Job>>($"youtube/video/{youtubeId}", HttpMethod.Post);
+    }
+    public async Task<BaseResponse<Job>> DownloadYoutubePlaylist(string youtubeId)
+    {
+        return await HarmonizeRequest<BaseResponse<Job>>($"youtube/playlist/{youtubeId}", HttpMethod.Post);
     }
     public async Task<AddQbtDownloadsResponse> AddQbtDownload(AddQbtDownloadsRequest request)
     {
-        return await HarmonizeRequest<AddQbtDownloadsRequest, AddQbtDownloadsResponse>(request, $"qbt/add", HttpMethod.Post, SnakeCaseOptions);
+        return await HarmonizeRequest<AddQbtDownloadsRequest, AddQbtDownloadsResponse>(request, $"qbt/add", HttpMethod.Post);
     }
     public async Task<ListQbtDownloadsResponse> GetQbtDownloads()
     {
-        return await HarmonizeRequest<ListQbtDownloadsResponse>($"qbt/list", HttpMethod.Get, SnakeCaseOptions);
+        return await HarmonizeRequest<ListQbtDownloadsResponse>($"qbt/list", HttpMethod.Get);
     }
     public async Task<DeleteDownloadsResponse> DeleteQbtDownloads(DeleteDownloadsRequest request)
     {
-        return await HarmonizeRequest<DeleteDownloadsRequest, DeleteDownloadsResponse>(request, $"qbt/delete", HttpMethod.Post, SnakeCaseOptions);
+        return await HarmonizeRequest<DeleteDownloadsRequest, DeleteDownloadsResponse>(request, $"qbt/delete", HttpMethod.Post);
     }
     public async Task<PauseDownloadsResponse> PauseQbtDownloads(PauseDownloadsRequest request)
     {
-        return await HarmonizeRequest<PauseDownloadsRequest, PauseDownloadsResponse>(request, $"qbt/pause", HttpMethod.Post, SnakeCaseOptions);
+        return await HarmonizeRequest<PauseDownloadsRequest, PauseDownloadsResponse>(request, $"qbt/pause", HttpMethod.Post);
     }
     public async Task<ResumeDownloadsResponse> ResumeQbtDownloads(ResumeDownloadsRequest request)
     {
-        return await HarmonizeRequest<ResumeDownloadsRequest, ResumeDownloadsResponse>(request, $"qbt/resume", HttpMethod.Post, SnakeCaseOptions);
+        return await HarmonizeRequest<ResumeDownloadsRequest, ResumeDownloadsResponse>(request, $"qbt/resume", HttpMethod.Post);
     }
     #endregion
     #region BASE REQUESTS
-    private async Task<TResponse> HarmonizeRequest<TResponse>(string path, HttpMethod httpMethod, JsonSerializerOptions? serializerOptions = null)
+    private async Task<TResponse> HarmonizeRequest<TResponse>(string path, HttpMethod httpMethod)
     {
         var request = new HttpRequestMessage(httpMethod, $"http://{hostName}:{port}/api/" + path);
         request.Headers.Accept.Clear();
         //request.Headers.Add("x-api-key", _apiKey);
         //request.Headers.Add("x-user-id", _userId);
 
-        var options = serializerOptions ?? SnakeCaseOptions;
-
-        return await SendRequest<TResponse>(request, options);
+        return await SendRequest<TResponse>(request, CamelCaseOptions);
     }
     private async Task<byte[]> HarmonizeRequestBytes(string path, HttpMethod httpMethod)
     {
@@ -138,19 +140,17 @@ public class HarmonizeClient
 
         return await SendRequestBytes(request);
     }
-    private async Task<TResponse> HarmonizeRequest<TRequest, TResponse>(TRequest requestObject, string path, HttpMethod httpMethod, JsonSerializerOptions? serializerOptions = null)
+    private async Task<TResponse> HarmonizeRequest<TRequest, TResponse>(TRequest requestObject, string path, HttpMethod httpMethod)
     {
         var request = new HttpRequestMessage(httpMethod, $"http://{hostName}:{port}/api/" + path);
         request.Headers.Accept.Clear();
         //request.Headers.Add("x-api-key", _apiKey);
         //request.Headers.Add("x-user-id", _userId);
 
-        var options = serializerOptions ?? SnakeCaseOptions;
-
-        var str = JsonSerializer.Serialize(requestObject, options);
+        var str = JsonSerializer.Serialize(requestObject, CamelCaseOptions);
         request.Content = new StringContent(str, Encoding.UTF8, "application/json");
 
-        return await SendRequest<TResponse>(request, options);
+        return await SendRequest<TResponse>(request, CamelCaseOptions);
     }
     //TODO: return a monad
     private async Task<TResponse> SendRequest<TResponse>(HttpRequestMessage request, JsonSerializerOptions settings)

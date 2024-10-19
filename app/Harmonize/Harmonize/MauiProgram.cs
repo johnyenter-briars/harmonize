@@ -44,6 +44,7 @@ namespace Harmonize
             builder.Services.AddSingleton<EditJobViewModel>();
             builder.Services.AddSingleton<YouTubeSearchViewModel>();
             builder.Services.AddSingleton<YouTubeSearchResultEditViewModel>();
+            builder.Services.AddSingleton<YouTubePlaylistSearchResultEditViewModel>();
             builder.Services.AddSingleton<MagnetLinkSearchViewModel>();
             builder.Services.AddSingleton<ManageQbtViewModel>();
 
@@ -55,6 +56,7 @@ namespace Harmonize
             builder.Services.AddSingleton<EditJobPage>();
             builder.Services.AddSingleton<YouTubeSearchPage>();
             builder.Services.AddSingleton<YouTubeSearchResultEditPage>();
+            builder.Services.AddSingleton<YouTubePlaylistSearchResultEditPage>();
             builder.Services.AddSingleton<MagnetLinkSearchPage>();
             builder.Services.AddSingleton<ManageQbtPage>();
 

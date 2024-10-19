@@ -14,8 +14,8 @@ public partial class YouTubeSearchPage : BasePage<YouTubeSearchViewModel>
         PreferenceManager preferenceManager,
         YouTubeSearchViewModel viewModel
         ) : base(viewModel)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         this.viewModel = viewModel;
     }
     private async void OnItemTapped(object sender, ItemTappedEventArgs e)
@@ -23,6 +23,10 @@ public partial class YouTubeSearchPage : BasePage<YouTubeSearchViewModel>
         if (e.Item is YoutubeVideoSearchResult youTubeSearchResult)
         {
             await viewModel.ItemTapped(youTubeSearchResult);
+        }
+        else if (e.Item is YoutubePlaylistSearchResult playlistSearchResult)
+        {
+            await viewModel.ItemTapped(playlistSearchResult);
         }
     }
 }
