@@ -44,8 +44,6 @@ public class HarmonizeClient
     {
         var artwork = mediaMetadata.Artwork;
 
-        var artworkProperty = GetPropertyValue(artwork, artworkSize);
-
         var xlMediaUrl = $"http://{hostName}:{port}/api/{mediaMetadata.Artwork}";
 
         return xlMediaUrl;
@@ -54,7 +52,7 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"media/audio", HttpMethod.Get);
     }
-    public async Task<byte[]> GetMediaBytes(MediaEntry mediaEntry)
+    public async Task<byte[]> GetMediaBytes(IMediaEntry mediaEntry)
     {
         return await HarmonizeRequestBytes($"stream/{mediaEntry.Id}", HttpMethod.Get);
     }
@@ -62,9 +60,9 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<Playlist>($"playlist/{playlistName}", HttpMethod.Get);
     }
-    public async Task<MediaMetadata> GetMediaMetadata(string fileName)
+    public async Task<MediaMetadataResponse> GetMediaMetadata(IMediaEntry mediaEntry)
     {
-        return await HarmonizeRequest<MediaMetadata>($"metadata/media/{fileName}", HttpMethod.Get);
+        return await HarmonizeRequest<MediaMetadataResponse>($"metadata/media/{mediaEntry.Id}", HttpMethod.Get);
     }
     public async Task<JobsResponse> GetJobs()
     {

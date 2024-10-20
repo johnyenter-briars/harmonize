@@ -164,14 +164,15 @@ public class MediaManager
             throw new DirectoryNotFoundException(mediaEntry?.LocalPath);
         }
     }
-    public async Task<MediaMetadata?> GetMediaMetadata(string name)
+    public async Task<MediaMetadata?> GetMediaMetadata(LocalMediaEntry localMediaEntry)
     {
-        var (mediaMetadata, _) = await failsafeService.Fallback(async () =>
+        var (response, success) = await failsafeService.Fallback(async () =>
         {
-            return await harmonizeClient.GetMediaMetadata(name);
+            return await harmonizeClient.GetMediaMetadata(localMediaEntry);
         }, null);
 
-        return mediaMetadata;
+        if (success) return response?.Value;
+        return null;
     }
     public string GetMediaMetadataArtworkUrl(MediaMetadata mediaMetadata, string artworkSize)
     {

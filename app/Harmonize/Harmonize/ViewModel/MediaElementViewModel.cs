@@ -158,15 +158,13 @@ public partial class MediaElementViewModel(
 
         var mediaEntry = await mediaManager.GetMediaEntry(MediaEntryId);
 
-        var mediaMetadata = await mediaManager.GetMediaMetadata();
+        var mediaMetadata = await mediaManager.GetMediaMetadata(mediaEntry);
 
-        var xlMediaUrl = mediaManager.GetMediaMetadataArtworkUrl(mediaMetadata, "Xl");
+        MetadataArtist = mediaMetadata?.Artist;
+        MetadataTitle = mediaMetadata?.Title;
+        MetadataArtworkUrl = mediaMetadata?.Artwork?.Xl;
 
-        MetadataArtist = mediaMetadata.Artist;
-        MetadataTitle = mediaMetadata.Title;
-        MetadataArtworkUrl = xlMediaUrl;
-
-        MediaSource = await mediaManager.GetMediaResource(name);
+        MediaSource = MediaSource.FromFile(mediaEntry.LocalPath);
 
         IsPlaying = true;
         MediaEntry = mediaEntry;
@@ -212,7 +210,7 @@ public partial class MediaElementViewModel(
 
         var item = playlist.Files[currentIndex];
 
-        await UpdateMediaElementFile(item);
+        await UpdateMediaElementFile();
     });
     public ICommand SkipBackCommand => new Command(async () =>
     {
@@ -225,7 +223,7 @@ public partial class MediaElementViewModel(
 
         var item = playlist.Files[currentIndex];
 
-        await UpdateMediaElementFile(item);
+        await UpdateMediaElementFile();
     });
     public void PlayPauseClicked(MediaElement mediaElement)
     {
