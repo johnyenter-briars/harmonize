@@ -2,13 +2,18 @@ import datetime
 import json
 import logging
 from pathlib import Path
+from typing import cast
 
 import yt_dlp
 from fastapi import APIRouter, Depends, HTTPException
+from mutagen.id3 import ID3
+from mutagen.id3._frames import APIC
+from mutagen.mp3 import MP3
 from sqlmodel import Session, select
 
 from harmonize.const import (
     AUDIO_ROOT,
+    TMP_ALBUM_ART_DIR,
     VIDEO_ROOT,
     YOUTUBE_PLAYLIST_SEARCH_METADATA,
     YOUTUBE_PLAYLIST_YTDL_METADATA,
@@ -17,9 +22,11 @@ from harmonize.const import (
 )
 from harmonize.db.database import get_session
 from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaElementType, MediaEntry
+from harmonize.defs.metadata import ApicData
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.youtube import DownloadPlaylistArguments, DownloadVideoArguments
 from harmonize.job.methods import start_job
+from harmonize.util.metadata import download_image
 
 logger = logging.getLogger('harmonize')
 router = APIRouter(prefix='/api/youtube')
@@ -35,8 +42,8 @@ async def download_youtube_video(
     statement = select(MediaEntry).where(MediaEntry.youtube_id == video_id)
     media_entries = session.exec(statement).all()
 
-    if len(media_entries) > 0:
-        raise HTTPException(status_code=400, detail='Media entry already exists')
+    # if len(media_entries) > 0:
+    #     raise HTTPException(status_code=400, detail='Media entry already exists')
 
     metadata_file = YOUTUBE_VIDEO_SEARCH_METADATA / f'{video_id}.search.info.json'
 
@@ -85,7 +92,21 @@ def _download_youtube_video(
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             output = json.dumps(ydl.sanitize_info(info))
-            (YOUTUBE_VIDEO_YTDL_METADATA / '{video_id}.info.json').write_text(output)
+            (YOUTUBE_VIDEO_YTDL_METADATA / f'{video_id}.info.json').write_text(output)
+
+        metadata = json.loads(
+            Path.open(YOUTUBE_VIDEO_YTDL_METADATA / f'{video_id}.info.json', mode='r').read()
+        )
+
+        highest_quality_image = next(
+            thumbnail
+            for thumbnail in metadata['thumbnails']
+            if thumbnail.get('height') == 1080 and thumbnail.get('width') == 1920
+        )
+
+        temp_path_to_image = TMP_ALBUM_ART_DIR / f'{video_id}.jpg'
+
+        _ = download_image(highest_quality_image['url'], temp_path_to_image)
 
         ydl_audo_opts = {
             'format': f'{_audio_format}/bestaudio/best',
@@ -95,7 +116,12 @@ def _download_youtube_video(
                 {  # Extract audio using ffmpeg
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': _audio_format,
-                }
+                },
+                {  # Add metadata and embed the cover art in the audio file
+                    'key': 'FFmpegMetadata',
+                    'add_metadata': True,
+                    'thumbnail': temp_path_to_image.absolute().as_posix(),  # Path to your album art image
+                },
             ],
         }
 
@@ -107,12 +133,38 @@ def _download_youtube_video(
                 )
                 job.status = JobStatus.FAILED
                 job.error_message = f'Youtube Download Failed with error code {error_code}'
+                return
+
+        absolute_path = (AUDIO_ROOT / f'{yt_title}.mp3').absolute().as_posix()
+
+        track = MP3(absolute_path, ID3=ID3)
+        if track.tags is None:
+            raise Exception('TODO')
+
+        foo = track.get('APIC:')
+        img_data = cast(ApicData | None, track.get('APIC:'))
+
+        track.add_tags()
+
+        track.tags.add(
+            APIC(
+                encoding=3,  # 3 is for utf-8
+                mime='image/jpeg',  # can be image/jpeg or image/png
+                type=3,  # 3 is for the cover image
+                desc='Cover',
+                data=open(temp_path_to_image, mode='rb').read(),
+            )
+        )
+
+        track.tags.save(f'{yt_title}.mp3')
+
+        track.save()
 
         job.status = JobStatus.SUCCEEDED
 
         media_element = MediaEntry(
             name=yt_title,
-            absolute_path=(AUDIO_ROOT / f'{yt_title}.mp3').absolute().as_posix(),
+            absolute_path=absolute_path,
             source=MediaElementSource.YOUTUBE,
             youtube_id=video_id,
             type=MediaElementType.AUDIO,

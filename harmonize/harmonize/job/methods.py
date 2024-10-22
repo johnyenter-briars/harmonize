@@ -11,7 +11,7 @@ from harmonize.job.stoppablethread import StoppableThread
 Jobs: dict[uuid.UUID, tuple[StoppableThread, Job]] = {}
 
 
-FuncType = Callable[[Any, Any], Awaitable[Any]]
+FuncType = Callable[[Any, Any, Any], Awaitable[Any]]
 
 
 async def start_job(
