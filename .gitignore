@@ -13,6 +13,8 @@ bin/
 *.part
 *.ytdl
 *.db
+*.jpg
+
 
 !app/Harmonize/Harmonize/Resources/Raw/*.mp3
 !app/Harmonize/Harmonize/Resources/Images/*.png

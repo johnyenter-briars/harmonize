@@ -2,13 +2,9 @@ import datetime
 import json
 import logging
 from pathlib import Path
-from typing import cast
 
 import yt_dlp
 from fastapi import APIRouter, Depends, HTTPException
-from mutagen.id3 import ID3
-from mutagen.id3._frames import APIC
-from mutagen.mp3 import MP3
 from sqlmodel import Session, select
 
 from harmonize.const import (
@@ -22,7 +18,6 @@ from harmonize.const import (
 )
 from harmonize.db.database import get_session
 from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaElementType, MediaEntry
-from harmonize.defs.metadata import ApicData
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.youtube import DownloadPlaylistArguments, DownloadVideoArguments
 from harmonize.job.methods import start_job
@@ -108,6 +103,8 @@ def _download_youtube_video(
 
         _ = download_image(highest_quality_image['url'], temp_path_to_image)
 
+        now = datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')
+
         ydl_audo_opts = {
             'format': f'{_audio_format}/bestaudio/best',
             'outtmpl': (AUDIO_ROOT / f'{yt_title}').absolute().as_posix(),
@@ -117,11 +114,21 @@ def _download_youtube_video(
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': _audio_format,
                 },
-                {  # Add metadata and embed the cover art in the audio file
+                {  # Embed thumbnail into audio
+                    'key': 'EmbedThumbnail',
+                },
+                {  # Add metadata using ffmpeg
                     'key': 'FFmpegMetadata',
                     'add_metadata': True,
-                    'thumbnail': temp_path_to_image.absolute().as_posix(),  # Path to your album art image
                 },
+            ],
+            'postprocessor_args': [
+                '-metadata',
+                f'album={now}',  # Add album metadata as timestamp
+                '-write_id3v1',
+                '1',  # Write ID3v1 metadata
+                '-id3v2_version',
+                '3',  # Use ID3v2.3 for metadata
             ],
         }
 
@@ -137,28 +144,28 @@ def _download_youtube_video(
 
         absolute_path = (AUDIO_ROOT / f'{yt_title}.mp3').absolute().as_posix()
 
-        track = MP3(absolute_path, ID3=ID3)
-        if track.tags is None:
-            raise Exception('TODO')
+        # track = MP3(absolute_path, ID3=ID3)
+        # if track.tags is None:
+        #     raise Exception('TODO')
 
-        foo = track.get('APIC:')
-        img_data = cast(ApicData | None, track.get('APIC:'))
+        # foo = track.get('APIC:')
+        # img_data = cast(ApicData | None, track.get('APIC:'))
 
-        track.add_tags()
+        # track.add_tags()
 
-        track.tags.add(
-            APIC(
-                encoding=3,  # 3 is for utf-8
-                mime='image/jpeg',  # can be image/jpeg or image/png
-                type=3,  # 3 is for the cover image
-                desc='Cover',
-                data=open(temp_path_to_image, mode='rb').read(),
-            )
-        )
+        # track.tags.add(
+        #     APIC(
+        #         encoding=3,  # 3 is for utf-8
+        #         mime='image/jpeg',  # can be image/jpeg or image/png
+        #         type=3,  # 3 is for the cover image
+        #         desc='Cover',
+        #         data=open(temp_path_to_image, mode='rb').read(),
+        #     )
+        # )
 
-        track.tags.save(f'{yt_title}.mp3')
+        # track.tags.save(f'{yt_title}.mp3')
 
-        track.save()
+        # track.save()
 
         job.status = JobStatus.SUCCEEDED
 
