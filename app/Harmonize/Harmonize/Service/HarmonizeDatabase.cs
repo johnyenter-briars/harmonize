@@ -13,6 +13,7 @@ public class HarmonizeDatabase
 {
     SQLiteAsyncConnection? Database;
     ILogger logger;
+    private const bool WipeData = true;
 
     public HarmonizeDatabase(ILogger<HarmonizeDatabase> logger)
     {
@@ -26,9 +27,16 @@ public class HarmonizeDatabase
 
         Database = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
 
-        var result = await Database.CreateTableAsync<LocalMediaEntry>();
-
         logger.LogInformation($"Init database: {Constants.DatabaseFilename}");
+
+        var createTableResult = await Database.CreateTableAsync<LocalMediaEntry>();
+        logger.LogInformation($"Create Table Result: {createTableResult.ToString()}");
+
+        if(WipeData)
+        {
+            var wipeDataResult = await Database.DeleteAllAsync<LocalMediaEntry>();
+            logger.LogInformation($"Wipe Table Result: {wipeDataResult.ToString()}");
+        }
     }
     public async Task<List<LocalMediaEntry>> GetMediaEntries()
     {
