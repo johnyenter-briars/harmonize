@@ -1,4 +1,5 @@
 ﻿using Harmonize.Model;
+using Harmonize.Page.View;
 using Harmonize.Service;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,8 @@ public class MediaListViewModel(
     FailsafeService failsafeService
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
-    private ObservableCollection<MediaEntry> mediaEntries = [];
-    public ObservableCollection<MediaEntry> MediaEntries
+    private ObservableCollection<LocalMediaEntry> mediaEntries = [];
+    public ObservableCollection<LocalMediaEntry> MediaEntries
     {
         get { return mediaEntries; }
         set { SetProperty(ref mediaEntries, value); }
@@ -26,10 +27,18 @@ public class MediaListViewModel(
     {
         var media = await mediaManager.GetMediaEntries();
 
+        MediaEntries.Clear();
         foreach (var m in media)
         {
             MediaEntries.Add(m);
         }
+    }
+    public async Task MediaEntryTapped(LocalMediaEntry localMediaEntry)
+    {
+        await Shell.Current.GoToAsync(nameof(MediaElementPage), new Dictionary<string, object>
+        {
+            { nameof(MediaElementViewModel.MediaEntryId), localMediaEntry.Id }
+        });
     }
 
     public override async Task OnAppearingAsync()

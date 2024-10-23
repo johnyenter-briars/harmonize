@@ -12,8 +12,8 @@ bin/
 *.webm
 *.part
 *.ytdl
-*.db
 *.jpg
+*.db
 
 
 !app/Harmonize/Harmonize/Resources/Raw/*.mp3

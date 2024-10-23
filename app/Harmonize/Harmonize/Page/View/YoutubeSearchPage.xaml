@@ -10,6 +10,7 @@
     x:DataType="viewModels:YouTubeSearchViewModel"
     x:Class="Harmonize.Page.View.YouTubeSearchPage"
     xmlns:youtube="clr-namespace:Harmonize.Client.Model.Youtube;assembly=Harmonize.Client"
+    xmlns:components="clr-namespace:Harmonize.Components"
     Title="YouTube Search">
 
     <Grid Padding="0">
@@ -18,18 +19,62 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <SearchBar 
-            Grid.Row="0"
-            Placeholder="Search YouTube"
-            SearchCommand="{Binding SearchCommand}"
-            SearchCommandParameter="{Binding ., Source={x:Reference searchBar}}"
-            Text="{Binding SearchQuery}" 
-            FontSize="18"
-            HeightRequest="40"
-            VerticalOptions="Start"
-            HorizontalOptions="FillAndExpand"
-            x:Name="searchBar"
-            />
+        <Grid 
+            Grid.Row="0" 
+            ColumnDefinitions="*, *"
+            RowDefinitions="Auto, Auto"
+        >
+            <SearchBar 
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Placeholder="Search YouTube"
+
+                SearchCommand="{Binding SearchCommand}"
+                SearchCommandParameter="{Binding ., Source={x:Reference searchBar}}"
+                Text="{Binding SearchQuery}" 
+                FontSize="18"
+                HeightRequest="40"
+                VerticalOptions="Start"
+                HorizontalOptions="FillAndExpand"
+                x:Name="searchBar"
+                />
+
+            <HorizontalStackLayout
+                Grid.Row="1"
+                Grid.Column="0"
+                >
+                <CheckBox 
+                    Color="{StaticResource PrimaryDark}"  
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    IsChecked="{Binding VideosChecked}" 
+                    />
+                <Label 
+                    Text="Videos"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    FontSize="20"
+                    />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout
+                Grid.Row="1"
+                Grid.Column="1"
+                >
+                <CheckBox 
+                    Color="{StaticResource SecondaryDark}"  
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    IsChecked="{Binding PlaylistsChecked}" 
+                    />
+                <Label 
+                    Text="Playlists"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    FontSize="20"
+                    />
+            </HorizontalStackLayout>
+        </Grid>
+
 
         <ActivityIndicator
             Grid.Row="1" 
@@ -41,7 +86,8 @@
 
         <ListView 
             Grid.Row="1" 
-            ItemsSource="{Binding SearchResults}"
+            IsVisible="{Binding ShowVideoList}"
+            ItemsSource="{Binding VideoSearchResults}"
             VerticalOptions="FillAndExpand"
             RowHeight="150"
             ItemTapped="OnItemTapped"
@@ -49,20 +95,14 @@
             ItemSelected="OnItemSelected"
             >
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="youtube:YouTubeSearchResult">
+                <DataTemplate x:DataType="youtube:YoutubeVideoSearchResult">
                     <ViewCell>
-                        <Grid>
-                            <Frame
-                                Margin="5"
-                                Padding="10" 
-                                HasShadow="True" 
-                                CornerRadius="5" 
-                                BackgroundColor="{StaticResource Gray600}">
-                                <Grid
+                        <components:ListElement>
+                            <Grid
                                     RowDefinitions="Auto, Auto"
                                     ColumnDefinitions="*, *"
                                     >
-                                    <Label 
+                                <Label 
                                         Grid.Row="0"
                                         Grid.ColumnSpan="2"
                                         Text="{Binding Title}" 
@@ -70,44 +110,105 @@
                                         MaxLines="2"
                                         />
 
-                                    <Image 
+                                <Image 
                                         Grid.Row="1"
                                         Grid.Column="0"
                                         Source="{Binding Thumbnails[0].Url}" 
                                         HeightRequest="75"/>
 
-                                    <StackLayout 
+                                <StackLayout 
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         Orientation="Vertical" 
                                         Padding="10,0,0,0">
-                                        <BoxView
+                                    <BoxView
                                             Grid.Row="1"
                                             Grid.ColumnSpan="2"
                                             HeightRequest="1" Color="{StaticResource Gray400}"/>
-                                        <Label 
+                                    <Label 
                                             Text="{Binding Channel.Name}" 
                                             TextColor="{StaticResource Gray300}"
                                             FontSize="Small" 
                                             />
-                                        <Label 
+                                    <Label 
                                             TextColor="{StaticResource Gray300}"
                                             Text="{Binding Duration}" 
                                             FontSize="Small" 
                                             />
-                                        <Label 
+                                    <Label 
                                             TextColor="{StaticResource Gray300}"
                                             Text="{Binding PublishedTime}" 
                                             FontSize="Small" 
                                             />
-                                    </StackLayout>
-                                </Grid>
-                            </Frame>
-                        </Grid>
+                                </StackLayout>
+                            </Grid>
+                        </components:ListElement>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+
+        <ListView 
+            Grid.Row="1" 
+            IsVisible="{Binding ShowPlaylistList}"
+            ItemsSource="{Binding PlaylistSearchResults}"
+            VerticalOptions="FillAndExpand"
+            RowHeight="150"
+            ItemTapped="OnItemTapped"
+            SeparatorVisibility="None"
+            ItemSelected="OnItemSelected"
+            >
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="youtube:YoutubePlaylistSearchResult">
+                    <ViewCell>
+                        <components:ListElement>
+                            <Grid
+                                    RowDefinitions="Auto, Auto"
+                                    ColumnDefinitions="*, *"
+                                    >
+                                <Label 
+                                        Grid.Row="0"
+                                        Grid.ColumnSpan="2"
+                                        Text="{Binding Title}" 
+                                        FontAttributes="Bold"
+                                        MaxLines="2"
+                                        />
+
+                                <Image 
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Source="{Binding Thumbnails[0].Url}" 
+                                        HeightRequest="75"/>
+
+                                <StackLayout 
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Orientation="Vertical" 
+                                        Padding="10,0,0,0">
+                                    <BoxView
+                                            Grid.Row="1"
+                                            Grid.ColumnSpan="2"
+                                            HeightRequest="1" Color="{StaticResource Gray400}"/>
+                                    <Label 
+                                            Text="{Binding Channel.Name}" 
+                                            TextColor="{StaticResource Gray300}"
+                                            FontSize="Small" 
+                                            />
+                                    <Label 
+                                            TextColor="{StaticResource Gray300}"
+                                            Text="{Binding VideoCount}" 
+                                            FontSize="Small" 
+                                            />
+                                </StackLayout>
+                            </Grid>
+                        </components:ListElement>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+
     </Grid>
 </pages:BasePage>
 

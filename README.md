@@ -28,7 +28,8 @@ NOTE: This is for running with docker for devleopment.
 - [X] Search magnet links across different search platforms
 - [X] Search youtube dl
   - [X] Simple keyword search
-  - [X] Simple keyword search playlists
+  - [ ] Simple file search and play
+  - [ ] Save files in main DB
 - [ ] search youtube dl in different regions
 - [ ] Set / query long running jobs
   - [x] Basic read

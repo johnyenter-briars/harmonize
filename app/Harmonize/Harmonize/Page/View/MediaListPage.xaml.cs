@@ -21,24 +21,15 @@ public partial class MediaListPage : BasePage<MediaListViewModel>
         this.mediaManager = mediaManager;
 
     }
-
     protected override async void OnAppearing()
     {
         await viewModel.OnAppearingAsync();
     }
-    private void OnMediaItemTapped(object sender, ItemTappedEventArgs e)
+    private async void OnMediaItemTapped(object sender, ItemTappedEventArgs e)
     {
-        if (e.Item is MediaEntry mediaEntry)
+        if (e.Item is LocalMediaEntry mediaEntry)
         {
-            DisplayAlert("Media Tapped", $"You tapped on {mediaEntry.Name}", "OK");
-        }
-    }
-
-    private void OnPlayButtonClicked(object sender, EventArgs e)
-    {
-        if (sender is Button button && button.BindingContext is MediaEntry mediaEntry)
-        {
-            DisplayAlert("Play Media", $"Playing {mediaEntry.Name}", "OK");
+            await viewModel.MediaEntryTapped(mediaEntry);
         }
     }
 }
