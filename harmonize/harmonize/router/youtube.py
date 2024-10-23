@@ -23,7 +23,7 @@ from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaElement
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.youtube import DownloadPlaylistArguments, DownloadVideoArguments
 from harmonize.job.methods import start_job
-from harmonize.util.metadata import download_image
+from harmonize.util.metadata import download_image, get_album_artwork_itunes
 
 logger = logging.getLogger('harmonize')
 router = APIRouter(prefix='/api/youtube')
@@ -95,15 +95,11 @@ def _download_youtube_video(
             Path.open(YOUTUBE_VIDEO_YTDL_METADATA / f'{video_id}.info.json', mode='r').read()
         )
 
-        highest_quality_image = next(
-            thumbnail
-            for thumbnail in metadata['thumbnails']
-            if thumbnail.get('height') == 1080 and thumbnail.get('width') == 1920
-        )
-
         temp_path_to_image = TMP_ALBUM_ART_DIR / f'{video_id}.jpg'
 
-        _ = download_image(highest_quality_image['url'], temp_path_to_image)
+        (small, large) = get_album_artwork_itunes(yt_title)
+
+        _ = download_image(large, temp_path_to_image)
 
         now = datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')
 
@@ -151,109 +147,17 @@ def _download_youtube_video(
             # TODO
             raise Exception('foo')
 
-        # if audiofile.tag is None:
-        audiofile.initTag()
+        if audiofile is None:
+            raise Exception('Audio file could not be loaded.')
 
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.OTHER, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
+        if audiofile.tag is None:
+            audiofile.initTag()
 
         audiofile.tag.images.set(  # type: ignore
             ImageFrame.FRONT_COVER, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.BACK_COVER, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.LEAFLET, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.MEDIA, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.LEAD_ARTIST, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.ARTIST, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.CONDUCTOR, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.BAND, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.COMPOSER, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.LYRICIST, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.RECORDING_LOCATION, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.DURING_RECORDING, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.DURING_PERFORMANCE, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.VIDEO, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.BRIGHT_COLORED_FISH, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.ILLUSTRATION, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.BAND_LOGO, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.PUBLISHER_LOGO, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )
+        )  # type: ignore
 
         audiofile.tag.save()  # type: ignore
-
-        # track = MP3(absolute_path, ID3=ID3)
-        # if track.tags is None:
-        #     raise Exception('TODO')
-
-        # foo = track.get('APIC:')
-        # img_data = cast(ApicData | None, track.get('APIC:'))
-
-        # track.add_tags()
-
-        # track.tags.add(
-        #     APIC(
-        #         encoding=3,  # 3 is for utf-8
-        #         mime='image/jpeg',  # can be image/jpeg or image/png
-        #         type=3,  # 3 is for the cover image
-        #         desc='Cover',
-        #         data=open(temp_path_to_image, mode='rb').read(),
-        #     )
-        # )
-
-        # track.tags.save(f'{yt_title}.mp3')
-
-        # track.save()
 
         job.status = JobStatus.SUCCEEDED
 
@@ -267,6 +171,8 @@ def _download_youtube_video(
         )
 
         session.add(media_element)
+
+        logger.debug('Added media element: %s', media_element.id)
 
     except Exception as e:
         job.status = JobStatus.FAILED

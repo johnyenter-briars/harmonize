@@ -19,24 +19,25 @@ NOTE: This is for running with docker for devleopment.
 ### Front End
 
 - [ ] List media
+  - [X] MVP
+  - [X] Initial caching
 - [ ] Search media
 - [ ] Stream any media
 - [ ] Support fast forwarding
 - [ ] Playlists
-- [ ] Search magnet links across different search platforms
-- [ ] Search youtube dl
-  - [ ] Simple keyword search
-  - [ ] Simple file search and play
-  - [ ] Save files in main DB
+- [X] Search magnet links across different search platforms
+- [X] Search youtube dl
+  - [X] Simple keyword search
+  - [X] Simple keyword search playlists
 - [ ] search youtube dl in different regions
 - [ ] Set / query long running jobs
   - [x] Basic read
   - [x] Basic cancel
   - [x] Job details / page
-  - [ ] Job details update
-  - [ ] Finish formatting edit page / list page
+  - [X] Finish formatting edit page / list page
+  - [ ] Jobs filter + order 
 - [ ] option to integration with custom media system / fullsail
-- [ ] Option to download
+- [X] Option to download
 - [ ] Implement https + private keys
 - [ ] Remove all null ref warnings
 - [ ] Fix all TODOs
@@ -48,17 +49,22 @@ NOTE: This is for running with docker for devleopment.
 - [x] Support fast forwarding
 - [x] Test initial manual deployment on server
 - [ ] Integrate with QBT
+  - [X] MVP start / stop / pause 
+  - [ ] Notice when file finished and save to server + metadata
 - [ ] Integrate with youtube-dl
   - [x] MVP file search + download via API
-  - [ ] Save + query to DB
+  - [X] Save + query to DB
+  - [ ] Metadata fixes
 - [ ] Playlists
-- [x] Set / query long running jobs
-- [ ] Update storing / saving jobs in database
+- [ ] Set / query long running jobs
+  - [X] Update storing / saving jobs in database
 - [ ] Integrate media art with youtube-dl
-- [ ] Search magnet links across different search platforms
+  - [X] MVP
+  - [ ] Smart searching of artist metadata + cover art
+- [X] Search magnet links across different search platforms
 - [ ] Setup easy deployment / redeployment on server
-- [ ] Automatic media art when not found?
 - [ ] Test kill switch
 - [ ] Implement https + private keys
 - [ ] All 'async with ClientSession' use the 'get' helper in 'util'
+- [ ] Fix all TODOs
 - [ ] Run check for VPN when running QBT
