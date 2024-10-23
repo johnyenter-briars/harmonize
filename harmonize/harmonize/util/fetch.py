@@ -1,6 +1,9 @@
 import aiohttp
 
 
-async def get(url: str, headers: dict[str, str]) -> tuple[int, str]:
+async def get(url: str, headers: dict[str, str], return_json: bool = False) -> tuple[int, str]:
     async with aiohttp.ClientSession() as session, session.get(url, headers=headers) as response:
-        return (response.status, await response.text())
+        if return_json:
+            return (response.status, await response.json())
+        else:
+            return (response.status, await response.text())

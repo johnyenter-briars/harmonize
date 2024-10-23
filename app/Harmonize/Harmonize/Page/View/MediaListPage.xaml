@@ -15,11 +15,11 @@
     <StackLayout Padding="10">
         <ListView ItemTapped="OnMediaItemTapped" ItemsSource="{Binding MediaEntries}">
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="model:MediaEntry">
+                <DataTemplate x:DataType="model:LocalMediaEntry">
                     <ViewCell>
                         <StackLayout Orientation="Horizontal" Padding="10">
                             <Label Text="{Binding Name}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
-                            <Button Text="Play" Clicked="OnPlayButtonClicked" VerticalOptions="Center" HorizontalOptions="End" />
+                            <!--<Button Text="Play" Clicked="OnPlayButtonClicked" VerticalOptions="Center" HorizontalOptions="End" />-->
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

@@ -161,9 +161,15 @@
 	  <Compile Update="Page\View\YoutubeSearchPage.xaml.cs">
 	    <DependentUpon>YouTubeSearchPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Page\View\YouTubePlaylistSearchResultEditPage.xaml.cs">
+	    <DependentUpon>YouTubePlaylistSearchResultEditPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Components\ListElement.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Page\View\EditJobPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -174,6 +180,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\YouTubeSearchPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\YouTubePlaylistSearchResultEditPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\YouTubeSearchResultEditPage.xaml">

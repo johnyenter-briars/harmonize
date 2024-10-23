@@ -25,8 +25,18 @@ def test_search_t1337x(setup):
     assert isinstance(data['value'], list), 'Response data should be a list'
 
 
-def test_search_youtube(setup):
-    url = f"{setup['base_url']}/search/youtube/Lo-fi Hip Hop 30 second Loop"
+def test_search_youtube_video(setup):
+    url = f"{setup['base_url']}/search/youtube/video/hey jude"
+
+    response = requests.get(url)
+    assert response.status_code == 200, f'Expected status code 200, but got {response.status_code}'
+    data = response.json()
+    print(data)
+    assert isinstance(data['value'], list), 'Expected a list of search results'
+
+
+def test_search_youtube_playlist(setup):
+    url = f"{setup['base_url']}/search/youtube/playlist/ice death planets lungs mushrooms and lava"
 
     response = requests.get(url)
     assert response.status_code == 200, f'Expected status code 200, but got {response.status_code}'

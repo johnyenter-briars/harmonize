@@ -8,6 +8,7 @@ using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
 
+[QueryProperty(nameof(MediaEntryId), nameof(MediaEntryId))]
 public partial class MediaElementViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
@@ -17,14 +18,15 @@ public partial class MediaElementViewModel(
     int currentIndex;
     public override async Task OnAppearingAsync()
     {
-        playlist = await mediaManager.GetPlaylist("foo");
-
-        var firstItem = playlist.Files.First();
-        currentIndex = 0;
-
-        await UpdateMediaElementFile(firstItem);
+        await UpdateMediaElementFile();
     }
     #region OtherBindings
+    private Guid mediaEntryId;
+    public Guid MediaEntryId
+    {
+        get => mediaEntryId;
+        set => SetProperty(ref mediaEntryId, value);
+    }
     private double positionSliderMaximum;
     public double PositionSliderMaximum
     {
@@ -64,8 +66,8 @@ public partial class MediaElementViewModel(
             }
         }
     }
-    private MediaEntry? mediaEntry;
-    public MediaEntry? MediaEntry
+    private LocalMediaEntry? mediaEntry;
+    public LocalMediaEntry? MediaEntry
     {
         get => mediaEntry;
         set
@@ -147,19 +149,22 @@ public partial class MediaElementViewModel(
 
     #endregion
     #region MediaElementHandlers
-    async Task UpdateMediaElementFile(string name)
+    async Task UpdateMediaElementFile()
     {
-        var mediaEntry = await mediaManager.GetMediaEntry(name);
+        if (MediaEntryId == Guid.Empty)
+        {
+            return;
+        }
 
-        var mediaMetadata = await mediaManager.GetMediaMetadata(name);
+        var mediaEntry = await mediaManager.GetMediaEntry(MediaEntryId);
 
-        var xlMediaUrl = mediaManager.GetMediaMetadataArtworkUrl(mediaMetadata, "Xl");
+        var mediaMetadata = await mediaManager.GetMediaMetadata(mediaEntry);
 
-        MetadataArtist = mediaMetadata.Artist;
-        MetadataTitle = mediaMetadata.Title;
-        MetadataArtworkUrl = xlMediaUrl;
+        MetadataArtist = mediaMetadata?.Artist;
+        MetadataTitle = mediaMetadata?.Title;
+        MetadataArtworkUrl = mediaMetadata?.Artwork?.Xl;
 
-        MediaSource = await mediaManager.GetMediaResource(name);
+        MediaSource = MediaSource.FromFile(mediaEntry.LocalPath);
 
         IsPlaying = true;
         MediaEntry = mediaEntry;
@@ -205,7 +210,7 @@ public partial class MediaElementViewModel(
 
         var item = playlist.Files[currentIndex];
 
-        await UpdateMediaElementFile(item);
+        await UpdateMediaElementFile();
     });
     public ICommand SkipBackCommand => new Command(async () =>
     {
@@ -218,7 +223,7 @@ public partial class MediaElementViewModel(
 
         var item = playlist.Files[currentIndex];
 
-        await UpdateMediaElementFile(item);
+        await UpdateMediaElementFile();
     });
     public void PlayPauseClicked(MediaElement mediaElement)
     {
