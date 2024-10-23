@@ -85,6 +85,8 @@ public class MediaManager
         {
             await CreateLocalMediaEntry(mediaEntry);
         }
+
+        logger.LogInformation("Finished syncing local db");
     }
     public async Task<LocalMediaEntry> GetMediaEntry(Guid id)
     {

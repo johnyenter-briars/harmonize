@@ -27,6 +27,14 @@
             HeightRequest="75" 
             />
 
+        <Label Text="ErrorMessage" FontSize="Medium" />
+        <Editor 
+            IsReadOnly="True"
+            Text="{Binding Job.ErrorMessage, Mode=OneWay}" 
+            AutoSize="TextChanges"
+            HeightRequest="75" 
+            />
+
         <Label Text="Status" FontSize="Medium" />
         <Picker 
             ItemsSource="{Binding StatusOptions}" 

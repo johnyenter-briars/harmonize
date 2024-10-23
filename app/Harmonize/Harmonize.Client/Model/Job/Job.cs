@@ -7,6 +7,7 @@ public class Job
     public required Guid Id { get; set; }
     public required DateTime StartedOn { get; set; }
     public required string Description { get; set; }
+    public required string? ErrorMessage { get; set; }
     public required JobStatus Status { get; set; }
 }
 
