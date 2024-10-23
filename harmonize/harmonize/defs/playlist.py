@@ -1,5 +1,5 @@
-from typing import TypedDict
+from harmonize.defs.response import BaseSchema
 
 
-class Playlist(TypedDict):
+class Playlist(BaseSchema):
     files: list[str]

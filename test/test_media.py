@@ -13,3 +13,10 @@ def test_stream_media(setup):
 
     response = requests.get(url)
     assert response.status_code == 200, f'Expected status code 200, but got {response.status_code}'
+
+
+def test_list_music(setup):
+    url = f"{setup['base_url']}/media/music"
+
+    response = requests.get(url)
+    assert response.status_code == 200, f'Expected status code 200, but got {response.status_code}'

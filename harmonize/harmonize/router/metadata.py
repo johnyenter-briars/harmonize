@@ -1,22 +1,29 @@
+import datetime
 import io
 import logging
+import uuid
 from pathlib import Path
 from typing import Final, Literal, cast
 
 import requests
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import FileResponse
 from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
 from PIL import Image
 from PIL.ImageFile import ImageFile
+from sqlmodel import Session, select
 
-from harmonize.const import MUSIC_ROOT, TMP_ALBUM_ART_DIR
+from harmonize.const import AUDIO_ROOT, TMP_ALBUM_ART_DIR
+from harmonize.db.database import get_session
+from harmonize.db.models import MediaElementSource, MediaElementType, MediaEntry
 from harmonize.defs.metadata import ApicData, HarmonizeThumbnail, MediaMetadata
 from harmonize.defs.musicbrainz import (
     CoverArtArchiveResponse,
     MusicBrainzReleaseResponse,
 )
+from harmonize.defs.response import BaseResponse
+from harmonize.util.metadata import get_album_artwork_itunes
 
 logger = logging.getLogger('harmonize')
 COVERART_ARCHIVE_ROOT: Final = 'http://coverartarchive.org/release'
@@ -100,40 +107,69 @@ def make_thumbnails(album_dir: Path, original_im: ImageFile):
             logger.exception('Failed to create thumbnail for size', extra={'size': tn_size})
 
 
-@router.get('/metadata/media/{filename}')
-async def media_metadata(filename: str) -> MediaMetadata:
-    track = MP3(MUSIC_ROOT / filename)
-    tags = EasyID3(MUSIC_ROOT / filename)
+@router.get('/metadata/media/{id}')
+async def media_metadata(
+    id: uuid.UUID, session: Session = Depends(get_session)
+) -> BaseResponse[MediaMetadata]:
+    statement = select(MediaEntry).where(MediaEntry.id == id)
+    media_entry = session.exec(statement).first()
+
+    # if media_entry is None:
+    #     return BaseResponse[MediaMetadata](
+    #         message='Media entry not found', status_code=404, value=None
+    #     )
+
+    absolute_path = (AUDIO_ROOT / 'Sense.mp3').absolute().as_posix()
+    media_entry = MediaEntry(
+        name='Sense.mp3',
+        absolute_path=absolute_path,
+        source=MediaElementSource.YOUTUBE,
+        youtube_id='',
+        type=MediaElementType.AUDIO,
+        date_added=datetime.datetime.now(datetime.UTC),
+    )
+
+    track = MP3(Path(media_entry.absolute_path))
+    tags = EasyID3(Path(media_entry.absolute_path))
 
     album_name = _get_str_tag(tags, 'album')
 
-    if album_name is not None:
+    if album_name is None:
+        album_dir = TMP_ALBUM_ART_DIR / media_entry.name
+    else:
         album_dir = TMP_ALBUM_ART_DIR / album_name
 
     img_data = cast(ApicData | None, track.get('APIC:'))
 
-    thumbnails: HarmonizeThumbnail
+    # TODO
     if img_data:
         # Make album art dir in case it doesn't exist yet
         album_dir.mkdir(parents=True, exist_ok=True)
         with Image.open(io.BytesIO(img_data.data)) as original_im:
             make_thumbnails(album_dir, original_im)
         url_base = f'album_art/{album_name}'
-        thumbnails = {
-            'xl': f'{url_base}/1200',
-            'large': f'{url_base}/500',
-            'small': f'{url_base}/250',
-        }
+        thumbnail = HarmonizeThumbnail(
+            xl=f'{url_base}/1200', large=f'{url_base}/500', small=f'{url_base}/250'
+        )
     else:
         # Retrieve album art if no art is included in the file
-        thumbnails = find_album_art_thumbails(album=album_name)
+        thumbnail: HarmonizeThumbnail = find_album_art_thumbails(song=media_entry.name)
+    (small_thumbnail, xl_thumbnail) = get_album_artwork_itunes('Singata (Mystic Queen)')
 
-    return {
-        'title': _get_str_tag(tags, 'title'),
-        'album': album_name,
-        'artist': _get_str_tag(tags, 'artist'),
-        'artwork': thumbnails,
-    }
+    # download_image(xl_thumbnail, TMP_ALBUM_ART_DIR / f'{media_entry.id}.jpg')
+
+    thumbnail = HarmonizeThumbnail(xl=xl_thumbnail, small=small_thumbnail, large='')
+
+    return BaseResponse[MediaMetadata](
+        message='Got metadata',
+        status_code=200,
+        value=MediaMetadata(
+            title='foo',
+            album='bar',
+            artist='bing',
+            artwork=thumbnail,
+        ),
+    )
 
 
 def _get_str_tag(tags: EasyID3, tag: Literal['title', 'album', 'artist']) -> str | None:
@@ -143,6 +179,11 @@ def _get_str_tag(tags: EasyID3, tag: Literal['title', 'album', 'artist']) -> str
     return cast(list[str], tags.get(tag))[0]
 
 
-@router.get('/album_art/{album}/{size}')
-async def album_art(album: str, size: Literal['250', '500', '1200']) -> FileResponse:
-    return FileResponse(TMP_ALBUM_ART_DIR / album / f'{size}.png')
+# @router.get('/album_art/{album}/{size}')
+# async def album_art(album: str, size: Literal['250', '500', '1200']) -> FileResponse:
+#     return FileResponse(TMP_ALBUM_ART_DIR / album / f'{size}.png')
+
+
+@router.get('/album_art/{id}')
+async def album_art(id: str) -> FileResponse:
+    return FileResponse(TMP_ALBUM_ART_DIR / f'{id}.jpg')
