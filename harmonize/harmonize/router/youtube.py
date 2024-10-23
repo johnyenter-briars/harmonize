@@ -3,7 +3,9 @@ import json
 import logging
 from pathlib import Path
 
+import eyed3
 import yt_dlp
+from eyed3.id3.frames import ImageFrame
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
@@ -143,6 +145,92 @@ def _download_youtube_video(
                 return
 
         absolute_path = (AUDIO_ROOT / f'{yt_title}.mp3').absolute().as_posix()
+
+        audiofile = eyed3.load(absolute_path)
+        if audiofile is None:
+            # TODO
+            raise Exception('foo')
+
+        # if audiofile.tag is None:
+        audiofile.initTag()
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.OTHER, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.FRONT_COVER, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.BACK_COVER, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.LEAFLET, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.MEDIA, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.LEAD_ARTIST, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.ARTIST, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.CONDUCTOR, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.BAND, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.COMPOSER, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.LYRICIST, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.RECORDING_LOCATION, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.DURING_RECORDING, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.DURING_PERFORMANCE, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.VIDEO, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.BRIGHT_COLORED_FISH, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.ILLUSTRATION, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.BAND_LOGO, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.images.set(  # type: ignore
+            ImageFrame.PUBLISHER_LOGO, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
+        )
+
+        audiofile.tag.save()  # type: ignore
 
         # track = MP3(absolute_path, ID3=ID3)
         # if track.tags is None:
