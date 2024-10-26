@@ -23,7 +23,11 @@ from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaElement
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.youtube import DownloadPlaylistArguments, DownloadVideoArguments
 from harmonize.job.methods import start_job
-from harmonize.util.metadata import download_image, get_album_artwork_itunes
+from harmonize.util.metadata import (
+    download_image,
+    get_album_art_musicbrainz,
+    get_album_artwork_itunes,
+)
 
 logger = logging.getLogger('harmonize')
 router = APIRouter(prefix='/api/youtube')
@@ -98,6 +102,7 @@ def _download_youtube_video(
         temp_path_to_image = TMP_ALBUM_ART_DIR / f'{video_id}.jpg'
 
         (small, large) = get_album_artwork_itunes(yt_title)
+        foo: HarmonizeThumnail = get_album_art_musicbrainz(song=yt_title)
 
         _ = download_image(large, temp_path_to_image)
 

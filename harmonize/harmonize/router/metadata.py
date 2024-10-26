@@ -14,7 +14,12 @@ from PIL import Image
 from PIL.ImageFile import ImageFile
 from sqlmodel import Session, select
 
-from harmonize.const import AUDIO_ROOT, TMP_ALBUM_ART_DIR
+from harmonize.const import (
+    AUDIO_ROOT,
+    COVERART_ARCHIVE_ROOT,
+    MUSTICBRAINZ_RELEASE_ROOT,
+    TMP_ALBUM_ART_DIR,
+)
 from harmonize.db.database import get_session
 from harmonize.db.models import MediaElementSource, MediaElementType, MediaEntry
 from harmonize.defs.metadata import ApicData, HarmonizeThumbnail, MediaMetadata
@@ -26,11 +31,6 @@ from harmonize.defs.response import BaseResponse
 from harmonize.util.metadata import get_album_artwork_itunes
 
 logger = logging.getLogger('harmonize')
-COVERART_ARCHIVE_ROOT: Final = 'http://coverartarchive.org/release'
-
-MUSTICBRAINZ_RELEASE_ROOT: Final = (
-    'https://musicbrainz.org/ws/2/release/?query={query_parameters}&fmt=json'
-)
 
 THUMBNAIL_SIZES: Final = (1200, 500, 250)
 
