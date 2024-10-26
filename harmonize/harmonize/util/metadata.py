@@ -134,22 +134,26 @@ def get_album_art_musicbrainz(
     album: str | None = None,
     song: str | None = None,
     artist: str | None = None,
-) -> HarmonizeThumbnail:
+) -> HarmonizeThumbnail | None:
     musicbrainz_releases = _get_musicbrainz_releases(
         album=album,
         song=song,
         artist=artist,
     )
 
-    first_match_mbid = musicbrainz_releases.get('releases')[1].get('id')
+    for index in [0, 1, 2]:
+        first_match_mbid = musicbrainz_releases.get('releases')[index].get('id')
 
-    cover_art_url = f'{COVERART_ARCHIVE_ROOT}/{first_match_mbid}'
-    response = requests.get(cover_art_url, timeout=10)
-    response.raise_for_status()
-    cover_art_response = cast(CoverArtArchiveResponse, response.json())
-    thumbnails = cover_art_response.get('images')[0].get('thumbnails')
-    return {
-        'xl': thumbnails.get('1200'),  # type: ignore[reportReturnType]
-        'large': thumbnails.get('large'),
-        'small': thumbnails.get('small'),
-    }
+        cover_art_url = f'{COVERART_ARCHIVE_ROOT}/{first_match_mbid}'
+        response = requests.get(cover_art_url, timeout=10)
+
+        if response.status_code == 200:
+            cover_art_response = cast(CoverArtArchiveResponse, response.json())
+            thumbnails = cover_art_response.get('images')[0].get('thumbnails')
+            return {
+                'xl': thumbnails.get('1200'),  # type: ignore[reportReturnType]
+                'large': thumbnails.get('large'),
+                'small': thumbnails.get('small'),
+            }
+
+    return None
