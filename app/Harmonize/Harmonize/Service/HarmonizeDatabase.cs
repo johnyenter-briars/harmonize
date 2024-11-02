@@ -9,16 +9,13 @@ using System.Threading.Tasks;
 
 namespace Harmonize.Service;
 
-public class HarmonizeDatabase
+public class HarmonizeDatabase(
+    ILogger<HarmonizeDatabase> logger,
+    PreferenceManager preferenceManager
+    )
 {
     SQLiteAsyncConnection? Database;
-    ILogger logger;
-    private const bool WipeData = true;
-
-    public HarmonizeDatabase(ILogger<HarmonizeDatabase> logger)
-    {
-        this.logger = logger;
-    }
+    ILogger logger = logger;
 
     async Task Init()
     {
@@ -32,7 +29,7 @@ public class HarmonizeDatabase
         var createTableResult = await Database.CreateTableAsync<LocalMediaEntry>();
         logger.LogInformation($"Create Table Result: {createTableResult.ToString()}");
 
-        if(WipeData)
+        if(preferenceManager.UserSettings.ResetDatabaseOnLaunch)
         {
             var wipeDataResult = await Database.DeleteAllAsync<LocalMediaEntry>();
             logger.LogInformation($"Wipe Table Result: {wipeDataResult.ToString()}");

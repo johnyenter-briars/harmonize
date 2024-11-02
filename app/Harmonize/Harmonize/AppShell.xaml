@@ -34,6 +34,17 @@
         </Tab>
     </FlyoutItem>
     <FlyoutItem 
+                Title="Logs" 
+                Icon="icons8_log_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Logs"
+                ContentTemplate="{DataTemplate view:LogPage}"
+                Route="Logs" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
                 Title="Media Element" 
                 Icon="icons8_music_note_50.png"
                 >

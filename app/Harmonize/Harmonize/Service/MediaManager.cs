@@ -18,6 +18,7 @@ public class MediaManager
     readonly HarmonizeClient harmonizeClient;
     readonly HarmonizeDatabase harmonizeDatabase;
     readonly FailsafeService failsafeService;
+    private readonly AlertService alertService;
 
     public static string MediaPath => Path.Combine(FileSystem.AppDataDirectory, "media");
     public static string AudioPath => Path.Combine(FileSystem.AppDataDirectory, "media", "audio");
@@ -27,13 +28,15 @@ public class MediaManager
         ILogger<MediaManager> logger,
         HarmonizeClient harmonizeClient,
         HarmonizeDatabase harmonizeDatabase,
-        FailsafeService failsafeService
+        FailsafeService failsafeService,
+        AlertService alertService
         )
     {
         this.logger = logger;
         this.harmonizeClient = harmonizeClient;
         this.harmonizeDatabase = harmonizeDatabase;
         this.failsafeService = failsafeService;
+        this.alertService = alertService;
         CreateMediaFolders();
     }
     void CreateMediaFolders()
@@ -87,6 +90,8 @@ public class MediaManager
         }
 
         logger.LogInformation("Finished syncing local db");
+
+        alertService.ShowAlert("Sync", "Finished syncing local db");
     }
     public async Task<LocalMediaEntry> GetMediaEntry(Guid id)
     {

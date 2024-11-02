@@ -33,6 +33,7 @@
                 PositionChanged="OnPositionChanged"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
+                HeightRequest="250"
                 Aspect="AspectFit"
             />
 

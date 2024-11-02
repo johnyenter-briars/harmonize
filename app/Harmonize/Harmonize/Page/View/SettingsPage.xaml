@@ -51,6 +51,16 @@
                    Text="{Binding UserSettings.DefaultPageOnLaunch}"
                    VerticalOptions="Center"/>
 
+        <Label Text="Reset Database On Launch" 
+                   FontSize="Medium" 
+                   VerticalOptions="Center" 
+                   Margin="0,10,0,0"/>
+        <CheckBox  
+            HorizontalOptions="Start"
+            VerticalOptions="Center" 
+            IsChecked="{Binding UserSettings.ResetDatabaseOnLaunch}"
+            />
+
         <Button Text="Save Changes" 
                     VerticalOptions="EndAndExpand" 
                     HorizontalOptions="FillAndExpand"

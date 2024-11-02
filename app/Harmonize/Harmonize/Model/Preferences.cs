@@ -11,4 +11,5 @@ public class UserSettings
     public required string DomainName { get; set; }
     public required int Port { get; set; }
     public required string DefaultPageOnLaunch { get; set; }
+    public required bool ResetDatabaseOnLaunch { get; set; }
 }

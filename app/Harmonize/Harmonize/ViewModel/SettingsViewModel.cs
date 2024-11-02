@@ -1,4 +1,5 @@
-﻿using Harmonize.Model;
+﻿using Harmonize.Client;
+using Harmonize.Model;
 using Harmonize.Service;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,12 @@ using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
 
-public class SettingsViewModel : BaseViewModel
+public class SettingsViewModel(
+    MediaManager mediaManager,
+    PreferenceManager preferenceManager,
+    FailsafeService failsafeService,
+    HarmonizeClient harmonizeClient
+        ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     private UserSettings? userSettings;
     public UserSettings UserSettings
@@ -35,17 +41,14 @@ public class SettingsViewModel : BaseViewModel
             {
                 preferenceManager
                     .SetUserSetttings(UserSettings);
+
+                harmonizeClient
+                    .SetPort(UserSettings.Port)
+                    .SetHostName(UserSettings.DomainName);
             });
 
             return saveChangesCommand;
         }
-    }
-    public SettingsViewModel(
-        MediaManager mediaManager,
-        PreferenceManager preferenceManager,
-        FailsafeService failsafeService
-        ) : base(mediaManager, preferenceManager, failsafeService)
-    {
     }
 
     public override Task OnAppearingAsync()

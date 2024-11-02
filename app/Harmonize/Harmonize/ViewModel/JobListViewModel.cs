@@ -15,10 +15,9 @@ public class JobListViewModel(
     FailsafeService failsafeService
         ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
+    private readonly HarmonizeClient harmonizeClient = harmonizeClient;
     #region Bindings
     private ObservableCollection<Job> jobs = [];
-    private readonly HarmonizeClient harmonizeClient = harmonizeClient;
-
     public ObservableCollection<Job> Jobs
     {
         get { return jobs; }

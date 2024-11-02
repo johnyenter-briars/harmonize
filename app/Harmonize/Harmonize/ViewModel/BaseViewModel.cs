@@ -1,4 +1,5 @@
-﻿using Harmonize.Service;
+﻿using Harmonize.Client;
+using Harmonize.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

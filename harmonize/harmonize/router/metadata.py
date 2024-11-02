@@ -114,10 +114,10 @@ async def media_metadata(
     statement = select(MediaEntry).where(MediaEntry.id == id)
     media_entry = session.exec(statement).first()
 
-    # if media_entry is None:
-    #     return BaseResponse[MediaMetadata](
-    #         message='Media entry not found', status_code=404, value=None
-    #     )
+    if media_entry is None:
+        return BaseResponse[MediaMetadata](
+            message='Media entry not found', status_code=404, value=None
+        )
 
     absolute_path = (AUDIO_ROOT / 'Sense.mp3').absolute().as_posix()
     media_entry = MediaEntry(

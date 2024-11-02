@@ -3,6 +3,7 @@ import json
 import logging
 from enum import Enum
 from pathlib import Path
+from typing import Any
 
 import eyed3
 import yt_dlp
@@ -21,13 +22,12 @@ from harmonize.const import (
 )
 from harmonize.db.database import get_session
 from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaElementType, MediaEntry
-from harmonize.defs.metadata import HarmonizeThumbnail
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.youtube import DownloadPlaylistArguments, DownloadVideoArguments
 from harmonize.job.methods import start_job
+from harmonize.util.filepropety import convert_webp_to_jpeg, rescale_jpeg
 from harmonize.util.metadata import (
     download_image,
-    get_album_art_musicbrainz,
 )
 
 logger = logging.getLogger('harmonize')
@@ -42,23 +42,31 @@ class YoutubeElementType(Enum):
 
 
 def _save_image(
-    youtube_id: str, youtube_title: str, object_type: YoutubeElementType
+    youtube_id: str, youtube_title: str, youtube_metadata: Any, object_type: YoutubeElementType
 ) -> Path | None:
-    temp_path_to_image = TMP_ALBUM_ART_DIR / f'{youtube_id}.jpg'
+    temp_path_to_image_webp = TMP_ALBUM_ART_DIR / f'{youtube_id}.webp'
+    temp_path_to_image_jpeg = TMP_ALBUM_ART_DIR / f'{youtube_id}.jpeg'
 
     if object_type == YoutubeElementType.VIDEO:
-        thumbnail_resp: HarmonizeThumbnail | None = get_album_art_musicbrainz(
-            song=youtube_title,
+        highest_quality_image = max(
+            youtube_metadata['thumbnails'],
+            key=lambda thumbnail: thumbnail.get('width', 0) * thumbnail.get('height', 0),
         )
     else:
-        thumbnail_resp: HarmonizeThumbnail | None = get_album_art_musicbrainz(album=youtube_title)
+        highest_quality_image = max(
+            youtube_metadata['thumbnails'],
+            key=lambda thumbnail: thumbnail.get('width', 0) * thumbnail.get('height', 0),
+        )
 
-    if thumbnail_resp is None:
-        return None
+    url = highest_quality_image['url']
 
-    _ = download_image(thumbnail_resp['large'], temp_path_to_image)
+    _ = download_image(url, temp_path_to_image_webp)
 
-    return temp_path_to_image
+    convert_webp_to_jpeg(temp_path_to_image_webp, temp_path_to_image_jpeg)
+
+    rescale_jpeg(temp_path_to_image_jpeg, temp_path_to_image_jpeg)
+
+    return temp_path_to_image_jpeg
 
 
 def _inject_album_art(path_to_file: Path, path_to_image: Path):
@@ -130,7 +138,7 @@ def _download_youtube_video(
     try:
         yt_title = yt_metadata['title']
 
-        album_art_path = _save_image(video_id, yt_title, YoutubeElementType.VIDEO)
+        album_art_path = _save_image(video_id, yt_title, yt_metadata, YoutubeElementType.VIDEO)
 
         url = f'https://www.youtube.com/watch?v={video_id}'
         ydl_opts = {
@@ -171,6 +179,9 @@ def _download_youtube_video(
                 return
 
         absolute_path = AUDIO_ROOT / f'{yt_title}.mp3'
+
+        if album_art_path is not None:
+            _inject_album_art(absolute_path, album_art_path)
 
         if album_art_path is not None:
             _inject_album_art(absolute_path, album_art_path)
@@ -237,11 +248,12 @@ def _download_youtube_playlist(
     session: Session,
 ):
     playlist_id = download_playlist_arguments.playlist_id
-    _ = download_playlist_arguments.playlist_metadata
+    yt_metadata = download_playlist_arguments.playlist_metadata
     try:
         album_art_path = _save_image(
             playlist_id,
             download_playlist_arguments.playlist_metadata['title'],
+            yt_metadata,
             YoutubeElementType.PLAYLIST,
         )
         url = f'https://www.youtube.com/playlist?list={playlist_id}'

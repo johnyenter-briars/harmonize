@@ -4,5 +4,6 @@
     "qbt-run": false,
     "qbt-domain-name": "localhost",
     "qbt-port": 8080,
-    "qbt-version": "v2"
+    "qbt-version": "v2",
+    "reset-db-on-launch": true
 }

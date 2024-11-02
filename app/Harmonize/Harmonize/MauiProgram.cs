@@ -1,12 +1,14 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Core.Views;
 using Harmonize.Client;
+using Harmonize.Log;
 using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
 using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
 using MediaManager = Harmonize.Service.MediaManager;
+using static Harmonize.Constants;
 
 namespace Harmonize
 {
@@ -29,6 +31,7 @@ namespace Harmonize
             builder.Logging.AddDebug();
 #endif
 
+            builder.Services.AddSingleton<ILoggerProvider>(new FileLoggerProvider(LogFilePath));
 
             builder.Services.AddSingleton<AlertService>();
             builder.Services.AddSingleton<FailsafeService>();
@@ -47,6 +50,7 @@ namespace Harmonize
             builder.Services.AddSingleton<YouTubePlaylistSearchResultEditViewModel>();
             builder.Services.AddSingleton<MagnetLinkSearchViewModel>();
             builder.Services.AddSingleton<ManageQbtViewModel>();
+            builder.Services.AddSingleton<LogViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();
@@ -59,6 +63,7 @@ namespace Harmonize
             builder.Services.AddSingleton<YouTubePlaylistSearchResultEditPage>();
             builder.Services.AddSingleton<MagnetLinkSearchPage>();
             builder.Services.AddSingleton<ManageQbtPage>();
+            builder.Services.AddSingleton<LogPage>();
 
             builder.Services.AddSingleton(service =>
             {

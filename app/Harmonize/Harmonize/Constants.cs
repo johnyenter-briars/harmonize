@@ -9,6 +9,7 @@ namespace Harmonize;
 class Constants
 {
     public const string DatabaseFilename = "Harmonize.db3";
+    public const string LogFilename = "Harmonize.log";
 
     public const SQLite.SQLiteOpenFlags Flags =
         // open the database in read/write mode
@@ -20,4 +21,8 @@ class Constants
 
     public static string DatabasePath =>
         Path.Combine(FileSystem.AppDataDirectory, DatabaseFilename);
+    public static string LogFilePath =>
+        Path.Combine(FileSystem.AppDataDirectory, LogFilename);
+
+    public static int NumRowsToDisplayInLogFile = 10;
 }
