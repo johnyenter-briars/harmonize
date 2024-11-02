@@ -61,10 +61,13 @@
                 VerticalOptions="Center"
             />
 
+            <!--
             <Grid Grid.Row="3" HorizontalOptions="Fill">
                 <Label HorizontalOptions="Start" Text="{Binding Position, Source={x:Reference MediaElement}, Converter={StaticResource SecondsToStringConverter}}" />
                 <Label HorizontalOptions="End" HorizontalTextAlignment="End" Text="{Binding Duration, Source={x:Reference MediaElement}, Converter={StaticResource SecondsToStringConverter}}" />
             </Grid>
+            -->
+
 
             <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center" Padding="0,10,0,10" Spacing="10">
                 <ImageButton 
