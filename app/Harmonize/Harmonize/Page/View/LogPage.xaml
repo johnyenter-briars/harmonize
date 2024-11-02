@@ -9,16 +9,15 @@
              x:TypeArguments="viewModels:LogViewModel"
              x:DataType="viewModels:LogViewModel"
              Title="Log Page">
-  <ScrollView>
-        <StackLayout>
-            <Editor 
-                Text="{Binding LogText}" 
-                FontSize="10"
-                x:Name="logEntry" 
-                IsReadOnly="True" 
-                VerticalOptions="FillAndExpand" 
-                />
-            
-        </StackLayout>
+    <ScrollView 
+    x:Name="scrollView"
+    VerticalScrollBarVisibility="Always">
+        <Label
+            Text="{Binding LogText}"
+            FontSize="10"
+            x:Name="logLabel"
+            VerticalOptions="FillAndExpand"
+            LineBreakMode="WordWrap"
+        />
     </ScrollView>
 </pages:BasePage>

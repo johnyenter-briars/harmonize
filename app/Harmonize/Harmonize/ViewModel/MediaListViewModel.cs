@@ -33,7 +33,7 @@ public class MediaListViewModel(
             MediaEntries.Add(m);
         }
     }
-    public async Task MediaEntryTapped(LocalMediaEntry localMediaEntry)
+    public async Task ItemTapped(LocalMediaEntry localMediaEntry)
     {
         await Shell.Current.GoToAsync(nameof(MediaElementPage), new Dictionary<string, object>
         {

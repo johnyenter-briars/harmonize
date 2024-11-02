@@ -25,6 +25,9 @@ public class LogViewModel(
 
             Array.Reverse(logEntries);
 
+            logEntries = logEntries.Take(NumRowsToDisplayInLogFile).ToArray();
+
+            LogText = "";
             LogText = string.Join(Environment.NewLine, logEntries);
         }
     }

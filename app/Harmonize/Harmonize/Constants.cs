@@ -24,5 +24,5 @@ class Constants
     public static string LogFilePath =>
         Path.Combine(FileSystem.AppDataDirectory, LogFilename);
 
-    public static int NumRowsToDisplayInLogFile = 10;
+    public static int NumRowsToDisplayInLogFile = 100;
 }
