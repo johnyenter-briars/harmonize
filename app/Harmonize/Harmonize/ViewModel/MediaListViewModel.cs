@@ -25,7 +25,7 @@ public class MediaListViewModel(
 
     async Task PopulateEntries()
     {
-        var media = await mediaManager.GetMediaEntries();
+        var media = await mediaManager.GetMediaEntries(PopulateEntries);
 
         MediaEntries.Clear();
         foreach (var m in media)

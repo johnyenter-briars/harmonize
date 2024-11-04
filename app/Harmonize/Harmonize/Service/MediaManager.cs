@@ -49,28 +49,29 @@ public class MediaManager
             }
         }
     }
-    public async Task<List<LocalMediaEntry>> GetMediaEntries()
+    public async Task<List<LocalMediaEntry>> GetMediaEntries(
+        Func<Task>? callback = null
+        )
     {
         var media = await harmonizeDatabase.GetMediaEntries();
-        var (response, success) = await failsafeService.Fallback(async () =>
-        {
-            return await harmonizeClient.GetMedia();
-        }, null);
+        var (response, success) = await failsafeService.Fallback(harmonizeClient.GetMedia, null);
 
-        if (media.Count != response?.Value.Count)
+        if (success)
         {
-            Task.Run(SyncLocalMediaStore);
+            if (media.Count != response?.Value.Count)
+            {
+                Task.Run(async () => await SyncLocalMediaStore(callback));
+            }
         }
 
         return media;
     }
-    private async Task SyncLocalMediaStore()
+    private async Task SyncLocalMediaStore(
+        Func<Task>? callback = null
+        )
     {
         var localMedia = await harmonizeDatabase.GetMediaEntries();
-        var (response, success) = await failsafeService.Fallback(async () =>
-        {
-            return await harmonizeClient.GetMedia();
-        }, null);
+        var (response, success) = await failsafeService.Fallback(harmonizeClient.GetMedia, null);
 
         if (!success)
         {
@@ -92,6 +93,11 @@ public class MediaManager
         logger.LogInformation("Finished syncing local db");
 
         alertService.ShowAlert("Sync", "Finished syncing local db");
+
+        if (callback != null)
+        {
+            await callback();
+        }
     }
     public async Task<LocalMediaEntry> GetMediaEntry(Guid id)
     {
