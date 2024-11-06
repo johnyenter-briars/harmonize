@@ -71,6 +71,7 @@
 	  <None Remove="Resources\Images\icons8_clock_50.png" />
 	  <None Remove="Resources\Images\icons8_closed_captioning_48.png" />
 	  <None Remove="Resources\Images\icons8_closed_captioning_50.png" />
+	  <None Remove="Resources\Images\icons8_collapse_50.png" />
 	  <None Remove="Resources\Images\icons8_controls_64.png" />
 	  <None Remove="Resources\Images\icons8_database_export_50.png" />
 	  <None Remove="Resources\Images\icons8_data_pending_50.png" />
@@ -91,6 +92,7 @@
 	  <None Remove="Resources\Images\icons8_left_arrow_60.png" />
 	  <None Remove="Resources\Images\icons8_list_50.png" />
 	  <None Remove="Resources\Images\icons8_log_50.png" />
+	  <None Remove="Resources\Images\icons8_media_50.png" />
 	  <None Remove="Resources\Images\icons8_memory_slot_50.png" />
 	  <None Remove="Resources\Images\icons8_move_up_row_50.png" />
 	  <None Remove="Resources\Images\icons8_music_album_50.png" />
@@ -109,6 +111,7 @@
 	  <None Remove="Resources\Images\icons8_processor_50.png" />
 	  <None Remove="Resources\Images\icons8_progress_indicator_50.png" />
 	  <None Remove="Resources\Images\icons8_reboot_50.png" />
+	  <None Remove="Resources\Images\icons8_remote_50.png" />
 	  <None Remove="Resources\Images\icons8_restart_50.png" />
 	  <None Remove="Resources\Images\icons8_rewind_50.png" />
 	  <None Remove="Resources\Images\icons8_right_arrow_60.png" />
@@ -156,6 +159,9 @@
 	  <Compile Update="Page\View\EditJobPage.xaml.cs">
 	    <DependentUpon>EditJobPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Page\View\MediaControlPage.xaml.cs">
+	    <DependentUpon>MediaControlPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Page\View\MagnetLinkSearchPage.xaml.cs">
 	    <DependentUpon>MagnetLinkSearchPage.xaml</DependentUpon>
 	  </Compile>
@@ -172,6 +178,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\EditJobPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\MediaControlPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\LogPage.xaml">

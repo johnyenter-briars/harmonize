@@ -1,4 +1,5 @@
-﻿using Harmonize.Model;
+﻿using Harmonize.Client;
+using Harmonize.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Harmonize.Service
     public class PreferenceManager
     {
         public UserSettings UserSettings { get; private set; }
-        public PreferenceManager()
+        public PreferenceManager(HarmonizeClient harmonizeClient)
         {
             UserSettings = new()
             {
@@ -19,6 +20,10 @@ namespace Harmonize.Service
                 DefaultPageOnLaunch = Preferences.Default.Get(nameof(UserSettings.DefaultPageOnLaunch), "Home"),
                 ResetDatabaseOnLaunch = Preferences.Default.Get(nameof(UserSettings.ResetDatabaseOnLaunch), false),
                 IncludeMediaControlPage = Preferences.Default.Get(nameof(UserSettings.IncludeMediaControlPage), false),
+                KodiDomainName = Preferences.Default.Get(nameof(UserSettings.KodiDomainName), "127.0.0.1"),
+                KodiPort = Preferences.Default.Get(nameof(UserSettings.KodiPort), 8080),
+                KodiApiUserName = Preferences.Default.Get(nameof(UserSettings.KodiApiUserName), ""),
+                KodiApiPasword = Preferences.Default.Get(nameof(UserSettings.KodiApiPasword), ""),
             };
         }
         internal PreferenceManager SetUserSetttings(UserSettings userSettings)
@@ -33,5 +38,6 @@ namespace Harmonize.Service
 
             return this;
         }
+        public 
     }
 }

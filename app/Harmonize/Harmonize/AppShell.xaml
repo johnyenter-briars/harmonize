@@ -57,7 +57,7 @@
     </FlyoutItem>
     <FlyoutItem 
                 Title="Media List" 
-                Icon="icons8_list_50.png"
+                Icon="icons8_media_50.png"
                 >
         <Tab>
             <ShellContent
@@ -108,6 +108,17 @@
                 Title="Manage QBT"
                 ContentTemplate="{DataTemplate view:ManageQbtPage}"
                 Route="MangeQbt" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
+                Title="Media Control" 
+                Icon="icons8_remote_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Media Control"
+                ContentTemplate="{DataTemplate view:MediaControlPage}"
+                Route="MediaControl" />
         </Tab>
     </FlyoutItem>
 

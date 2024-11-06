@@ -13,11 +13,21 @@ namespace Harmonize
             var defaultPage = preferenceManager.UserSettings.DefaultPageOnLaunch;
 
             CurrentItem = Items.FirstOrDefault(item => item.Title == defaultPage);
-            
+
             Routing.RegisterRoute(nameof(EditJobPage), typeof(EditJobPage));
             Routing.RegisterRoute(nameof(YouTubeSearchResultEditPage), typeof(YouTubeSearchResultEditPage));
             Routing.RegisterRoute(nameof(YouTubePlaylistSearchResultEditPage), typeof(YouTubePlaylistSearchResultEditPage));
             Routing.RegisterRoute(nameof(MediaElementPage), typeof(MediaElementPage));
+
+            if (!preferenceManager.UserSettings.IncludeMediaControlPage)
+            {
+                var mediaControlPage = Items.FirstOrDefault(item => item.Title == "Media Control");
+
+                if (mediaControlPage is not null)
+                {
+                    mediaControlPage.IsVisible = false;
+                }
+            }
         }
     }
 }

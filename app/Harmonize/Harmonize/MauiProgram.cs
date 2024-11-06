@@ -51,6 +51,7 @@ namespace Harmonize
             builder.Services.AddSingleton<MagnetLinkSearchViewModel>();
             builder.Services.AddSingleton<ManageQbtViewModel>();
             builder.Services.AddSingleton<LogViewModel>();
+            builder.Services.AddSingleton<MediaControlViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();
@@ -64,6 +65,7 @@ namespace Harmonize
             builder.Services.AddSingleton<MagnetLinkSearchPage>();
             builder.Services.AddSingleton<ManageQbtPage>();
             builder.Services.AddSingleton<LogPage>();
+            builder.Services.AddSingleton<MediaControlPage>();
 
             builder.Services.AddSingleton(service =>
             {
@@ -71,7 +73,11 @@ namespace Harmonize
 
                 var userSettings = preferenceManager.UserSettings;
 
-                var client = new HarmonizeClient(userSettings.DomainName, userSettings.Port);
+                var client = new HarmonizeClient();
+
+                client
+                    .SetHostName(userSettings.DomainName)
+                    .SetPort(userSettings.Port);
 
                 return client;
             });

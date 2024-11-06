@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BasePage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Harmonize.Page.View"
+    xmlns:pages="clr-namespace:Harmonize.Page"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+    x:TypeArguments="viewModels:MediaControlViewModel"
+    x:DataType="viewModels:MediaControlViewModel"
+    xmlns:behavior="clr-namespace:Harmonize.Behavior"
+    x:Class="Harmonize.Page.View.MediaControlPage"
+    Title="Media Control page"
+    >
+        <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Button
+            Margin="10, 25, 10, 25"
+            BackgroundColor="{StaticResource Blue100Accent}"
+            TextColor="white"
+            ImageSource="icons8_u_turn_to_left_64.png"
+            x:Name="esc"
+            Command="{Binding EscCommand }"
+            CommandParameter="{x:Reference esc}"
+            Clicked="ScaleButton"
+        />
+
+        <Button
+            Margin="20, 20, 20, 20"
+            Grid.Column="1"
+            BackgroundColor="{StaticResource Primary}"
+            TextColor="white"
+            ImageSource="icons8_up_arrow_60.png"
+            x:Name="up"
+            Command="{Binding UpCommand }"
+            CommandParameter="{x:Reference up}"
+            Clicked="ScaleButton"
+        />
+
+        <Button
+            Margin="10, 25, 10, 25"
+            Grid.Column="3"
+            BackgroundColor="{StaticResource Blue100Accent}"
+            TextColor="white"
+            ImageSource="icons8_slider_48.png"
+            x:Name="osd"
+            Command="{Binding OSDCommand }"
+            CommandParameter="{x:Reference osd}"
+            Clicked="ScaleButton"
+        />
+
+        <Button
+            Margin="20, 20, 20, 20"
+            Grid.Row="1"
+            BackgroundColor="{StaticResource Primary}"
+            TextColor="white"
+            ImageSource="icons8_left_arrow_60.png"
+            x:Name="left"
+            Command="{Binding LeftCommand }"
+            CommandParameter="{x:Reference left}"
+            Clicked="ScaleButton"
+        />
+
+        <Button
+            Margin="20, 20, 20, 20"
+            Grid.Row="1"
+            Grid.Column="1"
+            BackgroundColor="{StaticResource Cyan200Accent}"
+            TextColor="white"
+            ImageSource="icons8_checked_checkbox_50.png"
+            x:Name="enter"
+            Command="{Binding EnterCommand }"
+            CommandParameter="{x:Reference enter}"
+            Clicked="ScaleButton"
+        />
+
+        <Button
+            Margin="20, 20, 20, 20"
+            Grid.Row="1"
+            Grid.Column="2"
+            BackgroundColor="{StaticResource Primary}"
+            TextColor="white"
+            ImageSource="icons8_right_arrow_60.png"
+            x:Name="right"
+            Command="{Binding RightCommand}"
+            CommandParameter="{x:Reference right}"
+            Clicked="ScaleButton"
+        />
+
+        <Button
+            Margin="25, 25, 25, 25"
+            Grid.Row="2"
+            Grid.Column="0"
+            BackgroundColor="{StaticResource Yellow100Accent}"
+            TextColor="white"
+            ImageSource="icons8_power_off_button_50.png"
+            x:Name="powerOff"
+            Command="{Binding PowerOffCommand }"
+            CommandParameter="{x:Reference powerOff}"
+            Clicked="ScaleButton"
+        />
+
+        <Button
+            Margin="20, 20, 20, 20"
+            Grid.Row="2"
+            Grid.Column="1"
+            BackgroundColor="{StaticResource Primary}"
+            TextColor="white"
+            ImageSource="icons8_down_arrow_60.png"
+            x:Name="down"
+            Command="{Binding DownCommand }"
+            CommandParameter="{x:Reference down}"
+            Clicked="ScaleButton"
+        />
+
+        <Button
+            Margin="25, 25, 25, 25"
+            Grid.Row="2"
+            Grid.Column="2"
+            BackgroundColor="{StaticResource Yellow100Accent}"
+            TextColor="white"
+            ImageSource="icons8_restart_50.png"
+            x:Name="powerReboot"
+            Command="{Binding RebootCommand }"
+            CommandParameter="{x:Reference powerReboot}"
+            Clicked="ScaleButton"
+        />
+
+        <Slider
+            Grid.Row="3"
+            Grid.ColumnSpan="3"
+            MinimumWidthRequest="400"
+            ValueChanged="VolumeSlider_Changed"
+            MinimumTrackColor="{StaticResource Yellow100Accent}"
+            ThumbImageSource="icons8_voice_50_pink.png"
+        >
+        </Slider>
+        <Slider
+            Grid.Row="4"
+            Grid.ColumnSpan="3"
+            MinimumWidthRequest="400"
+            ValueChanged="SeekSlider_Changed"
+            MinimumTrackColor="{StaticResource Yellow100Accent}"
+            ThumbImageSource="icons8_music_album_50_pink.png"
+        />
+
+        <Button
+            Margin="20, 20, 20, 20"
+            Text="Rewind"
+            Grid.Row="5"
+            Grid.Column="0"
+            BackgroundColor="{StaticResource Primary}"
+            Command="{Binding RewindCommand }"
+            TextColor="white"
+            ImageSource="icons8_rewind_50.png"
+            x:Name="rewind"
+            Clicked="ScaleButton"
+        />
+        <Button
+            Margin="20, 20, 20, 20"
+            Grid.Row="5"
+            Grid.Column="1"
+            BackgroundColor="{StaticResource Primary}"
+            TextColor="white"
+            ImageSource="icons8_play_pause_48_2.png"
+            x:Name="playpause"
+            Command="{Binding TogglePlayPauseCommand }"
+            CommandParameter="{x:Reference playpause}"
+            Clicked="ScaleButton"
+        />
+        <Button
+            Margin="20, 20, 20, 20"
+            Text=""
+            Grid.Row="5"
+            Grid.Column="2"
+            BackgroundColor="{StaticResource Primary}"
+            TextColor="white"
+            Command="{Binding FastFowardCommand }"
+            ImageSource="icons8_fast_forward_50.png"
+            x:Name="fastfoward"
+            Clicked="ScaleButton"
+        />
+
+        <Frame
+            BorderColor="LightGray"
+            HasShadow="False"
+            Padding="15"
+            Grid.Row="6"
+            Grid.ColumnSpan="2"
+            BackgroundColor="Black"
+        >
+            <Editor
+                Text="{Binding SearchText}"
+                AutoSize="TextChanges"
+                FontSize="Medium"
+                Margin="0">
+                <Editor.Behaviors>
+                    <behavior:TextChangedBehavior Command="{Binding EnterTextChangedCommand}" />
+                </Editor.Behaviors>
+            </Editor>
+        </Frame>
+
+        <Button
+            Margin="10, 25, 10, 25"
+            Grid.Row="6"
+            Grid.Column="2"
+            BackgroundColor="{StaticResource Blue100Accent}"
+            TextColor="white"
+            ImageSource="icons8_enter_mac_key_50.png"
+            Command="{Binding EnterTextCommand}"
+            Clicked="ScaleButton"
+        />
+
+    </Grid>
+
+
+</pages:BasePage>

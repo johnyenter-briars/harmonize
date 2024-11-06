@@ -9,6 +9,7 @@ namespace Harmonize.ViewModel;
 
 public class SettingsViewModel : BaseViewModel
 {
+    private readonly HarmonizeClient harmonizeClient;
     public SettingsViewModel(
         MediaManager mediaManager,
         PreferenceManager preferenceManager,
@@ -47,27 +48,6 @@ public class SettingsViewModel : BaseViewModel
 
     private string buildVersion = Assembly.GetExecutingAssembly().GetName().ToString();
     public string BuildVersion { get => buildVersion; set => SetProperty(ref buildVersion, value); }
-    private Command? saveChangesCommand;
-    private readonly HarmonizeClient harmonizeClient;
-
-    public ICommand SaveChangesCommand
-    {
-        get
-        {
-            saveChangesCommand ??= new Command(() =>
-            {
-                preferenceManager
-                    .SetUserSetttings(UserSettings);
-
-                harmonizeClient
-                    .SetPort(UserSettings.Port)
-                    .SetHostName(UserSettings.DomainName);
-            });
-
-            return saveChangesCommand;
-        }
-    }
-
     public override Task OnAppearingAsync()
     {
         throw new NotImplementedException();

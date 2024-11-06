@@ -10,10 +10,10 @@ using static Harmonize.Client.Utility.Utility;
 
 namespace Harmonize.Client;
 
-public class HarmonizeClient(string hostName, int port)
+public class HarmonizeClient
 {
-    private string hostName = hostName;
-    private int port = port;
+    private string? hostName;
+    private int? port;
     private static readonly JsonSerializerOptions SnakeCaseOptions = new JsonSerializerOptions
     {
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
