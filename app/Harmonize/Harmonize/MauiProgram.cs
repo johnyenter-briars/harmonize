@@ -9,6 +9,7 @@ using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
 using MediaManager = Harmonize.Service.MediaManager;
 using static Harmonize.Constants;
+using Harmonize.Kodi;
 
 namespace Harmonize
 {
@@ -36,8 +37,22 @@ namespace Harmonize
             builder.Services.AddSingleton<AlertService>();
             builder.Services.AddSingleton<FailsafeService>();
 
-            builder.Services.AddSingleton<PreferenceManager>();
+            builder.Services.AddSingleton<HarmonizeClient>();
             builder.Services.AddSingleton<HarmonizeDatabase>();
+            builder.Services.AddSingleton<KodiClient>();
+            builder.Services.AddSingleton((services) =>
+            {
+                var kodiClient = services.GetService<KodiClient>() ?? throw new NullReferenceException(nameof(KodiClient));
+                var harmonizeClient = services.GetService<HarmonizeClient>() ?? throw new NullReferenceException(nameof(HarmonizeClient));
+
+                var preferenceManager = new PreferenceManager(harmonizeClient, kodiClient);
+
+                var userSettings = preferenceManager.UserSettings;
+
+                preferenceManager.SetUserSetttings(userSettings);
+
+                return preferenceManager;
+            });
 
             builder.Services.AddSingleton<MediaElementViewModel>();
             builder.Services.AddSingleton<SettingsViewModel>();
@@ -66,21 +81,6 @@ namespace Harmonize
             builder.Services.AddSingleton<ManageQbtPage>();
             builder.Services.AddSingleton<LogPage>();
             builder.Services.AddSingleton<MediaControlPage>();
-
-            builder.Services.AddSingleton(service =>
-            {
-                var preferenceManager = service.GetService<PreferenceManager>() ?? throw new NullReferenceException($"{nameof(PreferenceManager)} is not registered");
-
-                var userSettings = preferenceManager.UserSettings;
-
-                var client = new HarmonizeClient();
-
-                client
-                    .SetHostName(userSettings.DomainName)
-                    .SetPort(userSettings.Port);
-
-                return client;
-            });
 
             builder.Services.AddSingleton<MediaManager>();
 

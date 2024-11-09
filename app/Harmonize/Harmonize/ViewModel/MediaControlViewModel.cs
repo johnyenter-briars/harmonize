@@ -1,79 +1,75 @@
-﻿using Harmonize.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Harmonize.Kodi;
+using Harmonize.Service;
 using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
 
-public class MediaControlViewModel : BaseViewModel
+public class MediaControlViewModel(
+    MediaManager mediaManager,
+    PreferenceManager preferenceManager,
+    FailsafeService failsafeService,
+    KodiClient kodiClient,
+    AlertService alertService
+        ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     private int currSpeed = 1;
     private readonly int MAX_FASTFORWARD_SPEED = 32;
     private readonly int MAX_REWIND_SPEED = -32;
-    public MediaControlViewModel(
-        MediaManager mediaManager,
-        PreferenceManager preferenceManager,
-        FailsafeService failsafeService)
-        : base(mediaManager, preferenceManager, failsafeService)
-    {
-    }
+
     public ICommand EscCommand => new Command<Button>(async (Button button) =>
     {
-        //await KodiClientSingleton.InputBackAsync();
+        await kodiClient.InputBackAsync();
     });
     public ICommand UpCommand => new Command<Button>(async (Button button) => 
     { 
-        //await KodiClientSingleton.InputUpAsync(); 
+        await kodiClient.InputUpAsync(); 
     });
     public ICommand OSDCommand => new Command<Button>(async (Button button) => 
     { 
-        //await KodiClientSingleton.ShowOSD(); 
+        await kodiClient.ShowOSD(); 
     });
     public ICommand LeftCommand => new Command<Button>(async (Button button) => 
     { 
-        //await KodiClientSingleton.InputLeftAsync(); 
+        await kodiClient.InputLeftAsync(); 
     });
     public ICommand EnterCommand => new Command<Button>(async (Button button) => 
     { 
-        //await KodiClientSingleton.InputSelectAsync(); 
+        await kodiClient.InputSelectAsync(); 
     });
     public ICommand RightCommand => new Command<Button>(async (Button button) => 
     { 
-        //await KodiClientSingleton.InputRightAsync(); 
+        await kodiClient.InputRightAsync(); 
     });
     public ICommand DownCommand => new Command<Button>(async (Button button) => 
     { 
-        //await KodiClientSingleton.InputDownAsync(); 
+        await kodiClient.InputDownAsync(); 
     });
     public ICommand TogglePlayPauseCommand => new Command<Button>(async (Button button) =>
     {
         currSpeed = 1;
-        //await KodiClientSingleton.TogglePlayPausePlayerAsync();
+        await kodiClient.TogglePlayPausePlayerAsync();
     });
     public ICommand RebootCommand => new Command<Button>(async (Button button) =>
     {
-        //if (await AlertServiceSingleton.ShowConfirmationAsync("Reboot confirmation", "Are you sure you want to reboot?"))
-        //{
-        //    await KodiClientSingleton.PowerReboot();
-        //}
+        if (await alertService.ShowConfirmationAsync("Reboot confirmation", "Are you sure you want to reboot?"))
+        {
+            await kodiClient.PowerReboot();
+        }
     });
     public ICommand PowerOffCommand => new Command<Button>(async (Button button) =>
     {
-        //if (await AlertServiceSingleton.ShowConfirmationAsync("Power confirmation", "Are you sure you want to power down?"))
-        //{
-        //    await KodiClientSingleton.PowerOff();
-        //}
+        if (await alertService.ShowConfirmationAsync("Power confirmation", "Are you sure you want to power down?"))
+        {
+            await kodiClient.PowerOff();
+        }
     });
     public ICommand RewindCommand => new Command<Button>(async (Button button) => 
     { 
-        //await KodiClientSingleton.SetPlayerSpeed(DecSpeed()); 
+        await kodiClient.SetPlayerSpeed(DecSpeed()); 
     });
     public ICommand FastFowardCommand => new Command<Button>(async (Button button) => 
     { 
-        //await KodiClientSingleton.SetPlayerSpeed(IncSpeed()); 
+        await kodiClient.SetPlayerSpeed(IncSpeed()); 
     });
     private string searchText = "";
     public string SearchText
@@ -81,14 +77,15 @@ public class MediaControlViewModel : BaseViewModel
         get { return searchText; }
         set { SetProperty(ref searchText, value); }
     }
-    public ICommand EnterTextCommand => new Command(async () =>
+    public ICommand EnterTextCommand => new Command<Entry>(async (entry) =>
     {
-        //await KodiClientSingleton.InputSendText(searchText);
+        await kodiClient.InputSendText(searchText);
+        entry?.Unfocus();
         SearchText = "";
     });
     public ICommand EnterTextChangedCommand => new Command<string>(async (string e) =>
     {
-        //await KodiClientSingleton.InputText(searchText);
+        await kodiClient.InputText(searchText);
     });
     public int IncSpeed()
     {

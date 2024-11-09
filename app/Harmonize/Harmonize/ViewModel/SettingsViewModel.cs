@@ -26,10 +26,6 @@ public class SettingsViewModel : BaseViewModel
     private void UserSettings_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         preferenceManager.SetUserSetttings(UserSettings);
-
-        harmonizeClient
-            .SetPort(UserSettings.Port)
-            .SetHostName(UserSettings.DomainName);
     }
     private UserSettings? userSettings;
     public UserSettings UserSettings

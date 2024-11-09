@@ -1,4 +1,5 @@
 ﻿using AlohaKit.Animations;
+using Harmonize.Kodi;
 using Harmonize.Service;
 using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
@@ -10,19 +11,22 @@ public partial class MediaControlPage : BasePage<MediaControlViewModel>
     private readonly MediaControlViewModel viewModel;
     readonly ILogger logger;
     private readonly MediaManager mediaManager;
+    private readonly KodiClient kodiClient;
 
     public MediaControlPage(
         MediaControlViewModel viewModel,
         ILogger<HomePage> logger,
-        MediaManager mediaManager
+        MediaManager mediaManager,
+        KodiClient kodiClient
         ) : base(viewModel)
     {
         InitializeComponent();
         this.viewModel = viewModel;
         this.logger = logger;
         this.mediaManager = mediaManager;
+        this.kodiClient = kodiClient;
     }
-    private void VolumeSlider_Changed(object sender, ValueChangedEventArgs e)
+    private async void VolumeSlider_Changed(object sender, ValueChangedEventArgs e)
     {
         var slider = (Slider)sender;
         double distanceFromMin = (slider.Value - slider.Minimum);
@@ -31,10 +35,9 @@ public partial class MediaControlPage : BasePage<MediaControlViewModel>
 
         int sliderPercentAsint = (int)sliderPercent;
 
-        //Task.Run(async () => await kodiClient.SetVolumeAsync(sliderPercentAsint));
-
+        await kodiClient.SetVolumeAsync(sliderPercentAsint);
     }
-    private void SeekSlider_Changed(object sender, ValueChangedEventArgs e)
+    private async void SeekSlider_Changed(object sender, ValueChangedEventArgs e)
     {
         var slider = (Slider)sender;
         double distanceFromMin = (slider.Value - slider.Minimum);
@@ -43,7 +46,7 @@ public partial class MediaControlPage : BasePage<MediaControlViewModel>
 
         int sliderPercentAsint = (int)sliderPercent;
 
-        //Task.Run(async () => await kodiClient.SeekPlayerAsync(sliderPercentAsint));
+        await kodiClient.SeekPlayerAsync(sliderPercentAsint);
     }
     private void ScaleButton(object sender, EventArgs e)
     {
