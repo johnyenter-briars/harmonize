@@ -20,29 +20,29 @@ public class MediaControlViewModel(
     {
         await kodiClient.InputBackAsync();
     });
-    public ICommand UpCommand => new Command<Button>(async (Button button) => 
-    { 
-        await kodiClient.InputUpAsync(); 
+    public ICommand UpCommand => new Command<Button>(async (Button button) =>
+    {
+        await kodiClient.InputUpAsync();
     });
-    public ICommand OSDCommand => new Command<Button>(async (Button button) => 
-    { 
-        await kodiClient.ShowOSD(); 
+    public ICommand OSDCommand => new Command<Button>(async (Button button) =>
+    {
+        await kodiClient.ShowOSD();
     });
-    public ICommand LeftCommand => new Command<Button>(async (Button button) => 
-    { 
-        await kodiClient.InputLeftAsync(); 
+    public ICommand LeftCommand => new Command<Button>(async (Button button) =>
+    {
+        await kodiClient.InputLeftAsync();
     });
-    public ICommand EnterCommand => new Command<Button>(async (Button button) => 
-    { 
-        await kodiClient.InputSelectAsync(); 
+    public ICommand EnterCommand => new Command<Button>(async (Button button) =>
+    {
+        await kodiClient.InputSelectAsync();
     });
-    public ICommand RightCommand => new Command<Button>(async (Button button) => 
-    { 
-        await kodiClient.InputRightAsync(); 
+    public ICommand RightCommand => new Command<Button>(async (Button button) =>
+    {
+        await kodiClient.InputRightAsync();
     });
-    public ICommand DownCommand => new Command<Button>(async (Button button) => 
-    { 
-        await kodiClient.InputDownAsync(); 
+    public ICommand DownCommand => new Command<Button>(async (Button button) =>
+    {
+        await kodiClient.InputDownAsync();
     });
     public ICommand TogglePlayPauseCommand => new Command<Button>(async (Button button) =>
     {
@@ -63,29 +63,31 @@ public class MediaControlViewModel(
             await kodiClient.PowerOff();
         }
     });
-    public ICommand RewindCommand => new Command<Button>(async (Button button) => 
-    { 
-        await kodiClient.SetPlayerSpeed(DecSpeed()); 
+    public ICommand RewindCommand => new Command<Button>(async (Button button) =>
+    {
+        await kodiClient.SetPlayerSpeed(DecSpeed());
     });
-    public ICommand FastFowardCommand => new Command<Button>(async (Button button) => 
-    { 
-        await kodiClient.SetPlayerSpeed(IncSpeed()); 
+    public ICommand FastFowardCommand => new Command<Button>(async (Button button) =>
+    {
+        await kodiClient.SetPlayerSpeed(IncSpeed());
     });
-    private string searchText = "";
-    public string SearchText
+    private string? searchText = "";
+    public string? SearchText
     {
         get { return searchText; }
         set { SetProperty(ref searchText, value); }
     }
     public ICommand EnterTextCommand => new Command<Entry>(async (entry) =>
     {
-        await kodiClient.InputSendText(searchText);
-        entry?.Unfocus();
-        SearchText = "";
+        //Yea idk. I think there's a bug in the task scheduler engine coupled with the optimizations of the compiler
+        var text = SearchText;
+        await kodiClient.InputSendText(text ?? "");
+        await Task.Delay(2000);
+        SearchText = null;
     });
     public ICommand EnterTextChangedCommand => new Command<string>(async (string e) =>
     {
-        await kodiClient.InputText(searchText);
+        await kodiClient.InputText(searchText ?? "");
     });
     public int IncSpeed()
     {

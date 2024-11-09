@@ -203,7 +203,6 @@
             Padding="10" 
             HasShadow="True" 
             CornerRadius="5" 
-            Style="{StaticResource CustomEntryStyle}"
             BackgroundColor="{StaticResource Gray600}"
         >
             <Entry
