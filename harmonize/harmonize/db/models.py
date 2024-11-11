@@ -38,6 +38,7 @@ class MediaEntry(BaseSchema, SQLModel, table=True):
     absolute_path: str
     source: MediaElementSource
     youtube_id: str | None
+    magnet_link: str | None
     type: MediaElementType
     date_added: datetime.datetime
     type: MediaElementType

@@ -193,6 +193,7 @@ def _download_youtube_video(
             absolute_path=absolute_path.absolute().as_posix(),
             source=MediaElementSource.YOUTUBE,
             youtube_id=video_id,
+            magnet_link=None,
             type=MediaElementType.AUDIO,
             date_added=datetime.datetime.now(datetime.UTC),
         )
@@ -307,6 +308,7 @@ def _download_youtube_playlist(
                 absolute_path=absolute_path.absolute().as_posix(),
                 source=MediaElementSource.YOUTUBE,
                 youtube_id=video['id'],
+                magnet_link=None,
                 type=MediaElementType.AUDIO,
                 date_added=datetime.datetime.now(datetime.UTC),
             )

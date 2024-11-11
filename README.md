@@ -59,6 +59,7 @@ NOTE: This is for running with docker for devleopment.
 - [ ] Playlists
 - [ ] Set / query long running jobs
   - [X] Update storing / saving jobs in database
+  - [ ] Refactor to use fast API background tasks 
 - [ ] Integrate media art with youtube-dl
   - [X] MVP
   - [ ] Smart searching of artist metadata + cover art
