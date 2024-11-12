@@ -1,4 +1,6 @@
+from collections.abc import Generator
 from pathlib import Path
+from typing import Any
 
 from sqlmodel import Session, SQLModel, create_engine
 
@@ -19,9 +21,14 @@ def create_db_and_tables():
     SQLModel.metadata.create_all(_engine)
 
 
-def get_session():
+def get_session() -> Generator[Session, Any, None]:
     with Session(_engine) as session:
         yield session
+
+
+def get_session_non_gen() -> Session:
+    with Session(_engine) as session:
+        return session
 
 
 def seed():

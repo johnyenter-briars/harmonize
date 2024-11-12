@@ -27,7 +27,7 @@ class MediaElementSource(Enum):
     MAGNETLINK = 1
 
 
-class MediaElementType(Enum):
+class MediaEntryType(Enum):
     AUDIO = 0
     VIDEO = 1
 
@@ -39,6 +39,5 @@ class MediaEntry(BaseSchema, SQLModel, table=True):
     source: MediaElementSource
     youtube_id: str | None
     magnet_link: str | None
-    type: MediaElementType
+    type: MediaEntryType
     date_added: datetime.datetime
-    type: MediaElementType

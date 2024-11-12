@@ -22,8 +22,9 @@ config.log_config()
 
 
 @asynccontextmanager
-async def app_lifespan(app: FastAPI):
-    background_services = [qbt_background_service]
+async def app_lifespan(_: FastAPI):
+    background_services = [qbt_background_service] if config.run_qbt else []
+
     tasks = []
 
     for background_service in background_services:
@@ -42,7 +43,7 @@ async def app_lifespan(app: FastAPI):
             logger.info('Background service cancelled.')
 
 
-app = FastAPI(lifespan=app_lifespan) if config.run_qbt else FastAPI()
+app = FastAPI(lifespan=app_lifespan, dependencies=[Depends(get_session)])
 
 app.include_router(youtube.router, dependencies=[Depends(get_session)])
 app.include_router(media.router, dependencies=[Depends(get_session)])

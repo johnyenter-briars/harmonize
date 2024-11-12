@@ -21,7 +21,7 @@ from harmonize.const import (
     YOUTUBE_VIDEO_YTDL_METADATA,
 )
 from harmonize.db.database import get_session
-from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaElementType, MediaEntry
+from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaEntry, MediaEntryType
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.youtube import DownloadPlaylistArguments, DownloadVideoArguments
 from harmonize.job.methods import start_job
@@ -194,7 +194,7 @@ def _download_youtube_video(
             source=MediaElementSource.YOUTUBE,
             youtube_id=video_id,
             magnet_link=None,
-            type=MediaElementType.AUDIO,
+            type=MediaEntryType.AUDIO,
             date_added=datetime.datetime.now(datetime.UTC),
         )
 
@@ -309,7 +309,7 @@ def _download_youtube_playlist(
                 source=MediaElementSource.YOUTUBE,
                 youtube_id=video['id'],
                 magnet_link=None,
-                type=MediaElementType.AUDIO,
+                type=MediaEntryType.AUDIO,
                 date_added=datetime.datetime.now(datetime.UTC),
             )
             session.add(media_entry)

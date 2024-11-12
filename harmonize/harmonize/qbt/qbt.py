@@ -5,12 +5,11 @@ from codecs import encode
 
 import aiohttp
 import pydantic
-from fastapi import Depends
 from sqlmodel import Session, select
 
 from harmonize.config.harmonizeconfig import HARMONIZE_CONFIG
-from harmonize.db.database import get_session
-from harmonize.db.models import MediaElementSource, MediaElementType, MediaEntry
+from harmonize.db.database import get_session_non_gen
+from harmonize.db.models import MediaElementSource, MediaEntry, MediaEntryType
 from harmonize.defs.qbt import QbtDownloadData
 
 logger = logging.getLogger('harmonize')
@@ -144,39 +143,41 @@ async def delete_download(torrent_hash: str) -> str:
 
 
 def _ready_for_media_entry(data: QbtDownloadData) -> bool:
-    return data.state == 'stalledUp'
+    return data.state == 'stalledUP'
 
 
 def _media_entry_exists(
     data: QbtDownloadData,
-    session: Session = Depends(get_session),
+    session: Session,
 ) -> bool:
     statement = select(MediaEntry).where(MediaEntry.magnet_link == data.magnet_uri)
-    media_entries = session.exec(statement).all()
-    return False
+    media_entries = list(session.exec(statement).all())
+    return len(media_entries) > 0
 
 
-async def qbt_background_service(
-    session: Session = Depends(get_session),
-):
+async def qbt_background_service():
     while True:
         try:
+            session: Session = get_session_non_gen()
             downloads = await list_downloads()
             for download in downloads:
-                if _ready_for_media_entry(download) and not _media_entry_exists(download):
+                if _ready_for_media_entry(download) and not _media_entry_exists(download, session):
                     media_entry = MediaEntry(
                         name=download.name,
                         absolute_path=download.content_path,
                         source=MediaElementSource.MAGNETLINK,
                         youtube_id=None,
                         magnet_link=download.magnet_uri,
-                        type=MediaElementType.VIDEO,
+                        type=MediaEntryType.VIDEO,
                         date_added=datetime.datetime.now(datetime.UTC),
                     )
-                    # session.add(media_entry)
+                    session.add(media_entry)
+                    session.commit()
+
+                    await delete_download(download.hash)
 
                     logger.debug('Added media entry: %s', media_entry.id)
             logger.info('Background service is running...')
-            await asyncio.sleep(5)
+            await asyncio.sleep(30)
         except Exception as e:
             logger.exception('Error in background service: %s', str(e))

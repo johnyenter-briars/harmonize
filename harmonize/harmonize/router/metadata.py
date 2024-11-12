@@ -21,7 +21,7 @@ from harmonize.const import (
     TMP_ALBUM_ART_DIR,
 )
 from harmonize.db.database import get_session
-from harmonize.db.models import MediaElementSource, MediaElementType, MediaEntry
+from harmonize.db.models import MediaElementSource, MediaEntry, MediaEntryType
 from harmonize.defs.metadata import ApicData, HarmonizeThumbnail, MediaMetadata
 from harmonize.defs.musicbrainz import (
     CoverArtArchiveResponse,
@@ -125,7 +125,7 @@ async def media_metadata(
         absolute_path=absolute_path,
         source=MediaElementSource.YOUTUBE,
         youtube_id='',
-        type=MediaElementType.AUDIO,
+        type=MediaEntryType.AUDIO,
         date_added=datetime.datetime.now(datetime.UTC),
     )
 
