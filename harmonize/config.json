@@ -1,5 +1,5 @@
 {
-    "run-qbt": true,
+    "run-qbt": false,
     "media-root": "./media",
     "qbt-domain-name": "localhost",
     "qbt-port": 8080,
