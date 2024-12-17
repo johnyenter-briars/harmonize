@@ -10,3 +10,4 @@ sqlmodel>=0.0.22
 aiohttp==3.10.5
 beautifulsoup4==4.11.2
 eyed3==0.9.7 
+paramiko>=2.11.0,<3.0.0

@@ -1,3 +1,4 @@
+import datetime
 import uuid
 from collections.abc import Awaitable, Callable
 from typing import Any
@@ -5,7 +6,7 @@ from typing import Any
 from fastapi import HTTPException
 from sqlmodel import Session
 
-from harmonize.db.models import Job
+from harmonize.db.models import Job, JobStatus
 from harmonize.job.stoppablethread import StoppableThread
 
 Jobs: dict[uuid.UUID, tuple[StoppableThread, Job]] = {}
@@ -14,12 +15,38 @@ Jobs: dict[uuid.UUID, tuple[StoppableThread, Job]] = {}
 FuncType = Callable[[Any, Any, Any], Awaitable[Any]]
 
 
-async def start_job(
-    job_function: Callable, job: Job, session: Session, input_args: tuple[Any]
-) -> Job:
-    args = (*input_args, job, session)
+def _job_callback(job_function: Callable, args: Any, job: Job, session: Session):
+    try:
+        job_function(args, job, session)
 
-    thread = StoppableThread(target=job_function, args=args)
+        job.status = JobStatus.SUCCEEDED
+
+    except Exception as e:
+        job.status = JobStatus.FAILED
+        job.error_message = str(e)
+    finally:
+        session.add(job)
+        session.commit()
+
+
+async def start_job(
+    description: str, job_function: Callable, session: Session, input_args: tuple[Any]
+) -> Job:
+    job = Job(
+        description=description,
+        status=JobStatus.RUNNING,
+        started_on=datetime.datetime.now(datetime.UTC),
+        error_message=None,
+    )
+
+    session.add(job)
+    session.commit()
+
+    args = (*input_args, job, session)
+    callback_args = (job_function, *input_args, job, session)
+
+    # thread = StoppableThread(target=job_function, args=args)
+    thread = StoppableThread(target=_job_callback, args=callback_args)
     thread.start()
 
     Jobs[job.id] = (thread, job)

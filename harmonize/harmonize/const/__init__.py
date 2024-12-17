@@ -12,6 +12,7 @@ YOUTUBE_PLAYLIST_SEARCH_METADATA = Path('./cache/youtube/metadata/search/result/
 YOUTUBE_VIDEO_YTDL_METADATA = Path('./cache/youtube/metadata/ytdl/video')
 YOUTUBE_PLAYLIST_YTDL_METADATA = Path('./cache/youtube/metadata/ytdl/playlist')
 CONFIG_FILE = Path('./config.json')
+SECRETS_FILE = Path('./secrets.json')
 
 COVERART_ARCHIVE_ROOT: Final = 'http://coverartarchive.org/release'
 

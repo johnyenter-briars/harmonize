@@ -4,21 +4,17 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from harmonize.config import _kebab_to_snake
-from harmonize.const import CONFIG_FILE
+from harmonize.const import SECRETS_FILE
 
 
 @dataclass
-class HarmonizeConfig:
-    media_root: str = field()
-    qbt_domain_name: str = field()
-    qbt_port: int = field()
-    qbt_version: str = field()
-    run_qbt: bool = field()
-    reset_db_on_launch: bool = field()
-    run_transfer: bool = field()
+class HarmonizeSecrets:
+    media_system_ip: str = field()
+    media_system_username: str = field()
+    media_system_password: str = field()
 
-    def __init__(self, config_file: Path):
-        with config_file.open('r') as f:
+    def __init__(self, secrets_file: Path):
+        with secrets_file.open('r') as f:
             config = json.load(f)
 
             snake_case_config = {_kebab_to_snake(k): v for k, v in config.items()}
@@ -32,4 +28,4 @@ class HarmonizeConfig:
             logger.info('%s, %s', key, value)
 
 
-HARMONIZE_CONFIG = HarmonizeConfig(CONFIG_FILE)
+HARMONIZE_SECRETS = HarmonizeSecrets(SECRETS_FILE)

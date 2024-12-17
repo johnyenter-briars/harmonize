@@ -113,16 +113,7 @@ async def download_youtube_video(
         DownloadVideoArguments(video_id=video_id, video_metadata=metadata),
     )
 
-    job = Job(
-        description=description,
-        status=JobStatus.RUNNING,
-        started_on=datetime.datetime.now(datetime.UTC),
-        error_message=None,
-    )
-    session.add(job)
-    session.commit()
-
-    job = await start_job(_download_youtube_video, job, session, args)
+    job = await start_job(description, _download_youtube_video, session, args)
 
     return BaseResponse[Job](message='Job created', status_code=201, value=job)
 
@@ -229,16 +220,7 @@ async def download_youtube_playlist(
         DownloadPlaylistArguments(playlist_id=playlist_id, playlist_metadata=metadata),
     )
 
-    job = Job(
-        description=description,
-        status=JobStatus.RUNNING,
-        started_on=datetime.datetime.now(datetime.UTC),
-        error_message=None,
-    )
-    session.add(job)
-    session.commit()
-
-    job = await start_job(_download_youtube_playlist, job, session, args)
+    job = await start_job(description, _download_youtube_playlist, session, args)
 
     return BaseResponse[Job](message='Job created', status_code=201, value=job)
 

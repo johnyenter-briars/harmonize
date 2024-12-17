@@ -1,4 +1,4 @@
-from harmonize.harmonize.defs.response import BaseSchema
+from harmonize.defs.response import BaseSchema
 
 
 class MediaElement(BaseSchema):

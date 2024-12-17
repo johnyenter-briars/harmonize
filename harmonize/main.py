@@ -10,7 +10,7 @@ import harmonize.config.harmonizeconfig
 from harmonize.config.logconfig import LogConfig
 from harmonize.db.database import get_session, seed
 from harmonize.qbt.qbt import qbt_background_service
-from harmonize.router import job, media, metadata, playlist, qbt, search, stream, youtube
+from harmonize.router import job, media, metadata, playlist, qbt, search, stream, transfer, youtube
 
 config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
 
@@ -52,6 +52,7 @@ app.include_router(search.router, dependencies=[Depends(get_session)])
 app.include_router(stream.router, dependencies=[Depends(get_session)])
 app.include_router(job.router, dependencies=[Depends(get_session)])
 app.include_router(playlist.router, dependencies=[Depends(get_session)])
+app.include_router(transfer.router, dependencies=[Depends(get_session)])
 
 if config.run_qbt:
     app.include_router(qbt.router, dependencies=[Depends(get_session)])

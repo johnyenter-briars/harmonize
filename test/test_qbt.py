@@ -14,7 +14,7 @@ def test_list_torrents(setup):
 
 
 def test_add_torrent(setup):
-    url = f'{setup['base_url']}/search/piratebay/starwars'
+    url = f'{setup['base_url']}/search/piratebay/spiderman'
 
     response = requests.get(url)
 
@@ -22,7 +22,7 @@ def test_add_torrent(setup):
 
     url = f'{setup['base_url']}/qbt/add'
 
-    request_data = {'magnet_links': [magnet_links_response['value'][0]['magnet_link']]}
+    request_data = {'magnetLinks': [magnet_links_response['value'][0]['magnetLink']]}
 
     response = requests.post(url, json=request_data)
 
