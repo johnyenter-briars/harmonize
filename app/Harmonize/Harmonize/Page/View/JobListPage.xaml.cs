@@ -12,7 +12,7 @@ public partial class JobListPage : BasePage<JobListViewModel>
     private readonly MediaManager mediaManager;
 
     public JobListPage(
-        JobListViewModel  viewModel,
+        JobListViewModel viewModel,
         MediaManager mediaManager
         ) : base(viewModel)
     {

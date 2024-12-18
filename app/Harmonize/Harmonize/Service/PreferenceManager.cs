@@ -1,36 +1,51 @@
-﻿using Harmonize.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Harmonize.Client;
+using Harmonize.Kodi;
+using Harmonize.Model;
 
-namespace Harmonize.Service
+namespace Harmonize.Service;
+
+public class PreferenceManager(
+    HarmonizeClient harmonizeClient,
+    KodiClient kodiClient
+    )
 {
-    public class PreferenceManager
+    public UserSettings UserSettings { get; private set; } = new()
     {
-        const string DomainNameKey = nameof(DomainNameKey);
-        const string DefaultPageOnLaunchKey = nameof(DefaultPageOnLaunchKey);
-        const string PortKey = nameof(PortKey);
-        public UserSettings UserSettings { get; private set; }
-        public PreferenceManager()
-        {
-            UserSettings = new()
-            {
-                Port = Preferences.Default.Get(PortKey, 8000),
-                DomainName = Preferences.Default.Get(DomainNameKey, "127.0.0.1"),
-                DefaultPageOnLaunch = Preferences.Default.Get(DefaultPageOnLaunchKey, "Home"),
-            };
-        }
-        internal PreferenceManager SetUserSetttings(UserSettings userSettings)
-        {
-            UserSettings = userSettings;
+        Port = Preferences.Default.Get(nameof(UserSettings.Port), 8000),
+        DomainName = Preferences.Default.Get(nameof(UserSettings.DomainName), "127.0.0.1"),
+        DefaultPageOnLaunch = Preferences.Default.Get(nameof(UserSettings.DefaultPageOnLaunch), "Home"),
+        ResetDatabaseOnLaunch = Preferences.Default.Get(nameof(UserSettings.ResetDatabaseOnLaunch), false),
+        IncludeMediaControlPage = Preferences.Default.Get(nameof(UserSettings.IncludeMediaControlPage), false),
+        KodiDomainName = Preferences.Default.Get(nameof(UserSettings.KodiDomainName), "127.0.0.1"),
+        KodiPort = Preferences.Default.Get(nameof(UserSettings.KodiPort), 8080),
+        KodiApiUserName = Preferences.Default.Get(nameof(UserSettings.KodiApiUserName), ""),
+        KodiApiPasword = Preferences.Default.Get(nameof(UserSettings.KodiApiPasword), ""),
+    };
 
-            Preferences.Default.Set(DomainNameKey, userSettings.DomainName);
-            Preferences.Default.Set(DefaultPageOnLaunchKey, userSettings.DefaultPageOnLaunch);
-            Preferences.Default.Set(PortKey, userSettings.Port);
+    internal PreferenceManager SetUserSetttings(UserSettings userSettings)
+    {
+        UserSettings = userSettings;
 
-            return this;
-        }
+        Preferences.Default.Set(nameof(UserSettings.DomainName), userSettings.DomainName);
+        Preferences.Default.Set(nameof(UserSettings.DefaultPageOnLaunch), userSettings.DefaultPageOnLaunch);
+        Preferences.Default.Set(nameof(UserSettings.Port), userSettings.Port);
+        Preferences.Default.Set(nameof(UserSettings.ResetDatabaseOnLaunch), userSettings.ResetDatabaseOnLaunch);
+        Preferences.Default.Set(nameof(UserSettings.IncludeMediaControlPage), userSettings.IncludeMediaControlPage);
+        Preferences.Default.Set(nameof(UserSettings.KodiDomainName), userSettings.KodiDomainName);
+        Preferences.Default.Set(nameof(UserSettings.KodiPort), userSettings.KodiPort);
+        Preferences.Default.Set(nameof(UserSettings.KodiApiUserName), userSettings.KodiApiUserName);  
+        Preferences.Default.Set(nameof(UserSettings.KodiApiPasword), userSettings.KodiApiPasword);  
+
+        harmonizeClient
+            .SetPort(UserSettings.Port)
+            .SetHostName(UserSettings.DomainName);
+
+        kodiClient
+            .SetHostName(userSettings.KodiDomainName)
+            .SetPort(userSettings.KodiPort)
+            .SetUserName(userSettings.KodiApiUserName)
+            .SetPassword(userSettings.KodiApiPasword);
+
+        return this;
     }
 }

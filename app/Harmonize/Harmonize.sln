@@ -5,7 +5,9 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Harmonize", "Harmonize\Harmonize.csproj", "{DAF1019E-540A-4CEA-AC51-D013C4FB0DB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Harmonize.Client", "Harmonize.Client\Harmonize.Client.csproj", "{A1486431-2C9E-4092-AA1F-D6918F30BC29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Harmonize.Client", "Harmonize.Client\Harmonize.Client.csproj", "{A1486431-2C9E-4092-AA1F-D6918F30BC29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Harmonize.Kodi", "Harmonize.Kodi\Harmonize.Kodi.csproj", "{623B27ED-190E-4DE9-8060-EBB85A223663}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{A1486431-2C9E-4092-AA1F-D6918F30BC29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1486431-2C9E-4092-AA1F-D6918F30BC29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1486431-2C9E-4092-AA1F-D6918F30BC29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{623B27ED-190E-4DE9-8060-EBB85A223663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{623B27ED-190E-4DE9-8060-EBB85A223663}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{623B27ED-190E-4DE9-8060-EBB85A223663}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{623B27ED-190E-4DE9-8060-EBB85A223663}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

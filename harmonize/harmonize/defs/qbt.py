@@ -1,23 +1,23 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
-class AddTorrentRequest(BaseModel):
-    magnet_links: list[str]
+class AddDownloadRequest(BaseModel):
+    magnet_links: list[str] = Field(alias='magnetLinks')
 
 
-class PauseTorrentsRequest(BaseModel):
+class PauseDownloadsRequest(BaseModel):
     hashes: list[str]
 
 
-class ResumeTorrentsRequest(BaseModel):
+class ResumeDownloadsRequest(BaseModel):
     hashes: list[str]
 
 
-class DeleteTorrentsRequest(BaseModel):
+class DeleteDownloadsRequest(BaseModel):
     hashes: list[str]
 
 
-class TorrentData(BaseModel):
+class QbtDownloadData(BaseModel):
     added_on: int
     amount_left: int
     auto_tmm: bool

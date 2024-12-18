@@ -154,7 +154,6 @@
             IsVisible="{Binding ShowPlaylistList}"
             ItemsSource="{Binding PlaylistSearchResults}"
             VerticalOptions="FillAndExpand"
-            RowHeight="150"
             ItemTapped="OnItemTapped"
             SeparatorVisibility="None"
             ItemSelected="OnItemSelected"
