@@ -6,7 +6,7 @@ from sqlmodel import Session, select
 from harmonize.db.database import get_session
 from harmonize.db.models import Job, JobStatus
 from harmonize.defs.response import BaseResponse
-from harmonize.job.methods import cancel_job
+from harmonize.harmonize.job.callback import cancel_job
 
 router = APIRouter(prefix='/api')
 
