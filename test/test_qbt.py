@@ -22,7 +22,7 @@ def test_add_torrent(setup):
 
     url = f'{setup['base_url']}/qbt/add'
 
-    request_data = {'magnetLinks': [magnet_links_response['value'][0]['magnetLink']]}
+    request_data = {'magnetLinks': [magnet_links_response['value'][1]['magnetLink']]}
 
     response = requests.post(url, json=request_data)
 
