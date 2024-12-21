@@ -48,19 +48,14 @@ def _transfer_file_job(
     job: Job,
     session: Session,
 ):
-    local_file = (
-        '/home/john/Downloads/SpiderMan No Way Home 2021 1080p HD-TS V3 Line Audio x264 AAC.mkv'
-    )
-    remote_file = (
-        '/storage/videos/SpiderMan No Way Home 2021 1080p HD-TS V3 Line Audio x264 AAC.mkv'
-    )
+    remote_path = f'{secrets.media_system_root}/{media_entry.name}'
 
     transfer_file(
         secrets.media_system_ip,
         secrets.media_system_username,
         secrets.media_system_password,
-        local_file,
-        remote_file,
+        media_entry.absolute_path,
+        remote_path,
         media_entry,
         session,
         TransferDestination.MEDIA_SYSTEM,

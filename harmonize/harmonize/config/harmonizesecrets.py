@@ -12,6 +12,7 @@ class HarmonizeSecrets:
     media_system_ip: str = field()
     media_system_username: str = field()
     media_system_password: str = field()
+    media_system_root: str = field()
 
     def __init__(self, secrets_file: Path):
         with secrets_file.open('r') as f:
