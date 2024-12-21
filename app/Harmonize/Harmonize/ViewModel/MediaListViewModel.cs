@@ -25,7 +25,7 @@ public class MediaListViewModel(
 
     async Task PopulateEntries()
     {
-        var media = await mediaManager.GetMediaEntries();
+        var media = await mediaManager.GetMediaEntries(PopulateEntries);
 
         MediaEntries.Clear();
         foreach (var m in media)
@@ -33,7 +33,7 @@ public class MediaListViewModel(
             MediaEntries.Add(m);
         }
     }
-    public async Task MediaEntryTapped(LocalMediaEntry localMediaEntry)
+    public async Task ItemTapped(LocalMediaEntry localMediaEntry)
     {
         await Shell.Current.GoToAsync(nameof(MediaElementPage), new Dictionary<string, object>
         {

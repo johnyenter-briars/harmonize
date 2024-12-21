@@ -29,13 +29,15 @@ async def piratebay_search(query) -> list[MagnetLinkSearchResult]:
     font_tags = soup.find_all('font', {'class': 'detDesc'})
     tds = soup.find_all('td', {'align': 'right'})
 
-    paired = [
-        (item_1.text, item_2.text) for item_1, item_2 in zip(tds[::2], tds[1::2], strict=False)
-    ]
-
-    for seeder, leecher in paired:
-        seeders.append(seeder)
-        leechers.append(leecher)
+    all_rows = soup.find_all('tr')
+    for row in all_rows:
+        cells = row.find_all('td')
+        if len(cells) == 0 or len(cells) < 7:
+            continue
+        seeding = cells[5]
+        leeching = cells[6]
+        seeders.append(seeding.text)
+        leechers.append(leeching.text)
 
     for link in a_tags:
         b: str = link.get('href')
@@ -55,6 +57,23 @@ async def piratebay_search(query) -> list[MagnetLinkSearchResult]:
         size_split = text_split[1].split(' ')
         size = f'{size_split[2]} {size_split[3]}'
         sizes.append(size)
+
+    tds = soup.find_all('td')
+    for td in tds:
+        if 'GiB' not in td.text and 'MiB' not in td.text and 'KiB' not in td.text:
+            continue
+
+        sizes.append(td.text.replace('\xa0', ' '))
+
+    date_pattern = r'^\d{2}-\d{2} \d{4}$'
+    for td in tds:
+        if '-' not in td.text:
+            continue
+
+        replaced = td.text.replace('\xa0', ' ')
+
+        if re.match(date_pattern, replaced):
+            date_posteds.append(replaced)
 
     return transform_torrent_data(
         magnet_links, seeders, leechers, names, downloads, sizes, date_posteds

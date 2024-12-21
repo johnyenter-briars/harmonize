@@ -117,7 +117,7 @@ public class MagnetLinkSearchViewModel(
             }
             else
             {
-                await alertService.ShowAlertAsync("Failure", results.Message);
+                await alertService.ShowAlertAsync("Failure", results?.Message ?? "");
             }
         }
     }

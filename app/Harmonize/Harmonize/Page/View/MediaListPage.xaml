@@ -10,20 +10,33 @@
              x:DataType="viewModels:MediaListViewModel"
              x:Class="Harmonize.Page.View.MediaListPage"
              xmlns:model="clr-namespace:Harmonize.Model"
+             xmlns:components="clr-namespace:Harmonize.Components"
              Title="Media List">
 
     <StackLayout Padding="10">
-        <ListView ItemTapped="OnMediaItemTapped" ItemsSource="{Binding MediaEntries}">
+
+        <ListView 
+            Grid.Row="1" 
+            IsVisible="True"
+            ItemsSource="{Binding MediaEntries}"
+            VerticalOptions="FillAndExpand"
+            ItemTapped="OnItemTapped"
+            RowHeight="50"
+            SeparatorVisibility="None"
+            ItemSelected="OnItemSelected"
+            >
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:LocalMediaEntry">
                     <ViewCell>
-                        <StackLayout Orientation="Horizontal" Padding="10">
-                            <Label Text="{Binding Name}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
-                            <!--<Button Text="Play" Clicked="OnPlayButtonClicked" VerticalOptions="Center" HorizontalOptions="End" />-->
-                        </StackLayout>
+                        <components:ListElement>
+                            <StackLayout Orientation="Vertical">
+                                <Label FontSize="10" Text="{Binding Name}" />
+                            </StackLayout>
+                        </components:ListElement>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
     </StackLayout>
 </pages:BasePage>

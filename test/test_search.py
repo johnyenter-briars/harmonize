@@ -26,7 +26,7 @@ def test_search_t1337x(setup):
 
 
 def test_search_youtube_video(setup):
-    url = f"{setup['base_url']}/search/youtube/video/hey jude"
+    url = f"{setup['base_url']}/search/youtube/video/Singata (Mystic Queen)"
 
     response = requests.get(url)
     assert response.status_code == 200, f'Expected status code 200, but got {response.status_code}'

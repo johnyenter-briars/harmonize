@@ -25,11 +25,11 @@ public partial class MediaListPage : BasePage<MediaListViewModel>
     {
         await viewModel.OnAppearingAsync();
     }
-    private async void OnMediaItemTapped(object sender, ItemTappedEventArgs e)
+    private async void OnItemTapped(object sender, ItemTappedEventArgs e)
     {
         if (e.Item is LocalMediaEntry mediaEntry)
         {
-            await viewModel.MediaEntryTapped(mediaEntry);
+            await viewModel.ItemTapped(mediaEntry);
         }
     }
 }

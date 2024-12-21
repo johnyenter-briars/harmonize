@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
 from harmonize.db.database import get_session
-from harmonize.db.models import MediaEntry
+from harmonize.db.models import MediaEntry, MediaEntryType
 from harmonize.defs.response import BaseResponse
 
 logger = logging.getLogger('harmonize')
@@ -15,7 +15,7 @@ router = APIRouter(prefix='/api/media')
 async def list_video(
     session: Session = Depends(get_session),
 ) -> BaseResponse[list[MediaEntry]]:
-    statement = select(MediaEntry).where()
+    statement = select(MediaEntry).where(MediaEntry.type == MediaEntryType.VIDEO)
     media_entries = session.exec(statement).all()
     return BaseResponse[list[MediaEntry]](
         message='Media Entries Found', status_code=200, value=list(media_entries)
@@ -26,7 +26,7 @@ async def list_video(
 async def list_audio(
     session: Session = Depends(get_session),
 ) -> BaseResponse[list[MediaEntry]]:
-    statement = select(MediaEntry).where()
+    statement = select(MediaEntry).where(MediaEntry.type == MediaEntryType.AUDIO)
     media_entries = session.exec(statement).all()
     return BaseResponse[list[MediaEntry]](
         message='Media Entries Found', status_code=200, value=list(media_entries)

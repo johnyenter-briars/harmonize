@@ -158,11 +158,11 @@ public partial class MediaElementViewModel(
 
         var mediaEntry = await mediaManager.GetMediaEntry(MediaEntryId);
 
-        var mediaMetadata = await mediaManager.GetMediaMetadata(mediaEntry);
+        //var mediaMetadata = await mediaManager.GetMediaMetadata(mediaEntry);
 
-        MetadataArtist = mediaMetadata?.Artist;
-        MetadataTitle = mediaMetadata?.Title;
-        MetadataArtworkUrl = mediaMetadata?.Artwork?.Xl;
+        //MetadataArtist = mediaMetadata?.Artist;
+        //MetadataTitle = mediaMetadata?.Title;
+        //MetadataArtworkUrl = mediaMetadata?.Artwork?.Xl;
 
         MediaSource = MediaSource.FromFile(mediaEntry.LocalPath);
 
