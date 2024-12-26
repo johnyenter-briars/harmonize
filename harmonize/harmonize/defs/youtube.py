@@ -49,11 +49,11 @@ class YoutubeVideoSearchResult(BaseSchema):
     title: str
     published_time: str | None
     duration: str | None
-    view_count: ViewCount | None
+    view_count: str | None
     thumbnails: list[Thumbnail]
     rich_thumbnail: RichThumbnail | None
     # description_snippet: list[DescriptionSnippet]
-    channel: Channel
+    channel: str | None
     accessibility: Accessibility | None
     link: str | None
     shelf_title: str | None

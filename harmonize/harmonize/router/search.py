@@ -3,7 +3,6 @@ import json
 import anyio
 import yt_dlp
 from fastapi import APIRouter
-from youtubesearchpython import VideosSearch
 
 from harmonize.const import YOUTUBE_PLAYLIST_SEARCH_METADATA, YOUTUBE_VIDEO_SEARCH_METADATA
 from harmonize.defs.magnetlink import MagnetLinkSearchResult
@@ -14,21 +13,22 @@ from harmonize.scrape.xt1337 import t1337x_search
 
 router = APIRouter(prefix='/api')
 
+_MAX_RESULTS = 10
+
 
 @router.get('/search/youtube/playlist/{search_keywords}')
 async def search_youtube_playlist(
     search_keywords: str,
 ) -> BaseResponse[list[YoutubePlaylistSearchResult]]:
-    max_results = 10
-    search_query = f'ytsearch{max_results}: {search_keywords}'
     ydl_opts = {
         'extract_flat': True,
         'force_generic_extractor': True,
+        'playlistend': _MAX_RESULTS,
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         result = ydl.extract_info(
-            'https://www.youtube.com/results?search_query=Ice Death Planets Lungs Mushrooms And Lava&sp=EgIQAw%253D%253D',
+            f'https://www.youtube.com/results?search_query={search_keywords}&sp=EgIQAw%253D%253D',
             download=False,
         )
 
@@ -37,9 +37,8 @@ async def search_youtube_playlist(
             message='Unable to property parse youtube search results', status_code=500, value=None
         )
 
-    first_10_playlists = result['entries'][:10]
     playlists = []
-    for entry in first_10_playlists:
+    for entry in result['entries']:
         if 'playlist' in entry.get('url', ''):
             playlist_url = entry['url']
             playlist_info = ydl.extract_info(playlist_url, download=False)
@@ -56,7 +55,7 @@ async def search_youtube_playlist(
             async with await anyio.open_file(metadata_file, 'w') as f:
                 await f.write(json.dumps(playlist_info))
 
-            foo = YoutubePlaylistSearchResult(
+            playlist = YoutubePlaylistSearchResult(
                 type='playlist',
                 id=entry['id'],
                 title=entry['title'],
@@ -66,12 +65,10 @@ async def search_youtube_playlist(
                 link=entry['url'],
             )
 
-            playlists.append(foo)
-
-    results: list[YoutubePlaylistSearchResult] = playlists
+            playlists.append(playlist)
 
     return BaseResponse[list[YoutubePlaylistSearchResult]](
-        message='Success', status_code=200, value=results
+        message='Success', status_code=200, value=playlists
     )
 
 
@@ -79,27 +76,58 @@ async def search_youtube_playlist(
 async def search_youtube_video(
     search_keywords: str,
 ) -> BaseResponse[list[YoutubeVideoSearchResult]]:
-    videos_search = VideosSearch(search_keywords, limit=10)
+    ydl_opts = {
+        'extract_flat': True,
+        'force_generic_extractor': True,
+        'playlistend': _MAX_RESULTS,
+    }
 
-    search_results = videos_search.result()
-
-    if isinstance(search_results, str):
-        return BaseResponse[list[YoutubeVideoSearchResult]](
-            message='Unable to property parse youtube search results', status_code=500, value=None
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        result = ydl.extract_info(
+            f'https://www.youtube.com/results?search_query={search_keywords}sp=EgIQAQ%253D%253D',
+            download=False,
         )
 
-    for search_result in search_results['result']:
-        yt_id = search_result['id']
+    if result is None or 'entries' not in result:
+        return BaseResponse[list[YoutubeVideoSearchResult]](
+            message='Unable to properly parse YouTube search results', status_code=500, value=None
+        )
 
-        metadata_file = YOUTUBE_VIDEO_SEARCH_METADATA / f'{yt_id}.search.info.json'
+    videos = []
+
+    for entry in result['entries']:
+        video_url = entry['url']
+        video_info = ydl.extract_info(video_url, download=False)
+
+        if video_info is None:
+            return BaseResponse[list[YoutubeVideoSearchResult]](
+                message='Unable to properly parse video metadata', status_code=500, value=None
+            )
+
+        metadata_file = YOUTUBE_VIDEO_SEARCH_METADATA / f'{entry["id"]}.search.info.json'
 
         async with await anyio.open_file(metadata_file, 'w') as f:
-            await f.write(json.dumps(search_result))
+            await f.write(json.dumps(video_info))
 
-    results: list[YoutubeVideoSearchResult] = search_results['result']
+        video_result = YoutubeVideoSearchResult(
+            type='video',
+            id=entry['id'],
+            title=entry['title'],
+            published_time=video_info.get('upload_date', 'Unknown'),
+            duration=str(video_info.get('duration', 'Unknown')),
+            view_count=str(video_info.get('view_count', 'Unknown')),
+            thumbnails=entry['thumbnails'],
+            rich_thumbnail=video_info.get('rich_thumbnails', None),
+            channel=video_info.get('uploader', 'Unknown'),
+            accessibility=None,
+            link=video_info.get('url', ''),
+            shelf_title=None,
+        )
+
+        videos.append(video_result)
 
     return BaseResponse[list[YoutubeVideoSearchResult]](
-        message='Success', status_code=200, value=results
+        message='Success', status_code=200, value=videos
     )
 
 
