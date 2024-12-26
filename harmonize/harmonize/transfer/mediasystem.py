@@ -1,5 +1,4 @@
 import logging
-import os
 import uuid
 
 import paramiko
@@ -16,9 +15,9 @@ _progress_dict: dict[tuple[uuid.UUID, TransferDestination], TransferProgress] = 
 def _generate_progress_callback(
     media_entry: MediaEntry, session: Session, transfer_destination: TransferDestination
 ):
-    key = (media_entry.id, transfer_destination)
-
     media_entry = session.merge(media_entry)
+
+    key = (media_entry.id, transfer_destination)
 
     _progress_dict[key] = TransferProgress(
         media_entry=media_entry, destination=TransferDestination.MEDIA_SYSTEM, progress=0
@@ -54,11 +53,12 @@ def transfer_file(
     key = (media_entry.id, transfer_destination)
 
     if key in _progress_dict:
-        logger.info('key already in progress dict')
-        return
-
-    file_size = os.path.getsize(local_path)
-    transferred = 0
+        progress_entry = _progress_dict[key]
+        if progress_entry.progress < 100:
+            logger.info(
+                f'key: {key} already in progress dict and current progress: {progress_entry.progress}'
+            )
+            return
 
     sftp.put(
         local_path,
@@ -66,7 +66,7 @@ def transfer_file(
         callback=_generate_progress_callback(media_entry, session, transfer_destination),
     )
 
-    print(f'File transferred successfully to {remote_path}')
+    logger.info(f'File transferred successfully to {remote_path}')  # noqa: G004
 
     sftp.close()
     ssh_client.close()
@@ -80,4 +80,5 @@ def get_running_transfer(media_entry: MediaEntry) -> TransferProgress | None:
 
 
 def get_all_running_transfers() -> list[TransferProgress]:
-    return list(_progress_dict.values())
+    foo = _progress_dict.values()
+    return list(foo)

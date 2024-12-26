@@ -1,5 +1,6 @@
 import logging
 import uuid
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
@@ -48,7 +49,9 @@ def _transfer_file_job(
     job: Job,
     session: Session,
 ):
-    remote_path = f'{secrets.media_system_root}/{media_entry.name}'
+    current_full_path = Path(media_entry.absolute_path)
+
+    remote_path = f'{secrets.media_system_root}/{current_full_path.name}'
 
     transfer_file(
         secrets.media_system_ip,
