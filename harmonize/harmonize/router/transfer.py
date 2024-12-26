@@ -11,7 +11,7 @@ from harmonize.db.database import get_session
 from harmonize.db.models import Job, MediaEntry
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.transferprogress import TransferDestination, TransferProgress
-from harmonize.harmonize.job.callback import start_job
+from harmonize.job.callback import start_job
 from harmonize.transfer.mediasystem import get_all_running_transfers, transfer_file
 
 config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG

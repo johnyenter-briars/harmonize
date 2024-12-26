@@ -24,7 +24,7 @@ from harmonize.db.database import get_session
 from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaEntry, MediaEntryType
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.youtube import DownloadPlaylistArguments, DownloadVideoArguments
-from harmonize.harmonize.job.callback import start_job
+from harmonize.job.callback import start_job
 from harmonize.util.filepropety import convert_webp_to_jpeg, rescale_jpeg
 from harmonize.util.metadata import (
     download_image,

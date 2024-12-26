@@ -127,6 +127,7 @@ async def media_metadata(
         youtube_id='',
         type=MediaEntryType.AUDIO,
         date_added=datetime.datetime.now(datetime.UTC),
+        magnet_link=None,
     )
 
     track = MP3(Path(media_entry.absolute_path))
