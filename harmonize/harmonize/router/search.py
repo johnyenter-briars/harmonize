@@ -13,7 +13,7 @@ from harmonize.scrape.xt1337 import t1337x_search
 
 router = APIRouter(prefix='/api')
 
-_MAX_RESULTS = 10
+_MAX_RESULTS = 1
 
 
 @router.get('/search/youtube/playlist/{search_keywords}')

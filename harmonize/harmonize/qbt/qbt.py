@@ -1,13 +1,16 @@
 import asyncio
 import datetime
 import logging
+import shutil
 from codecs import encode
+from pathlib import Path
 
 import aiohttp
 import pydantic
 from sqlmodel import Session, select
 
 from harmonize.config.harmonizeconfig import HARMONIZE_CONFIG
+from harmonize.const import VIDEO_ROOT
 from harmonize.db.database import get_session_non_gen
 from harmonize.db.models import MediaElementSource, MediaEntry, MediaEntryType
 from harmonize.defs.qbt import QbtDownloadData
@@ -142,7 +145,7 @@ async def delete_download(torrent_hash: str) -> str:
         return response_text
 
 
-def _ready_for_media_entry(data: QbtDownloadData) -> bool:
+def _download_finished(data: QbtDownloadData) -> bool:
     return data.state == 'stalledUP'
 
 
@@ -155,28 +158,45 @@ def _media_entry_exists(
     return len(media_entries) > 0
 
 
+def save_file(download: QbtDownloadData) -> Path:
+    path = Path(download.content_path)
+
+    media_root_path = VIDEO_ROOT / path.name
+
+    shutil.copy2(path, media_root_path)
+
+    return media_root_path
+
+
 async def qbt_background_service():
     while True:
         try:
             session: Session = get_session_non_gen()
             downloads = await list_downloads()
             for download in downloads:
-                if _ready_for_media_entry(download) and not _media_entry_exists(download, session):
-                    media_entry = MediaEntry(
-                        name=download.name,
-                        absolute_path=download.content_path,
-                        source=MediaElementSource.MAGNETLINK,
-                        youtube_id=None,
-                        magnet_link=download.magnet_uri,
-                        type=MediaEntryType.VIDEO,
-                        date_added=datetime.datetime.now(datetime.UTC),
-                    )
-                    session.add(media_entry)
-                    session.commit()
+                if _download_finished(download):
+                    if not _media_entry_exists(download, session):
+                        path_to_file = save_file(download)
+
+                        media_entry = MediaEntry(
+                            name=download.name,
+                            absolute_path=path_to_file.absolute().as_posix(),
+                            source=MediaElementSource.MAGNETLINK,
+                            youtube_id=None,
+                            magnet_link=download.magnet_uri,
+                            type=MediaEntryType.VIDEO,
+                            date_added=datetime.datetime.now(datetime.UTC),
+                            cover_art_absolute_path=None,
+                            thumbnail_art_absolute_path=None,
+                        )
+
+                        session.add(media_entry)
+                        session.commit()
+
+                        logger.debug('Added media entry: %s', media_entry.id)
 
                     await delete_download(download.hash)
 
-                    logger.debug('Added media entry: %s', media_entry.id)
             logger.info('Background service is running...')
             await asyncio.sleep(30)
         except Exception as e:
