@@ -76,7 +76,7 @@ class YoutubePlaylistSearchResult(BaseSchema):
     id: str
     title: str
     video_count: str
-    channel: PlaylistChannel | None
+    channel: str | None
     thumbnails: list[PlaylistThumbnail] | None
     link: str | None
 

@@ -25,7 +25,7 @@ from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaEntry, 
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.youtube import DownloadPlaylistArguments, DownloadVideoArguments
 from harmonize.job.callback import start_job
-from harmonize.util.filepropety import convert_webp_to_jpeg, rescale_jpeg
+from harmonize.util.filepropety import convert_webp_to_jpeg, crop_to_album_size
 from harmonize.util.metadata import (
     download_image,
 )
@@ -64,7 +64,7 @@ def _save_image(
 
     convert_webp_to_jpeg(temp_path_to_image_webp, temp_path_to_image_jpeg)
 
-    rescale_jpeg(temp_path_to_image_jpeg, temp_path_to_image_jpeg)
+    crop_to_album_size(temp_path_to_image_jpeg, temp_path_to_image_jpeg)
 
     return temp_path_to_image_jpeg
 
