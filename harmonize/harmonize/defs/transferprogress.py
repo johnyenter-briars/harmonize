@@ -1,6 +1,7 @@
+import datetime
+import uuid
 from enum import Enum
 
-from harmonize.db.models import MediaEntry
 from harmonize.defs.response import BaseSchema
 
 
@@ -9,6 +10,8 @@ class TransferDestination(Enum):
 
 
 class TransferProgress(BaseSchema):
-    media_entry: MediaEntry
+    media_entry_id: uuid.UUID
+    name: str
     destination: TransferDestination
     progress: float
+    start_time: datetime.datetime

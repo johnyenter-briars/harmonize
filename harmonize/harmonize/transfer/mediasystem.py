@@ -1,3 +1,4 @@
+import datetime
 import logging
 import uuid
 
@@ -13,14 +14,19 @@ _progress_dict: dict[tuple[uuid.UUID, TransferDestination], TransferProgress] = 
 
 
 def _generate_progress_callback(
-    media_entry: MediaEntry, session: Session, transfer_destination: TransferDestination
+    media_entry_id: uuid.UUID,
+    name: str,
+    session: Session,
+    transfer_destination: TransferDestination,
 ):
-    media_entry = session.merge(media_entry)
-
-    key = (media_entry.id, transfer_destination)
+    key = (media_entry_id, transfer_destination)
 
     _progress_dict[key] = TransferProgress(
-        media_entry=media_entry, destination=TransferDestination.MEDIA_SYSTEM, progress=0
+        name=name,
+        media_entry_id=media_entry_id,
+        destination=TransferDestination.MEDIA_SYSTEM,
+        progress=0,
+        start_time=datetime.datetime.now(),
     )
 
     def _progress_callback(transferred, total):
@@ -63,7 +69,9 @@ def transfer_file(
     sftp.put(
         local_path,
         remote_path,
-        callback=_generate_progress_callback(media_entry, session, transfer_destination),
+        callback=_generate_progress_callback(
+            media_entry.id, media_entry.name, session, transfer_destination
+        ),
     )
 
     logger.info(f'File transferred successfully to {remote_path}')  # noqa: G004
