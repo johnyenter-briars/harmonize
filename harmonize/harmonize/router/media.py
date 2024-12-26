@@ -1,4 +1,5 @@
 import logging
+import uuid
 
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
@@ -31,3 +32,21 @@ async def list_audio(
     return BaseResponse[list[MediaEntry]](
         message='Media Entries Found', status_code=200, value=list(media_entries)
     )
+
+
+@router.delete('/{media_entry_id}', status_code=200)
+async def delete_media_entry(
+    media_entry_id: uuid.UUID,
+    session: Session = Depends(get_session),
+) -> BaseResponse[None]:
+    statement = select(MediaEntry).where(MediaEntry.id == media_entry_id)
+
+    media_entry = session.exec(statement).first()
+
+    if not media_entry:
+        return BaseResponse[None](message='Media entry not found', status_code=404, value=None)
+
+    session.delete(media_entry)
+    session.commit()
+
+    return BaseResponse[None](message='Entry deleted', status_code=204, value=None)

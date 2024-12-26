@@ -41,3 +41,5 @@ class MediaEntry(BaseSchema, SQLModel, table=True):
     magnet_link: str | None
     type: MediaEntryType
     date_added: datetime.datetime
+    cover_art_absolute_path: str | None
+    thumbnail_art_absolute_path: str | None

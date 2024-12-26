@@ -25,7 +25,12 @@ from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaEntry, 
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.youtube import DownloadPlaylistArguments, DownloadVideoArguments
 from harmonize.job.callback import start_job
-from harmonize.util.filepropety import convert_webp_to_jpeg, crop_to_album_size
+from harmonize.util.filepropety import (
+    convert_webp_to_jpeg,
+    create_thumbnail,
+    crop_to_album_size,
+    move_to_cover_folder,
+)
 from harmonize.util.metadata import (
     download_image,
 )
@@ -41,9 +46,9 @@ class YoutubeElementType(Enum):
     PLAYLIST = 1
 
 
-def _save_image(
+def _save_images(
     youtube_id: str, youtube_title: str, youtube_metadata: Any, object_type: YoutubeElementType
-) -> Path | None:
+) -> tuple[Path, Path]:
     temp_path_to_image_webp = TMP_ALBUM_ART_DIR / f'{youtube_id}.webp'
     temp_path_to_image_jpeg = TMP_ALBUM_ART_DIR / f'{youtube_id}.jpeg'
 
@@ -58,15 +63,19 @@ def _save_image(
             key=lambda thumbnail: thumbnail.get('width', 0) * thumbnail.get('height', 0),
         )
 
-    url = highest_quality_image['url']
+    cover_url = highest_quality_image['url']
 
-    _ = download_image(url, temp_path_to_image_webp)
+    _ = download_image(cover_url, temp_path_to_image_webp)
 
     convert_webp_to_jpeg(temp_path_to_image_webp, temp_path_to_image_jpeg)
 
     crop_to_album_size(temp_path_to_image_jpeg, temp_path_to_image_jpeg)
 
-    return temp_path_to_image_jpeg
+    full_path_to_cover_image = move_to_cover_folder(temp_path_to_image_jpeg)
+
+    full_path_to_thumbnail_image = create_thumbnail(full_path_to_cover_image)
+
+    return (full_path_to_cover_image, full_path_to_thumbnail_image)
 
 
 def _inject_album_art(path_to_file: Path, path_to_image: Path):
@@ -129,7 +138,9 @@ def _download_youtube_video(
     try:
         yt_title = yt_metadata['title']
 
-        album_art_path = _save_image(video_id, yt_title, yt_metadata, YoutubeElementType.VIDEO)
+        (album_art_path, thumbnail_path) = _save_images(
+            video_id, yt_title, yt_metadata, YoutubeElementType.VIDEO
+        )
 
         url = f'https://www.youtube.com/watch?v={video_id}'
         ydl_opts = {
@@ -187,6 +198,8 @@ def _download_youtube_video(
             magnet_link=None,
             type=MediaEntryType.AUDIO,
             date_added=datetime.datetime.now(datetime.UTC),
+            cover_art_absolute_path=album_art_path.absolute().as_posix(),
+            thumbnail_art_absolute_path=thumbnail_path.absolute().as_posix(),
         )
 
         session.add(media_entry)
@@ -233,7 +246,7 @@ def _download_youtube_playlist(
     playlist_id = download_playlist_arguments.playlist_id
     yt_metadata = download_playlist_arguments.playlist_metadata
     try:
-        album_art_path = _save_image(
+        (album_art_path, thumbnail_path) = _save_images(
             playlist_id,
             download_playlist_arguments.playlist_metadata['title'],
             yt_metadata,
@@ -293,6 +306,8 @@ def _download_youtube_playlist(
                 magnet_link=None,
                 type=MediaEntryType.AUDIO,
                 date_added=datetime.datetime.now(datetime.UTC),
+                cover_art_absolute_path=album_art_path.absolute().as_posix(),
+                thumbnail_art_absolute_path=thumbnail_path.absolute().as_posix(),
             )
             session.add(media_entry)
 

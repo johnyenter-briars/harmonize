@@ -120,7 +120,7 @@ async def search_youtube_video(
             rich_thumbnail=video_info.get('rich_thumbnails', None),
             channel=video_info.get('uploader', 'Unknown'),
             accessibility=None,
-            link=video_info.get('url', ''),
+            link=entry['url'],
             shelf_title=None,
         )
 
