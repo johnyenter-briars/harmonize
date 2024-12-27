@@ -57,11 +57,11 @@ public class YoutubeVideoSearchResult
     public required string Title { get; set; }
     public string? PublishedTime { get; set; }
     public string? Duration { get; set; }
-    public ViewCount? ViewCount { get; set; }
+    public int ViewCount { get; set; }
     public List<Thumbnail>? Thumbnails { get; set; }
     public RichThumbnail? RichThumbnail { get; set; }
     public List<DescriptionSnippet>? DescriptionSnippet { get; set; }
-    public Channel? Channel { get; set; }
+    public string? Channel { get; set; }
     public Accessibility? Accessibility { get; set; }
     public string? Link { get; set; }
     public string? ShelfTitle { get; set; }

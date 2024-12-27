@@ -56,14 +56,14 @@
         </Tab>
     </FlyoutItem>
     <FlyoutItem 
-                Title="Media List" 
+                Title="Library" 
                 Icon="icons8_media_50.png"
                 >
         <Tab>
             <ShellContent
-                Title="Media List"
-                ContentTemplate="{DataTemplate view:MediaListPage}"
-                Route="MediaList" />
+                Title="Library"
+                ContentTemplate="{DataTemplate view:LibraryPage}"
+                Route="Library" />
         </Tab>
     </FlyoutItem>
     <FlyoutItem 

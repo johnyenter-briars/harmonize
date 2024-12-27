@@ -67,6 +67,7 @@ namespace Harmonize
             builder.Services.AddSingleton<ManageQbtViewModel>();
             builder.Services.AddSingleton<LogViewModel>();
             builder.Services.AddSingleton<MediaControlViewModel>();
+            builder.Services.AddSingleton<LibraryViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();
@@ -81,6 +82,7 @@ namespace Harmonize
             builder.Services.AddSingleton<ManageQbtPage>();
             builder.Services.AddSingleton<LogPage>();
             builder.Services.AddSingleton<MediaControlPage>();
+            builder.Services.AddSingleton<LibraryPage>();
 
             builder.Services.AddSingleton<MediaManager>();
 

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BasePage 
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Harmonize.Page.View"
+             xmlns:pages="clr-namespace:Harmonize.Page"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+             x:TypeArguments="viewModels:LibraryViewModel"
+             x:DataType="viewModels:LibraryViewModel"
+             x:Class="Harmonize.Page.View.LibraryPage"
+             xmlns:model="clr-namespace:Harmonize.Model"
+             xmlns:components="clr-namespace:Harmonize.Components"
+             Title="Library">
+
+    <StackLayout Padding="10">
+
+        <RefreshView 
+            IsRefreshing="{Binding FetchingData}" 
+            Command="{Binding RefreshCommand}">
+
+            <ListView 
+                Grid.Row="1" 
+                IsVisible="True"
+                ItemsSource="{Binding MediaEntries}"
+                VerticalOptions="FillAndExpand"
+                ItemTapped="OnItemTapped"
+                RowHeight="50"
+                SeparatorVisibility="None"
+                >
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="model:LocalMediaEntry">
+                        <ViewCell>
+                            <components:ListElement>
+                                <StackLayout Orientation="Vertical">
+                                    <Label FontSize="10" Text="{Binding Name}" />
+                                </StackLayout>
+                            </components:ListElement>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </RefreshView>
+
+    </StackLayout>
+</pages:BasePage>

@@ -25,7 +25,7 @@
 
             <Label Text="Channel Name" FontSize="Medium" />
             <Entry 
-            Text="{Binding YoutubePlaylistSearchResult.Channel.Name, Mode=OneWay}" 
+            Text="{Binding YoutubePlaylistSearchResult.Channel, Mode=OneWay}" 
             IsReadOnly="True" />
 
             <Button 

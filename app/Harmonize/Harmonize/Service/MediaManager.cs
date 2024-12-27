@@ -54,11 +54,12 @@ public class MediaManager
         )
     {
         var media = await harmonizeDatabase.GetMediaEntries();
-        var (response, success) = await failsafeService.Fallback(harmonizeClient.GetMedia, null);
+        var (audioResponse, audioSuccess) = await failsafeService.Fallback(harmonizeClient.GetAudio, null);
+        var (videoResponse, videoSuccess) = await failsafeService.Fallback(harmonizeClient.GetAudio, null);
 
-        if (success)
+        if (audioSuccess)
         {
-            if (media.Count != response?.Value.Count)
+            if (media.Count != audioResponse?.Value.Count)
             {
                 Task.Run(async () => await SyncLocalMediaStore(callback));
             }
@@ -71,7 +72,7 @@ public class MediaManager
         )
     {
         var localMedia = await harmonizeDatabase.GetMediaEntries();
-        var (response, success) = await failsafeService.Fallback(harmonizeClient.GetMedia, null);
+        var (response, success) = await failsafeService.Fallback(harmonizeClient.GetAudio, null);
 
         if (!success)
         {

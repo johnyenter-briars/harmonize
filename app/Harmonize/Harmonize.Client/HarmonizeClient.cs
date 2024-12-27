@@ -55,9 +55,13 @@ public class HarmonizeClient
 
         return xlMediaUrl;
     }
-    public async Task<MediaEntriesResponse> GetMedia()
+    public async Task<MediaEntriesResponse> GetAudio()
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"media/audio", HttpMethod.Get);
+    }
+    public async Task<MediaEntriesResponse> GetVideo()
+    {
+        return await HarmonizeRequest<MediaEntriesResponse>($"media/video", HttpMethod.Get);
     }
     public async Task<byte[]> GetMediaBytes(IMediaEntry mediaEntry)
     {

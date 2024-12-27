@@ -126,7 +126,7 @@
                                             Grid.ColumnSpan="2"
                                             HeightRequest="1" Color="{StaticResource Gray400}"/>
                                     <Label 
-                                            Text="{Binding Channel.Name}" 
+                                            Text="{Binding Channel}" 
                                             TextColor="{StaticResource Gray300}"
                                             FontSize="Small" 
                                             />
@@ -157,6 +157,7 @@
             ItemTapped="OnItemTapped"
             SeparatorVisibility="None"
             ItemSelected="OnItemSelected"
+            RowHeight="50"
             >
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="youtube:YoutubePlaylistSearchResult">
@@ -190,7 +191,7 @@
                                             Grid.ColumnSpan="2"
                                             HeightRequest="1" Color="{StaticResource Gray400}"/>
                                     <Label 
-                                            Text="{Binding Channel.Name}" 
+                                            Text="{Binding Channel}" 
                                             TextColor="{StaticResource Gray300}"
                                             FontSize="Small" 
                                             />
