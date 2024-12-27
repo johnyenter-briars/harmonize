@@ -1,5 +1,5 @@
 {
-    "run-qbt": false,
+    "run-qbt": true,
     "run-transfer": true,
     "media-root": "./media",
     "qbt-domain-name": "localhost",
