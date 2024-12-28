@@ -49,7 +49,7 @@ class YoutubeVideoSearchResult(BaseSchema):
     title: str
     published_time: str | None
     duration: str | None
-    view_count: str | None
+    view_count: int
     thumbnails: list[Thumbnail]
     rich_thumbnail: RichThumbnail | None
     # description_snippet: list[DescriptionSnippet]
@@ -75,7 +75,7 @@ class YoutubePlaylistSearchResult(BaseSchema):
     type: str
     id: str
     title: str
-    video_count: str
+    video_count: int
     channel: str | None
     thumbnails: list[PlaylistThumbnail] | None
     link: str | None

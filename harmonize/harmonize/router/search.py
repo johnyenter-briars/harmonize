@@ -13,7 +13,7 @@ from harmonize.scrape.xt1337 import t1337x_search
 
 router = APIRouter(prefix='/api')
 
-_MAX_RESULTS = 1
+_MAX_RESULTS = 10
 
 
 @router.get('/search/youtube/playlist/{search_keywords}')
@@ -59,7 +59,7 @@ async def search_youtube_playlist(
                 type='playlist',
                 id=entry['id'],
                 title=entry['title'],
-                video_count=str(playlist_info.get('playlist_count', 'Unknown')),
+                video_count=playlist_info.get('playlist_count', 'Unknown'),
                 channel=playlist_info.get('uploader', 'Unknown'),
                 thumbnails=entry['thumbnails'],
                 link=entry['url'],
@@ -115,7 +115,7 @@ async def search_youtube_video(
             title=entry['title'],
             published_time=video_info.get('upload_date', 'Unknown'),
             duration=str(video_info.get('duration', 'Unknown')),
-            view_count=str(video_info.get('view_count', 'Unknown')),
+            view_count=video_info.get('view_count', 'Unknown'),
             thumbnails=entry['thumbnails'],
             rich_thumbnail=video_info.get('rich_thumbnails', None),
             channel=video_info.get('uploader', 'Unknown'),
