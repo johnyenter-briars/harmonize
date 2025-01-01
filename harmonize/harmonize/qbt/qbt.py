@@ -197,7 +197,7 @@ async def qbt_background_service():
 
                     await delete_download(download.hash)
 
-            logger.info('Background service is running...')
+            logger.info('%s is running...', 'qbt_background_service')
             await asyncio.sleep(30)
         except Exception as e:
             logger.exception('Error in background service: %s', str(e))
