@@ -1,7 +1,6 @@
 import uuid
 
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import selectinload
 from sqlmodel import Session, select
 
 from harmonize.db.database import get_session
@@ -52,8 +51,15 @@ async def get_playlist(
     return BaseResponse[Playlist](message='Found', status_code=201, value=None)
 
 
+# @router.get('/playlist')
+# async def get_playlists(session: Session = Depends(get_session)) -> BaseResponse[list[Playlist]]:
+#     statement = select(Playlist).options(selectinload(Playlist.media_entries))
+#     playlists = list(session.exec(statement))
+#     return BaseResponse[list[Playlist]](message='Found', status_code=201, value=playlists)
+
+
 @router.get('/playlist')
 async def get_playlists(session: Session = Depends(get_session)) -> BaseResponse[list[Playlist]]:
-    statement = select(Playlist).options(selectinload(Playlist.media_entries))
+    statement = select(Playlist)
     playlists = list(session.exec(statement))
     return BaseResponse[list[Playlist]](message='Found', status_code=201, value=playlists)
