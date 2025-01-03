@@ -5,7 +5,7 @@ def test_add_playlist(setup):
     url = f"{setup['base_url']}/playlist/my new playlist 2"
 
     response = requests.post(url)
-    assert response.status_code == 200, f'Expected status code 200, but got {response.status_code}'
+    assert response.status_code == 201, f'Expected status code 201, but got {response.status_code}'
 
 
 def test_get_playlist(setup):
@@ -31,11 +31,11 @@ def test_add_element_to_playlist(setup):
 
     all_media_entries = (response.json())['value']
 
-    first_media_entry = all_media_entries[0]
+    first_media_entry = all_media_entries[2]
     first_media_entry_id = first_media_entry['id']
 
     url = f"{setup['base_url']}/playlist/{first_playlist_id}/entry/{first_media_entry_id}"
 
     response = requests.put(url)
 
-    assert response.status_code == 200, f'Expected status code 200, but got {response.status_code}'
+    assert response.status_code == 201, f'Expected status code 201, but got {response.status_code}'
