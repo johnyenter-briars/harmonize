@@ -37,13 +37,25 @@ class MediaEntryPlaylistLink(SQLModel, table=True):
     media_entry_id: uuid.UUID = Field(foreign_key='mediaentry.id', primary_key=True)
 
 
-class Playlist(BaseSchema, SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+class PlaylistBase(SQLModel):
     name: str
     date_created: datetime.datetime = Field(default_factory=datetime.datetime.utcnow)
+
+
+class Playlist(BaseSchema, PlaylistBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+
     media_entries: list['MediaEntry'] = Relationship(
         back_populates='playlists', link_model=MediaEntryPlaylistLink
     )
+
+
+class PlaylistPublic(PlaylistBase):
+    id: uuid.UUID
+
+
+class PlaylistWithMediaEntries(PlaylistBase):
+    media_entries: list['MediaEntry'] = []
 
 
 class MediaEntry(BaseSchema, SQLModel, table=True):
