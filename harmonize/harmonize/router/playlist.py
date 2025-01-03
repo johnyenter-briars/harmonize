@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
 from harmonize.db.database import get_session
-from harmonize.db.models import MediaEntry, Playlist
+from harmonize.db.models import MediaEntry, Playlist, PlaylistWithMediaEntries
 from harmonize.defs.response import BaseResponse
 
 router = APIRouter(prefix='/api')
@@ -58,8 +58,9 @@ async def get_playlist(
 #     return BaseResponse[list[Playlist]](message='Found', status_code=201, value=playlists)
 
 
-@router.get('/playlist')
-async def get_playlists(session: Session = Depends(get_session)) -> BaseResponse[list[Playlist]]:
+@router.get('/playlist', response_model=list[PlaylistWithMediaEntries])
+async def get_playlists(session: Session = Depends(get_session)) -> list[Playlist]:
     statement = select(Playlist)
     playlists = list(session.exec(statement))
-    return BaseResponse[list[Playlist]](message='Found', status_code=201, value=playlists)
+
+    return playlists
