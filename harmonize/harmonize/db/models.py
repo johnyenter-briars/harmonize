@@ -41,6 +41,7 @@ class Playlist(BaseSchema, SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str
     date_created: datetime.datetime = Field(default_factory=datetime.datetime.utcnow)
+
     media_entries: list['MediaEntry'] = Relationship(
         back_populates='playlists', link_model=MediaEntryPlaylistLink
     )
