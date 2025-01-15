@@ -12,69 +12,25 @@
     Title="Harmonize">
 
     <FlyoutItem 
-                Title="Home" 
-                Icon="icons8_home_50.png"
+                Title="Media Control" 
+                Icon="icons8_remote_50.png"
                 >
         <Tab>
             <ShellContent
-                Title="Home"
-                ContentTemplate="{DataTemplate view:HomePage}"
-                Route="Main" />
+                Title="Media Control"
+                ContentTemplate="{DataTemplate view:MediaControlPage}"
+                Route="MediaControl" />
         </Tab>
     </FlyoutItem>
     <FlyoutItem 
-                Title="Settings" 
-                Icon="icons8_automatic_50.png"
+                Title="Video Library" 
+                Icon="icons8_media_50.png"
                 >
         <Tab>
             <ShellContent
-                Title="Settings"
-                ContentTemplate="{DataTemplate view:SettingsPage}"
-                Route="Settings" />
-        </Tab>
-    </FlyoutItem>
-    <FlyoutItem 
-                Title="Media Element" 
-                Icon="icons8_music_note_50.png"
-                >
-        <Tab>
-            <ShellContent
-                Title="Media Element"
-                ContentTemplate="{DataTemplate view:MediaElementPage}"
-                Route="MediaElement" />
-        </Tab>
-    </FlyoutItem>
-    <FlyoutItem 
-                Title="Media List" 
-                Icon="icons8_list_50.png"
-                >
-        <Tab>
-            <ShellContent
-                Title="Media List"
-                ContentTemplate="{DataTemplate view:MediaListPage}"
-                Route="MediaList" />
-        </Tab>
-    </FlyoutItem>
-    <FlyoutItem 
-                Title="Job List" 
-                Icon="icons8_job_50.png"
-                >
-        <Tab>
-            <ShellContent
-                Title="Job List"
-                ContentTemplate="{DataTemplate view:JobListPage}"
-                Route="JobList" />
-        </Tab>
-    </FlyoutItem>
-    <FlyoutItem 
-                Title="Youtube Search" 
-                Icon="icons8_youtube_50.png"
-                >
-        <Tab>
-            <ShellContent
-                Title="Youtube Search"
-                ContentTemplate="{DataTemplate view:YouTubeSearchPage}"
-                Route="YoutubeSearch" />
+                Title="Video Library"
+                ContentTemplate="{DataTemplate view:VideoLibraryPage}"
+                Route="VideoLibraryPage" />
         </Tab>
     </FlyoutItem>
     <FlyoutItem 
@@ -97,6 +53,83 @@
                 Title="Manage QBT"
                 ContentTemplate="{DataTemplate view:ManageQbtPage}"
                 Route="MangeQbt" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
+                Title="Job List" 
+                Icon="icons8_job_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Job List"
+                ContentTemplate="{DataTemplate view:JobListPage}"
+                Route="JobList" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
+                Title="Settings" 
+                Icon="icons8_automatic_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Settings"
+                ContentTemplate="{DataTemplate view:SettingsPage}"
+                Route="Settings" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
+                Title="Logs" 
+                Icon="icons8_log_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Logs"
+                ContentTemplate="{DataTemplate view:LogPage}"
+                Route="Logs" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
+                Title="Home" 
+                Icon="icons8_home_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Home"
+                ContentTemplate="{DataTemplate view:HomePage}"
+                Route="Main" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
+                Title="Media Element" 
+                Icon="icons8_music_note_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Media Element"
+                ContentTemplate="{DataTemplate view:MediaElementPage}"
+                Route="MediaElement" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
+                Title="Audio Library" 
+                Icon="icons8_media_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Audio Library"
+                ContentTemplate="{DataTemplate view:AudioLibraryPage}"
+                Route="AudioLibrary" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
+                Title="Youtube Search" 
+                Icon="icons8_youtube_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Youtube Search"
+                ContentTemplate="{DataTemplate view:YouTubeSearchPage}"
+                Route="YoutubeSearch" />
         </Tab>
     </FlyoutItem>
 

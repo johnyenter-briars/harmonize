@@ -6,11 +6,18 @@
     xmlns:pages="clr-namespace:Harmonize.Page"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+    xmlns:converter="clr-namespace:Harmonize.Converter"
     x:TypeArguments="viewModels:MediaElementViewModel"
     x:DataType="viewModels:MediaElementViewModel"
     x:Class="Harmonize.Page.View.MediaElementPage"
     Title="{Binding MediaEntry.Name}"
 >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:HarmonizeSecondsToStringConverter x:Key="HarmonizeSecondsToStringConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ScrollView>
         <Grid Padding="10" VerticalOptions="FillAndExpand">
             <Grid.RowDefinitions>
@@ -33,6 +40,7 @@
                 PositionChanged="OnPositionChanged"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
+                HeightRequest="250"
                 Aspect="AspectFit"
             />
 
@@ -61,8 +69,11 @@
             />
 
             <Grid Grid.Row="3" HorizontalOptions="Fill">
-                <Label HorizontalOptions="Start" Text="{Binding Position, Source={x:Reference MediaElement}, Converter={StaticResource SecondsToStringConverter}}" />
-                <Label HorizontalOptions="End" HorizontalTextAlignment="End" Text="{Binding Duration, Source={x:Reference MediaElement}, Converter={StaticResource SecondsToStringConverter}}" />
+                <Label HorizontalOptions="Start" 
+                    Text="{Binding Position.TotalSeconds, Source={x:Reference MediaElement}, Converter={StaticResource HarmonizeSecondsToStringConverter}}" />
+                <Label HorizontalOptions="End" 
+                   HorizontalTextAlignment="End" 
+                   Text="{Binding Duration.TotalSeconds, Source={x:Reference MediaElement}, Converter={StaticResource HarmonizeSecondsToStringConverter}}" />
             </Grid>
 
             <HorizontalStackLayout Grid.Row="4" HorizontalOptions="Center" Padding="0,10,0,10" Spacing="10">

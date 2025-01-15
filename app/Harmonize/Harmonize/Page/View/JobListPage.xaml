@@ -22,28 +22,12 @@
 
         <Grid 
             Grid.Row="0" 
-            ColumnDefinitions="100, *"
-            RowDefinitions="*, *"
+            ColumnDefinitions="150, 75"
+            RowDefinitions="*"
         >
-            <ImageButton 
-                    x:Name="refreshButton"
-                    Grid.RowSpan="2"
-                    Grid.Column="0"
-                    Source="icons8_update_left_rotation_50.png"
-                    Command="{Binding Refresh}"
-                    CommandParameter="{Binding ., Source={x:Reference refreshButton}}"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    Scale="1.5"
-                >
-                <ImageButton.Behaviors>
-                    <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
-                </ImageButton.Behaviors>
-            </ImageButton>
-
             <HorizontalStackLayout
                 Grid.Row="0"
-                Grid.Column="1"
+                Grid.Column="0"
                 >
                 <CheckBox 
                     Color="{StaticResource Primary}"  
@@ -77,63 +61,58 @@
             </HorizontalStackLayout>
         </Grid>
 
-        <ActivityIndicator
-            Grid.Row="1" 
-            IsVisible="{Binding FetchingData}"
-            IsRunning="{Binding FetchingData}"
-            Color="{StaticResource Primary}"
-            Scale="0.7"
-        />
-
-        <ListView 
+        <RefreshView 
             Grid.Row="1"
-            ItemTapped="OnItemTapped" 
-            ItemsSource="{Binding Jobs}"
-            IsVisible="{Binding NotFetchingData}"
-            SeparatorVisibility="None"
-            HasUnevenRows="True"
-            ItemSelected="OnItemSelected"
-            RowHeight="150"
-            >
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="job:Job">
-                    <ViewCell
+            IsRefreshing="{Binding FetchingData}" 
+            Command="{Binding RefreshCommand}">
+            <ListView 
+                ItemTapped="OnItemTapped" 
+                ItemsSource="{Binding Jobs}"
+                IsVisible="{Binding NotFetchingData}"
+                SeparatorVisibility="None"
+                HasUnevenRows="True"
+                RowHeight="150"
+                >
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="job:Job">
+                        <ViewCell
                        Height="100"
                         >
-                        <components:ListElement>
-                            <Grid
+                            <components:ListElement>
+                                <Grid
                                     ColumnDefinitions="*, Auto"
                                     RowDefinitions="Auto, *, *, *"
                                 >
-                                <Label
+                                    <Label
                                         Grid.Row="0"
                                         Grid.ColumnSpan="2"
                                         Text="{Binding Description}" 
                                         FontAttributes="Bold" 
                                     />
-                                <BoxView
+                                    <BoxView
                                         Grid.Row="1"
                                         Grid.ColumnSpan="2"
                                         HeightRequest="1" Color="{StaticResource Gray400}"/>
-                                <Label
+                                    <Label
                                         Grid.Row="2"
                                         Grid.Column="0"
                                         TextColor="{StaticResource Gray200}"
                                         Text="{Binding Status}" 
                                         VerticalOptions="Center"
                                     />
-                                <Label
+                                    <Label
                                         Grid.Row="2"
                                         Grid.Column="1"
                                         TextColor="{StaticResource Gray200}"
                                         Text="{Binding StartedOn}" 
                                         VerticalOptions="Center"
                                     />
-                            </Grid>
-                        </components:ListElement>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                                </Grid>
+                            </components:ListElement>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </RefreshView>
     </Grid>
 </pages:BasePage>

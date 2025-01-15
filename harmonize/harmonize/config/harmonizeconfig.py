@@ -3,11 +3,8 @@ import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from harmonize.config import _kebab_to_snake
 from harmonize.const import CONFIG_FILE
-
-
-def _kebab_to_snake(name: str) -> str:
-    return name.replace('-', '_')
 
 
 @dataclass
@@ -17,6 +14,8 @@ class HarmonizeConfig:
     qbt_port: int = field()
     qbt_version: str = field()
     run_qbt: bool = field()
+    reset_db_on_launch: bool = field()
+    run_transfer: bool = field()
 
     def __init__(self, config_file: Path):
         with config_file.open('r') as f:

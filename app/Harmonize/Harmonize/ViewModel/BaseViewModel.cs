@@ -1,4 +1,6 @@
-﻿using Harmonize.Service;
+﻿using Harmonize.Client;
+using Harmonize.Service;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,7 +21,10 @@ public abstract partial class BaseViewModel(
     public bool FetchingData
     {
         get { return fetchingData; }
-        set { SetProperty(ref fetchingData, value); }
+        set
+        {
+            SetProperty(ref fetchingData, value);
+        }
     }
     private bool notFetchingData = true;
     public bool NotFetchingData
@@ -38,6 +43,7 @@ public abstract partial class BaseViewModel(
         get { return title; }
         set { SetProperty(ref title, value); }
     }
+    //TODO: This has weird behavior with refresh view for some reason... sometimes... idk
     protected async Task<T> FetchData<T>(Func<Task<T>> callback)
     {
         FetchingData = true;

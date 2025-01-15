@@ -1,4 +1,5 @@
-﻿using Harmonize.Model;
+﻿using Harmonize.Client.Model.Media;
+using Harmonize.Model;
 using Microsoft.Extensions.Logging;
 using SQLite;
 using System;
@@ -9,16 +10,13 @@ using System.Threading.Tasks;
 
 namespace Harmonize.Service;
 
-public class HarmonizeDatabase
+public class HarmonizeDatabase(
+    ILogger<HarmonizeDatabase> logger,
+    PreferenceManager preferenceManager
+    )
 {
     SQLiteAsyncConnection? Database;
-    ILogger logger;
-    private const bool WipeData = true;
-
-    public HarmonizeDatabase(ILogger<HarmonizeDatabase> logger)
-    {
-        this.logger = logger;
-    }
+    ILogger logger = logger;
 
     async Task Init()
     {
@@ -32,7 +30,7 @@ public class HarmonizeDatabase
         var createTableResult = await Database.CreateTableAsync<LocalMediaEntry>();
         logger.LogInformation($"Create Table Result: {createTableResult.ToString()}");
 
-        if(WipeData)
+        if(preferenceManager.UserSettings.ResetDatabaseOnLaunch)
         {
             var wipeDataResult = await Database.DeleteAllAsync<LocalMediaEntry>();
             logger.LogInformation($"Wipe Table Result: {wipeDataResult.ToString()}");
@@ -59,6 +57,21 @@ public class HarmonizeDatabase
     {
         await Init();
         return await Database!.InsertAsync(item);
+    }
+    public async Task<int> CreateUnsyncedMediaEntry(MediaEntry item)
+    {
+        await Init();
+
+        var newLocalEntry = new LocalMediaEntry
+        {
+            Id = item.Id,
+            Name = item.Name,
+            LocalPath = null,
+            Type = item.Type,
+            IsSynced = false,
+        };
+
+        return await Database!.InsertAsync(newLocalEntry);
     }
 
     public async Task<int> DeleteMediaEntry(LocalMediaEntry item)

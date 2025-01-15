@@ -1,7 +1,9 @@
 import datetime
 import json
 import logging
+from enum import Enum
 from pathlib import Path
+from typing import Any
 
 import eyed3
 import yt_dlp
@@ -19,16 +21,80 @@ from harmonize.const import (
     YOUTUBE_VIDEO_YTDL_METADATA,
 )
 from harmonize.db.database import get_session
-from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaElementType, MediaEntry
+from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaEntry, MediaEntryType
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.youtube import DownloadPlaylistArguments, DownloadVideoArguments
-from harmonize.job.methods import start_job
-from harmonize.util.metadata import download_image, get_album_artwork_itunes
+from harmonize.job.callback import start_job
+from harmonize.util.filepropety import (
+    convert_webp_to_jpeg,
+    create_thumbnail,
+    crop_to_album_size,
+    move_to_cover_folder,
+)
+from harmonize.util.metadata import (
+    download_image,
+)
 
 logger = logging.getLogger('harmonize')
 router = APIRouter(prefix='/api/youtube')
 
 _audio_format = 'mp3'
+
+
+class YoutubeElementType(Enum):
+    VIDEO = 0
+    PLAYLIST = 1
+
+
+def _save_images(
+    youtube_id: str, youtube_title: str, youtube_metadata: Any, object_type: YoutubeElementType
+) -> tuple[Path, Path]:
+    temp_path_to_image_webp = TMP_ALBUM_ART_DIR / f'{youtube_id}.webp'
+    temp_path_to_image_jpeg = TMP_ALBUM_ART_DIR / f'{youtube_id}.jpeg'
+
+    if object_type == YoutubeElementType.VIDEO:
+        highest_quality_image = max(
+            youtube_metadata['thumbnails'],
+            key=lambda thumbnail: thumbnail.get('width', 0) * thumbnail.get('height', 0),
+        )
+    else:
+        highest_quality_image = max(
+            youtube_metadata['thumbnails'],
+            key=lambda thumbnail: thumbnail.get('width', 0) * thumbnail.get('height', 0),
+        )
+
+    cover_url = highest_quality_image['url']
+
+    _ = download_image(cover_url, temp_path_to_image_webp)
+
+    convert_webp_to_jpeg(temp_path_to_image_webp, temp_path_to_image_jpeg)
+
+    crop_to_album_size(temp_path_to_image_jpeg, temp_path_to_image_jpeg)
+
+    full_path_to_cover_image = move_to_cover_folder(temp_path_to_image_jpeg)
+
+    full_path_to_thumbnail_image = create_thumbnail(full_path_to_cover_image)
+
+    return (full_path_to_cover_image, full_path_to_thumbnail_image)
+
+
+def _inject_album_art(path_to_file: Path, path_to_image: Path):
+    audiofile = eyed3.load(path_to_file)
+    if audiofile is None:
+        # TODO
+        raise Exception('foo')
+
+    if audiofile is None:
+        raise Exception('Audio file could not be loaded.')
+
+    if audiofile.tag is None:
+        audiofile.initTag()
+
+    audiofile.tag.images.set(  # type: ignore
+        ImageFrame.FRONT_COVER, open(path_to_image, 'rb').read(), 'image/jpeg'
+    )  # type: ignore
+
+    audiofile.tag.save()  # type: ignore
 
 
 @router.post('/video/{video_id}', status_code=201)
@@ -39,8 +105,8 @@ async def download_youtube_video(
     statement = select(MediaEntry).where(MediaEntry.youtube_id == video_id)
     media_entries = session.exec(statement).all()
 
-    # if len(media_entries) > 0:
-    #     raise HTTPException(status_code=400, detail='Media entry already exists')
+    if len(media_entries) > 0:
+        raise HTTPException(status_code=400, detail='Media entry already exists')
 
     metadata_file = YOUTUBE_VIDEO_SEARCH_METADATA / f'{video_id}.search.info.json'
 
@@ -56,16 +122,7 @@ async def download_youtube_video(
         DownloadVideoArguments(video_id=video_id, video_metadata=metadata),
     )
 
-    job = Job(
-        description=description,
-        status=JobStatus.RUNNING,
-        started_on=datetime.datetime.now(datetime.UTC),
-        error_message=None,
-    )
-    session.add(job)
-    session.commit()
-
-    job = await start_job(_download_youtube_video, job, session, args)
+    job = await start_job(description, _download_youtube_video, session, args)
 
     return BaseResponse[Job](message='Job created', status_code=201, value=job)
 
@@ -81,6 +138,10 @@ def _download_youtube_video(
     try:
         yt_title = yt_metadata['title']
 
+        (album_art_path, thumbnail_path) = _save_images(
+            video_id, yt_title, yt_metadata, YoutubeElementType.VIDEO
+        )
+
         url = f'https://www.youtube.com/watch?v={video_id}'
         ydl_opts = {
             'outtmpl': './media/video/%(title)s.%(ext)s',
@@ -91,18 +152,6 @@ def _download_youtube_video(
             output = json.dumps(ydl.sanitize_info(info))
             (YOUTUBE_VIDEO_YTDL_METADATA / f'{video_id}.info.json').write_text(output)
 
-        metadata = json.loads(
-            Path.open(YOUTUBE_VIDEO_YTDL_METADATA / f'{video_id}.info.json', mode='r').read()
-        )
-
-        temp_path_to_image = TMP_ALBUM_ART_DIR / f'{video_id}.jpg'
-
-        (small, large) = get_album_artwork_itunes(yt_title)
-
-        _ = download_image(large, temp_path_to_image)
-
-        now = datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')
-
         ydl_audo_opts = {
             'format': f'{_audio_format}/bestaudio/best',
             'outtmpl': (AUDIO_ROOT / f'{yt_title}').absolute().as_posix(),
@@ -112,21 +161,12 @@ def _download_youtube_video(
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': _audio_format,
                 },
-                {  # Embed thumbnail into audio
-                    'key': 'EmbedThumbnail',
-                },
-                {  # Add metadata using ffmpeg
-                    'key': 'FFmpegMetadata',
-                    'add_metadata': True,
-                },
             ],
             'postprocessor_args': [
-                '-metadata',
-                f'album={now}',  # Add album metadata as timestamp
                 '-write_id3v1',
-                '1',  # Write ID3v1 metadata
+                '1',
                 '-id3v2_version',
-                '3',  # Use ID3v2.3 for metadata
+                '3',
             ],
         }
 
@@ -140,39 +180,31 @@ def _download_youtube_video(
                 job.error_message = f'Youtube Download Failed with error code {error_code}'
                 return
 
-        absolute_path = (AUDIO_ROOT / f'{yt_title}.mp3').absolute().as_posix()
+        absolute_path = AUDIO_ROOT / f'{yt_title}.mp3'
 
-        audiofile = eyed3.load(absolute_path)
-        if audiofile is None:
-            # TODO
-            raise Exception('foo')
+        if album_art_path is not None:
+            _inject_album_art(absolute_path, album_art_path)
 
-        if audiofile is None:
-            raise Exception('Audio file could not be loaded.')
-
-        if audiofile.tag is None:
-            audiofile.initTag()
-
-        audiofile.tag.images.set(  # type: ignore
-            ImageFrame.FRONT_COVER, open(temp_path_to_image, 'rb').read(), 'image/jpeg'
-        )  # type: ignore
-
-        audiofile.tag.save()  # type: ignore
+        if album_art_path is not None:
+            _inject_album_art(absolute_path, album_art_path)
 
         job.status = JobStatus.SUCCEEDED
 
-        media_element = MediaEntry(
+        media_entry = MediaEntry(
             name=yt_title,
-            absolute_path=absolute_path,
+            absolute_path=absolute_path.absolute().as_posix(),
             source=MediaElementSource.YOUTUBE,
             youtube_id=video_id,
-            type=MediaElementType.AUDIO,
+            magnet_link=None,
+            type=MediaEntryType.AUDIO,
             date_added=datetime.datetime.now(datetime.UTC),
+            cover_art_absolute_path=album_art_path.absolute().as_posix(),
+            thumbnail_art_absolute_path=thumbnail_path.absolute().as_posix(),
         )
 
-        session.add(media_element)
+        session.add(media_entry)
 
-        logger.debug('Added media element: %s', media_element.id)
+        logger.debug('Added media entry: %s', media_entry.id)
 
     except Exception as e:
         job.status = JobStatus.FAILED
@@ -201,16 +233,7 @@ async def download_youtube_playlist(
         DownloadPlaylistArguments(playlist_id=playlist_id, playlist_metadata=metadata),
     )
 
-    job = Job(
-        description=description,
-        status=JobStatus.RUNNING,
-        started_on=datetime.datetime.now(datetime.UTC),
-        error_message=None,
-    )
-    session.add(job)
-    session.commit()
-
-    job = await start_job(_download_youtube_playlist, job, session, args)
+    job = await start_job(description, _download_youtube_playlist, session, args)
 
     return BaseResponse[Job](message='Job created', status_code=201, value=job)
 
@@ -221,8 +244,14 @@ def _download_youtube_playlist(
     session: Session,
 ):
     playlist_id = download_playlist_arguments.playlist_id
-    _ = download_playlist_arguments.playlist_metadata
+    yt_metadata = download_playlist_arguments.playlist_metadata
     try:
+        (album_art_path, thumbnail_path) = _save_images(
+            playlist_id,
+            download_playlist_arguments.playlist_metadata['title'],
+            yt_metadata,
+            YoutubeElementType.PLAYLIST,
+        )
         url = f'https://www.youtube.com/playlist?list={playlist_id}'
         ydl_opts = {
             'outtmpl': (VIDEO_ROOT / '%(playlist)s/%(title)s.%(ext)s').absolute().as_posix(),
@@ -264,16 +293,25 @@ def _download_youtube_playlist(
                 return
 
         for video in video_list:
-            video_file = AUDIO_ROOT / f"{video['title']}.mp3"
+            absolute_path = AUDIO_ROOT / f"{video['title']}.mp3"
+
+            if album_art_path is not None:
+                _inject_album_art(absolute_path, album_art_path)
+
             media_entry = MediaEntry(
                 name=video['title'],
-                absolute_path=video_file.absolute().as_posix(),
+                absolute_path=absolute_path.absolute().as_posix(),
                 source=MediaElementSource.YOUTUBE,
                 youtube_id=video['id'],
-                type=MediaElementType.AUDIO,
+                magnet_link=None,
+                type=MediaEntryType.AUDIO,
                 date_added=datetime.datetime.now(datetime.UTC),
+                cover_art_absolute_path=album_art_path.absolute().as_posix(),
+                thumbnail_art_absolute_path=thumbnail_path.absolute().as_posix(),
             )
             session.add(media_entry)
+
+            logger.debug('Added media entry: %s', media_entry.id)
 
         job.status = JobStatus.SUCCEEDED
     except Exception as e:

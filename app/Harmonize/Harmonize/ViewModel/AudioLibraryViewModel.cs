@@ -1,21 +1,34 @@
 ﻿using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
 
-public class MediaListViewModel(
+public class AudioLibraryViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
-    FailsafeService failsafeService
+    FailsafeService failsafeService,
+    ILogger<VideoLibraryPage> logger
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
+    public ICommand RefreshCommand => new Command(async () => await Refresh());
+    public ICommand MoreInfoCommand => new Command<LocalMediaEntry>(entry =>
+    {
+    });
+    private List<string> options = ["foo", "bar"];
+    public List<string> Options 
+    {
+        get { return options; }
+        set { SetProperty(ref options, value); }
+    }
     private ObservableCollection<LocalMediaEntry> mediaEntries = [];
     public ObservableCollection<LocalMediaEntry> MediaEntries
     {
@@ -23,9 +36,16 @@ public class MediaListViewModel(
         set { SetProperty(ref mediaEntries, value); }
     }
 
-    async Task PopulateEntries()
+    //TODO: This doesn't work in refresh list for some reason
+    async Task Refresh()
     {
-        var media = await mediaManager.GetMediaEntries();
+        if (FetchingData)
+        {
+            logger.LogInformation($"{nameof(FetchingData)} is true, not fetching data again");
+            return;
+        }
+
+        var media = await FetchData(mediaManager.GetAudioMediaEntries);
 
         MediaEntries.Clear();
         foreach (var m in media)
@@ -33,7 +53,7 @@ public class MediaListViewModel(
             MediaEntries.Add(m);
         }
     }
-    public async Task MediaEntryTapped(LocalMediaEntry localMediaEntry)
+    public async Task ItemTapped(LocalMediaEntry localMediaEntry)
     {
         await Shell.Current.GoToAsync(nameof(MediaElementPage), new Dictionary<string, object>
         {
@@ -43,6 +63,6 @@ public class MediaListViewModel(
 
     public override async Task OnAppearingAsync()
     {
-        await PopulateEntries();
+        await Refresh();
     }
 }

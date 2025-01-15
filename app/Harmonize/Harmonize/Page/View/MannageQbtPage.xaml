@@ -21,28 +21,12 @@
 
         <Grid 
             Grid.Row="0" 
-            ColumnDefinitions="100, *"
-            RowDefinitions="*, *"
+            ColumnDefinitions="150, 75"
+            RowDefinitions="*"
         >
-            <ImageButton 
-                    x:Name="refreshButton"
-                    Grid.RowSpan="2"
-                    Grid.Column="0"
-                    Source="icons8_update_left_rotation_50.png"
-                    Command="{Binding RetrieveQbtDownloads}"
-                    CommandParameter="{Binding ., Source={x:Reference refreshButton}}"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    Scale="1.5"
-                >
-                <ImageButton.Behaviors>
-                    <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
-                </ImageButton.Behaviors>
-            </ImageButton>
-
             <HorizontalStackLayout
                 Grid.Row="0"
-                Grid.Column="1"
+                Grid.Column="0"
                 >
                 <CheckBox 
                     Color="{StaticResource Primary}"  
@@ -76,57 +60,53 @@
             </HorizontalStackLayout>
         </Grid>
 
-        <ActivityIndicator
-            Grid.Row="1" 
-            IsVisible="{Binding FetchingData}"
-            IsRunning="{Binding FetchingData}"
-            Color="{StaticResource Primary}"
-            Scale="0.7"
-        />
-
-        <ListView 
-            Grid.Row="1" 
-            ItemsSource="{Binding ActiveDownloads}" 
-            VerticalOptions="FillAndExpand"
-            ItemSelected="OnItemSelected"
-            IsVisible="{Binding NotFetchingData}"
-            ItemTapped="OnItemTapped"
-            SeparatorVisibility="None"
-            HasUnevenRows="True"
-            >
-            <ListView.ItemTemplate>
-                <DataTemplate 
-                    x:DataType="qbt:QbtDownloadData">
-                    <ViewCell>
-                        <components:ListElement>
-                            <Grid
+        <RefreshView 
+            Grid.Row="1"
+            IsRefreshing="{Binding FetchingData}" 
+            Command="{Binding RefreshCommand}">
+            <ListView 
+                Grid.Row="1" 
+                ItemsSource="{Binding ActiveDownloads}" 
+                VerticalOptions="FillAndExpand"
+                ItemSelected="OnItemSelected"
+                IsVisible="{Binding NotFetchingData}"
+                ItemTapped="OnItemTapped"
+                SeparatorVisibility="None"
+                HasUnevenRows="True"
+                >
+                <ListView.ItemTemplate>
+                    <DataTemplate 
+                        x:DataType="qbt:QbtDownloadData">
+                        <ViewCell>
+                            <components:ListElement>
+                                <Grid
                                     ColumnDefinitions="*, *"
                                     RowDefinitions="Auto, *, *, *"
                                 >
-                                <Label
+                                    <Label
                                         Grid.Row="0"
                                         Grid.ColumnSpan="2"
                                         Text="{Binding Name}" 
                                         FontAttributes="Bold" 
                                     />
-                                <BoxView
+                                    <BoxView
                                         Grid.Row="1"
                                         Grid.ColumnSpan="2"
                                         HeightRequest="1" Color="{StaticResource Gray400}"/>
-                                <Label
+                                    <Label
                                         Grid.Row="2"
                                         Grid.ColumnSpan="2"
                                         TextColor="{StaticResource Gray200}"
                                         Text="{Binding FullItemDescription}" 
                                         VerticalOptions="Center"
                                     />
-                                <HorizontalStackLayout
+                                    <HorizontalStackLayout
                                         Grid.Row="3"
                                         Grid.ColumnSpan="2"
                                         HorizontalOptions="CenterAndExpand"
                                         Margin="5"
                                         >
-                                    <ImageButton 
+                                        <ImageButton 
                                             Grid.RowSpan="2"
                                             Grid.Column="0"
                                             Margin="30, 0, 30, 0"
@@ -135,18 +115,18 @@
                                             VerticalOptions="Center"
                                             Clicked="ScaleButton"
                                         >
-                                        <ImageButton.Behaviors>
-                                            <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
-                                        </ImageButton.Behaviors>
-                                        <ImageButton.GestureRecognizers>
-                                            <TapGestureRecognizer
+                                            <ImageButton.Behaviors>
+                                                <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                                            </ImageButton.Behaviors>
+                                            <ImageButton.GestureRecognizers>
+                                                <TapGestureRecognizer
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ManageQbtViewModel}}, Path=PlayPauseDownload }"
                                                     CommandParameter="{Binding}"
                                                 />
-                                        </ImageButton.GestureRecognizers>
-                                    </ImageButton>
+                                            </ImageButton.GestureRecognizers>
+                                        </ImageButton>
 
-                                    <ImageButton 
+                                        <ImageButton 
                                             Grid.RowSpan="2"
                                             Grid.Column="0"
                                             Margin="30, 0, 30, 0"
@@ -155,23 +135,24 @@
                                             VerticalOptions="Center"
                                             Clicked="ScaleButton"
                                         >
-                                        <ImageButton.Behaviors>
-                                            <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
-                                        </ImageButton.Behaviors>
-                                        <ImageButton.GestureRecognizers>
-                                            <TapGestureRecognizer
+                                            <ImageButton.Behaviors>
+                                                <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
+                                            </ImageButton.Behaviors>
+                                            <ImageButton.GestureRecognizers>
+                                                <TapGestureRecognizer
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ManageQbtViewModel}}, Path=DeleteDownload}"
                                                     CommandParameter="{Binding}"
                                                 />
-                                        </ImageButton.GestureRecognizers>
-                                    </ImageButton>
-                                </HorizontalStackLayout>
-                            </Grid>
-                        </components:ListElement>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                                            </ImageButton.GestureRecognizers>
+                                        </ImageButton>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </components:ListElement>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </RefreshView>
 
     </Grid>
 </pages:BasePage>

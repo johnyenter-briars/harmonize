@@ -20,3 +20,19 @@ def test_list_music(setup):
 
     response = requests.get(url)
     assert response.status_code == 200, f'Expected status code 200, but got {response.status_code}'
+
+
+def test_delete_entry(setup):
+    url = f"{setup['base_url']}/media/music"
+
+    response = requests.get(url)
+
+    data = response.json()
+
+    id_to_delete = data['value'][0]['id']
+
+    url = f"{setup['base_url']}/media/music"
+
+    response = requests.delete(url)
+
+    assert response.status_code == 204, f'Expected status code 204, but got {response.status_code}'

@@ -64,7 +64,7 @@ public class ManageQbtViewModel(
         await imageButton.RotateTo(100, 300, Easing.CubicInOut);
         await imageButton.RotateTo(0, 300, Easing.CubicInOut);
 
-        await RefreshQbtDownloads();
+        await Refresh();
     });
     public ICommand DeleteDownload => new Command<QbtDownloadData>(async (downloadData) =>
     {
@@ -78,7 +78,7 @@ public class ManageQbtViewModel(
 
         if (success)
         {
-            await RefreshQbtDownloads();
+            await Refresh();
         }
 
     });
@@ -96,7 +96,7 @@ public class ManageQbtViewModel(
 
             if (success)
             {
-                await RefreshQbtDownloads();
+                await Refresh();
             }
         }
         else if (downloadData.InActive)
@@ -112,11 +112,12 @@ public class ManageQbtViewModel(
             if (success)
             {
                 await Task.Delay(1500);
-                await RefreshQbtDownloads();
+                await Refresh();
             }
         }
     });
-    async Task RefreshQbtDownloads()
+    public ICommand RefreshCommand => new Command(async () => await Refresh());
+    async Task Refresh()
     {
         var (results, success) = await FetchData(async () =>
         {
@@ -138,7 +139,7 @@ public class ManageQbtViewModel(
 
     public override async Task OnAppearingAsync()
     {
-        await RefreshQbtDownloads();
+        await Refresh();
     }
 }
 

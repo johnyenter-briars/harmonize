@@ -25,7 +25,7 @@
 
             <Label Text="Channel Name" FontSize="Medium" />
             <Entry 
-            Text="{Binding YoutubeSearchResult.Channel.Name, Mode=OneWay}" 
+            Text="{Binding YoutubeSearchResult.Channel, Mode=OneWay}" 
             IsReadOnly="True" />
 
             <Label Text="Duration" FontSize="Medium" />

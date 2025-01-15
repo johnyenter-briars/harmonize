@@ -71,6 +71,7 @@
 	  <None Remove="Resources\Images\icons8_clock_50.png" />
 	  <None Remove="Resources\Images\icons8_closed_captioning_48.png" />
 	  <None Remove="Resources\Images\icons8_closed_captioning_50.png" />
+	  <None Remove="Resources\Images\icons8_collapse_50.png" />
 	  <None Remove="Resources\Images\icons8_controls_64.png" />
 	  <None Remove="Resources\Images\icons8_database_export_50.png" />
 	  <None Remove="Resources\Images\icons8_data_pending_50.png" />
@@ -90,6 +91,8 @@
 	  <None Remove="Resources\Images\icons8_laptop_play_video_64.png" />
 	  <None Remove="Resources\Images\icons8_left_arrow_60.png" />
 	  <None Remove="Resources\Images\icons8_list_50.png" />
+	  <None Remove="Resources\Images\icons8_log_50.png" />
+	  <None Remove="Resources\Images\icons8_media_50.png" />
 	  <None Remove="Resources\Images\icons8_memory_slot_50.png" />
 	  <None Remove="Resources\Images\icons8_move_up_row_50.png" />
 	  <None Remove="Resources\Images\icons8_music_album_50.png" />
@@ -108,6 +111,7 @@
 	  <None Remove="Resources\Images\icons8_processor_50.png" />
 	  <None Remove="Resources\Images\icons8_progress_indicator_50.png" />
 	  <None Remove="Resources\Images\icons8_reboot_50.png" />
+	  <None Remove="Resources\Images\icons8_remote_50.png" />
 	  <None Remove="Resources\Images\icons8_restart_50.png" />
 	  <None Remove="Resources\Images\icons8_rewind_50.png" />
 	  <None Remove="Resources\Images\icons8_right_arrow_60.png" />
@@ -141,7 +145,7 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="4.0.1" />
+		<PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="4.1.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="AlohaKit.Animations" Version="1.0.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
@@ -149,14 +153,27 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Harmonize.Client\Harmonize.Client.csproj" />
+	  <ProjectReference Include="..\Harmonize.Kodi\Harmonize.Kodi.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Components\BottomMenu.xaml.cs">
+	    <DependentUpon>BottomMenu.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Page\View\VideoLibraryPage.xaml.cs">
+	    <DependentUpon>VideoLibraryPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Page\View\EditJobPage.xaml.cs">
 	    <DependentUpon>EditJobPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Page\View\MediaControlPage.xaml.cs">
+	    <DependentUpon>MediaControlPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Page\View\MagnetLinkSearchPage.xaml.cs">
 	    <DependentUpon>MagnetLinkSearchPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Page\View\AudioLibraryPage.xaml.cs">
+	    <DependentUpon>AudioLibraryPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Page\View\YoutubeSearchPage.xaml.cs">
 	    <DependentUpon>YouTubeSearchPage.xaml</DependentUpon>
@@ -167,16 +184,31 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Components\BottomMenu.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Components\ListElement.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Page\View\VideoLibraryPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Page\View\EditJobPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\MediaControlPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\LogPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\MagnetLinkSearchPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\MannageQbtPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\AudioLibraryPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\YouTubeSearchPage.xaml">

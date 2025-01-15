@@ -2,7 +2,7 @@ import datetime
 import uuid
 from enum import Enum
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 from harmonize.defs.response import BaseSchema
 
@@ -27,9 +27,24 @@ class MediaElementSource(Enum):
     MAGNETLINK = 1
 
 
-class MediaElementType(Enum):
+class MediaEntryType(Enum):
     AUDIO = 0
     VIDEO = 1
+
+
+class MediaEntryPlaylistLink(SQLModel, table=True):
+    playlist_id: uuid.UUID = Field(foreign_key='playlist.id', primary_key=True)
+    media_entry_id: uuid.UUID = Field(foreign_key='mediaentry.id', primary_key=True)
+
+
+class Playlist(BaseSchema, SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    name: str
+    date_created: datetime.datetime = Field(default_factory=datetime.datetime.utcnow)
+
+    media_entries: list['MediaEntry'] = Relationship(
+        back_populates='playlists', link_model=MediaEntryPlaylistLink
+    )
 
 
 class MediaEntry(BaseSchema, SQLModel, table=True):
@@ -38,6 +53,11 @@ class MediaEntry(BaseSchema, SQLModel, table=True):
     absolute_path: str
     source: MediaElementSource
     youtube_id: str | None
-    type: MediaElementType
+    magnet_link: str | None
+    type: MediaEntryType
     date_added: datetime.datetime
-    type: MediaElementType
+    cover_art_absolute_path: str | None
+    thumbnail_art_absolute_path: str | None
+    playlists: list['Playlist'] = Relationship(
+        back_populates='media_entries', link_model=MediaEntryPlaylistLink
+    )

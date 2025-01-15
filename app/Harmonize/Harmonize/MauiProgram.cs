@@ -1,12 +1,15 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Core.Views;
 using Harmonize.Client;
+using Harmonize.Log;
 using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
 using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
 using MediaManager = Harmonize.Service.MediaManager;
+using static Harmonize.Constants;
+using Harmonize.Kodi;
 
 namespace Harmonize
 {
@@ -29,16 +32,30 @@ namespace Harmonize
             builder.Logging.AddDebug();
 #endif
 
+            builder.Services.AddSingleton<ILoggerProvider>(new FileLoggerProvider(LogFilePath));
 
             builder.Services.AddSingleton<AlertService>();
             builder.Services.AddSingleton<FailsafeService>();
 
-            builder.Services.AddSingleton<PreferenceManager>();
+            builder.Services.AddSingleton<HarmonizeClient>();
             builder.Services.AddSingleton<HarmonizeDatabase>();
+            builder.Services.AddSingleton<KodiClient>();
+            builder.Services.AddSingleton((services) =>
+            {
+                var kodiClient = services.GetService<KodiClient>() ?? throw new NullReferenceException(nameof(KodiClient));
+                var harmonizeClient = services.GetService<HarmonizeClient>() ?? throw new NullReferenceException(nameof(HarmonizeClient));
+
+                var preferenceManager = new PreferenceManager(harmonizeClient, kodiClient);
+
+                var userSettings = preferenceManager.UserSettings;
+
+                preferenceManager.SetUserSetttings(userSettings);
+
+                return preferenceManager;
+            });
 
             builder.Services.AddSingleton<MediaElementViewModel>();
             builder.Services.AddSingleton<SettingsViewModel>();
-            builder.Services.AddSingleton<MediaListViewModel>();
             builder.Services.AddSingleton<HomePageViewModel>();
             builder.Services.AddSingleton<JobListViewModel>();
             builder.Services.AddSingleton<EditJobViewModel>();
@@ -47,10 +64,14 @@ namespace Harmonize
             builder.Services.AddSingleton<YouTubePlaylistSearchResultEditViewModel>();
             builder.Services.AddSingleton<MagnetLinkSearchViewModel>();
             builder.Services.AddSingleton<ManageQbtViewModel>();
+            builder.Services.AddSingleton<LogViewModel>();
+            builder.Services.AddSingleton<MediaControlViewModel>();
+            builder.Services.AddSingleton<AudioLibraryViewModel>();
+            builder.Services.AddSingleton<BottomMenuViewModel>();
+            builder.Services.AddSingleton<VideoLibraryViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();
-            builder.Services.AddSingleton<MediaListPage>();
             builder.Services.AddSingleton<HomePage>();
             builder.Services.AddSingleton<JobListPage>();
             builder.Services.AddSingleton<EditJobPage>();
@@ -59,17 +80,10 @@ namespace Harmonize
             builder.Services.AddSingleton<YouTubePlaylistSearchResultEditPage>();
             builder.Services.AddSingleton<MagnetLinkSearchPage>();
             builder.Services.AddSingleton<ManageQbtPage>();
-
-            builder.Services.AddSingleton(service =>
-            {
-                var preferenceManager = service.GetService<PreferenceManager>() ?? throw new NullReferenceException($"{nameof(PreferenceManager)} is not registered");
-
-                var userSettings = preferenceManager.UserSettings;
-
-                var client = new HarmonizeClient(userSettings.DomainName, userSettings.Port);
-
-                return client;
-            });
+            builder.Services.AddSingleton<LogPage>();
+            builder.Services.AddSingleton<MediaControlPage>();
+            builder.Services.AddSingleton<AudioLibraryPage>();
+            builder.Services.AddSingleton<VideoLibraryPage>();
 
             builder.Services.AddSingleton<MediaManager>();
 

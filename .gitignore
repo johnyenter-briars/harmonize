@@ -6,14 +6,19 @@ bin/
 *.mp4
 *.mp3
 *.m4a
+*.mkv
 *.info.json
 *.png
 .venv/
 *.webm
+*.jpeg
+*.webp
 *.part
 *.ytdl
 *.jpg
 *.db
+
+secrets.json
 
 
 !app/Harmonize/Harmonize/Resources/Raw/*.mp3

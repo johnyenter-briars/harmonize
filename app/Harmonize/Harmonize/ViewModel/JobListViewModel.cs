@@ -15,10 +15,9 @@ public class JobListViewModel(
     FailsafeService failsafeService
         ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
+    private readonly HarmonizeClient harmonizeClient = harmonizeClient;
     #region Bindings
     private ObservableCollection<Job> jobs = [];
-    private readonly HarmonizeClient harmonizeClient = harmonizeClient;
-
     public ObservableCollection<Job> Jobs
     {
         get { return jobs; }
@@ -62,7 +61,8 @@ public class JobListViewModel(
     }
     #endregion
 
-    public async Task PopulateJobs()
+    public ICommand RefreshCommand => new Command(async () => await Refresh());
+    public async Task Refresh()
     {
         Jobs.Clear();
 
@@ -70,7 +70,7 @@ public class JobListViewModel(
         {
             return await failsafeService.Fallback(harmonizeClient.GetJobs, null);
         });
-            
+
         if (success)
         {
             foreach (var m in response?.Value ?? [])
@@ -89,17 +89,16 @@ public class JobListViewModel(
             });
         }
     }
-
     public override async Task OnAppearingAsync()
     {
-        await PopulateJobs();
+        await Refresh();
     }
 
-    public ICommand Refresh => new Command<ImageButton>(async (imageButton) =>
-    {
-        await imageButton.RotateTo(100, 300, Easing.CubicInOut);
-        await imageButton.RotateTo(0, 300, Easing.CubicInOut);
+    //public ICommand Refresh => new Command<ImageButton>(async (imageButton) =>
+    //{
+    //    await imageButton.RotateTo(100, 300, Easing.CubicInOut);
+    //    await imageButton.RotateTo(0, 300, Easing.CubicInOut);
 
-        await PopulateJobs();
-    });
+    //    await Refresh();
+    //});
 }

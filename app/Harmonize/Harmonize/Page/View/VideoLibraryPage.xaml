@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BasePage 
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Harmonize.Page.View"
+             xmlns:pages="clr-namespace:Harmonize.Page"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+             x:TypeArguments="viewModels:VideoLibraryViewModel"
+             x:DataType="viewModels:VideoLibraryViewModel"
+             x:Class="Harmonize.Page.View.VideoLibraryPage"
+             xmlns:model="clr-namespace:Harmonize.Model"
+             xmlns:harmonizeModel="clr-namespace:Harmonize.Client.Model.Media;assembly=Harmonize.Client"
+             xmlns:components="clr-namespace:Harmonize.Components"
+             Title="Video Library">
+
+    <StackLayout Padding="10">
+        <RefreshView 
+            IsRefreshing="{Binding FetchingData}" 
+            Command="{Binding RefreshCommand}">
+
+            <ListView 
+                Grid.Row="1" 
+                IsVisible="True"
+                ItemsSource="{Binding MediaEntries}"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                ItemTapped="OnItemTapped"
+                RowHeight="95"
+                SeparatorVisibility="None"
+                >
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="harmonizeModel:MediaEntry">
+                        <ViewCell>
+                            <components:ListElement>
+                                <Grid
+                                    RowDefinitions="Auto"
+                                    ColumnDefinitions="*, Auto"
+                                    VerticalOptions="Center"
+                                    Padding="5">
+
+                                    <Label 
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        FontSize="14" 
+                                        Text="{Binding Name}" 
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="Start" />
+
+                                    <Button 
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Text="⋮"
+                                        FontSize="18"
+                                        BackgroundColor="Transparent"
+                                        VerticalOptions="Center"
+                                        Clicked="OnOpenBottomSheetClicked"
+                                        />
+
+                                </Grid>
+                            </components:ListElement>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </RefreshView>
+
+        <components:BottomMenu x:Name="bottomMenu" IsVisible="False">
+            <Frame 
+                BackgroundColor="{StaticResource Gray600}"
+                CornerRadius="16"
+                HasShadow="True"
+                Padding="15"
+                VerticalOptions="End"
+                HorizontalOptions="FillAndExpand"
+                AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
+                AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional">
+                <StackLayout Spacing="12">
+                    <Button Text="Send to Media System"
+                        BackgroundColor="{StaticResource PrimaryDark}"
+                        TextColor="White"
+                        FontSize="16"
+                        CornerRadius="25"
+                        HeightRequest="45"
+                        />
+
+                    <Button Text="Add to Season"
+                        BackgroundColor="{StaticResource PrimaryDark}"
+                        TextColor="White"
+                        FontSize="16"
+                        CornerRadius="25"
+                        HeightRequest="45"
+                        />
+
+                </StackLayout>
+            </Frame>
+
+
+        </components:BottomMenu>
+
+    </StackLayout>
+</pages:BasePage>

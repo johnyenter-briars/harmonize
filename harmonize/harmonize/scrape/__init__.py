@@ -11,16 +11,17 @@ def transform_torrent_data(
     date_posteds: list[str],
 ) -> list[MagnetLinkSearchResult]:
     return [
-        {
-            'magnet_link': magnet_link,
-            'number_seeders': number_seeders,
-            'number_leechers': number_leechers,
-            'name': name,
-            'number_downloads': number_downloads,
-            'size': size,
-            'date_posted': date_posted,
-        }
+        MagnetLinkSearchResult(
+            magnet_link=magnet_link,
+            number_seeders=number_seeders,
+            number_leechers=number_leechers,
+            name=name,
+            number_downloads=number_downloads,
+            size=size,
+            date_posted=date_posted,
+        )
         for magnet_link, number_seeders, number_leechers, name, number_downloads, size, date_posted in zip(
             magnet_links, seeders, leechers, names, downloads, sizes, date_posteds, strict=False
         )
     ]
+

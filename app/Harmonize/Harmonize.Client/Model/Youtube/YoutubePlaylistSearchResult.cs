@@ -20,8 +20,8 @@ public class YoutubePlaylistSearchResult
     public required string Type { get; set; }
     public required string Id { get; set; }
     public required string Title { get; set; }
-    public string? VideoCount { get; set; }
-    public PlaylistChannel? Channel { get; set; }
+    public int? VideoCount { get; set; }
+    public string? Channel { get; set; }
     public List<PlaylistThumbnail>? Thumbnails { get; set; }
     public string? Link { get; set; }
 }

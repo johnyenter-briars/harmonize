@@ -12,8 +12,8 @@ namespace Harmonize.Client;
 
 public class HarmonizeClient
 {
-    private string hostName;
-    private int port;
+    private string? hostName;
+    private int? port;
     private static readonly JsonSerializerOptions SnakeCaseOptions = new JsonSerializerOptions
     {
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
@@ -34,11 +34,18 @@ public class HarmonizeClient
     {
         Timeout = new TimeSpan(0, 1, 100),
     };
-    public HarmonizeClient(string hostName, int port)
+    #region Utilities
+    public HarmonizeClient SetPort(int port)
+    {
+        this.port = port;
+        return this;
+    }
+    public HarmonizeClient SetHostName(string hostName)
     {
         this.hostName = hostName;
-        this.port = port;
+        return this;
     }
+    #endregion
     #region GET
     public string GetMediaMetadataArtworkUrl(MediaMetadata mediaMetadata, string artworkSize)
     {
@@ -48,9 +55,13 @@ public class HarmonizeClient
 
         return xlMediaUrl;
     }
-    public async Task<MediaEntriesResponse> GetMedia()
+    public async Task<MediaEntriesResponse> GetAudio()
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"media/audio", HttpMethod.Get);
+    }
+    public async Task<MediaEntriesResponse> GetVideo()
+    {
+        return await HarmonizeRequest<MediaEntriesResponse>($"media/video", HttpMethod.Get);
     }
     public async Task<byte[]> GetMediaBytes(IMediaEntry mediaEntry)
     {

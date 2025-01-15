@@ -18,6 +18,7 @@ public class MediaManager
     readonly HarmonizeClient harmonizeClient;
     readonly HarmonizeDatabase harmonizeDatabase;
     readonly FailsafeService failsafeService;
+    private readonly AlertService alertService;
 
     public static string MediaPath => Path.Combine(FileSystem.AppDataDirectory, "media");
     public static string AudioPath => Path.Combine(FileSystem.AppDataDirectory, "media", "audio");
@@ -27,13 +28,15 @@ public class MediaManager
         ILogger<MediaManager> logger,
         HarmonizeClient harmonizeClient,
         HarmonizeDatabase harmonizeDatabase,
-        FailsafeService failsafeService
+        FailsafeService failsafeService,
+        AlertService alertService
         )
     {
         this.logger = logger;
         this.harmonizeClient = harmonizeClient;
         this.harmonizeDatabase = harmonizeDatabase;
         this.failsafeService = failsafeService;
+        this.alertService = alertService;
         CreateMediaFolders();
     }
     void CreateMediaFolders()
@@ -46,28 +49,58 @@ public class MediaManager
             }
         }
     }
-    public async Task<List<LocalMediaEntry>> GetMediaEntries()
-    {
-        var media = await harmonizeDatabase.GetMediaEntries();
-        var (response, success) = await failsafeService.Fallback(async () =>
-        {
-            return await harmonizeClient.GetMedia();
-        }, null);
-
-        if (media.Count != response?.Value.Count)
-        {
-            Task.Run(SyncLocalMediaStore);
-        }
-
-        return media;
-    }
-    private async Task SyncLocalMediaStore()
+    public async Task<List<LocalMediaEntry>> GetAudioMediaEntries(
+        Func<Task>? callback = null
+        )
     {
         var localMedia = await harmonizeDatabase.GetMediaEntries();
-        var (response, success) = await failsafeService.Fallback(async () =>
+
+        var (audioResponse, audioSuccess) = await failsafeService.Fallback(harmonizeClient.GetAudio, null);
+
+
+        if (!audioSuccess)
         {
-            return await harmonizeClient.GetMedia();
-        }, null);
+            return [];
+        }
+
+        if (localMedia.Count != audioResponse?.Value.Count)
+        {
+            Task.Run(async () => await SyncLocalMediaStore(callback));
+        }
+
+        return localMedia;
+    }
+    public async Task<List<LocalMediaEntry>> GetAudioMediaEntries()
+    {
+        var localMedia = await harmonizeDatabase.GetMediaEntries();
+
+        var (audioResponse, audioSuccess) = await failsafeService.Fallback(harmonizeClient.GetAudio, null);
+
+        if (!audioSuccess || audioResponse is null)
+        {
+            return [];
+        }
+
+        foreach(var remoteEntry in audioResponse.Value ?? [])
+        {
+            var localEntry = localMedia.FirstOrDefault(e => e?.Id == remoteEntry.Id, null);
+
+            if (localEntry is null)
+            {
+                await harmonizeDatabase.CreateUnsyncedMediaEntry(remoteEntry);
+            }
+        }
+
+        var localMediaAfterUnSync = await harmonizeDatabase.GetMediaEntries();
+
+        return localMediaAfterUnSync;
+    }
+    private async Task SyncLocalMediaStore(
+        Func<Task>? callback = null
+        )
+    {
+        var localMedia = await harmonizeDatabase.GetMediaEntries();
+        var (response, success) = await failsafeService.Fallback(harmonizeClient.GetAudio, null);
 
         if (!success)
         {
@@ -87,6 +120,13 @@ public class MediaManager
         }
 
         logger.LogInformation("Finished syncing local db");
+
+        alertService.ShowAlert("Sync", "Finished syncing local db");
+
+        if (callback != null)
+        {
+            await callback();
+        }
     }
     public async Task<LocalMediaEntry> GetMediaEntry(Guid id)
     {

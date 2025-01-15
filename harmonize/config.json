@@ -1,8 +1,9 @@
 {
-    "run-qbt": "false",
+    "run-qbt": true,
+    "run-transfer": true,
     "media-root": "./media",
-    "qbt-run": false,
     "qbt-domain-name": "localhost",
     "qbt-port": 8080,
-    "qbt-version": "v2"
+    "qbt-version": "v2",
+    "reset-db-on-launch": false
 }
