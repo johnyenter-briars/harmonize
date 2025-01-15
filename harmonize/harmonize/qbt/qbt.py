@@ -146,7 +146,7 @@ async def delete_download(torrent_hash: str) -> str:
 
 
 def _download_finished(data: QbtDownloadData) -> bool:
-    return data.state == 'stalledUP'
+    return data.state in ('stalledUP', 'uploading')
 
 
 def _media_entry_exists(
@@ -201,3 +201,6 @@ async def qbt_background_service():
             await asyncio.sleep(30)
         except Exception as e:
             logger.exception('Error in background service: %s', str(e))
+        finally:
+            if session:  # type: ignore
+                session.close()

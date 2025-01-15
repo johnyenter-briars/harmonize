@@ -17,6 +17,7 @@ bin/
 *.ytdl
 *.jpg
 *.db
+*-bak
 
 secrets.json
 
