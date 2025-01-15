@@ -157,6 +157,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Components\BottomMenu.xaml.cs">
+	    <DependentUpon>BottomMenu.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Page\View\EditJobPage.xaml.cs">
 	    <DependentUpon>EditJobPage.xaml</DependentUpon>
 	  </Compile>
@@ -166,8 +169,8 @@
 	  <Compile Update="Page\View\MagnetLinkSearchPage.xaml.cs">
 	    <DependentUpon>MagnetLinkSearchPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Page\View\LibraryPage.xaml.cs">
-	    <DependentUpon>LibraryPage.xaml</DependentUpon>
+	  <Compile Update="Page\View\AudioLibraryPage.xaml.cs">
+	    <DependentUpon>AudioLibraryPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Page\View\YoutubeSearchPage.xaml.cs">
 	    <DependentUpon>YouTubeSearchPage.xaml</DependentUpon>
@@ -178,6 +181,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Components\BottomMenu.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Components\ListElement.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -196,7 +202,7 @@
 	  <MauiXaml Update="Page\View\MannageQbtPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Page\View\LibraryPage.xaml">
+	  <MauiXaml Update="Page\View\AudioLibraryPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\YouTubeSearchPage.xaml">

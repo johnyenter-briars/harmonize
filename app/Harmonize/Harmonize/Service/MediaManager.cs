@@ -49,23 +49,51 @@ public class MediaManager
             }
         }
     }
-    public async Task<List<LocalMediaEntry>> GetMediaEntries(
+    public async Task<List<LocalMediaEntry>> GetAudioMediaEntries(
         Func<Task>? callback = null
         )
     {
-        var media = await harmonizeDatabase.GetMediaEntries();
-        var (audioResponse, audioSuccess) = await failsafeService.Fallback(harmonizeClient.GetAudio, null);
-        var (videoResponse, videoSuccess) = await failsafeService.Fallback(harmonizeClient.GetAudio, null);
+        var localMedia = await harmonizeDatabase.GetMediaEntries();
 
-        if (audioSuccess)
+        var (audioResponse, audioSuccess) = await failsafeService.Fallback(harmonizeClient.GetAudio, null);
+
+
+        if (!audioSuccess)
         {
-            if (media.Count != audioResponse?.Value.Count)
+            return [];
+        }
+
+        if (localMedia.Count != audioResponse?.Value.Count)
+        {
+            Task.Run(async () => await SyncLocalMediaStore(callback));
+        }
+
+        return localMedia;
+    }
+    public async Task<List<LocalMediaEntry>> GetAudioMediaEntries()
+    {
+        var localMedia = await harmonizeDatabase.GetMediaEntries();
+
+        var (audioResponse, audioSuccess) = await failsafeService.Fallback(harmonizeClient.GetAudio, null);
+
+        if (!audioSuccess || audioResponse is null)
+        {
+            return [];
+        }
+
+        foreach(var remoteEntry in audioResponse.Value ?? [])
+        {
+            var localEntry = localMedia.FirstOrDefault(e => e?.Id == remoteEntry.Id, null);
+
+            if (localEntry is null)
             {
-                Task.Run(async () => await SyncLocalMediaStore(callback));
+                await harmonizeDatabase.CreateUnsyncedMediaEntry(remoteEntry);
             }
         }
 
-        return media;
+        var localMediaAfterUnSync = await harmonizeDatabase.GetMediaEntries();
+
+        return localMediaAfterUnSync;
     }
     private async Task SyncLocalMediaStore(
         Func<Task>? callback = null

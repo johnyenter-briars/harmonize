@@ -1,6 +1,7 @@
 ﻿using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,17 +12,23 @@ using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
 
-public class LibraryViewModel(
+public class AudioLibraryViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
-    FailsafeService failsafeService
+    FailsafeService failsafeService,
+    ILogger<AudioLibraryPage> logger
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     public ICommand RefreshCommand => new Command(async () => await Refresh());
     public ICommand MoreInfoCommand => new Command<LocalMediaEntry>(entry =>
     {
     });
-
+    private List<string> options = ["foo", "bar"];
+    public List<string> Options 
+    {
+        get { return options; }
+        set { SetProperty(ref options, value); }
+    }
     private ObservableCollection<LocalMediaEntry> mediaEntries = [];
     public ObservableCollection<LocalMediaEntry> MediaEntries
     {
@@ -29,12 +36,16 @@ public class LibraryViewModel(
         set { SetProperty(ref mediaEntries, value); }
     }
 
+    //TODO: This doesn't work in refresh list for some reason
     async Task Refresh()
     {
-        var media = await FetchData(async () =>
+        if (FetchingData)
         {
-            return await mediaManager.GetMediaEntries(Refresh);
-        });
+            logger.LogInformation($"{nameof(FetchingData)} is true, not fetching data again");
+            return;
+        }
+
+        var media = await FetchData(mediaManager.GetAudioMediaEntries);
 
         MediaEntries.Clear();
         foreach (var m in media)

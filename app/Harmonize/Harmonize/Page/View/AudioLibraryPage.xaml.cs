@@ -1,17 +1,17 @@
 using Harmonize.Model;
 using Harmonize.Service;
 using Harmonize.ViewModel;
-using System.Collections.ObjectModel;
 
 namespace Harmonize.Page.View;
 
-public partial class MediaListPage : BasePage<MediaListViewModel>
+public partial class AudioLibraryPage : BasePage<AudioLibraryViewModel>
 {
-    private readonly MediaListViewModel viewModel;
+    private Picker _optionsPicker;
+    private readonly AudioLibraryViewModel viewModel;
     private readonly MediaManager mediaManager;
 
-    public MediaListPage(
-        MediaListViewModel viewModel,
+    public AudioLibraryPage(
+        AudioLibraryViewModel viewModel,
         MediaManager mediaManager
         ) : base(viewModel)
     {
@@ -19,7 +19,6 @@ public partial class MediaListPage : BasePage<MediaListViewModel>
 
         this.viewModel = viewModel;
         this.mediaManager = mediaManager;
-
     }
     protected override async void OnAppearing()
     {
@@ -30,6 +29,17 @@ public partial class MediaListPage : BasePage<MediaListViewModel>
         if (e.Item is LocalMediaEntry mediaEntry)
         {
             await viewModel.ItemTapped(mediaEntry);
+        }
+    }
+    private async void OnOpenBottomSheetClicked(object sender, EventArgs e)
+    {
+        if(!bottomMenu.IsVisible)
+        {
+            await bottomMenu.ShowAsync();
+        }
+        else
+        {
+            await bottomMenu.HideAsync();
         }
     }
 }

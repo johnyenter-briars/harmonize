@@ -2,17 +2,7 @@
 
 ### To Run Locally:
 
-Install uv (https://docs.astral.sh/uv/getting-started/installation/)
-
-`cd` into the `harmonize` directory
-
-Run `uv run fastapi dev .\main.py`
-
-### To run with docker:
-
-NOTE: This is for running with docker for devleopment.
-
-`docker-compose --profile dev up`
+Good luck.
 
 ## todos
 

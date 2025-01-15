@@ -1,4 +1,5 @@
-﻿using Harmonize.Model;
+﻿using Harmonize.Client.Model.Media;
+using Harmonize.Model;
 using Microsoft.Extensions.Logging;
 using SQLite;
 using System;
@@ -56,6 +57,21 @@ public class HarmonizeDatabase(
     {
         await Init();
         return await Database!.InsertAsync(item);
+    }
+    public async Task<int> CreateUnsyncedMediaEntry(MediaEntry item)
+    {
+        await Init();
+
+        var newLocalEntry = new LocalMediaEntry
+        {
+            Id = item.Id,
+            Name = item.Name,
+            LocalPath = null,
+            Type = item.Type,
+            IsSynced = false,
+        };
+
+        return await Database!.InsertAsync(newLocalEntry);
     }
 
     public async Task<int> DeleteMediaEntry(LocalMediaEntry item)

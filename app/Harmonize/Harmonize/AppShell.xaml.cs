@@ -12,7 +12,10 @@ namespace Harmonize
 
             var defaultPage = preferenceManager.UserSettings.DefaultPageOnLaunch;
 
-            CurrentItem = Items.FirstOrDefault(item => item.Title == defaultPage);
+            if (Items.Any(page => page.Title == defaultPage))
+            {
+                CurrentItem = Items.FirstOrDefault(item => item.Title == defaultPage);
+            }
 
             Routing.RegisterRoute(nameof(EditJobPage), typeof(EditJobPage));
             Routing.RegisterRoute(nameof(YouTubeSearchResultEditPage), typeof(YouTubeSearchResultEditPage));

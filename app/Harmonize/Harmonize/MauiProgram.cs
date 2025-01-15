@@ -56,7 +56,6 @@ namespace Harmonize
 
             builder.Services.AddSingleton<MediaElementViewModel>();
             builder.Services.AddSingleton<SettingsViewModel>();
-            builder.Services.AddSingleton<MediaListViewModel>();
             builder.Services.AddSingleton<HomePageViewModel>();
             builder.Services.AddSingleton<JobListViewModel>();
             builder.Services.AddSingleton<EditJobViewModel>();
@@ -67,11 +66,11 @@ namespace Harmonize
             builder.Services.AddSingleton<ManageQbtViewModel>();
             builder.Services.AddSingleton<LogViewModel>();
             builder.Services.AddSingleton<MediaControlViewModel>();
-            builder.Services.AddSingleton<LibraryViewModel>();
+            builder.Services.AddSingleton<AudioLibraryViewModel>();
+            builder.Services.AddSingleton<BottomMenuViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();
-            builder.Services.AddSingleton<MediaListPage>();
             builder.Services.AddSingleton<HomePage>();
             builder.Services.AddSingleton<JobListPage>();
             builder.Services.AddSingleton<EditJobPage>();
@@ -82,7 +81,7 @@ namespace Harmonize
             builder.Services.AddSingleton<ManageQbtPage>();
             builder.Services.AddSingleton<LogPage>();
             builder.Services.AddSingleton<MediaControlPage>();
-            builder.Services.AddSingleton<LibraryPage>();
+            builder.Services.AddSingleton<AudioLibraryPage>();
 
             builder.Services.AddSingleton<MediaManager>();
 

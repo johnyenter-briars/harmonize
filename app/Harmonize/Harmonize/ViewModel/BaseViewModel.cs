@@ -1,5 +1,6 @@
 ﻿using Harmonize.Client;
 using Harmonize.Service;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,7 +21,10 @@ public abstract partial class BaseViewModel(
     public bool FetchingData
     {
         get { return fetchingData; }
-        set { SetProperty(ref fetchingData, value); }
+        set
+        {
+            SetProperty(ref fetchingData, value);
+        }
     }
     private bool notFetchingData = true;
     public bool NotFetchingData
