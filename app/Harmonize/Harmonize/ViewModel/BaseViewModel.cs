@@ -43,6 +43,7 @@ public abstract partial class BaseViewModel(
         get { return title; }
         set { SetProperty(ref title, value); }
     }
+    //TODO: This has weird behavior with refresh view for some reason... sometimes... idk
     protected async Task<T> FetchData<T>(Func<Task<T>> callback)
     {
         FetchingData = true;

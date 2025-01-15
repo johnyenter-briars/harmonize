@@ -1,4 +1,6 @@
-﻿using Harmonize.Model;
+﻿using Harmonize.Client;
+using Harmonize.Client.Model.Media;
+using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
 using Microsoft.Extensions.Logging;
@@ -12,15 +14,16 @@ using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
 
-public class AudioLibraryViewModel(
+public class VideoLibraryViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
     FailsafeService failsafeService,
-    ILogger<VideoLibraryPage> logger
+    ILogger<VideoLibraryPage> logger,
+    HarmonizeClient harmonizeCilent
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     public ICommand RefreshCommand => new Command(async () => await Refresh());
-    public ICommand MoreInfoCommand => new Command<LocalMediaEntry>(entry =>
+    public ICommand MoreInfoCommand => new Command<MediaEntry>(entry =>
     {
     });
     private List<string> options = ["foo", "bar"];
@@ -29,26 +32,22 @@ public class AudioLibraryViewModel(
         get { return options; }
         set { SetProperty(ref options, value); }
     }
-    private ObservableCollection<LocalMediaEntry> mediaEntries = [];
-    public ObservableCollection<LocalMediaEntry> MediaEntries
+    private ObservableCollection<MediaEntry> mediaEntries = [];
+    public ObservableCollection<MediaEntry> MediaEntries
     {
         get { return mediaEntries; }
         set { SetProperty(ref mediaEntries, value); }
     }
 
-    //TODO: This doesn't work in refresh list for some reason
     async Task Refresh()
     {
-        if (FetchingData)
+        var (response, success) = await FetchData(async () =>
         {
-            logger.LogInformation($"{nameof(FetchingData)} is true, not fetching data again");
-            return;
-        }
-
-        var media = await FetchData(mediaManager.GetAudioMediaEntries);
+            return await failsafeService.Fallback(harmonizeCilent.GetVideo, null);
+        });
 
         MediaEntries.Clear();
-        foreach (var m in media)
+        foreach (var m in response?.Value ?? [])
         {
             MediaEntries.Add(m);
         }

@@ -160,6 +160,9 @@
 	  <Compile Update="Components\BottomMenu.xaml.cs">
 	    <DependentUpon>BottomMenu.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Page\View\VideoLibraryPage.xaml.cs">
+	    <DependentUpon>VideoLibraryPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Page\View\EditJobPage.xaml.cs">
 	    <DependentUpon>EditJobPage.xaml</DependentUpon>
 	  </Compile>
@@ -185,6 +188,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Components\ListElement.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\VideoLibraryPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\EditJobPage.xaml">

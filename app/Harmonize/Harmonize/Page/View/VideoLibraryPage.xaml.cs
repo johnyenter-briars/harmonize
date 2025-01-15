@@ -4,14 +4,14 @@ using Harmonize.ViewModel;
 
 namespace Harmonize.Page.View;
 
-public partial class AudioLibraryPage : BasePage<AudioLibraryViewModel>
+public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
 {
     private Picker _optionsPicker;
-    private readonly AudioLibraryViewModel viewModel;
+    private readonly VideoLibraryViewModel viewModel;
     private readonly MediaManager mediaManager;
 
-    public AudioLibraryPage (
-        AudioLibraryViewModel viewModel,
+    public VideoLibraryPage(
+        VideoLibraryViewModel viewModel,
         MediaManager mediaManager
         ) : base(viewModel)
     {
@@ -28,12 +28,12 @@ public partial class AudioLibraryPage : BasePage<AudioLibraryViewModel>
     {
         if (e.Item is LocalMediaEntry mediaEntry)
         {
-            await viewModel.ItemTapped(mediaEntry);
+            //await viewModel.ItemTapped(mediaEntry);
         }
     }
     private async void OnOpenBottomSheetClicked(object sender, EventArgs e)
     {
-        if(!bottomMenu.IsVisible)
+        if (!bottomMenu.IsVisible)
         {
             await bottomMenu.ShowAsync();
         }

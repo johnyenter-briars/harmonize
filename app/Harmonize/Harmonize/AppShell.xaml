@@ -23,6 +23,17 @@
         </Tab>
     </FlyoutItem>
     <FlyoutItem 
+                Title="Video Library" 
+                Icon="icons8_media_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Video Library"
+                ContentTemplate="{DataTemplate view:VideoLibraryPage}"
+                Route="VideoLibraryPage" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
                 Title="Magnet Link Search" 
                 Icon="icons8_search_more_50.png"
                 >

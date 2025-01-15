@@ -68,6 +68,7 @@ namespace Harmonize
             builder.Services.AddSingleton<MediaControlViewModel>();
             builder.Services.AddSingleton<AudioLibraryViewModel>();
             builder.Services.AddSingleton<BottomMenuViewModel>();
+            builder.Services.AddSingleton<VideoLibraryViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();
@@ -82,6 +83,7 @@ namespace Harmonize
             builder.Services.AddSingleton<LogPage>();
             builder.Services.AddSingleton<MediaControlPage>();
             builder.Services.AddSingleton<AudioLibraryPage>();
+            builder.Services.AddSingleton<VideoLibraryPage>();
 
             builder.Services.AddSingleton<MediaManager>();
 
