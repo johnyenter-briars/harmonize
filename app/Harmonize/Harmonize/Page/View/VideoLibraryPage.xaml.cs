@@ -1,3 +1,4 @@
+using AlohaKit.Animations;
 using Harmonize.Model;
 using Harmonize.Service;
 using Harmonize.ViewModel;
@@ -9,6 +10,7 @@ public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
     private Picker _optionsPicker;
     private readonly VideoLibraryViewModel viewModel;
     private readonly MediaManager mediaManager;
+    private object? previousSender = null;
 
     public VideoLibraryPage(
         VideoLibraryViewModel viewModel,
@@ -33,13 +35,27 @@ public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
     }
     private async void OnOpenBottomSheetClicked(object sender, EventArgs e)
     {
+        if (sender is Button button)
+        {
+            var currentScale = button.Scale;
+            await button.Animate(new StoryBoard(
+              [
+                 new ScaleToAnimation { Scale = 2, Duration = "150" },
+                 new ScaleToAnimation { Scale = currentScale, Duration = "100" }
+              ]));
+        }
         if (!bottomMenu.IsVisible)
         {
             await bottomMenu.ShowAsync();
         }
         else
         {
-            await bottomMenu.HideAsync();
+            if (sender == previousSender)
+            {
+                await bottomMenu.HideAsync();
+            }
         }
+
+        previousSender = sender;
     }
 }

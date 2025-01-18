@@ -26,8 +26,23 @@ public class VideoLibraryViewModel(
     public ICommand MoreInfoCommand => new Command<MediaEntry>(entry =>
     {
     });
+    public ICommand SendToMediaSystemCommand => new Command(() =>
+    {
+        var bing = SelectedMediaEntry;
+        logger.LogInformation("foo");
+    });
+    private MediaEntry selectedMediaEntry;
+    public MediaEntry SelectedMediaEntry
+    {
+        get { return selectedMediaEntry; }
+        set { SetProperty(ref selectedMediaEntry, value); }
+    }
+    public ICommand OpenBottomSheetCommand => new Command<MediaEntry>(entry =>
+    {
+        SelectedMediaEntry = entry;
+    });
     private List<string> options = ["foo", "bar"];
-    public List<string> Options 
+    public List<string> Options
     {
         get { return options; }
         set { SetProperty(ref options, value); }
