@@ -10,7 +10,7 @@ import pydantic
 from sqlmodel import Session, select
 
 from harmonize.config.harmonizeconfig import HARMONIZE_CONFIG
-from harmonize.const import VIDEO_ROOT
+from harmonize.const import SUPPORTED_EXTENSIONS, VIDEO_EXTENSIONS, VIDEO_ROOT
 from harmonize.db.database import get_session_non_gen
 from harmonize.db.models import MediaElementSource, MediaEntry, MediaEntryType
 from harmonize.defs.qbt import QbtDownloadData
@@ -158,14 +158,69 @@ def _media_entry_exists(
     return len(media_entries) > 0
 
 
-def save_file(download: QbtDownloadData) -> Path:
+def save_file(download: QbtDownloadData, session: Session, logger: logging.Logger):
     path = Path(download.content_path)
 
     media_root_path = VIDEO_ROOT / path.name
 
     shutil.copy2(path, media_root_path)
 
-    return media_root_path
+    media_entry = MediaEntry(
+        name=download.name,
+        absolute_path=media_root_path.absolute().as_posix(),
+        source=MediaElementSource.MAGNETLINK,
+        youtube_id=None,
+        magnet_link=download.magnet_uri,
+        type=MediaEntryType.VIDEO,
+        date_added=datetime.datetime.now(datetime.UTC),
+        cover_art_absolute_path=None,
+        thumbnail_art_absolute_path=None,
+    )
+
+    session.add(media_entry)
+    session.commit()
+
+    logger.debug('Added media entry: %s', media_entry.id)
+
+
+import logging
+
+from sqlalchemy.orm import Session
+
+
+def save_directory_files(download: QbtDownloadData, session: Session, logger: logging.Logger):
+    path = Path(download.content_path)
+
+    if not path.is_dir():
+        logger.error('Provided path is not a directory: %s', path)
+        return
+
+    for file in path.iterdir():
+        if file.is_file() and file.suffix.lower() in SUPPORTED_EXTENSIONS:
+            media_root_path = VIDEO_ROOT / file.name
+
+            shutil.copy2(file, media_root_path)
+
+            media_entry = MediaEntry(
+                name=file.stem,
+                absolute_path=media_root_path.absolute().as_posix(),
+                source=MediaElementSource.MAGNETLINK,
+                youtube_id=None,
+                magnet_link=download.magnet_uri,
+                type=MediaEntryType.VIDEO
+                if file.suffix.lower() in VIDEO_EXTENSIONS
+                else MediaEntryType.SUBTITLE,
+                date_added=datetime.datetime.now(datetime.UTC),
+                cover_art_absolute_path=None,
+                thumbnail_art_absolute_path=None,
+            )
+
+            session.add(media_entry)
+
+            logger.debug('Added media entry: %s', media_entry.id)
+
+    session.commit()
+    logger.info('Processed all files in directory: %s', path)
 
 
 async def qbt_background_service():
@@ -176,24 +231,11 @@ async def qbt_background_service():
             for download in downloads:
                 if _download_finished(download):
                     if not _media_entry_exists(download, session):
-                        path_to_file = save_file(download)
-
-                        media_entry = MediaEntry(
-                            name=download.name,
-                            absolute_path=path_to_file.absolute().as_posix(),
-                            source=MediaElementSource.MAGNETLINK,
-                            youtube_id=None,
-                            magnet_link=download.magnet_uri,
-                            type=MediaEntryType.VIDEO,
-                            date_added=datetime.datetime.now(datetime.UTC),
-                            cover_art_absolute_path=None,
-                            thumbnail_art_absolute_path=None,
-                        )
-
-                        session.add(media_entry)
-                        session.commit()
-
-                        logger.debug('Added media entry: %s', media_entry.id)
+                        path = Path(download.content_path)
+                        if path.is_dir():
+                            save_directory_files(download, session, logger)
+                        else:
+                            save_file(download, session, logger)
 
                     await delete_download(download.hash)
 

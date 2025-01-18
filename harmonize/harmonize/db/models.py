@@ -30,6 +30,7 @@ class MediaElementSource(Enum):
 class MediaEntryType(Enum):
     AUDIO = 0
     VIDEO = 1
+    SUBTITLE = 2
 
 
 class MediaEntryPlaylistLink(SQLModel, table=True):
