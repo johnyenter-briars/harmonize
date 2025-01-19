@@ -2,36 +2,37 @@ import requests
 
 
 def test_metadata_media(setup):
-    url = f"{setup['base_url']}/metadata/media/Sense.mp3"
+    url = f'{setup["base_url"]}/metadata/media/Sense.mp3'
 
     response = requests.get(url)
     assert response.status_code == 200, f'Expected status code 200, but got {response.status_code}'
 
 
 def test_stream_media(setup):
-    url = f"{setup['base_url']}/stream/Sense.mp3"
+    url = f'{setup["base_url"]}/stream/Sense.mp3'
 
     response = requests.get(url)
     assert response.status_code == 200, f'Expected status code 200, but got {response.status_code}'
 
 
 def test_list_music(setup):
-    url = f"{setup['base_url']}/media/music"
+    url = f'{setup["base_url"]}/media/music'
 
     response = requests.get(url)
     assert response.status_code == 200, f'Expected status code 200, but got {response.status_code}'
 
 
 def test_delete_entry(setup):
-    url = f"{setup['base_url']}/media/music"
+    url = f'{setup["base_url"]}/media/music'
 
     response = requests.get(url)
 
     data = response.json()
 
-    id_to_delete = data['value'][0]['id']
+    # id_to_delete = data['value'][0]['id']
+    id_to_delete = 'aeb80ada-abbd-4e6d-a839-dbecc875254d'
 
-    url = f"{setup['base_url']}/media/music"
+    url = f'{setup["base_url"]}/media/{id_to_delete}'
 
     response = requests.delete(url)
 

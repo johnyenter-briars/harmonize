@@ -5,5 +5,9 @@
     "qbt-domain-name": "localhost",
     "qbt-port": 8080,
     "qbt-version": "v2",
-    "reset-db-on-launch": false
+    "reset-db-on-launch": false,
+    "drives": [
+        "/mnt/db1",
+        "/mnt/db2"
+    ]
 }

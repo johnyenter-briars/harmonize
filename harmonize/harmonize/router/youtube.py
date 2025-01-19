@@ -24,6 +24,7 @@ from harmonize.db.database import get_session
 from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaEntry, MediaEntryType
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.youtube import DownloadPlaylistArguments, DownloadVideoArguments
+from harmonize.file.drive import move_file_to_mounted_folders, remove_file
 from harmonize.job.callback import start_job
 from harmonize.util.filepropety import (
     convert_webp_to_jpeg,
@@ -152,12 +153,13 @@ def _download_youtube_video(
             output = json.dumps(ydl.sanitize_info(info))
             (YOUTUBE_VIDEO_YTDL_METADATA / f'{video_id}.info.json').write_text(output)
 
+        absolute_path = AUDIO_ROOT / f'{yt_title}.mp3'
+
         ydl_audo_opts = {
             'format': f'{_audio_format}/bestaudio/best',
-            'outtmpl': (AUDIO_ROOT / f'{yt_title}').absolute().as_posix(),
-            # See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
+            'outtmpl': absolute_path.absolute().as_posix(),
             'postprocessors': [
-                {  # Extract audio using ffmpeg
+                {
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': _audio_format,
                 },
@@ -180,19 +182,18 @@ def _download_youtube_video(
                 job.error_message = f'Youtube Download Failed with error code {error_code}'
                 return
 
-        absolute_path = AUDIO_ROOT / f'{yt_title}.mp3'
-
         if album_art_path is not None:
             _inject_album_art(absolute_path, album_art_path)
 
         if album_art_path is not None:
             _inject_album_art(absolute_path, album_art_path)
 
-        job.status = JobStatus.SUCCEEDED
+        moved_path = move_file_to_mounted_folders(absolute_path)
+        remove_file(absolute_path)
 
         media_entry = MediaEntry(
             name=yt_title,
-            absolute_path=absolute_path.absolute().as_posix(),
+            absolute_path=moved_path.absolute().as_posix(),
             source=MediaElementSource.YOUTUBE,
             youtube_id=video_id,
             magnet_link=None,
@@ -201,6 +202,8 @@ def _download_youtube_video(
             cover_art_absolute_path=album_art_path.absolute().as_posix(),
             thumbnail_art_absolute_path=thumbnail_path.absolute().as_posix(),
         )
+
+        job.status = JobStatus.SUCCEEDED
 
         session.add(media_entry)
 
@@ -293,7 +296,7 @@ def _download_youtube_playlist(
                 return
 
         for video in video_list:
-            absolute_path = AUDIO_ROOT / f"{video['title']}.mp3"
+            absolute_path = AUDIO_ROOT / f'{video["title"]}.mp3'
 
             if album_art_path is not None:
                 _inject_album_art(absolute_path, album_art_path)

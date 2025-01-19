@@ -16,6 +16,7 @@ class HarmonizeConfig:
     run_qbt: bool = field()
     reset_db_on_launch: bool = field()
     run_transfer: bool = field()
+    drives: list[str] = field()
 
     def __init__(self, config_file: Path):
         with config_file.open('r') as f:

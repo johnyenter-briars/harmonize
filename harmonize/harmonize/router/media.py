@@ -49,4 +49,4 @@ async def delete_media_entry(
     session.delete(media_entry)
     session.commit()
 
-    return BaseResponse[None](message='Entry deleted', status_code=204, value=None)
+    return BaseResponse[None](message='Entry deleted', status_code=200, value=None)
