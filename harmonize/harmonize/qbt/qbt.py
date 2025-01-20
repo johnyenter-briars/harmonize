@@ -1,19 +1,20 @@
 import asyncio
 import datetime
 import logging
-import shutil
 from codecs import encode
 from pathlib import Path
 
 import aiohttp
 import pydantic
+from sqlalchemy.orm import Session
 from sqlmodel import Session, select
 
 from harmonize.config.harmonizeconfig import HARMONIZE_CONFIG
-from harmonize.const import SUPPORTED_EXTENSIONS, VIDEO_EXTENSIONS, VIDEO_ROOT
+from harmonize.const import SUPPORTED_EXTENSIONS, VIDEO_EXTENSIONS
 from harmonize.db.database import get_session_non_gen
 from harmonize.db.models import MediaElementSource, MediaEntry, MediaEntryType
 from harmonize.defs.qbt import QbtDownloadData
+from harmonize.file.drive import move_file_to_mounted_folders, remove_file
 
 logger = logging.getLogger('harmonize')
 
@@ -159,15 +160,16 @@ def _media_entry_exists(
 
 
 def save_file(download: QbtDownloadData, session: Session, logger: logging.Logger):
-    path = Path(download.content_path)
+    source_path = Path(download.content_path)
 
-    media_root_path = VIDEO_ROOT / path.name
-
-    shutil.copy2(path, media_root_path)
+    moved_path = move_file_to_mounted_folders(source_path)
+    if moved_path is None:
+        msg = 'Unable to move file'
+        raise Exception(msg)  # noqa: TRY002
 
     media_entry = MediaEntry(
         name=download.name,
-        absolute_path=media_root_path.absolute().as_posix(),
+        absolute_path=moved_path.absolute().as_posix(),
         source=MediaElementSource.MAGNETLINK,
         youtube_id=None,
         magnet_link=download.magnet_uri,
@@ -182,10 +184,7 @@ def save_file(download: QbtDownloadData, session: Session, logger: logging.Logge
 
     logger.debug('Added media entry: %s', media_entry.id)
 
-
-import logging
-
-from sqlalchemy.orm import Session
+    remove_file(source_path)
 
 
 def save_directory_files(download: QbtDownloadData, session: Session, logger: logging.Logger):
@@ -197,13 +196,17 @@ def save_directory_files(download: QbtDownloadData, session: Session, logger: lo
 
     for file in path.iterdir():
         if file.is_file() and file.suffix.lower() in SUPPORTED_EXTENSIONS:
-            media_root_path = VIDEO_ROOT / file.name
+            source_path = file.absolute()
+            moved_path = move_file_to_mounted_folders(source_path)
+            if moved_path is None:
+                msg = 'Unable to move file'
+                raise Exception(msg)  # noqa: TRY002
 
-            shutil.copy2(file, media_root_path)
+            remove_file(source_path)
 
             media_entry = MediaEntry(
                 name=file.stem,
-                absolute_path=media_root_path.absolute().as_posix(),
+                absolute_path=moved_path.absolute().as_posix(),
                 source=MediaElementSource.MAGNETLINK,
                 youtube_id=None,
                 magnet_link=download.magnet_uri,

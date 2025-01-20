@@ -103,6 +103,7 @@ async def download_youtube_video(
     video_id: str,
     session: Session = Depends(get_session),
 ) -> BaseResponse[Job]:
+    raise HTTPException(status_code=501, detail='Not fully implemented')
     statement = select(MediaEntry).where(MediaEntry.youtube_id == video_id)
     media_entries = session.exec(statement).all()
 
@@ -189,6 +190,10 @@ def _download_youtube_video(
             _inject_album_art(absolute_path, album_art_path)
 
         moved_path = move_file_to_mounted_folders(absolute_path)
+        if moved_path is None:
+            msg = 'Unable to move file'
+            raise Exception(msg)  # noqa: TRY002, TRY301
+
         remove_file(absolute_path)
 
         media_entry = MediaEntry(
@@ -222,6 +227,7 @@ async def download_youtube_playlist(
     playlist_id: str,
     session: Session = Depends(get_session),
 ) -> BaseResponse[Job]:
+    raise HTTPException(status_code=501, detail='Not fully implemented')
     metadata_file = YOUTUBE_PLAYLIST_SEARCH_METADATA / f'{playlist_id}.search.info.json'
 
     if not Path.exists(metadata_file):

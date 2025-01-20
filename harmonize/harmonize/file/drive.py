@@ -1,23 +1,44 @@
-import random
 import shutil
 from pathlib import Path
 
 import harmonize.config
 import harmonize.config.harmonizeconfig
+from harmonize.const import VIDEO_ROOT
 
 config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
 
 
-def _get_random_drive() -> Path:
-    random_drive = random.choice(config.drives)  # noqa: S311
+def _get_folder_size(folder: Path) -> int:
+    total_size = 0
+    for entry in folder.iterdir():
+        if entry.is_file():
+            total_size += entry.stat().st_size
+        elif entry.is_dir():
+            total_size += _get_folder_size(entry)
+    return total_size
 
-    return Path(random_drive)
+
+def _get_drive_with_least_space() -> Path | None:
+    drives = [Path(drive) for drive in config.drives]
+    folder_sizes = {drive: _get_folder_size(drive) for drive in drives}
+
+    least_space_drive = None
+    least_space = float('inf')
+    for drive, size in folder_sizes.items():
+        if size < least_space:
+            least_space_drive = drive
+            least_space = size
+
+    return least_space_drive
 
 
-def move_file_to_mounted_folders(source_path: Path) -> Path:
-    chosen_drive = _get_random_drive()
+def move_file_to_mounted_folders(source_path: Path) -> Path | None:
+    chosen_drive = _get_drive_with_least_space()
 
-    destination_path = chosen_drive / source_path
+    if chosen_drive is None:
+        return None
+
+    destination_path = chosen_drive / VIDEO_ROOT / source_path.name
 
     shutil.copy2(source_path, destination_path)
 

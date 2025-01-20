@@ -42,10 +42,8 @@ async def start_job(
     session.add(job)
     session.commit()
 
-    args = (*input_args, job, session)
     callback_args = (job_function, *input_args, job, session)
 
-    # thread = StoppableThread(target=job_function, args=args)
     thread = StoppableThread(target=_job_callback, args=callback_args)
     thread.start()
 
