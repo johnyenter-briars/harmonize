@@ -4,7 +4,17 @@
 
 Good luck.
 
-## todos
+## Todos For Audio Support Only
+
+- [ ] Delete video method
+- [ ] Edit video page
+- [ ] Update colors
+- [ ] Hook up send to media server
+- [ ] Update server
+- [ ] Setup daemon
+- [ ] Setup SSL Cert + Https
+
+## Todos For Full Functionality
 
 ### Front End
 
