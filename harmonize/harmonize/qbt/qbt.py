@@ -240,7 +240,9 @@ async def qbt_background_service():
                         else:
                             save_file(download, session, logger)
 
-                    await delete_download(download.hash)
+                    # TODO: undo this
+                    # await delete_download(download.hash)
+                    continue
 
             logger.info('%s is running...', 'qbt_background_service')
             await asyncio.sleep(30)
