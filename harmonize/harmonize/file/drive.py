@@ -8,19 +8,19 @@ from harmonize.const import VIDEO_ROOT
 config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
 
 
-def _get_folder_size(folder: Path) -> int:
+def get_folder_size_bytes(folder: Path) -> int:
     total_size = 0
     for entry in folder.iterdir():
         if entry.is_file():
             total_size += entry.stat().st_size
         elif entry.is_dir():
-            total_size += _get_folder_size(entry)
+            total_size += get_folder_size_bytes(entry)
     return total_size
 
 
 def _get_drive_with_least_space() -> Path | None:
     drives = [Path(drive) for drive in config.drives]
-    folder_sizes = {drive: _get_folder_size(drive) for drive in drives}
+    folder_sizes = {drive: get_folder_size_bytes(drive) for drive in drives}
 
     least_space_drive = None
     least_space = float('inf')

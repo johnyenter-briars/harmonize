@@ -1,24 +1,17 @@
 from datetime import datetime
+from pathlib import Path
 
-from fastapi import APIRouter, Depends, Request
-from sqlmodel import Session, select
+from fastapi import APIRouter, Request
 
-from harmonize.db.database import get_session
-from harmonize.db.models import Job
-from harmonize.defs.health import HealthStatus, Uptime
+import harmonize.config
+import harmonize.config.harmonizeconfig
+from harmonize.defs.health import Drive, HealthStatus, Uptime
 from harmonize.defs.response import BaseResponse
+from harmonize.file.drive import get_folder_size_bytes
+
+config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
 
 router = APIRouter(prefix='/api/health')
-
-
-@router.get('/')
-async def jobs(
-    session: Session = Depends(get_session),
-) -> BaseResponse[list[Job]]:
-    statement = select(Job)
-    jobs = list(session.exec(statement).all())
-
-    return BaseResponse[list[Job]](message='Jobs found', status_code=200, value=jobs)
 
 
 @router.get('/status')
@@ -32,6 +25,11 @@ async def status(request: Request) -> BaseResponse[HealthStatus]:
 
     uptime = Uptime(seconds=uptime_seconds, hours=hours, minutes=minutes)
 
-    status = HealthStatus(uptime=uptime, drives=[])
+    drives = [
+        Drive(path=drive, space_used=round(get_folder_size_bytes(Path(drive)) / (1024**3), 2))
+        for drive in config.drives
+    ]
+
+    status = HealthStatus(uptime=uptime, drives=drives)
 
     return BaseResponse[HealthStatus](message='Status', status_code=200, value=status)

@@ -147,7 +147,7 @@ async def delete_download(torrent_hash: str) -> str:
 
 
 def _download_finished(data: QbtDownloadData) -> bool:
-    return data.state in ('stalledUP', 'uploading')
+    return data.state in ('stalledUP', 'uploading', 'stoppedUP')
 
 
 def _media_entry_exists(
@@ -202,8 +202,6 @@ def save_directory_files(download: QbtDownloadData, session: Session, logger: lo
                 msg = 'Unable to move file'
                 raise Exception(msg)  # noqa: TRY002
 
-            remove_file(source_path)
-
             media_entry = MediaEntry(
                 name=file.stem,
                 absolute_path=moved_path.absolute().as_posix(),
@@ -224,6 +222,7 @@ def save_directory_files(download: QbtDownloadData, session: Session, logger: lo
 
     session.commit()
     logger.info('Processed all files in directory: %s', path)
+    remove_file(path)
 
 
 async def qbt_background_service():
@@ -231,18 +230,18 @@ async def qbt_background_service():
         try:
             session: Session = get_session_non_gen()
             downloads = await list_downloads()
-            for download in downloads:
-                if _download_finished(download):
-                    if not _media_entry_exists(download, session):
-                        path = Path(download.content_path)
-                        if path.is_dir():
-                            save_directory_files(download, session, logger)
-                        else:
-                            save_file(download, session, logger)
+            # for download in downloads:
+            #     if _download_finished(download):
+            #         if not _media_entry_exists(download, session):
+            #             path = Path(download.content_path)
+            #             if path.is_dir():
+            #                 save_directory_files(download, session, logger)
+            #             else:
+            #                 save_file(download, session, logger)
 
-                    # TODO: undo this
-                    # await delete_download(download.hash)
-                    continue
+            #         # TODO: undo this
+            #         # await delete_download(download.hash)
+            #         continue
 
             logger.info('%s is running...', 'qbt_background_service')
             await asyncio.sleep(30)

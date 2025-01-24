@@ -6,8 +6,10 @@ Good luck.
 
 ## Todos For Audio Support Only
 
-- [ ] Delete video method
+- [X] Delete video method
+- [ ] Test + confirm QBT
 - [ ] Edit video page
+- [ ] Seasons
 - [ ] Update colors
 - [ ] Hook up send to media server
 - [ ] Update server

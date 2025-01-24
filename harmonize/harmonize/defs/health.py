@@ -9,7 +9,7 @@ class Uptime(BaseSchema):
 
 class Drive(BaseSchema):
     path: str
-    space: int
+    space_used: float
 
 
 class HealthStatus(BaseSchema):

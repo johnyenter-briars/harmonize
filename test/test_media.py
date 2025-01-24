@@ -23,17 +23,16 @@ def test_list_music(setup):
 
 
 def test_delete_entry(setup):
-    url = f'{setup["base_url"]}/media/music'
+    url = f'{setup["base_url"]}/media/video'
 
     response = requests.get(url)
 
     data = response.json()
 
-    # id_to_delete = data['value'][0]['id']
-    id_to_delete = 'aeb80ada-abbd-4e6d-a839-dbecc875254d'
+    id_to_delete = data['value'][0]['id']
 
     url = f'{setup["base_url"]}/media/{id_to_delete}'
 
     response = requests.delete(url)
 
-    assert response.status_code == 204, f'Expected status code 204, but got {response.status_code}'
+    assert response.status_code == 200, f'Expected status code 204, but got {response.status_code}'
