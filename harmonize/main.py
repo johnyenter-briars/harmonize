@@ -19,6 +19,7 @@ from harmonize.router import (
     playlist,
     qbt,
     search,
+    season,
     stream,
     transfer,
     youtube,
@@ -66,6 +67,7 @@ app.include_router(search.router, dependencies=[Depends(get_session)])
 app.include_router(stream.router, dependencies=[Depends(get_session)])
 app.include_router(job.router, dependencies=[Depends(get_session)])
 app.include_router(playlist.router, dependencies=[Depends(get_session)])
+app.include_router(season.router, dependencies=[Depends(get_session)])
 app.include_router(transfer.router, dependencies=[Depends(get_session)])
 app.include_router(health.router, dependencies=[Depends(get_session)])
 

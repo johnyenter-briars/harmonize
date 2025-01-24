@@ -7,6 +7,7 @@ Good luck.
 ## Todos For Audio Support Only
 
 - [X] Delete video method
+- [ ] Health page
 - [ ] Test + confirm QBT
 - [ ] Edit video page
 - [ ] Seasons
