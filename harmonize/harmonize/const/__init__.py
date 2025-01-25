@@ -20,7 +20,7 @@ YOUTUBE_PLAYLIST_YTDL_METADATA = Path('./cache/youtube/metadata/ytdl/playlist')
 CONFIG_FILE = Path('./config.json')
 SECRETS_FILE = Path('./secrets.json')
 SUPPORTED_EXTENSIONS = {'.srt', '.mkv', '.mp4'}
-VIDEO_EXTENSIONS = {'.mkv', '.mp4'}
+VIDEO_EXTENSIONS = {'.mkv', '.mp4', '.m4a', '.mov', '.avi'}
 
 COVERART_ARCHIVE_ROOT: Final = 'http://coverartarchive.org/release'
 

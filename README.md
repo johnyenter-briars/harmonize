@@ -7,10 +7,11 @@ Good luck.
 ## Todos For Audio Support Only
 
 - [X] Delete video method
+- [ ] Edit video page
 - [ ] Health page
 - [ ] Test + confirm QBT
-- [ ] Edit video page
-- [ ] Seasons
+- [ ] Seasons backend
+- [ ] Seasons frontend
 - [ ] Update colors
 - [ ] Hook up send to media server
 - [ ] Update server

@@ -18,7 +18,7 @@ def get_folder_size_bytes(folder: Path) -> int:
     return total_size
 
 
-def _get_drive_with_least_space() -> Path | None:
+def get_drive_with_least_space() -> Path | None:
     drives = [Path(drive) for drive in config.drives]
     folder_sizes = {drive: get_folder_size_bytes(drive) for drive in drives}
 
@@ -32,8 +32,11 @@ def _get_drive_with_least_space() -> Path | None:
     return least_space_drive
 
 
-def move_file_to_mounted_folders(source_path: Path) -> Path | None:
-    chosen_drive = _get_drive_with_least_space()
+def move_file_to_mounted_folders(
+    source_path: Path, chosen_drive: Path | None = None
+) -> Path | None:
+    if chosen_drive is None:
+        chosen_drive = get_drive_with_least_space()
 
     if chosen_drive is None:
         return None
@@ -46,5 +49,8 @@ def move_file_to_mounted_folders(source_path: Path) -> Path | None:
 
 
 def remove_file(path: Path):
-    if path.exists() and path.is_file():
-        path.unlink()
+    if path.exists():
+        if path.is_file():
+            path.unlink()
+        elif path.is_dir():
+            shutil.rmtree(path)
