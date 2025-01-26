@@ -8,6 +8,9 @@ Good luck.
 
 - [X] Delete video method
 - [ ] Edit video page
+- [ ] Job List page
+  - [ ] Item tapped color
+  - [ ] Bug where two identidal elements show up
 - [ ] Health page
 - [ ] Test + confirm QBT
 - [ ] Seasons backend

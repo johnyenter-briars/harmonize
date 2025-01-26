@@ -36,10 +36,7 @@
             />
 
         <Label Text="Status" FontSize="Medium" />
-        <Picker 
-            ItemsSource="{Binding StatusOptions}" 
-            SelectedItem="{Binding Job.Status}">
-        </Picker>
+        <Entry Text="{Binding Job.Status, Mode=OneWay}" IsReadOnly="True" />
 
         <Button 
             ImageSource="icons8_trash_50.png"

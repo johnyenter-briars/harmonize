@@ -86,6 +86,7 @@
                         FontSize="16"
                         CornerRadius="25"
                         HeightRequest="45"
+                        Clicked="OnOpenBottomSheetClicked"
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=SendToMediaSystemCommand }"
                         />
 

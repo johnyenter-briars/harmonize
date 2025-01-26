@@ -2,6 +2,7 @@
 using Harmonize.Client.Model.Media;
 using Harmonize.Client.Model.QBT;
 using Harmonize.Client.Model.Response;
+using Harmonize.Client.Model.Transfer;
 using Harmonize.Client.Model.Youtube;
 using System.Text;
 using System.Text.Json;
@@ -98,6 +99,16 @@ public class HarmonizeClient
     public async Task<MagnetLinkSearchResults> GetXT1337SearchResults(string query)
     {
         return await HarmonizeRequest<MagnetLinkSearchResults>($"search/xt1337/{query}", HttpMethod.Get);
+    }
+    public async Task<TransferProgressResponse> GetTransferProgress(TransferDestination transferDestination)
+    {
+        var destination = transferDestination.ToString().ToLower();
+        return await HarmonizeRequest<TransferProgressResponse>($"transfer/{destination}", HttpMethod.Get);
+    }
+    public async Task<JobResponse> StartTransfer(TransferDestination transferDestination, IMediaEntry entry) 
+    {
+        var destination = transferDestination.ToString().ToLower();
+        return await HarmonizeRequest<JobResponse>($"transfer/{destination}/{entry.Id}", HttpMethod.Post);
     }
     #endregion
     #region POST

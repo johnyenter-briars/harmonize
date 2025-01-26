@@ -1,5 +1,6 @@
 ﻿using Harmonize.Client;
 using Harmonize.Client.Model.Media;
+using Harmonize.Client.Model.Transfer;
 using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
@@ -26,10 +27,12 @@ public class VideoLibraryViewModel(
     public ICommand MoreInfoCommand => new Command<MediaEntry>(entry =>
     {
     });
-    public ICommand SendToMediaSystemCommand => new Command(() =>
+    public ICommand SendToMediaSystemCommand => new Command(async () =>
     {
-        var bing = SelectedMediaEntry;
-        logger.LogInformation("foo");
+        var (jobResponse, success) =  await failsafeService.Fallback(
+            async () => await harmonizeCilent.StartTransfer(TransferDestination.MediaSystem, SelectedMediaEntry), null);
+
+        var bing = 10;
     });
     private MediaEntry selectedMediaEntry;
     public MediaEntry SelectedMediaEntry
@@ -67,11 +70,12 @@ public class VideoLibraryViewModel(
             MediaEntries.Add(m);
         }
     }
-    public async Task ItemTapped(LocalMediaEntry localMediaEntry)
+    public async Task ItemTapped(MediaEntry mediaEntry)
     {
-        await Shell.Current.GoToAsync(nameof(MediaElementPage), new Dictionary<string, object>
+        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), new Dictionary<string, object>
         {
-            { nameof(MediaElementViewModel.MediaEntryId), localMediaEntry.Id }
+            { nameof(EditMediaEntryViewModel.MediaEntryId), mediaEntry.Id },
+            { nameof(EditMediaEntryViewModel.MediaEntry), mediaEntry }
         });
     }
 
