@@ -58,14 +58,14 @@ async def disassociate_media_entries(
     req: DisassociateToSeasonRequest,
     session: Session = Depends(get_session),
 ) -> BaseResponse[None]:
-    # for media_entry_id in media_entry_ids:
-    #     media_entry = session.get(MediaEntry, media_entry_id)
-    #     if media_entry and media_entry.season_id == season_id:
-    #         media_entry.season_id = None
-    #     elif media_entry:
-    #         logger.warning(
-    #             f'Media entry {media_entry_id} is not associated with season {season_id}.'
-    #         )
+    for media_entry_id in req.media_entry_ids:
+        media_entry = session.get(MediaEntry, media_entry_id)
+        if media_entry and media_entry.season_id == req.season_id:
+            media_entry.season_id = None
+        elif media_entry:
+            logger.warning(
+                f'Media entry {media_entry_id} is not associated with season {req.season_id}.'
+            )
 
     session.commit()
     return BaseResponse[None](

@@ -206,6 +206,7 @@ def _download_youtube_video(
             date_added=datetime.datetime.now(datetime.UTC),
             cover_art_absolute_path=album_art_path.absolute().as_posix(),
             thumbnail_art_absolute_path=thumbnail_path.absolute().as_posix(),
+            season_id=None,
         )
 
         job.status = JobStatus.SUCCEEDED
@@ -317,6 +318,7 @@ def _download_youtube_playlist(
                 date_added=datetime.datetime.now(datetime.UTC),
                 cover_art_absolute_path=album_art_path.absolute().as_posix(),
                 thumbnail_art_absolute_path=thumbnail_path.absolute().as_posix(),
+                season_id=None,
             )
             session.add(media_entry)
 

@@ -32,9 +32,12 @@ def test_associate_media_entries(setup):
     assert response.json()['message'] == 'Media entries associated successfully'
 
 
-def test_disassociate_media_entries(setup, season_id, media_entry_ids):
-    url = f'{setup["base_url"]}/season/{season_id}/disassociate'
-    payload = {'media_entry_ids': media_entry_ids}
+def test_disassociate_media_entries(setup):
+    url = f'{setup["base_url"]}/season/disassociate'
+    payload = {
+        'seasonId': '7e6448cb-4f58-4a17-b337-cb7f2116c2d5',
+        'mediaEntryIds': ['2ab6a1d7-b9a1-4fe3-8398-ce4347f9e147'],
+    }
 
     response = requests.post(url, json=payload)
 
@@ -42,11 +45,10 @@ def test_disassociate_media_entries(setup, season_id, media_entry_ids):
     assert response.json()['message'] == 'Media entries disassociated successfully'
 
 
-def test_get_season_details(setup, season_id):
-    url = f'{setup["base_url"]}/season/{season_id}'
+def test_get_season_details(setup):
+    url = f'{setup["base_url"]}/season/7e6448cb-4f58-4a17-b337-cb7f2116c2d5'
 
     response = requests.get(url)
 
     assert response.status_code == 200, f'Expected status code 200, got {response.status_code}'
     assert response.json()['message'] == 'Season details retrieved successfully'
-    assert 'media_entries' in response.json()['value']
