@@ -8,20 +8,30 @@ Good luck.
 
 - [X] Delete video method
 - [X] Edit element page
+- [ ] Find all spots where 
 - [ ] Job List page
   - [X] Item tapped color
   - [X] Bug where two identidal elements show up
   - [X] Sort elements by started time
   - [ ] If transfer, status of transfer
+- [ ] Media List
+  - [ ] Nice search
+  - [ ] Season search
+  - [ ] Filter + query popup
 - [ ] Health page
+  - [X] Add page
+  - [ ] VPN check
+  - [ ] Network check
 - [ ] Test + confirm QBT
-- [ ] Seasons backend
+- [X] Seasons backend
 - [ ] Seasons frontend
 - [ ] Update colors
-- [ ] Hook up send to media server
+- [X] Hook up send to media server
 - [ ] Update server
 - [ ] Setup daemon
 - [ ] Setup SSL Cert + Https
+- [ ] Warnings in frontend
+- [ ] Warnings in backend
 
 ## Todos For Full Functionality
 

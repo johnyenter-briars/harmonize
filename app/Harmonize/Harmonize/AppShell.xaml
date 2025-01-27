@@ -89,48 +89,14 @@
         </Tab>
     </FlyoutItem>
     <FlyoutItem 
-                Title="Home" 
-                Icon="icons8_home_50.png"
+                Title="Health Status" 
+                Icon="icons8_heart_with_pulse_50.png"
                 >
         <Tab>
             <ShellContent
-                Title="Home"
-                ContentTemplate="{DataTemplate view:HomePage}"
-                Route="Main" />
+                Title="Health Status"
+                ContentTemplate="{DataTemplate view:HealthPage}"
+                Route="HealthStatus" />
         </Tab>
     </FlyoutItem>
-    <FlyoutItem 
-                Title="Media Element" 
-                Icon="icons8_music_note_50.png"
-                >
-        <Tab>
-            <ShellContent
-                Title="Media Element"
-                ContentTemplate="{DataTemplate view:MediaElementPage}"
-                Route="MediaElement" />
-        </Tab>
-    </FlyoutItem>
-    <FlyoutItem 
-                Title="Audio Library" 
-                Icon="icons8_media_50.png"
-                >
-        <Tab>
-            <ShellContent
-                Title="Audio Library"
-                ContentTemplate="{DataTemplate view:AudioLibraryPage}"
-                Route="AudioLibrary" />
-        </Tab>
-    </FlyoutItem>
-    <FlyoutItem 
-                Title="Youtube Search" 
-                Icon="icons8_youtube_50.png"
-                >
-        <Tab>
-            <ShellContent
-                Title="Youtube Search"
-                ContentTemplate="{DataTemplate view:YouTubeSearchPage}"
-                Route="YoutubeSearch" />
-        </Tab>
-    </FlyoutItem>
-
 </Shell>

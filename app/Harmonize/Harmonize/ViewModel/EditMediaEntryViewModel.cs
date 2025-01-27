@@ -51,31 +51,11 @@ public class EditMediaEntryViewModel(
     }
     public ICommand DeleteEntry => new Command<MediaEntry>(async (entry) =>
     {
-        //var (_, success) = await failsafeService.Fallback(async () =>
-        //{
-        //    return await harmonizeClient.CancelJob(entry.Id);
-        //}, null);
-
-        //if (success)
-        //{
-        //    await alertService.ShowConfirmationAsync("Success", "Job canceled successfully.", "Ok");
-        //}
     });
     async Task Refresh()
     {
-        //var (response, success) = await FetchData(async () =>
-        //{
-        //    return await failsafeService.Fallback(harmonizeCilent.GetVideo, null);
-        //});
-
-        //MediaEntries.Clear();
-        //foreach (var m in response?.Value ?? [])
-        //{
-        //    MediaEntries.Add(m);
-        //}
     }
     public override async Task OnAppearingAsync()
     {
-        var foo = 10;
     }
 }

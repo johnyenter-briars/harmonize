@@ -1,4 +1,5 @@
-﻿using Harmonize.Client.Model.Job;
+﻿using Harmonize.Client.Model.Health;
+using Harmonize.Client.Model.Job;
 using Harmonize.Client.Model.Media;
 using Harmonize.Client.Model.QBT;
 using Harmonize.Client.Model.Response;
@@ -47,7 +48,6 @@ public class HarmonizeClient
         return this;
     }
     #endregion
-    #region GET
     public string GetMediaMetadataArtworkUrl(MediaMetadata mediaMetadata, string artworkSize)
     {
         var artwork = mediaMetadata.Artwork;
@@ -100,6 +100,7 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<MagnetLinkSearchResults>($"search/xt1337/{query}", HttpMethod.Get);
     }
+    #region Transfer
     public async Task<TransferProgressResponse> GetTransferProgress(TransferDestination transferDestination)
     {
         var destination = transferDestination.ToString().ToLower();
@@ -109,6 +110,13 @@ public class HarmonizeClient
     {
         var destination = transferDestination.ToString().ToLower();
         return await HarmonizeRequest<JobResponse>($"transfer/{destination}/{entry.Id}", HttpMethod.Post);
+    }
+    #endregion
+
+    #region Health
+    public async Task<HealthStatusResponse> GetHealthStatus() 
+    {
+        return await HarmonizeRequest<HealthStatusResponse>($"health/status", HttpMethod.Get);
     }
     #endregion
     #region POST
