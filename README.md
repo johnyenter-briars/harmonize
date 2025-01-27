@@ -7,10 +7,12 @@ Good luck.
 ## Todos For Audio Support Only
 
 - [X] Delete video method
-- [ ] Edit video page
+- [X] Edit element page
 - [ ] Job List page
-  - [ ] Item tapped color
-  - [ ] Bug where two identidal elements show up
+  - [X] Item tapped color
+  - [X] Bug where two identidal elements show up
+  - [X] Sort elements by started time
+  - [ ] If transfer, status of transfer
 - [ ] Health page
 - [ ] Test + confirm QBT
 - [ ] Seasons backend

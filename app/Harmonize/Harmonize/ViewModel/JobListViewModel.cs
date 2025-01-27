@@ -64,18 +64,19 @@ public class JobListViewModel(
     public ICommand RefreshCommand => new Command(async () => await Refresh());
     public async Task Refresh()
     {
-        Jobs.Clear();
-
         var (response, success) = await FetchData(async () =>
         {
             return await failsafeService.Fallback(harmonizeClient.GetJobs, null);
         });
 
+        Jobs.Clear();
+
         if (success)
         {
-            foreach (var m in response?.Value ?? [])
+            var jobs = (response?.Value ?? []).OrderByDescending(j => j.StartedOn);
+            foreach (var j in jobs)
             {
-                Jobs.Add(m);
+                Jobs.Add(j);
             }
         }
     }
@@ -91,14 +92,6 @@ public class JobListViewModel(
     }
     public override async Task OnAppearingAsync()
     {
-        await Refresh();
+        FetchingData = true;
     }
-
-    //public ICommand Refresh => new Command<ImageButton>(async (imageButton) =>
-    //{
-    //    await imageButton.RotateTo(100, 300, Easing.CubicInOut);
-    //    await imageButton.RotateTo(0, 300, Easing.CubicInOut);
-
-    //    await Refresh();
-    //});
 }

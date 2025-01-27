@@ -46,13 +46,6 @@
                 Text="{Binding MediaEntry.DateAdded, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}"
                 IsReadOnly="True" />
 
-            <Label Text="Description" FontSize="Medium" />
-            <Editor 
-                Text="{Binding MediaEntry.Name, Mode=OneWay}" 
-                IsReadOnly="True"
-                AutoSize="TextChanges"
-                HeightRequest="75" />
-
             <Button 
                 ImageSource="icons8_trash_50.png"
                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=CancelJob}"

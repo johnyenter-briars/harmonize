@@ -17,7 +17,8 @@
     <StackLayout Padding="10">
         <RefreshView 
             IsRefreshing="{Binding FetchingData}" 
-            Command="{Binding RefreshCommand}">
+            Command="{Binding RefreshCommand}"
+            >
 
             <ListView 
                 Grid.Row="1" 
