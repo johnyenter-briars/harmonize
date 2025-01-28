@@ -17,15 +17,18 @@ Good luck.
   - [ ] Nice search
   - [ ] Season search
   - [ ] Filter + query popup
+  - [ ] Delete entry
 - [X] Health page
   - [X] Add page
   - [X] VPN check
   - [X] Network check
 - [ ] Test + confirm QBT
+  - [ ] Indiviual eps in a folder considered a season
 - [X] Seasons backend
 - [ ] Seasons frontend
   - [ ] Edit Season Name
   - [ ] Display entries in season
+  - [ ] Delete season
 - [ ] Update colors
 - [X] Hook up send to media server
 - [ ] Backfill method
