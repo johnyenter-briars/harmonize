@@ -15,3 +15,5 @@ class Drive(BaseSchema):
 class HealthStatus(BaseSchema):
     uptime: Uptime
     drives: list[Drive]
+    vpn_connected: bool
+    vpn_country: str

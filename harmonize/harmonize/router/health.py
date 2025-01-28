@@ -1,3 +1,4 @@
+import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -12,6 +13,30 @@ from harmonize.file.drive import get_folder_size_bytes
 config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
 
 router = APIRouter(prefix='/api/health')
+
+
+def _vpn_status() -> tuple[bool, str]:
+    output = subprocess.check_output(
+        'nordvpn status | grep Status',
+        shell=True,  # Let this run in the shell
+        stderr=subprocess.STDOUT,
+    )
+
+    nord_status = str(output).split(': ')[1]
+
+    country = ''
+    connected = False
+    if 'Connected' in nord_status:
+        output = subprocess.check_output(
+            'nordvpn status | grep Country',
+            shell=True,  # Let this run in the shell
+            stderr=subprocess.STDOUT,
+        )
+
+        country = str(output).split(': ')[1].replace('\\n', '').replace("'", '')
+        connected = True
+
+    return (connected, country)
 
 
 @router.get('/status')
@@ -30,6 +55,10 @@ async def status(request: Request) -> BaseResponse[HealthStatus]:
         for drive in config.drives
     ]
 
-    status = HealthStatus(uptime=uptime, drives=drives)
+    (connected, country) = _vpn_status()
+
+    status = HealthStatus(
+        uptime=uptime, drives=drives, vpn_connected=connected, vpn_country=country
+    )
 
     return BaseResponse[HealthStatus](message='Status', status_code=200, value=status)
