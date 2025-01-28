@@ -23,5 +23,7 @@ public class HealthStatus
 {
     public required Uptime Uptime { get; set; }
     public required List<Drive> Drives { get; set; }
+    public required bool VpnConnected { get; set; }
+    public required string VpnCountry { get; set; }
 }
 

@@ -35,7 +35,7 @@ public class HealthViewModel(
         }
         else
         {
-            await alertService.ShowAlertAsync("Error in getting health check", response.Message ?? "Failure to perform action");
+            await alertService.ShowAlertAsync("Error in getting health check", response?.Message ?? "Failure to perform action");
         }
     }
     public override async Task OnAppearingAsync()

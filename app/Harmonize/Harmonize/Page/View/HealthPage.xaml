@@ -18,7 +18,6 @@
         Command="{Binding RefreshCommand}"
         >
         <StackLayout Padding="10" Spacing="20">
-            <!-- Uptime Section -->
             <Label Text="Uptime" FontSize="Medium" FontAttributes="Bold" />
             <HorizontalStackLayout>
                 <Label Text="Seconds: " FontSize="Small" />
@@ -33,7 +32,6 @@
                 <Label Text="{Binding HealthStatus.Uptime.Hours}" FontSize="Small" />
             </HorizontalStackLayout>
 
-            <!-- Drives Section -->
             <Label Text="Drives" FontSize="Medium" FontAttributes="Bold" />
             <CollectionView ItemsSource="{Binding HealthStatus.Drives}">
                 <CollectionView.ItemTemplate>
@@ -47,6 +45,18 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
+            <Label Text="Vpn" FontSize="Medium" FontAttributes="Bold" />
+            <HorizontalStackLayout>
+                <Label Text="Connected: " FontSize="Small" />
+                <Label Text="{Binding HealthStatus.VpnConnected}" FontSize="Small" />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <Label Text="Country: " FontSize="Small" />
+                <Label Text="{Binding HealthStatus.VpnCountry}" FontSize="Small" />
+            </HorizontalStackLayout>
+
+            
         </StackLayout>
         
     </RefreshView>

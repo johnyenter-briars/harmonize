@@ -8,7 +8,6 @@ Good luck.
 
 - [X] Delete video method
 - [X] Edit element page
-- [ ] Find all spots where 
 - [ ] Job List page
   - [X] Item tapped color
   - [X] Bug where two identidal elements show up
@@ -27,6 +26,7 @@ Good luck.
 - [ ] Seasons frontend
 - [ ] Update colors
 - [X] Hook up send to media server
+- [ ] Backfill method
 - [ ] Update server
 - [ ] Setup daemon
 - [ ] Setup SSL Cert + Https
