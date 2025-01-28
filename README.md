@@ -17,10 +17,10 @@ Good luck.
   - [ ] Nice search
   - [ ] Season search
   - [ ] Filter + query popup
-- [ ] Health page
+- [X] Health page
   - [X] Add page
   - [X] VPN check
-  - [ ] Network check
+  - [X] Network check
 - [ ] Test + confirm QBT
 - [X] Seasons backend
 - [ ] Seasons frontend

@@ -56,6 +56,23 @@
                 <Label Text="{Binding HealthStatus.VpnCountry}" FontSize="Small" />
             </HorizontalStackLayout>
 
+            <Label Text="System" FontSize="Medium" FontAttributes="Bold" />
+            <HorizontalStackLayout>
+                <Label Text="Cpu Usage Percent: " FontSize="Small" />
+                <Label Text="{Binding HealthStatus.CpuUsagePercent}" FontSize="Small" />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <Label Text="Memory Usage Percent: " FontSize="Small" />
+                <Label Text="{Binding HealthStatus.MemoryUsagePercent}" FontSize="Small" />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <Label Text="Upload Speed Kb: " FontSize="Small" />
+                <Label Text="{Binding HealthStatus.UploadSpeedKb}" FontSize="Small" />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <Label Text="Download Speed Kb: " FontSize="Small" />
+                <Label Text="{Binding HealthStatus.DownloadSpeedKb}" FontSize="Small" />
+            </HorizontalStackLayout>
             
         </StackLayout>
         
