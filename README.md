@@ -8,22 +8,24 @@ Good luck.
 
 - [X] Delete video method
 - [X] Edit element page
-- [ ] Job List page
+- [X] Job List page
   - [X] Item tapped color
   - [X] Bug where two identidal elements show up
   - [X] Sort elements by started time
-  - [ ] If transfer, status of transfer
+  - [X] If transfer, status of transfer
 - [ ] Media List
   - [ ] Nice search
   - [ ] Season search
   - [ ] Filter + query popup
 - [ ] Health page
   - [X] Add page
-  - [ ] VPN check
+  - [X] VPN check
   - [ ] Network check
 - [ ] Test + confirm QBT
 - [X] Seasons backend
 - [ ] Seasons frontend
+  - [ ] Edit Season Name
+  - [ ] Display entries in season
 - [ ] Update colors
 - [X] Hook up send to media server
 - [ ] Backfill method
