@@ -8,6 +8,8 @@
     "reset-db-on-launch": false,
     "drives": [
         "/mnt/db1",
-        "/mnt/db2"
+        "/mnt/db2",
+        "/mnt/db3",
+        "/mnt/db4"
     ]
 }

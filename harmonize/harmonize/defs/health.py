@@ -17,3 +17,7 @@ class HealthStatus(BaseSchema):
     drives: list[Drive]
     vpn_connected: bool
     vpn_country: str
+    cpu_usage_percent: float
+    memory_usage_percent: float
+    upload_speed_kb: float
+    download_speed_kb: float
