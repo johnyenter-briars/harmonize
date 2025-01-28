@@ -1,5 +1,6 @@
 ﻿using Harmonize.Client;
 using Harmonize.Client.Model.Health;
+using Harmonize.Extensions;
 using Harmonize.Service;
 using Microsoft.Extensions.Logging;
 using System.Windows.Input;
@@ -40,6 +41,11 @@ public class HealthViewModel(
     }
     public override async Task OnAppearingAsync()
     {
-        FetchingData = true;
+        Task.Run(() =>
+        {
+            FetchingData = true;
+        }).FireAndForget(ex => logger.LogError($"Error: {ex}"));
+
+        await Task.CompletedTask;
     }
 }

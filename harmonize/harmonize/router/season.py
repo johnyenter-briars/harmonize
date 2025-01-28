@@ -35,7 +35,7 @@ async def create_season(
 async def associate_media_entries(
     req: AssociateToSeasonRequest,
     session: Session = Depends(get_session),
-) -> BaseResponse[None]:
+) -> BaseResponse[Season]:
     season = session.get(Season, req.season_id)
     if not season:
         raise HTTPException(status_code=404, detail='Season not found')
@@ -48,7 +48,7 @@ async def associate_media_entries(
             logger.warning(f'Media entry with ID {media_entry_id} not found.')
 
     session.commit()
-    return BaseResponse[None](
+    return BaseResponse[Season](
         message='Media entries associated successfully', status_code=200, value=None
     )
 
@@ -57,7 +57,7 @@ async def associate_media_entries(
 async def disassociate_media_entries(
     req: DisassociateToSeasonRequest,
     session: Session = Depends(get_session),
-) -> BaseResponse[None]:
+) -> BaseResponse[Season]:
     for media_entry_id in req.media_entry_ids:
         media_entry = session.get(MediaEntry, media_entry_id)
         if media_entry and media_entry.season_id == req.season_id:
@@ -68,7 +68,7 @@ async def disassociate_media_entries(
             )
 
     session.commit()
-    return BaseResponse[None](
+    return BaseResponse[Season](
         message='Media entries disassociated successfully', status_code=200, value=None
     )
 

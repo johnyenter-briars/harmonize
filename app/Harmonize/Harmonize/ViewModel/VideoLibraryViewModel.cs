@@ -1,6 +1,7 @@
 ﻿using Harmonize.Client;
 using Harmonize.Client.Model.Media;
 using Harmonize.Client.Model.Transfer;
+using Harmonize.Extensions;
 using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
@@ -85,6 +86,11 @@ public class VideoLibraryViewModel(
 
     public override async Task OnAppearingAsync()
     {
-        FetchingData = true;
+        Task.Run(() =>
+        {
+            FetchingData = true;
+        }).FireAndForget(ex => logger.LogError($"Error: {ex}"));
+
+        await Task.CompletedTask;
     }
 }

@@ -34,6 +34,17 @@
         </Tab>
     </FlyoutItem>
     <FlyoutItem 
+                Title="Season Library" 
+                Icon="icons8_retro_tv_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Season Library"
+                ContentTemplate="{DataTemplate view:SeasonLibraryPage}"
+                Route="SeasonLibraryPage" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
                 Title="Magnet Link Search" 
                 Icon="icons8_search_more_50.png"
                 >

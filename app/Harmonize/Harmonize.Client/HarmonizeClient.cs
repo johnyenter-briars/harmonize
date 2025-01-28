@@ -3,8 +3,10 @@ using Harmonize.Client.Model.Job;
 using Harmonize.Client.Model.Media;
 using Harmonize.Client.Model.QBT;
 using Harmonize.Client.Model.Response;
+using Harmonize.Client.Model.Season;
 using Harmonize.Client.Model.Transfer;
 using Harmonize.Client.Model.Youtube;
+using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -119,6 +121,30 @@ public class HarmonizeClient
         return await HarmonizeRequest<HealthStatusResponse>($"health/status", HttpMethod.Get);
     }
     #endregion
+
+    #region Season
+    public async Task<SeasonsResponse> GetSeasons()
+    {
+        return await HarmonizeRequest<SeasonsResponse>($"season/", HttpMethod.Get);
+    }
+    public async Task<MediaEntriesResponse> GetSeasonDetails(Season season)
+    {
+        return await HarmonizeRequest<MediaEntriesResponse>($"season/{season.Id}", HttpMethod.Get);
+    }
+    public async Task<SeasonResponse> CreateSeason(CreateSeasonRequest request) 
+    {
+        return await HarmonizeRequest<CreateSeasonRequest, SeasonResponse>(request, $"season/", HttpMethod.Post);
+    }
+    public async Task<SeasonResponse> AssociateToSeason(AssociateToSeasonRequest request) 
+    {
+        return await HarmonizeRequest<AssociateToSeasonRequest, SeasonResponse>(request, $"season/associate", HttpMethod.Post);
+    }
+    public async Task<SeasonResponse> DisassociateToSeason(DisassociateToSeasonRequest request) 
+    {
+        return await HarmonizeRequest<DisassociateToSeasonRequest, SeasonResponse>(request, $"season/associate", HttpMethod.Post);
+    }
+    #endregion
+
     #region POST
     public async Task<BaseResponse<Job>> CancelJob(Guid jobId)
     {

@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Maui.Core;
 using Harmonize.Client;
 using Harmonize.Client.Model.Job;
+using Harmonize.Extensions;
 using Harmonize.Page.View;
 using Harmonize.Service;
+using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -12,7 +14,8 @@ public class JobListViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
     HarmonizeClient harmonizeClient,
-    FailsafeService failsafeService
+    FailsafeService failsafeService,
+    ILogger<JobListViewModel> logger
         ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     private readonly HarmonizeClient harmonizeClient = harmonizeClient;
@@ -92,6 +95,11 @@ public class JobListViewModel(
     }
     public override async Task OnAppearingAsync()
     {
-        FetchingData = true;
+        Task.Run(() =>
+        {
+            FetchingData = true;
+        }).FireAndForget(ex => logger.LogError($"Error: {ex}"));
+
+        await Task.CompletedTask;
     }
 }

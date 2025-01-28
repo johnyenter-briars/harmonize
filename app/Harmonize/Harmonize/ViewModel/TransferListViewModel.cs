@@ -1,6 +1,8 @@
 ﻿using Harmonize.Client;
 using Harmonize.Client.Model.Transfer;
+using Harmonize.Extensions;
 using Harmonize.Service;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +17,8 @@ public class TransferListViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
     HarmonizeClient harmonizeClient,
-    FailsafeService failsafeService
+    FailsafeService failsafeService,
+    ILogger<TransferListViewModel> logger
         ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     private readonly HarmonizeClient harmonizeClient = harmonizeClient;
@@ -91,6 +94,11 @@ public class TransferListViewModel(
     }
     public override async Task OnAppearingAsync()
     {
-        FetchingData = true;
+        Task.Run(() =>
+        {
+            FetchingData = true;
+        }).FireAndForget(ex => logger.LogError($"Error: {ex}"));
+
+        await Task.CompletedTask;
     }
 }
