@@ -71,6 +71,7 @@ namespace Harmonize
             builder.Services.AddSingleton<VideoLibraryViewModel>();
             builder.Services.AddSingleton<EditMediaEntryViewModel>();
             builder.Services.AddSingleton<HealthViewModel>();
+            builder.Services.AddSingleton<TransferListViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();
@@ -88,6 +89,7 @@ namespace Harmonize
             builder.Services.AddSingleton<VideoLibraryPage>();
             builder.Services.AddSingleton<EditMediaEntryPage>();
             builder.Services.AddSingleton<HealthPage>();
+            builder.Services.AddSingleton<TransferListPage>();
 
             builder.Services.AddSingleton<MediaManager>();
 

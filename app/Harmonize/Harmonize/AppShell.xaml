@@ -67,6 +67,17 @@
         </Tab>
     </FlyoutItem>
     <FlyoutItem 
+                Title="Transfer List" 
+                Icon="icons8_send_file_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="Transfer List"
+                ContentTemplate="{DataTemplate view:TransferListPage}"
+                Route="Transfer" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
                 Title="Settings" 
                 Icon="icons8_automatic_50.png"
                 >

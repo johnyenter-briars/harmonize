@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BasePage 
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Harmonize.Page.View"
+             xmlns:pages="clr-namespace:Harmonize.Page"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+             x:TypeArguments="viewModels:TransferListViewModel"
+             x:DataType="viewModels:TransferListViewModel"
+             x:Class="Harmonize.Page.View.TransferListPage"
+             xmlns:model="clr-namespace:Harmonize.Model"
+             xmlns:transfer="clr-namespace:Harmonize.Client.Model.Transfer;assembly=Harmonize.Client"
+             xmlns:components="clr-namespace:Harmonize.Components"
+             Title="Transfer List">
+
+    <Grid Padding="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid 
+            Grid.Row="0" 
+            ColumnDefinitions="150, 75"
+            RowDefinitions="*"
+        >
+            <HorizontalStackLayout
+                Grid.Row="0"
+                Grid.Column="0"
+                >
+                <CheckBox 
+                    Color="{StaticResource Primary}"  
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    IsChecked="{Binding OrderByName, Mode=TwoWay}" 
+                    />
+                <Label 
+                    Text="Order by Name"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    FontSize="15"
+                    />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout
+                Grid.Row="1"
+                Grid.Column="1"
+                >
+                <CheckBox 
+                    Color="{StaticResource Secondary}"  
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    IsChecked="{Binding OrderByStatus, Mode=TwoWay}" 
+                    />
+                <Label 
+                    Text="Order by Percentage"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    FontSize="15"
+                    />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <RefreshView 
+            Grid.Row="1"
+            IsRefreshing="{Binding FetchingData}" 
+            Command="{Binding RefreshCommand}">
+            <ListView 
+                ItemTapped="OnItemTapped" 
+                ItemsSource="{Binding TransferProgress}"
+                IsVisible="{Binding NotFetchingData}"
+                SeparatorVisibility="None"
+                HasUnevenRows="True"
+                RowHeight="150"
+                ItemSelected="OnItemSelected"
+                >
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="transfer:TransferProgress">
+                        <ViewCell
+                       Height="100"
+                        >
+                            <components:ListElement>
+                                <Grid
+                                    ColumnDefinitions="*, Auto"
+                                    RowDefinitions="Auto, *, *, *"
+                                >
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.ColumnSpan="2"
+                                        Text="{Binding Name}" 
+                                        FontAttributes="Bold" 
+                                    />
+                                    <BoxView
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        HeightRequest="1" Color="{StaticResource Gray400}"/>
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        TextColor="{StaticResource Gray200}"
+                                        Text="{Binding Progress}" 
+                                        VerticalOptions="Center"
+                                    />
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        TextColor="{StaticResource Gray200}"
+                                        Text="{Binding StartTime}" 
+                                        VerticalOptions="Center"
+                                    />
+                                </Grid>
+                            </components:ListElement>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </RefreshView>
+    </Grid>
+</pages:BasePage>

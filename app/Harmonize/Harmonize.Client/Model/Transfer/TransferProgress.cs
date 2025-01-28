@@ -10,9 +10,9 @@ public enum TransferDestination
 
 public class TransferProgress
 {
-    public Guid MediaEntryId { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public TransferDestination Destination { get; set; }
-    public float Progress { get; set; }
-    public DateTime StartTime { get; set; }
+    public required Guid MediaEntryId { get; set; }
+    public required string Name { get; set; } = string.Empty;
+    public required TransferDestination Destination { get; set; }
+    public required float Progress { get; set; }
+    public required DateTime StartTime { get; set; }
 }
