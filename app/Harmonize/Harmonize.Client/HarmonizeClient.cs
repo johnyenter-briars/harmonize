@@ -6,11 +6,9 @@ using Harmonize.Client.Model.Response;
 using Harmonize.Client.Model.Season;
 using Harmonize.Client.Model.Transfer;
 using Harmonize.Client.Model.Youtube;
-using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static Harmonize.Client.Utility.Utility;
 
 namespace Harmonize.Client;
 

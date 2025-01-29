@@ -3,12 +3,7 @@ using Harmonize.Client.Model.Season;
 using Harmonize.Extensions;
 using Harmonize.Service;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
@@ -23,19 +18,6 @@ public class SeasonLibraryViewModel(
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     public ICommand RefreshCommand => new Command(async () => await Refresh());
-    public ICommand MoreInfoCommand => new Command<Season>(entry =>
-    {
-    });
-    public ICommand SendToMediaSystemCommand => new Command(async () =>
-    {
-        //var (jobResponse, success) = await failsafeService.Fallback(
-        //    async () => await harmonizeCilent.StartTransfer(TransferDestination.MediaSystem, SelectedSeason), null);
-
-        //if (success)
-        //{
-        //    await alertService.ShowConfirmationAsync("Success", "Job created successfully.", "Ok");
-        //}
-    });
     private Season selectedSeason;
     public Season SelectedSeason
     {

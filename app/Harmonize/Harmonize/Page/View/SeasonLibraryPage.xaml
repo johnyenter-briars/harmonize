@@ -13,13 +13,29 @@
              xmlns:harmonizeModel="clr-namespace:Harmonize.Client.Model.Season;assembly=Harmonize.Client"
              xmlns:components="clr-namespace:Harmonize.Components"
              Title="Season Library">
+    
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="9*,4*">
+            <Label FontSize="20"  Text="Season Library" HorizontalOptions="Start" Grid.Column="0" VerticalTextAlignment="Center"/>
+            <ImageButton 
+                Grid.Column="1" 
+                Source="icons8_plus_key_50.png"
+                Scale="0.75"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SeasonLibraryViewModel}}, Path=SendToMediaSystemCommand }"
+                Clicked="ImageButton_Clicked"
+                >
+                <ImageButton.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
+                </ImageButton.Behaviors>
+            </ImageButton>
+        </Grid>
+    </Shell.TitleView>
 
     <StackLayout Padding="10">
         <RefreshView 
             IsRefreshing="{Binding FetchingData}" 
             Command="{Binding RefreshCommand}"
             >
-
             <ListView 
                 Grid.Row="1" 
                 IsVisible="True"

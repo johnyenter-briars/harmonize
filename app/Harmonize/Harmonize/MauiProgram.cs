@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using MediaManager = Harmonize.Service.MediaManager;
 using static Harmonize.Constants;
 using Harmonize.Kodi;
+using Harmonize.Components;
 
 namespace Harmonize
 {
@@ -92,6 +93,7 @@ namespace Harmonize
             builder.Services.AddSingleton<HealthPage>();
             builder.Services.AddSingleton<TransferListPage>();
             builder.Services.AddSingleton<SeasonLibraryPage>();
+            builder.Services.AddSingleton<CreateSeasonPopup>();
 
             builder.Services.AddSingleton<MediaManager>();
 

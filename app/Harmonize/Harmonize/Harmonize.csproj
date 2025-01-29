@@ -157,6 +157,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Components\CreateSeasonPopup.xaml.cs">
+	    <DependentUpon>CreateSeasonPopup.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Components\BottomMenu.xaml.cs">
 	    <DependentUpon>BottomMenu.xaml</DependentUpon>
 	  </Compile>
@@ -187,6 +190,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Components\CreateSeasonPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Components\BottomMenu.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

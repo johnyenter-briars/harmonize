@@ -18,6 +18,7 @@ Good luck.
   - [ ] Season search
   - [ ] Filter + query popup
   - [ ] Delete entry
+  - [ ] Paging
 - [X] Health page
   - [X] Add page
   - [X] VPN check
@@ -27,8 +28,10 @@ Good luck.
 - [X] Seasons backend
 - [ ] Seasons frontend
   - [ ] Edit Season Name
+  - [X] Add season
   - [ ] Display entries in season
   - [ ] Delete season
+  - [ ] Paging
 - [ ] Update colors
 - [X] Hook up send to media server
 - [ ] Backfill method
@@ -37,6 +40,7 @@ Good luck.
 - [ ] Setup SSL Cert + Https
 - [ ] Warnings in frontend
 - [ ] Warnings in backend
+- [ ] IOS
 
 ## Todos For Full Functionality
 
