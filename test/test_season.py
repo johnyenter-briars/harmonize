@@ -52,3 +52,11 @@ def test_get_season_details(setup):
 
     assert response.status_code == 200, f'Expected status code 200, got {response.status_code}'
     assert response.json()['message'] == 'Season details retrieved successfully'
+
+
+def test_delete_season(setup):
+    url = f'{setup["base_url"]}/season/48f99edb-5a72-4545-96a2-f403b6542627'
+
+    response = requests.delete(url)
+
+    assert response.status_code == 200, f'Expected status code 200, got {response.status_code}'

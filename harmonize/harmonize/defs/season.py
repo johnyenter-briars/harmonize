@@ -3,7 +3,7 @@ import uuid
 from pydantic import BaseModel, Field
 
 
-class CreateSeasonRequest(BaseModel):
+class UpsertSeasonRequest(BaseModel):
     name: str
 
 

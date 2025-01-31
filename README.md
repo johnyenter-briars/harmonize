@@ -10,7 +10,7 @@ Good luck.
 - [X] Edit element page
 - [X] Job List page
   - [X] Item tapped color
-  - [X] Bug where two identidal elements show up
+  - [X] Bug where two identical elements show up
   - [X] Sort elements by started time
   - [X] If transfer, status of transfer
 - [ ] Media List
@@ -32,8 +32,6 @@ Good luck.
 - [ ] Update server
 - [ ] Setup daemon
 - [ ] Setup SSL Cert + Https
-- [ ] Warnings in frontend
-- [ ] Warnings in backend
 
 ## Todos For Full Functionality
 

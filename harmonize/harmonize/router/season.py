@@ -9,8 +9,8 @@ from harmonize.db.models import MediaEntry, Season
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.season import (
     AssociateToSeasonRequest,
-    CreateSeasonRequest,
     DisassociateToSeasonRequest,
+    UpsertSeasonRequest,
 )
 
 logger = logging.getLogger('harmonize')
@@ -19,7 +19,7 @@ router = APIRouter(prefix='/api/season')
 
 @router.post('/', status_code=201)
 async def create_season(
-    req: CreateSeasonRequest,
+    req: UpsertSeasonRequest,
     session: Session = Depends(get_session),
 ) -> BaseResponse[Season]:
     season = Season(name=req.name)
@@ -98,3 +98,37 @@ async def get_seasons(
     return BaseResponse[list[Season]](
         message='Season details retrieved successfully', status_code=200, value=seasons
     )
+
+
+@router.put('/{season_id}', status_code=200)
+async def update_season(
+    season_id: uuid.UUID,
+    req: UpsertSeasonRequest,
+    session: Session = Depends(get_session),
+) -> BaseResponse[Season]:
+    season = session.get(Season, season_id)
+    if not season:
+        raise HTTPException(status_code=404, detail='Season not found')
+
+    season.name = req.name
+    session.commit()
+    session.refresh(season)
+
+    return BaseResponse[Season](
+        message='Season updated successfully', status_code=200, value=season
+    )
+
+
+@router.delete('/{season_id}', status_code=200)
+async def delete_season(
+    season_id: uuid.UUID,
+    session: Session = Depends(get_session),
+) -> BaseResponse[None]:
+    season = session.get(Season, season_id)
+    if not season:
+        raise HTTPException(status_code=404, detail='Season not found')
+
+    session.delete(season)
+    session.commit()
+
+    return BaseResponse[None](message='Season deleted successfully', status_code=200, value=None)
