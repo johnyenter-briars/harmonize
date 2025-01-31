@@ -20,7 +20,6 @@
         <Label Text="Name" FontSize="Medium" />
         <Editor 
                 Text="{Binding Seaon.Name, Mode=TwoWay}"
-                IsReadOnly="True" 
                 AutoSize="TextChanges" 
                 HeightRequest="75" />
 
@@ -78,21 +77,39 @@
         </ListView>
 
         <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
-            <Button 
-                    Margin="25, 0, 25, 0"
-                    Padding="30, 10, 30, 10"
-                    ImageSource="icons8_trash_50.png"
-                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditSeasonViewModel}}, Path=DeleteSeason}"
-                    CommandParameter="{Binding Seaon}" 
-                />
+            <ImageButton 
+                    Margin="50, 0, 50, 0"
+                    Source="icons8_trash_26.png"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Clicked="ScaleButton"
+                >
+                <ImageButton.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
+                </ImageButton.Behaviors>
+                <ImageButton.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditSeasonViewModel}}, Path=DeleteSeason }"
+                            />
+                </ImageButton.GestureRecognizers>
+            </ImageButton>
 
-            <Button 
-                    Margin="25, 0, 25, 0"
-                    Padding="30, 10, 30, 10"
-                    ImageSource="icons8_save_50.png"
-                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditSeasonViewModel}}, Path=SaveSeason}"
-                    CommandParameter="{Binding Seaon}" 
-                />
+            <ImageButton 
+                    Margin="50, 0, 50, 0"
+                    Source="icons8_save_50.png"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Clicked="ScaleButton"
+                    >
+                <ImageButton.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                </ImageButton.Behaviors>
+                <ImageButton.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditSeasonViewModel}}, Path=SaveSeason }"
+                        />
+                </ImageButton.GestureRecognizers>
+            </ImageButton>
         </HorizontalStackLayout>
     </VerticalStackLayout>
 </pages:BasePage>

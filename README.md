@@ -27,10 +27,10 @@ Good luck.
   - [ ] Individual eps in a folder considered a season
 - [X] Seasons backend
 - [ ] Seasons frontend
-  - [ ] Edit Season Name
+  - [X] Edit Season Name
   - [X] Add season
-  - [ ] Display entries in season
-  - [ ] Delete season
+  - [X] Display entries in season
+  - [X] Delete season
   - [ ] Paging
 - [ ] Update colors
 - [X] Hook up send to media server
