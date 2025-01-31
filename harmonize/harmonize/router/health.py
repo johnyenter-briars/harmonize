@@ -4,10 +4,14 @@ from datetime import datetime
 from pathlib import Path
 
 import psutil
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Request
+from sqlalchemy.sql import func
+from sqlmodel import Session, select
 
 import harmonize.config
 import harmonize.config.harmonizeconfig
+from harmonize.db.database import get_session
+from harmonize.db.models import MediaEntry, MediaEntryType, Playlist, Season
 from harmonize.defs.health import Drive, HealthStatus, Uptime
 from harmonize.defs.response import BaseResponse
 from harmonize.file.drive import get_folder_size_bytes
@@ -46,7 +50,10 @@ def _vpn_status() -> tuple[bool, str]:
 
 
 @router.get('/status')
-async def status(request: Request) -> BaseResponse[HealthStatus]:
+async def status(
+    request: Request,
+    session: Session = Depends(get_session),
+) -> BaseResponse[HealthStatus]:
     start_time = request.app.state.start_time
     current_time = datetime.now()
     uptime = current_time - start_time
@@ -75,6 +82,18 @@ async def status(request: Request) -> BaseResponse[HealthStatus]:
 
     (connected, country) = _vpn_status()
 
+    video_count = session.exec(
+        select(func.count()).where(MediaEntry.type == MediaEntryType.VIDEO)
+    ).one()
+
+    audio_count = session.exec(
+        select(func.count()).where(MediaEntry.type == MediaEntryType.AUDIO)
+    ).one()
+
+    playlist_count = session.exec(select(func.count()).select_from(Playlist)).one()
+
+    season_count = session.exec(select(func.count()).select_from(Season)).one()
+
     status = HealthStatus(
         uptime=uptime,
         drives=drives,
@@ -84,6 +103,10 @@ async def status(request: Request) -> BaseResponse[HealthStatus]:
         memory_usage_percent=memory_usage,
         upload_speed_kb=upload_speed_kb,
         download_speed_kb=download_speed_kb,
+        video_count=video_count,
+        audio_count=audio_count,
+        playlist_count=playlist_count,
+        season_count=season_count,
     )
 
     return BaseResponse[HealthStatus](message='Status', status_code=200, value=status)

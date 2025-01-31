@@ -21,3 +21,7 @@ class HealthStatus(BaseSchema):
     memory_usage_percent: float
     upload_speed_kb: float
     download_speed_kb: float
+    audio_count: int
+    video_count: int
+    playlist_count: int
+    season_count: int
