@@ -48,14 +48,7 @@ public class HarmonizeClient
         return this;
     }
     #endregion
-    public string GetMediaMetadataArtworkUrl(MediaMetadata mediaMetadata, string artworkSize)
-    {
-        var artwork = mediaMetadata.Artwork;
 
-        var xlMediaUrl = $"http://{hostName}:{port}/api/{mediaMetadata.Artwork}";
-
-        return xlMediaUrl;
-    }
     #region Media
     public async Task<MediaEntriesResponse> GetAudio()
     {
@@ -69,15 +62,28 @@ public class HarmonizeClient
     {
         return await HarmonizeRequestBytes($"stream/{mediaEntry.Id}", HttpMethod.Get);
     }
-    #endregion
-    public async Task<Playlist> GetPlaylist(string playlistName)
+    public string GetMediaMetadataArtworkUrl(MediaMetadata mediaMetadata, string artworkSize)
     {
-        return await HarmonizeRequest<Playlist>($"playlist/{playlistName}", HttpMethod.Get);
+        var artwork = mediaMetadata.Artwork;
+
+        var xlMediaUrl = $"http://{hostName}:{port}/api/{mediaMetadata.Artwork}";
+
+        return xlMediaUrl;
     }
     public async Task<MediaMetadataResponse> GetMediaMetadata(IMediaEntry mediaEntry)
     {
         return await HarmonizeRequest<MediaMetadataResponse>($"metadata/media/{mediaEntry.Id}", HttpMethod.Get);
     }
+    #endregion
+
+    #region Playlist
+    public async Task<Playlist> GetPlaylist(string playlistName)
+    {
+        return await HarmonizeRequest<Playlist>($"playlist/{playlistName}", HttpMethod.Get);
+    }
+    #endregion
+
+    #region Job
     public async Task<JobsResponse> GetJobs()
     {
         return await HarmonizeRequest<JobsResponse>($"job", HttpMethod.Get);
@@ -86,6 +92,13 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<JobResponse>($"job/{jobId}", HttpMethod.Get);
     }
+    public async Task<BaseResponse<Job>> CancelJob(Guid jobId)
+    {
+        return await HarmonizeRequest<BaseResponse<Job>>($"job/cancel/{jobId}", HttpMethod.Post);
+    }
+    #endregion
+
+    #region Search
     public async Task<YoutubeVideoSearchResponse> GetYoutubeVideoSearchResults(string query)
     {
         return await HarmonizeRequest<YoutubeVideoSearchResponse>($"search/youtube/video/{query}", HttpMethod.Get);
@@ -102,13 +115,15 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<MagnetLinkSearchResults>($"search/xt1337/{query}", HttpMethod.Get);
     }
+    #endregion 
+
     #region Transfer
     public async Task<TransferProgressResponse> GetTransferProgress(TransferDestination transferDestination)
     {
         var destination = transferDestination.ToString().ToLower();
         return await HarmonizeRequest<TransferProgressResponse>($"transfer/{destination}", HttpMethod.Get);
     }
-    public async Task<JobResponse> StartTransfer(TransferDestination transferDestination, IMediaEntry entry) 
+    public async Task<JobResponse> StartTransfer(TransferDestination transferDestination, IMediaEntry entry)
     {
         var destination = transferDestination.ToString().ToLower();
         return await HarmonizeRequest<JobResponse>($"transfer/{destination}/{entry.Id}", HttpMethod.Post);
@@ -116,7 +131,7 @@ public class HarmonizeClient
     #endregion
 
     #region Health
-    public async Task<HealthStatusResponse> GetHealthStatus() 
+    public async Task<HealthStatusResponse> GetHealthStatus()
     {
         return await HarmonizeRequest<HealthStatusResponse>($"health/status", HttpMethod.Get);
     }
@@ -131,34 +146,30 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"season/{season.Id}", HttpMethod.Get);
     }
-    public async Task<SeasonResponse> CreateSeason(UpsertSeasonRequest request) 
+    public async Task<SeasonResponse> CreateSeason(UpsertSeasonRequest request)
     {
         return await HarmonizeRequest<UpsertSeasonRequest, SeasonResponse>(request, $"season/", HttpMethod.Post);
     }
-    public async Task<SeasonResponse> AssociateToSeason(AssociateToSeasonRequest request) 
+    public async Task<SeasonResponse> AssociateToSeason(AssociateToSeasonRequest request)
     {
         return await HarmonizeRequest<AssociateToSeasonRequest, SeasonResponse>(request, $"season/associate", HttpMethod.Post);
     }
-    public async Task<SeasonResponse> DisassociateToSeason(DisassociateToSeasonRequest request) 
+    public async Task<SeasonResponse> DisassociateToSeason(DisassociateToSeasonRequest request)
     {
         return await HarmonizeRequest<DisassociateToSeasonRequest, SeasonResponse>(request, $"season/associate", HttpMethod.Post);
     }
     //TODO: this is horrible
-    public async Task<SeasonResponse> UpdateSeason(Season season, UpsertSeasonRequest request) 
+    public async Task<SeasonResponse> UpdateSeason(Season season, UpsertSeasonRequest request)
     {
         return await HarmonizeRequest<UpsertSeasonRequest, SeasonResponse>(request, $"season/{season.Id}", HttpMethod.Put);
     }
-    public async Task<SeasonResponse> DeleteSeason(Season season) 
+    public async Task<SeasonResponse> DeleteSeason(Season season)
     {
         return await HarmonizeRequest<SeasonResponse>($"season/{season.Id}", HttpMethod.Delete);
     }
     #endregion
 
-    #region POST
-    public async Task<BaseResponse<Job>> CancelJob(Guid jobId)
-    {
-        return await HarmonizeRequest<BaseResponse<Job>>($"job/cancel/{jobId}", HttpMethod.Post);
-    }
+    #region Youtube
     public async Task<BaseResponse<Job>> DownloadYoutubeVideo(string youtubeId)
     {
         return await HarmonizeRequest<BaseResponse<Job>>($"youtube/video/{youtubeId}", HttpMethod.Post);
@@ -167,6 +178,9 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<BaseResponse<Job>>($"youtube/playlist/{youtubeId}", HttpMethod.Post);
     }
+    #endregion
+
+    #region QBT
     public async Task<AddQbtDownloadsResponse> AddQbtDownload(AddQbtDownloadsRequest request)
     {
         return await HarmonizeRequest<AddQbtDownloadsRequest, AddQbtDownloadsResponse>(request, $"qbt/add", HttpMethod.Post);
@@ -188,6 +202,7 @@ public class HarmonizeClient
         return await HarmonizeRequest<ResumeDownloadsRequest, ResumeDownloadsResponse>(request, $"qbt/resume", HttpMethod.Post);
     }
     #endregion
+
     #region BASE REQUESTS
     private async Task<TResponse> HarmonizeRequest<TResponse>(string path, HttpMethod httpMethod)
     {

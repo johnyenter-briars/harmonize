@@ -34,6 +34,7 @@ Good luck.
   - [ ] Paging
 - [ ] Update colors
 - [X] Hook up send to media server
+- [ ] Authentication
 - [ ] Backfill method
 - [ ] Update server
 - [ ] Setup daemon
