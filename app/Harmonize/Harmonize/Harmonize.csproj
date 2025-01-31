@@ -202,6 +202,9 @@
 	  <MauiXaml Update="Page\View\EditMediaEntryPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Page\View\EditSeasonPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Page\View\HealthPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

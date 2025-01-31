@@ -125,7 +125,7 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<SeasonsResponse>($"season/", HttpMethod.Get);
     }
-    public async Task<MediaEntriesResponse> GetSeasonDetails(Season season)
+    public async Task<MediaEntriesResponse> GetSeasonEntries(Season season)
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"season/{season.Id}", HttpMethod.Get);
     }

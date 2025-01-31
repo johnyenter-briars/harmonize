@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BasePage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Harmonize.Page.View"
+    xmlns:pages="clr-namespace:Harmonize.Page"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+    x:TypeArguments="viewModels:EditSeasonViewModel"
+    x:DataType="viewModels:EditSeasonViewModel"
+    x:Class="Harmonize.Page.View.EditSeasonPage"
+    xmlns:components="clr-namespace:Harmonize.Components"
+    xmlns:harmonizeModel="clr-namespace:Harmonize.Client.Model.Media;assembly=Harmonize.Client"
+    Title="Edit Season Page">
+
+    <VerticalStackLayout Spacing="10">
+        <Label Text="Season ID" FontSize="Medium" />
+        <Entry Text="{Binding Seaon.Id, Mode=OneWay}" IsReadOnly="True" />
+
+        <Label Text="Name" FontSize="Medium" />
+        <Editor 
+                Text="{Binding Seaon.Name, Mode=TwoWay}"
+                IsReadOnly="True" 
+                AutoSize="TextChanges" 
+                HeightRequest="75" />
+
+        <Label Text="Date Added" FontSize="Medium" />
+        <Entry 
+                Text="{Binding Seaon.DateAdded, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}"
+                IsReadOnly="True" />
+
+        <ListView 
+            HeightRequest="276"
+            Grid.Row="1" 
+            IsVisible="True"
+            ItemsSource="{Binding MediaEntries}"
+            VerticalOptions="FillAndExpand"
+            HorizontalOptions="FillAndExpand"
+            ItemTapped="OnItemTapped"
+            RowHeight="60"
+            SeparatorVisibility="None"
+            ItemSelected="OnItemSelected"
+            >
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="harmonizeModel:MediaEntry">
+                    <ViewCell>
+                        <components:ListElement>
+                            <Grid
+                                    Scale="0.8"
+                                    RowDefinitions="Auto"
+                                    ColumnDefinitions="*, Auto"
+                                    VerticalOptions="Center"
+                                    Padding="5">
+
+                                <Label 
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        FontSize="14" 
+                                        Text="{Binding Name}" 
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="Start" />
+
+                                <Button 
+                                        Scale="1.5"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Text="⋮"
+                                        FontSize="18"
+                                        BackgroundColor="Transparent"
+                                        VerticalOptions="Center"
+                                        />
+
+                            </Grid>
+                        </components:ListElement>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
+            <Button 
+                    Margin="25, 0, 25, 0"
+                    Padding="30, 10, 30, 10"
+                    ImageSource="icons8_trash_50.png"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditSeasonViewModel}}, Path=DeleteSeason}"
+                    CommandParameter="{Binding Seaon}" 
+                />
+
+            <Button 
+                    Margin="25, 0, 25, 0"
+                    Padding="30, 10, 30, 10"
+                    ImageSource="icons8_save_50.png"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditSeasonViewModel}}, Path=SaveSeason}"
+                    CommandParameter="{Binding Seaon}" 
+                />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</pages:BasePage>
+

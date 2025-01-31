@@ -24,7 +24,7 @@ Good luck.
   - [X] VPN check
   - [X] Network check
 - [ ] Test + confirm QBT
-  - [ ] Indiviual eps in a folder considered a season
+  - [ ] Individual eps in a folder considered a season
 - [X] Seasons backend
 - [ ] Seasons frontend
   - [ ] Edit Season Name

@@ -1,6 +1,7 @@
 ﻿using Harmonize.Client;
 using Harmonize.Client.Model.Season;
 using Harmonize.Extensions;
+using Harmonize.Page.View;
 using Harmonize.Service;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
@@ -13,7 +14,7 @@ public class SeasonLibraryViewModel(
     PreferenceManager preferenceManager,
     FailsafeService failsafeService,
     ILogger<SeasonLibraryViewModel> logger,
-    HarmonizeClient harmonizeCilent,
+    HarmonizeClient harmonizeClient,
     AlertService alertService
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
@@ -45,7 +46,7 @@ public class SeasonLibraryViewModel(
     {
         var (response, success) = await FetchData(async () =>
         {
-            return await failsafeService.Fallback(harmonizeCilent.GetSeasons, null);
+            return await failsafeService.Fallback(harmonizeClient.GetSeasons, null);
         });
 
         Seasons.Clear();
@@ -56,11 +57,10 @@ public class SeasonLibraryViewModel(
     }
     public async Task ItemTapped(Season season)
     {
-        //await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), new Dictionary<string, object>
-        //{
-        //    { nameof(EditMediaEntryViewModel.MediaEntryId), season.Id },
-        //    { nameof(EditMediaEntryViewModel.MediaEntry), season }
-        //});
+        await Shell.Current.GoToAsync(nameof(EditSeasonPage), new Dictionary<string, object>
+        {
+            { nameof(EditSeasonViewModel.Seaon), season }
+        });
     }
 
     public override async Task OnAppearingAsync()
