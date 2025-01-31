@@ -29,5 +29,9 @@ public class HealthStatus
     public required decimal MemoryUsagePercent { get; set; }
     public required decimal UploadSpeedKb { get; set; }
     public required decimal DownloadSpeedKb { get; set; }
+    public required int AudioCount { get; set; }
+    public required int VideoCount { get; set; }
+    public required int PlaylistCount { get; set; }
+    public required int SeasonCount { get; set; }
 }
 

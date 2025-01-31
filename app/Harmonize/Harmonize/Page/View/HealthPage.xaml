@@ -19,6 +19,16 @@
         >
         <ScrollView>
             <StackLayout Padding="10" Spacing="20">
+                <Label Text="Vpn" FontSize="Medium" FontAttributes="Bold" />
+                <HorizontalStackLayout>
+                    <Label Text="Connected: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.VpnConnected}" FontSize="Small" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="Country: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.VpnCountry}" FontSize="Small" />
+                </HorizontalStackLayout>
+
                 <Label Text="Uptime" FontSize="Medium" FontAttributes="Bold" />
                 <HorizontalStackLayout>
                     <Label Text="Seconds: " FontSize="Small" />
@@ -47,14 +57,22 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <Label Text="Vpn" FontSize="Medium" FontAttributes="Bold" />
+                <Label Text="Database" FontSize="Medium" FontAttributes="Bold" />
                 <HorizontalStackLayout>
-                    <Label Text="Connected: " FontSize="Small" />
-                    <Label Text="{Binding HealthStatus.VpnConnected}" FontSize="Small" />
+                    <Label Text="Audio: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.AudioCount}" FontSize="Small" />
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
-                    <Label Text="Country: " FontSize="Small" />
-                    <Label Text="{Binding HealthStatus.VpnCountry}" FontSize="Small" />
+                    <Label Text="Video: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.VideoCount}" FontSize="Small" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="Playlist: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.PlaylistCount}" FontSize="Small" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="Season: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.SeasonCount}" FontSize="Small" />
                 </HorizontalStackLayout>
 
                 <Label Text="System" FontSize="Medium" FontAttributes="Bold" />
