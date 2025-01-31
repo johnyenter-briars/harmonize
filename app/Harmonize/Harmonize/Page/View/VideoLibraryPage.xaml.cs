@@ -1,3 +1,5 @@
+using AlohaKit.Animations;
+using Harmonize.Client.Model.Media;
 using Harmonize.Model;
 using Harmonize.Service;
 using Harmonize.ViewModel;
@@ -9,6 +11,7 @@ public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
     private Picker _optionsPicker;
     private readonly VideoLibraryViewModel viewModel;
     private readonly MediaManager mediaManager;
+    private object? previousSender = null;
 
     public VideoLibraryPage(
         VideoLibraryViewModel viewModel,
@@ -26,20 +29,43 @@ public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
     }
     private async void OnItemTapped(object sender, ItemTappedEventArgs e)
     {
-        if (e.Item is LocalMediaEntry mediaEntry)
+        if (e.Item is MediaEntry mediaEntry)
         {
-            //await viewModel.ItemTapped(mediaEntry);
+            await viewModel.ItemTapped(mediaEntry);
         }
     }
     private async void OnOpenBottomSheetClicked(object sender, EventArgs e)
     {
-        if (!bottomMenu.IsVisible)
+        if (sender is Button button)
         {
-            await bottomMenu.ShowAsync();
-        }
-        else
-        {
-            await bottomMenu.HideAsync();
+            if (button.Text != "Send to Media System")
+            {
+                var currentScale = button.Scale;
+                await button.Animate(new StoryBoard(
+                  [
+                     new ScaleToAnimation { Scale = 2, Duration = "150" },
+                 new ScaleToAnimation { Scale = currentScale, Duration = "100" }
+                  ]));
+            }
+
+            if (!bottomMenu.IsVisible)
+            {
+                await bottomMenu.ShowAsync();
+            }
+            else
+            {
+                if (sender == previousSender)
+                {
+                    await bottomMenu.HideAsync();
+                }
+
+                if (button.Text == "Send to Media System")
+                {
+                    await bottomMenu.HideAsync();
+                }
+            }
+
+            previousSender = sender;
         }
     }
 }

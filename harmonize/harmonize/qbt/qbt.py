@@ -1,19 +1,25 @@
 import asyncio
 import datetime
 import logging
-import shutil
+import uuid
 from codecs import encode
 from pathlib import Path
 
 import aiohttp
 import pydantic
+from sqlalchemy.orm import Session
 from sqlmodel import Session, select
 
 from harmonize.config.harmonizeconfig import HARMONIZE_CONFIG
-from harmonize.const import VIDEO_ROOT
+from harmonize.const import SUPPORTED_EXTENSIONS, VIDEO_EXTENSIONS
 from harmonize.db.database import get_session_non_gen
-from harmonize.db.models import MediaElementSource, MediaEntry, MediaEntryType
+from harmonize.db.models import MediaElementSource, MediaEntry, MediaEntryType, Season
 from harmonize.defs.qbt import QbtDownloadData
+from harmonize.file.drive import (
+    get_drive_with_least_space,
+    move_file_to_mounted_folders,
+    remove_file,
+)
 
 logger = logging.getLogger('harmonize')
 
@@ -146,7 +152,7 @@ async def delete_download(torrent_hash: str) -> str:
 
 
 def _download_finished(data: QbtDownloadData) -> bool:
-    return data.state == 'stalledUP'
+    return data.state in ('stalledUP', 'uploading', 'stoppedUP')
 
 
 def _media_entry_exists(
@@ -158,14 +164,80 @@ def _media_entry_exists(
     return len(media_entries) > 0
 
 
-def save_file(download: QbtDownloadData) -> Path:
+def save_file(download: QbtDownloadData, session: Session, logger: logging.Logger):
+    source_path = Path(download.content_path)
+
+    moved_path = move_file_to_mounted_folders(source_path)
+    if moved_path is None:
+        msg = 'Unable to move file'
+        raise Exception(msg)  # noqa: TRY002
+
+    media_entry = MediaEntry(
+        name=download.name,
+        absolute_path=moved_path.absolute().as_posix(),
+        source=MediaElementSource.MAGNETLINK,
+        youtube_id=None,
+        magnet_link=download.magnet_uri,
+        type=MediaEntryType.VIDEO,
+        date_added=datetime.datetime.now(datetime.UTC),
+        cover_art_absolute_path=None,
+        thumbnail_art_absolute_path=None,
+        season_id=None,
+    )
+
+    session.add(media_entry)
+    session.commit()
+
+    logger.debug('Added media entry: %s', media_entry.id)
+
+    remove_file(source_path)
+
+
+def save_directory_files(download: QbtDownloadData, session: Session, logger: logging.Logger):
     path = Path(download.content_path)
 
-    media_root_path = VIDEO_ROOT / path.name
+    if not path.is_dir():
+        logger.error('Provided path is not a directory: %s', path)
+        return
 
-    shutil.copy2(path, media_root_path)
+    season_id = uuid.uuid4()
+    season = Season(name=download.name, id=season_id)
+    session.add(season)
 
-    return media_root_path
+    logger.info('Created season: %s', season_id)
+
+    chosen_drive = get_drive_with_least_space()
+
+    for file in path.iterdir():
+        if file.is_file() and file.suffix.lower() in SUPPORTED_EXTENSIONS:
+            source_path = file.absolute()
+            moved_path = move_file_to_mounted_folders(source_path, chosen_drive)
+            if moved_path is None:
+                msg = 'Unable to move file'
+                raise Exception(msg)  # noqa: TRY002
+
+            media_entry = MediaEntry(
+                name=file.stem,
+                absolute_path=moved_path.absolute().as_posix(),
+                source=MediaElementSource.MAGNETLINK,
+                youtube_id=None,
+                magnet_link=download.magnet_uri,
+                type=MediaEntryType.VIDEO
+                if file.suffix.lower() in VIDEO_EXTENSIONS
+                else MediaEntryType.SUBTITLE,
+                date_added=datetime.datetime.now(datetime.UTC),
+                cover_art_absolute_path=None,
+                thumbnail_art_absolute_path=None,
+                season_id=season_id,
+            )
+
+            session.add(media_entry)
+
+            logger.debug('Added media entry: %s', media_entry.id)
+
+    session.commit()
+    logger.info('Processed all files in directory: %s', path)
+    remove_file(path)
 
 
 async def qbt_background_service():
@@ -174,26 +246,12 @@ async def qbt_background_service():
             session: Session = get_session_non_gen()
             downloads = await list_downloads()
             for download in downloads:
-                if _download_finished(download):
-                    if not _media_entry_exists(download, session):
-                        path_to_file = save_file(download)
-
-                        media_entry = MediaEntry(
-                            name=download.name,
-                            absolute_path=path_to_file.absolute().as_posix(),
-                            source=MediaElementSource.MAGNETLINK,
-                            youtube_id=None,
-                            magnet_link=download.magnet_uri,
-                            type=MediaEntryType.VIDEO,
-                            date_added=datetime.datetime.now(datetime.UTC),
-                            cover_art_absolute_path=None,
-                            thumbnail_art_absolute_path=None,
-                        )
-
-                        session.add(media_entry)
-                        session.commit()
-
-                        logger.debug('Added media entry: %s', media_entry.id)
+                if _download_finished(download) and not _media_entry_exists(download, session):
+                    path = Path(download.content_path)
+                    if path.is_dir():
+                        save_directory_files(download, session, logger)
+                    else:
+                        save_file(download, session, logger)
 
                     await delete_download(download.hash)
 
@@ -201,3 +259,6 @@ async def qbt_background_service():
             await asyncio.sleep(30)
         except Exception as e:
             logger.exception('Error in background service: %s', str(e))
+        finally:
+            if session:  # type: ignore
+                session.close()

@@ -1,5 +1,7 @@
 ﻿using Harmonize.Client;
 using Harmonize.Client.Model.Media;
+using Harmonize.Client.Model.Transfer;
+using Harmonize.Extensions;
 using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
@@ -19,15 +21,37 @@ public class VideoLibraryViewModel(
     PreferenceManager preferenceManager,
     FailsafeService failsafeService,
     ILogger<VideoLibraryPage> logger,
-    HarmonizeClient harmonizeCilent
+    HarmonizeClient harmonizeClient,
+    AlertService alertService
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     public ICommand RefreshCommand => new Command(async () => await Refresh());
+    public ICommand LoadMoreCommand => new Command(async () => await LoadMore());
     public ICommand MoreInfoCommand => new Command<MediaEntry>(entry =>
     {
     });
+    public ICommand SendToMediaSystemCommand => new Command(async () =>
+    {
+        var (jobResponse, success) = await failsafeService.Fallback(
+            async () => await harmonizeClient.StartTransfer(TransferDestination.MediaSystem, SelectedMediaEntry), null);
+
+        if (success)
+        {
+            await alertService.ShowConfirmationAsync("Success", "Job created successfully.", "Ok");
+        }
+    });
+    private MediaEntry selectedMediaEntry;
+    public MediaEntry SelectedMediaEntry
+    {
+        get { return selectedMediaEntry; }
+        set { SetProperty(ref selectedMediaEntry, value); }
+    }
+    public ICommand OpenBottomSheetCommand => new Command<MediaEntry>(entry =>
+    {
+        SelectedMediaEntry = entry;
+    });
     private List<string> options = ["foo", "bar"];
-    public List<string> Options 
+    public List<string> Options
     {
         get { return options; }
         set { SetProperty(ref options, value); }
@@ -38,12 +62,30 @@ public class VideoLibraryViewModel(
         get { return mediaEntries; }
         set { SetProperty(ref mediaEntries, value); }
     }
+    const int Limit = 10;
+    int skip = 0;
 
-    async Task Refresh()
+    async Task LoadMore()
     {
+        skip += Limit;
+
         var (response, success) = await FetchData(async () =>
         {
-            return await failsafeService.Fallback(harmonizeCilent.GetVideo, null);
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideoPaging(Limit, skip), null);
+        });
+
+        foreach (var m in response?.Value ?? [])
+        {
+            MediaEntries.Add(m);
+        }
+    }
+    async Task Refresh()
+    {
+        skip = 0;
+
+        var (response, success) = await FetchData(async () =>
+        {
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideoPaging(Limit, skip), null);
         });
 
         MediaEntries.Clear();
@@ -52,16 +94,22 @@ public class VideoLibraryViewModel(
             MediaEntries.Add(m);
         }
     }
-    public async Task ItemTapped(LocalMediaEntry localMediaEntry)
+    public async Task ItemTapped(MediaEntry mediaEntry)
     {
-        await Shell.Current.GoToAsync(nameof(MediaElementPage), new Dictionary<string, object>
+        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), new Dictionary<string, object>
         {
-            { nameof(MediaElementViewModel.MediaEntryId), localMediaEntry.Id }
+            { nameof(EditMediaEntryViewModel.MediaEntryId), mediaEntry.Id },
+            { nameof(EditMediaEntryViewModel.MediaEntry), mediaEntry }
         });
     }
 
     public override async Task OnAppearingAsync()
     {
-        await Refresh();
+        Task.Run(() =>
+        {
+            FetchingData = true;
+        }).FireAndForget(ex => logger.LogError($"Error: {ex}"));
+
+        await Task.CompletedTask;
     }
 }

@@ -4,7 +4,43 @@
 
 Good luck.
 
-## todos
+## Todos For Audio Support Only
+
+- [X] Delete video method
+- [X] Edit element page
+- [X] Job List page
+  - [X] Item tapped color
+  - [X] Bug where two identical elements show up
+  - [X] Sort elements by started time
+  - [X] If transfer, status of transfer
+- [ ] Media List
+  - [ ] Nice search
+  - [ ] Season search
+  - [ ] Filter + query popup
+  - [ ] Delete entry
+  - [ ] Paging
+- [X] Health page
+  - [X] Add page
+  - [X] VPN check
+  - [X] Network check
+- [ ] Test + confirm QBT
+  - [ ] Individual eps in a folder considered a season
+- [X] Seasons backend
+- [ ] Seasons frontend
+  - [X] Edit Season Name
+  - [X] Add season
+  - [X] Display entries in season
+  - [X] Delete season
+  - [ ] Paging
+- [ ] Update colors
+- [X] Hook up send to media server
+- [ ] Backfill method
+- [ ] Update server
+- [ ] Setup daemon
+- [ ] Setup SSL Cert + Https
+- [ ] IOS
+
+## Todos For Full Functionality
 
 ### Front End
 

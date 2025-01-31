@@ -1,0 +1,53 @@
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+               x:Class="Harmonize.Components.CreateSeasonPopup">
+
+    <Border BackgroundColor="{StaticResource Gray600}"
+        StrokeThickness="0"
+        Padding="0"
+        Clip="M0,0 H350 V300 H0 Z">
+
+        <Frame 
+            BackgroundColor="Transparent"
+            HasShadow="True"
+            Padding="20"
+            WidthRequest="350"
+            HeightRequest="185"
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
+               
+            <VerticalStackLayout Spacing="50">
+
+                <Entry Placeholder="Enter season name..."
+                   BackgroundColor="{StaticResource Gray600}"
+                   TextColor="White"
+                   FontSize="16"
+                   x:Name="seasonName"/>
+
+                <HorizontalStackLayout Spacing="10"
+                                   HorizontalOptions="End">
+                    <Button Text="Cancel"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontSize="16"
+                        Clicked="Cancel_Clicked"
+                            />
+
+                    <Button Text="Add"
+                        BackgroundColor="{StaticResource PrimaryDark}"
+                        TextColor="White"
+                        FontSize="16"
+                        CornerRadius="10"
+                        Clicked="Add_Clicked"
+                            />
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+
+        </Frame>
+    </Border>
+    
+</toolkit:Popup>
+

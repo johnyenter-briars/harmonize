@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Maui.Core;
 using Harmonize.Client;
 using Harmonize.Client.Model.Job;
+using Harmonize.Extensions;
 using Harmonize.Page.View;
 using Harmonize.Service;
+using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -12,7 +14,8 @@ public class JobListViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
     HarmonizeClient harmonizeClient,
-    FailsafeService failsafeService
+    FailsafeService failsafeService,
+    ILogger<JobListViewModel> logger
         ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     private readonly HarmonizeClient harmonizeClient = harmonizeClient;
@@ -64,18 +67,19 @@ public class JobListViewModel(
     public ICommand RefreshCommand => new Command(async () => await Refresh());
     public async Task Refresh()
     {
-        Jobs.Clear();
-
         var (response, success) = await FetchData(async () =>
         {
             return await failsafeService.Fallback(harmonizeClient.GetJobs, null);
         });
 
+        Jobs.Clear();
+
         if (success)
         {
-            foreach (var m in response?.Value ?? [])
+            var jobs = (response?.Value ?? []).OrderByDescending(j => j.StartedOn);
+            foreach (var j in jobs)
             {
-                Jobs.Add(m);
+                Jobs.Add(j);
             }
         }
     }
@@ -91,14 +95,11 @@ public class JobListViewModel(
     }
     public override async Task OnAppearingAsync()
     {
-        await Refresh();
+        Task.Run(() =>
+        {
+            FetchingData = true;
+        }).FireAndForget(ex => logger.LogError($"Error: {ex}"));
+
+        await Task.CompletedTask;
     }
-
-    //public ICommand Refresh => new Command<ImageButton>(async (imageButton) =>
-    //{
-    //    await imageButton.RotateTo(100, 300, Easing.CubicInOut);
-    //    await imageButton.RotateTo(0, 300, Easing.CubicInOut);
-
-    //    await Refresh();
-    //});
 }

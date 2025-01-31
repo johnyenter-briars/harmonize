@@ -17,21 +17,19 @@
     <StackLayout Padding="10">
         <RefreshView 
             IsRefreshing="{Binding FetchingData}" 
-            Command="{Binding RefreshCommand}">
-
-            <ListView 
+            Command="{Binding RefreshCommand}"
+            >
+            <CollectionView 
                 Grid.Row="1" 
                 IsVisible="True"
+                RemainingItemsThreshold="5"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                 ItemsSource="{Binding MediaEntries}"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                ItemTapped="OnItemTapped"
-                RowHeight="95"
-                SeparatorVisibility="None"
                 >
-                <ListView.ItemTemplate>
+                <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="harmonizeModel:MediaEntry">
-                        <ViewCell>
                             <components:ListElement>
                                 <Grid
                                     RowDefinitions="Auto"
@@ -48,6 +46,7 @@
                                         HorizontalOptions="Start" />
 
                                     <Button 
+                                        Scale="1.5"
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Text="⋮"
@@ -55,14 +54,18 @@
                                         BackgroundColor="Transparent"
                                         VerticalOptions="Center"
                                         Clicked="OnOpenBottomSheetClicked"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=OpenBottomSheetCommand}"
+                                        CommandParameter="{Binding .}"
                                         />
 
                                 </Grid>
                             </components:ListElement>
-                        </ViewCell>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+                <CollectionView.Footer>
+                    <ActivityIndicator IsRunning="{Binding FetchingData}" />
+                </CollectionView.Footer>
+            </CollectionView>
         </RefreshView>
 
         <components:BottomMenu x:Name="bottomMenu" IsVisible="False">
@@ -82,6 +85,8 @@
                         FontSize="16"
                         CornerRadius="25"
                         HeightRequest="45"
+                        Clicked="OnOpenBottomSheetClicked"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=SendToMediaSystemCommand }"
                         />
 
                     <Button Text="Add to Season"

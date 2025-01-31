@@ -157,8 +157,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Components\CreateSeasonPopup.xaml.cs">
+	    <DependentUpon>CreateSeasonPopup.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Components\BottomMenu.xaml.cs">
 	    <DependentUpon>BottomMenu.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Page\View\SeasonLibraryPage.xaml.cs">
+	    <DependentUpon>SeasonLibraryPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Page\View\VideoLibraryPage.xaml.cs">
 	    <DependentUpon>VideoLibraryPage.xaml</DependentUpon>
@@ -184,10 +190,28 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Components\CreateSeasonPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Components\BottomMenu.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Components\ListElement.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\EditMediaEntryPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\EditSeasonPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\HealthPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\SeasonLibraryPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\TransferListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\VideoLibraryPage.xaml">

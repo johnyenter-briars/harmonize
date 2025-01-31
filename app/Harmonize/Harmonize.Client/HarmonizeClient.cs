@@ -1,12 +1,14 @@
-﻿using Harmonize.Client.Model.Job;
+﻿using Harmonize.Client.Model.Health;
+using Harmonize.Client.Model.Job;
 using Harmonize.Client.Model.Media;
 using Harmonize.Client.Model.QBT;
 using Harmonize.Client.Model.Response;
+using Harmonize.Client.Model.Season;
+using Harmonize.Client.Model.Transfer;
 using Harmonize.Client.Model.Youtube;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static Harmonize.Client.Utility.Utility;
 
 namespace Harmonize.Client;
 
@@ -46,7 +48,6 @@ public class HarmonizeClient
         return this;
     }
     #endregion
-    #region GET
     public string GetMediaMetadataArtworkUrl(MediaMetadata mediaMetadata, string artworkSize)
     {
         var artwork = mediaMetadata.Artwork;
@@ -55,18 +56,20 @@ public class HarmonizeClient
 
         return xlMediaUrl;
     }
+    #region Media
     public async Task<MediaEntriesResponse> GetAudio()
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"media/audio", HttpMethod.Get);
     }
-    public async Task<MediaEntriesResponse> GetVideo()
+    public async Task<MediaEntriesResponse> GetVideoPaging(int limit, int skip = 0)
     {
-        return await HarmonizeRequest<MediaEntriesResponse>($"media/video", HttpMethod.Get);
+        return await HarmonizeRequest<MediaEntriesResponse>($"media/video?limit={limit}&skip={skip}", HttpMethod.Get);
     }
     public async Task<byte[]> GetMediaBytes(IMediaEntry mediaEntry)
     {
         return await HarmonizeRequestBytes($"stream/{mediaEntry.Id}", HttpMethod.Get);
     }
+    #endregion
     public async Task<Playlist> GetPlaylist(string playlistName)
     {
         return await HarmonizeRequest<Playlist>($"playlist/{playlistName}", HttpMethod.Get);
@@ -99,7 +102,58 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<MagnetLinkSearchResults>($"search/xt1337/{query}", HttpMethod.Get);
     }
+    #region Transfer
+    public async Task<TransferProgressResponse> GetTransferProgress(TransferDestination transferDestination)
+    {
+        var destination = transferDestination.ToString().ToLower();
+        return await HarmonizeRequest<TransferProgressResponse>($"transfer/{destination}", HttpMethod.Get);
+    }
+    public async Task<JobResponse> StartTransfer(TransferDestination transferDestination, IMediaEntry entry) 
+    {
+        var destination = transferDestination.ToString().ToLower();
+        return await HarmonizeRequest<JobResponse>($"transfer/{destination}/{entry.Id}", HttpMethod.Post);
+    }
     #endregion
+
+    #region Health
+    public async Task<HealthStatusResponse> GetHealthStatus() 
+    {
+        return await HarmonizeRequest<HealthStatusResponse>($"health/status", HttpMethod.Get);
+    }
+    #endregion
+
+    #region Season
+    public async Task<SeasonsResponse> GetSeasons()
+    {
+        return await HarmonizeRequest<SeasonsResponse>($"season/", HttpMethod.Get);
+    }
+    public async Task<MediaEntriesResponse> GetSeasonEntries(Season season)
+    {
+        return await HarmonizeRequest<MediaEntriesResponse>($"season/{season.Id}", HttpMethod.Get);
+    }
+    public async Task<SeasonResponse> CreateSeason(UpsertSeasonRequest request) 
+    {
+        return await HarmonizeRequest<UpsertSeasonRequest, SeasonResponse>(request, $"season/", HttpMethod.Post);
+    }
+    public async Task<SeasonResponse> AssociateToSeason(AssociateToSeasonRequest request) 
+    {
+        return await HarmonizeRequest<AssociateToSeasonRequest, SeasonResponse>(request, $"season/associate", HttpMethod.Post);
+    }
+    public async Task<SeasonResponse> DisassociateToSeason(DisassociateToSeasonRequest request) 
+    {
+        return await HarmonizeRequest<DisassociateToSeasonRequest, SeasonResponse>(request, $"season/associate", HttpMethod.Post);
+    }
+    //TODO: this is horrible
+    public async Task<SeasonResponse> UpdateSeason(Season season, UpsertSeasonRequest request) 
+    {
+        return await HarmonizeRequest<UpsertSeasonRequest, SeasonResponse>(request, $"season/{season.Id}", HttpMethod.Put);
+    }
+    public async Task<SeasonResponse> DeleteSeason(Season season) 
+    {
+        return await HarmonizeRequest<SeasonResponse>($"season/{season.Id}", HttpMethod.Delete);
+    }
+    #endregion
+
     #region POST
     public async Task<BaseResponse<Job>> CancelJob(Guid jobId)
     {

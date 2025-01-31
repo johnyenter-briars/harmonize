@@ -71,5 +71,5 @@ async def current_transfers(
 ) -> BaseResponse[list[TransferProgress]]:
     transfers = get_all_running_transfers()
     return BaseResponse[list[TransferProgress]](
-        message='Transfer progresses found', status_code=201, value=transfers
+        message='Transfer progresses found', status_code=200, value=transfers
     )

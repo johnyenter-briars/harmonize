@@ -31,7 +31,7 @@ def get_session_non_gen() -> Session:
         return session
 
 
-def seed():
+def create_db_tables():
     if Path.exists(Path(sqlite_file_name)):
         return
 

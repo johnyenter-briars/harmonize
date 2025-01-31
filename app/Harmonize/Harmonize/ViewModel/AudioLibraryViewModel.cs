@@ -36,7 +36,6 @@ public class AudioLibraryViewModel(
         set { SetProperty(ref mediaEntries, value); }
     }
 
-    //TODO: This doesn't work in refresh list for some reason
     async Task Refresh()
     {
         if (FetchingData)
@@ -63,6 +62,7 @@ public class AudioLibraryViewModel(
 
     public override async Task OnAppearingAsync()
     {
+        //TODO: switch this for fetchindata = true
         await Refresh();
     }
 }

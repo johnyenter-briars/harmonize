@@ -21,6 +21,8 @@ namespace Harmonize
             Routing.RegisterRoute(nameof(YouTubeSearchResultEditPage), typeof(YouTubeSearchResultEditPage));
             Routing.RegisterRoute(nameof(YouTubePlaylistSearchResultEditPage), typeof(YouTubePlaylistSearchResultEditPage));
             Routing.RegisterRoute(nameof(MediaElementPage), typeof(MediaElementPage));
+            Routing.RegisterRoute(nameof(EditMediaEntryPage), typeof(EditMediaEntryPage));
+            Routing.RegisterRoute(nameof(EditSeasonPage), typeof(EditSeasonPage));
 
             if (!preferenceManager.UserSettings.IncludeMediaControlPage)
             {

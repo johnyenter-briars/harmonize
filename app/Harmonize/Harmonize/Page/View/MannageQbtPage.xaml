@@ -110,26 +110,6 @@
                                             Grid.RowSpan="2"
                                             Grid.Column="0"
                                             Margin="30, 0, 30, 0"
-                                            Source="icons8_play_pause_48_2.png"
-                                            HorizontalOptions="Center"
-                                            VerticalOptions="Center"
-                                            Clicked="ScaleButton"
-                                        >
-                                            <ImageButton.Behaviors>
-                                                <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
-                                            </ImageButton.Behaviors>
-                                            <ImageButton.GestureRecognizers>
-                                                <TapGestureRecognizer
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ManageQbtViewModel}}, Path=PlayPauseDownload }"
-                                                    CommandParameter="{Binding}"
-                                                />
-                                            </ImageButton.GestureRecognizers>
-                                        </ImageButton>
-
-                                        <ImageButton 
-                                            Grid.RowSpan="2"
-                                            Grid.Column="0"
-                                            Margin="30, 0, 30, 0"
                                             Source="icons8_trash_26.png"
                                             HorizontalOptions="Center"
                                             VerticalOptions="Center"
@@ -141,6 +121,26 @@
                                             <ImageButton.GestureRecognizers>
                                                 <TapGestureRecognizer
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ManageQbtViewModel}}, Path=DeleteDownload}"
+                                                    CommandParameter="{Binding}"
+                                                />
+                                            </ImageButton.GestureRecognizers>
+                                        </ImageButton>
+
+                                        <ImageButton 
+                                            Grid.RowSpan="2"
+                                            Grid.Column="0"
+                                            Margin="30, 0, 30, 0"
+                                            Source="icons8_play_pause_48_2.png"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            Clicked="ScaleButton"
+                                        >
+                                            <ImageButton.Behaviors>
+                                                <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                                            </ImageButton.Behaviors>
+                                            <ImageButton.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ManageQbtViewModel}}, Path=PlayPauseDownload }"
                                                     CommandParameter="{Binding}"
                                                 />
                                             </ImageButton.GestureRecognizers>

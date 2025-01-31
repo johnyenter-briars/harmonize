@@ -1,7 +1,7 @@
 import logging
 import uuid
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlmodel import Session, select
 
 from harmonize.db.database import get_session
@@ -10,17 +10,6 @@ from harmonize.defs.response import BaseResponse
 
 logger = logging.getLogger('harmonize')
 router = APIRouter(prefix='/api/media')
-
-
-@router.get('/video', status_code=200)
-async def list_video(
-    session: Session = Depends(get_session),
-) -> BaseResponse[list[MediaEntry]]:
-    statement = select(MediaEntry).where(MediaEntry.type == MediaEntryType.VIDEO)
-    media_entries = session.exec(statement).all()
-    return BaseResponse[list[MediaEntry]](
-        message='Media Entries Found', status_code=200, value=list(media_entries)
-    )
 
 
 @router.get('/audio', status_code=200)
@@ -49,4 +38,19 @@ async def delete_media_entry(
     session.delete(media_entry)
     session.commit()
 
-    return BaseResponse[None](message='Entry deleted', status_code=204, value=None)
+    return BaseResponse[None](message='Entry deleted', status_code=200, value=None)
+
+
+@router.get('/video', status_code=200)
+async def list_video_paging(
+    limit: int = Query(10, ge=1),
+    skip: int = Query(0, ge=0),
+    session: Session = Depends(get_session),
+) -> BaseResponse[list[MediaEntry]]:
+    statement = (
+        select(MediaEntry).where(MediaEntry.type == MediaEntryType.VIDEO).offset(skip).limit(limit)
+    )
+    media_entries = session.exec(statement).all()
+    return BaseResponse[list[MediaEntry]](
+        message='Media Entries Found', status_code=200, value=list(media_entries)
+    )

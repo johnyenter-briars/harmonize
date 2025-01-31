@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BasePage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Harmonize.Page.View"
+    xmlns:pages="clr-namespace:Harmonize.Page"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+    x:TypeArguments="viewModels:EditMediaEntryViewModel"
+    x:DataType="viewModels:EditMediaEntryViewModel"
+    x:Class="Harmonize.Page.View.EditMediaEntryPage"
+    Title="Edit Media Entry Page">
+
+    <ScrollView 
+        VerticalScrollBarVisibility="Always"
+        >
+        <VerticalStackLayout Spacing="10">
+            <Label Text="Job ID" FontSize="Medium" />
+            <Entry Text="{Binding MediaEntry.Id, Mode=OneWay}" IsReadOnly="True" />
+
+            <Label Text="Name" FontSize="Medium" />
+            <Editor 
+                Text="{Binding MediaEntry.Name, Mode=OneWay}"
+                IsReadOnly="True" 
+                AutoSize="TextChanges" 
+                HeightRequest="75" />
+
+            <Label Text="Absolute Path" FontSize="Medium" />
+            <Editor 
+                Text="{Binding MediaEntry.AbsolutePath, Mode=OneWay}"
+                IsReadOnly="True" 
+                AutoSize="TextChanges" 
+                HeightRequest="75" />
+
+            <Label Text="Source" FontSize="Medium" />
+            <Entry Text="{Binding MediaEntry.Source, Mode=OneWay}" IsReadOnly="True" />
+
+            <Label Text="YouTube ID" FontSize="Medium" />
+            <Entry Text="{Binding MediaEntry.YouTubeId, Mode=OneWay}" IsReadOnly="True" />
+
+            <Label Text="Type" FontSize="Medium" />
+            <Entry Text="{Binding MediaEntry.Type, Mode=OneWay}" IsReadOnly="True" />
+
+            <Label Text="Date Added" FontSize="Medium" />
+            <Entry 
+                Text="{Binding MediaEntry.DateAdded, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}"
+                IsReadOnly="True" />
+
+            <Button 
+                ImageSource="icons8_trash_50.png"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=CancelJob}"
+                CommandParameter="{Binding MediaEntry}" 
+                />
+        </VerticalStackLayout>
+    </ScrollView>
+</pages:BasePage>
+

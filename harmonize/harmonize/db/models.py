@@ -30,6 +30,7 @@ class MediaElementSource(Enum):
 class MediaEntryType(Enum):
     AUDIO = 0
     VIDEO = 1
+    SUBTITLE = 2
 
 
 class MediaEntryPlaylistLink(SQLModel, table=True):
@@ -40,11 +41,18 @@ class MediaEntryPlaylistLink(SQLModel, table=True):
 class Playlist(BaseSchema, SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str
-    date_created: datetime.datetime = Field(default_factory=datetime.datetime.utcnow)
+    date_added: datetime.datetime = Field(default_factory=datetime.datetime.utcnow)
 
     media_entries: list['MediaEntry'] = Relationship(
         back_populates='playlists', link_model=MediaEntryPlaylistLink
     )
+
+
+class Season(BaseSchema, SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    name: str
+    date_added: datetime.datetime = Field(default_factory=datetime.datetime.utcnow)
+    media_entries: list['MediaEntry'] = Relationship(back_populates='season')
 
 
 class MediaEntry(BaseSchema, SQLModel, table=True):
@@ -61,3 +69,5 @@ class MediaEntry(BaseSchema, SQLModel, table=True):
     playlists: list['Playlist'] = Relationship(
         back_populates='media_entries', link_model=MediaEntryPlaylistLink
     )
+    season_id: uuid.UUID | None = Field(foreign_key='season.id', nullable=True)  # Foreign Key
+    season: 'Season' = Relationship(back_populates='media_entries')

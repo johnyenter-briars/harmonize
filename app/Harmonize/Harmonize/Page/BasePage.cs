@@ -56,8 +56,6 @@ public abstract class BasePage : ContentPage
         if (e.SelectedItem == null)
             return;
        
-        //var selectedItem = e.SelectedItem as MagnetLinkSearchResult;
-
         var listView = sender as ListView;
 
         foreach (ViewCell viewCell in listView.TemplatedItems)
