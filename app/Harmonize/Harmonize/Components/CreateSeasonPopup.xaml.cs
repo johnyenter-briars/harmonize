@@ -29,7 +29,7 @@ public partial class CreateSeasonPopup : Popup
     {
         var name = seasonName.Text;
         var foo = await failsafeService.Fallback(async () => 
-        await harmonizeClient.CreateSeason(new CreateSeasonRequest { 
+        await harmonizeClient.CreateSeason(new UpsertSeasonRequest { 
             Name = name,
         }), null);
 

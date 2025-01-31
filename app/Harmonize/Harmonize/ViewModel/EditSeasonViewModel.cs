@@ -37,9 +37,22 @@ public class EditSeasonViewModel(
     }
     public ICommand DeleteSeason => new Command<Season>(async (entry) =>
     {
+        var (response, success) = await FetchData(async () =>
+        {
+            return await failsafeService.Fallback(async () => await harmonizeClient.DeleteSeason(Seaon), null);
+        });
+
+        if (response.Success)
+        {
+            await Shell.Current.GoToAsync("..");
+        }
     });
     public ICommand SaveSeason => new Command<Season>(async (entry) =>
     {
+        var (response, success) = await FetchData(async () =>
+        {
+            return await failsafeService.Fallback(async () => await harmonizeClient.UpdateSeason(season, new UpsertSeasonRequest { Name = season.Name }), null);
+        });
     });
     async Task Refresh()
     {
@@ -62,6 +75,7 @@ public class EditSeasonViewModel(
     public ICommand RefreshCommand => new Command(async () => await Refresh());
     public override async Task OnAppearingAsync()
     {
+        MediaEntries.Clear();
         Task.Run(async () =>
         {
             await Refresh();

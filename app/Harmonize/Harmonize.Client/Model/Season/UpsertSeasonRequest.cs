@@ -1,6 +1,6 @@
 ﻿namespace Harmonize.Client.Model.Season;
 
-public class CreateSeasonRequest
+public class UpsertSeasonRequest
 {
     public required string Name { get; set; }
 }

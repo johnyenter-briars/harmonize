@@ -129,9 +129,9 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"season/{season.Id}", HttpMethod.Get);
     }
-    public async Task<SeasonResponse> CreateSeason(CreateSeasonRequest request) 
+    public async Task<SeasonResponse> CreateSeason(UpsertSeasonRequest request) 
     {
-        return await HarmonizeRequest<CreateSeasonRequest, SeasonResponse>(request, $"season/", HttpMethod.Post);
+        return await HarmonizeRequest<UpsertSeasonRequest, SeasonResponse>(request, $"season/", HttpMethod.Post);
     }
     public async Task<SeasonResponse> AssociateToSeason(AssociateToSeasonRequest request) 
     {
@@ -140,6 +140,15 @@ public class HarmonizeClient
     public async Task<SeasonResponse> DisassociateToSeason(DisassociateToSeasonRequest request) 
     {
         return await HarmonizeRequest<DisassociateToSeasonRequest, SeasonResponse>(request, $"season/associate", HttpMethod.Post);
+    }
+    //TODO: this is horrible
+    public async Task<SeasonResponse> UpdateSeason(Season season, UpsertSeasonRequest request) 
+    {
+        return await HarmonizeRequest<UpsertSeasonRequest, SeasonResponse>(request, $"season/{season.Id}", HttpMethod.Put);
+    }
+    public async Task<SeasonResponse> DeleteSeason(Season season) 
+    {
+        return await HarmonizeRequest<SeasonResponse>($"season/{season.Id}", HttpMethod.Delete);
     }
     #endregion
 
