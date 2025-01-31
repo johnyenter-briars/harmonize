@@ -19,21 +19,17 @@
             IsRefreshing="{Binding FetchingData}" 
             Command="{Binding RefreshCommand}"
             >
-
-            <ListView 
+            <CollectionView 
                 Grid.Row="1" 
                 IsVisible="True"
+                RemainingItemsThreshold="5"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                 ItemsSource="{Binding MediaEntries}"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                ItemTapped="OnItemTapped"
-                RowHeight="95"
-                SeparatorVisibility="None"
-                ItemSelected="OnItemSelected"
                 >
-                <ListView.ItemTemplate>
+                <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="harmonizeModel:MediaEntry">
-                        <ViewCell>
                             <components:ListElement>
                                 <Grid
                                     RowDefinitions="Auto"
@@ -64,10 +60,12 @@
 
                                 </Grid>
                             </components:ListElement>
-                        </ViewCell>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+                <CollectionView.Footer>
+                    <ActivityIndicator IsRunning="{Binding FetchingData}" />
+                </CollectionView.Footer>
+            </CollectionView>
         </RefreshView>
 
         <components:BottomMenu x:Name="bottomMenu" IsVisible="False">

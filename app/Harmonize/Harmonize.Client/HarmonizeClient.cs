@@ -56,18 +56,20 @@ public class HarmonizeClient
 
         return xlMediaUrl;
     }
+    #region Media
     public async Task<MediaEntriesResponse> GetAudio()
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"media/audio", HttpMethod.Get);
     }
-    public async Task<MediaEntriesResponse> GetVideo()
+    public async Task<MediaEntriesResponse> GetVideoPaging(int limit, int skip = 0)
     {
-        return await HarmonizeRequest<MediaEntriesResponse>($"media/video", HttpMethod.Get);
+        return await HarmonizeRequest<MediaEntriesResponse>($"media/video?limit={limit}&skip={skip}", HttpMethod.Get);
     }
     public async Task<byte[]> GetMediaBytes(IMediaEntry mediaEntry)
     {
         return await HarmonizeRequestBytes($"stream/{mediaEntry.Id}", HttpMethod.Get);
     }
+    #endregion
     public async Task<Playlist> GetPlaylist(string playlistName)
     {
         return await HarmonizeRequest<Playlist>($"playlist/{playlistName}", HttpMethod.Get);

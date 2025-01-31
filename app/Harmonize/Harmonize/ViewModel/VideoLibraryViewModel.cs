@@ -26,6 +26,7 @@ public class VideoLibraryViewModel(
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     public ICommand RefreshCommand => new Command(async () => await Refresh());
+    public ICommand LoadMoreCommand => new Command(async () => await LoadMore());
     public ICommand MoreInfoCommand => new Command<MediaEntry>(entry =>
     {
     });
@@ -61,12 +62,30 @@ public class VideoLibraryViewModel(
         get { return mediaEntries; }
         set { SetProperty(ref mediaEntries, value); }
     }
+    const int Limit = 10;
+    int skip = 0;
 
-    async Task Refresh()
+    async Task LoadMore()
     {
+        skip += Limit;
+
         var (response, success) = await FetchData(async () =>
         {
-            return await failsafeService.Fallback(harmonizeClient.GetVideo, null);
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideoPaging(Limit, skip), null);
+        });
+
+        foreach (var m in response?.Value ?? [])
+        {
+            MediaEntries.Add(m);
+        }
+    }
+    async Task Refresh()
+    {
+        skip = 0;
+
+        var (response, success) = await FetchData(async () =>
+        {
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideoPaging(Limit, skip), null);
         });
 
         MediaEntries.Clear();
