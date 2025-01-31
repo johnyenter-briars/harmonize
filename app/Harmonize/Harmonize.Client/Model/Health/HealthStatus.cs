@@ -25,5 +25,9 @@ public class HealthStatus
     public required List<Drive> Drives { get; set; }
     public required bool VpnConnected { get; set; }
     public required string VpnCountry { get; set; }
+    public required decimal CpuUsagePercent { get; set; }
+    public required decimal MemoryUsagePercent { get; set; }
+    public required decimal UploadSpeedKb { get; set; }
+    public required decimal DownloadSpeedKb { get; set; }
 }
 

@@ -21,7 +21,7 @@ public class VideoLibraryViewModel(
     PreferenceManager preferenceManager,
     FailsafeService failsafeService,
     ILogger<VideoLibraryPage> logger,
-    HarmonizeClient harmonizeCilent,
+    HarmonizeClient harmonizeClient,
     AlertService alertService
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
@@ -32,7 +32,7 @@ public class VideoLibraryViewModel(
     public ICommand SendToMediaSystemCommand => new Command(async () =>
     {
         var (jobResponse, success) = await failsafeService.Fallback(
-            async () => await harmonizeCilent.StartTransfer(TransferDestination.MediaSystem, SelectedMediaEntry), null);
+            async () => await harmonizeClient.StartTransfer(TransferDestination.MediaSystem, SelectedMediaEntry), null);
 
         if (success)
         {
@@ -66,7 +66,7 @@ public class VideoLibraryViewModel(
     {
         var (response, success) = await FetchData(async () =>
         {
-            return await failsafeService.Fallback(harmonizeCilent.GetVideo, null);
+            return await failsafeService.Fallback(harmonizeClient.GetVideo, null);
         });
 
         MediaEntries.Clear();

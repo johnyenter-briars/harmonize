@@ -17,21 +17,28 @@ Good luck.
   - [ ] Nice search
   - [ ] Season search
   - [ ] Filter + query popup
-- [ ] Health page
+  - [ ] Delete entry
+  - [ ] Paging
+- [X] Health page
   - [X] Add page
   - [X] VPN check
-  - [ ] Network check
+  - [X] Network check
 - [ ] Test + confirm QBT
+  - [ ] Individual eps in a folder considered a season
 - [X] Seasons backend
 - [ ] Seasons frontend
   - [ ] Edit Season Name
+  - [X] Add season
   - [ ] Display entries in season
+  - [ ] Delete season
+  - [ ] Paging
 - [ ] Update colors
 - [X] Hook up send to media server
 - [ ] Backfill method
 - [ ] Update server
 - [ ] Setup daemon
 - [ ] Setup SSL Cert + Https
+- [ ] IOS
 
 ## Todos For Full Functionality
 

@@ -1,7 +1,8 @@
 using AlohaKit.Animations;
-using Harmonize.Client.Model.Media;
+using CommunityToolkit.Maui.Views;
+using Harmonize.Client;
 using Harmonize.Client.Model.Season;
-using Harmonize.Model;
+using Harmonize.Components;
 using Harmonize.Service;
 using Harmonize.ViewModel;
 
@@ -12,17 +13,23 @@ public partial class SeasonLibraryPage : BasePage<SeasonLibraryViewModel>
     private Picker _optionsPicker;
     private readonly SeasonLibraryViewModel viewModel;
     private readonly MediaManager mediaManager;
+    private readonly HarmonizeClient harmonizeClient;
+    private readonly FailsafeService failsafeService;
     private object? previousSender = null;
 
     public SeasonLibraryPage(
         SeasonLibraryViewModel  viewModel,
-        MediaManager mediaManager
+        MediaManager mediaManager,
+        HarmonizeClient harmonizeClient,
+        FailsafeService failsafeService
         ) : base(viewModel)
     {
         InitializeComponent();
 
         this.viewModel = viewModel;
         this.mediaManager = mediaManager;
+        this.harmonizeClient = harmonizeClient;
+        this.failsafeService = failsafeService;
     }
     protected override async void OnAppearing()
     {
@@ -68,5 +75,11 @@ public partial class SeasonLibraryPage : BasePage<SeasonLibraryViewModel>
 
             previousSender = sender;
         }
+    }
+    private void ImageButton_Clicked(object sender, EventArgs e)
+    {
+        var popup = new CreateSeasonPopup(harmonizeClient, failsafeService);
+
+        this.ShowPopup(popup);
     }
 }

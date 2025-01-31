@@ -6,11 +6,9 @@ using Harmonize.Client.Model.Response;
 using Harmonize.Client.Model.Season;
 using Harmonize.Client.Model.Transfer;
 using Harmonize.Client.Model.Youtube;
-using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static Harmonize.Client.Utility.Utility;
 
 namespace Harmonize.Client;
 
@@ -127,7 +125,7 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<SeasonsResponse>($"season/", HttpMethod.Get);
     }
-    public async Task<MediaEntriesResponse> GetSeasonDetails(Season season)
+    public async Task<MediaEntriesResponse> GetSeasonEntries(Season season)
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"season/{season.Id}", HttpMethod.Get);
     }

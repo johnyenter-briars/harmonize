@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using MediaManager = Harmonize.Service.MediaManager;
 using static Harmonize.Constants;
 using Harmonize.Kodi;
+using Harmonize.Components;
 
 namespace Harmonize
 {
@@ -73,6 +74,7 @@ namespace Harmonize
             builder.Services.AddSingleton<HealthViewModel>();
             builder.Services.AddSingleton<TransferListViewModel>();
             builder.Services.AddSingleton<SeasonLibraryViewModel>();
+            builder.Services.AddSingleton<EditSeasonViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();
@@ -92,6 +94,8 @@ namespace Harmonize
             builder.Services.AddSingleton<HealthPage>();
             builder.Services.AddSingleton<TransferListPage>();
             builder.Services.AddSingleton<SeasonLibraryPage>();
+            builder.Services.AddSingleton<CreateSeasonPopup>();
+            builder.Services.AddSingleton<EditSeasonPage>();
 
             builder.Services.AddSingleton<MediaManager>();
 

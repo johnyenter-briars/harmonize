@@ -17,48 +17,67 @@
         IsRefreshing="{Binding FetchingData}" 
         Command="{Binding RefreshCommand}"
         >
-        <StackLayout Padding="10" Spacing="20">
-            <Label Text="Uptime" FontSize="Medium" FontAttributes="Bold" />
-            <HorizontalStackLayout>
-                <Label Text="Seconds: " FontSize="Small" />
-                <Label Text="{Binding HealthStatus.Uptime.Seconds}" FontSize="Small" />
-            </HorizontalStackLayout>
-            <HorizontalStackLayout>
-                <Label Text="Minutes: " FontSize="Small" />
-                <Label Text="{Binding HealthStatus.Uptime.Minutes}" FontSize="Small" />
-            </HorizontalStackLayout>
-            <HorizontalStackLayout>
-                <Label Text="Hours: " FontSize="Small" />
-                <Label Text="{Binding HealthStatus.Uptime.Hours}" FontSize="Small" />
-            </HorizontalStackLayout>
+        <ScrollView>
+            <StackLayout Padding="10" Spacing="20">
+                <Label Text="Uptime" FontSize="Medium" FontAttributes="Bold" />
+                <HorizontalStackLayout>
+                    <Label Text="Seconds: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.Uptime.Seconds}" FontSize="Small" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="Minutes: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.Uptime.Minutes}" FontSize="Small" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="Hours: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.Uptime.Hours}" FontSize="Small" />
+                </HorizontalStackLayout>
 
-            <Label Text="Drives" FontSize="Medium" FontAttributes="Bold" />
-            <CollectionView ItemsSource="{Binding HealthStatus.Drives}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="health:Drive">
-                        <components:ListElement>
-                            <VerticalStackLayout>
-                                <Label Text="{Binding Path}" FontSize="Small" FontAttributes="Bold" />
-                                <Label Text="{Binding SpaceUsed, StringFormat='Space Used: {0} GB'}" FontSize="Small" />
-                            </VerticalStackLayout>
-                        </components:ListElement>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                <Label Text="Drives" FontSize="Medium" FontAttributes="Bold" />
+                <CollectionView ItemsSource="{Binding HealthStatus.Drives}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="health:Drive">
+                            <components:ListElement>
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Path}" FontSize="Small" FontAttributes="Bold" />
+                                    <Label Text="{Binding SpaceUsed, StringFormat='Space Used: {0} GB'}" FontSize="Small" />
+                                </VerticalStackLayout>
+                            </components:ListElement>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
-            <Label Text="Vpn" FontSize="Medium" FontAttributes="Bold" />
-            <HorizontalStackLayout>
-                <Label Text="Connected: " FontSize="Small" />
-                <Label Text="{Binding HealthStatus.VpnConnected}" FontSize="Small" />
-            </HorizontalStackLayout>
-            <HorizontalStackLayout>
-                <Label Text="Country: " FontSize="Small" />
-                <Label Text="{Binding HealthStatus.VpnCountry}" FontSize="Small" />
-            </HorizontalStackLayout>
+                <Label Text="Vpn" FontSize="Medium" FontAttributes="Bold" />
+                <HorizontalStackLayout>
+                    <Label Text="Connected: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.VpnConnected}" FontSize="Small" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="Country: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.VpnCountry}" FontSize="Small" />
+                </HorizontalStackLayout>
 
-            
-        </StackLayout>
-        
+                <Label Text="System" FontSize="Medium" FontAttributes="Bold" />
+                <HorizontalStackLayout>
+                    <Label Text="Cpu Usage Percent: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.CpuUsagePercent}" FontSize="Small" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="Memory Usage Percent: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.MemoryUsagePercent}" FontSize="Small" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="Upload Speed Kb: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.UploadSpeedKb, StringFormat='{0:F2}'}" FontSize="Small" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="Download Speed Kb: " FontSize="Small" />
+                    <Label Text="{Binding HealthStatus.DownloadSpeedKb, StringFormat='{0:F2}'}" FontSize="Small" />
+                </HorizontalStackLayout>
+
+            </StackLayout>
+        </ScrollView>
+
     </RefreshView>
 
 </pages:BasePage>
