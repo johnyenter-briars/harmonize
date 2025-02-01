@@ -20,8 +20,7 @@
 
             <Label Text="Name" FontSize="Medium" />
             <Editor 
-                Text="{Binding MediaEntry.Name, Mode=OneWay}"
-                IsReadOnly="True" 
+                Text="{Binding MediaEntry.Name, Mode=TwoWay}"
                 AutoSize="TextChanges" 
                 HeightRequest="75" />
 
