@@ -2,6 +2,7 @@ import logging
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import select
 from sqlmodel import Session, select
 
 from harmonize.db.database import get_session
@@ -28,12 +29,17 @@ async def list_audio(
 async def list_video_paging(
     limit: int = Query(10, ge=1),
     skip: int = Query(0, ge=0),
+    name_sub_string: str | None = Query(None),
     session: Session = Depends(get_session),
 ) -> BaseResponse[list[MediaEntry]]:
-    statement = (
-        select(MediaEntry).where(MediaEntry.type == MediaEntryType.VIDEO).offset(skip).limit(limit)
-    )
+    statement = select(MediaEntry).where(MediaEntry.type == MediaEntryType.VIDEO)
+
+    if name_sub_string:
+        statement = statement.where(MediaEntry.name.like(f'%{name_sub_string}%'))  # type: ignore
+
+    statement = statement.offset(skip).limit(limit)
     media_entries = session.exec(statement).all()
+
     return BaseResponse[list[MediaEntry]](
         message='Media Entries Found', status_code=200, value=list(media_entries)
     )
