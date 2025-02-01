@@ -38,6 +38,18 @@ public class VideoLibraryViewModel(
             await alertService.ShowConfirmationAsync("Success", "Job created successfully.", "Ok");
         }
     });
+    private bool searchBarVisible = false;
+    public bool SearchBarVisible
+    {
+        get { return searchBarVisible; }
+        set { SetProperty(ref searchBarVisible, value); }
+    }
+    private string? searchQuery;
+    public string? SearchQuery
+    {
+        get => searchQuery;
+        set => SetProperty(ref searchQuery, value);
+    }
     private MediaEntry selectedMediaEntry;
     public MediaEntry SelectedMediaEntry
     {
@@ -77,6 +89,42 @@ public class VideoLibraryViewModel(
             MediaEntries.Add(m);
         }
     }
+    public ICommand OpenSearchCommand => new Command(() =>
+    {
+        SearchBarVisible = !SearchBarVisible;
+    });
+    public ICommand SearchCommand => new Command<SearchBar>(async (searchBar) =>
+    {
+        if (string.IsNullOrWhiteSpace(SearchQuery))
+            return;
+
+        searchBar?.Unfocus();
+
+        //var (results, success) = await FetchData(async () =>
+        //{
+        //    return await failsafeService.Fallback(async () =>
+        //    {
+        //        if (PiratebayChecked)
+        //        {
+        //            return await harmonizeClient.GetPiratebaySearchResults(SearchQuery);
+        //        }
+        //        else if (Xt1337Checked)
+        //        {
+        //            return await harmonizeClient.GetXT1337SearchResults(SearchQuery);
+        //        }
+        //        else return null;
+        //    }, null);
+        //});
+
+        //if (success)
+        //{
+        //    SearchResults.Clear();
+        //    foreach (var video in results?.Value ?? [])
+        //    {
+        //        SearchResults.Add(video);
+        //    }
+        //}
+    });
     async Task Refresh()
     {
         skip = 0;

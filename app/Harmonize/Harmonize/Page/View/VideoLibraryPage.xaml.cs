@@ -97,4 +97,8 @@ public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
             }
         }).FireAndForget(ex => logger.LogError($"Error: {ex}"));
     }
+    private void ImageButton_Clicked(object sender, EventArgs e)
+    {
+        var foo = 10;
+    }
 }
