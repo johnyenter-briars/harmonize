@@ -74,6 +74,15 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<MediaMetadataResponse>($"metadata/media/{mediaEntry.Id}", HttpMethod.Get);
     }
+    //TODO: this is also horrible
+    public async Task<MediaEntryResponse> UpdateEntry(MediaEntry entry, UpsertMediaEntryRequest request)
+    {
+        return await HarmonizeRequest<UpsertMediaEntryRequest, MediaEntryResponse>(request, $"media/{entry.Id}", HttpMethod.Put);
+    }
+    public async Task<MediaEntryResponse> DeleteEntry(MediaEntry entry)
+    {
+        return await HarmonizeRequest<MediaEntryResponse>($"media/{entry.Id}", HttpMethod.Delete);
+    }
     #endregion
 
     #region Playlist

@@ -46,11 +46,58 @@
                 Text="{Binding MediaEntry.DateAdded, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}"
                 IsReadOnly="True" />
 
-            <Button 
-                ImageSource="icons8_trash_50.png"
-                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=CancelJob}"
-                CommandParameter="{Binding MediaEntry}" 
-                />
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
+                <ImageButton 
+                    Margin="30, 0, 30, 0"
+                    Source="icons8_trash_26.png"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Clicked="ScaleButton"
+                >
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
+                    </ImageButton.Behaviors>
+                    <ImageButton.GestureRecognizers>
+                        <TapGestureRecognizer
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=DeleteEntry }"
+                            />
+                    </ImageButton.GestureRecognizers>
+                </ImageButton>
+
+                <ImageButton 
+                    Margin="30, 0, 30, 0"
+                    Source="icons8_save_50.png"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Clicked="ScaleButton"
+                    >
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                    </ImageButton.Behaviors>
+                    <ImageButton.GestureRecognizers>
+                        <TapGestureRecognizer
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SaveEntry }"
+                        />
+                    </ImageButton.GestureRecognizers>
+                </ImageButton>
+
+                <ImageButton 
+                    Margin="30, 0, 30, 0"
+                    Source="icons8_send_file_50.png"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Clicked="ScaleButton"
+                    >
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                    </ImageButton.Behaviors>
+                    <ImageButton.GestureRecognizers>
+                        <TapGestureRecognizer
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendEntry }"
+                        />
+                    </ImageButton.GestureRecognizers>
+                </ImageButton>
+            </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </pages:BasePage>
