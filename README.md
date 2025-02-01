@@ -17,8 +17,8 @@ Good luck.
   - [ ] Nice search
   - [ ] Season search
   - [ ] Filter + query popup
-  - [ ] Delete entry
-  - [ ] Paging
+  - [X] Delete entry
+  - [X] Paging
 - [X] Health page
   - [X] Add page
   - [X] VPN check
@@ -32,9 +32,10 @@ Good luck.
   - [X] Display entries in season
   - [X] Delete season
   - [ ] Paging
+  - [ ] Edit entry from within season
 - [ ] Update colors
 - [X] Hook up send to media server
-- [ ] Gb rounding in QBT
+- [X] Gb rounding in QBT
 - [ ] Authentication
 - [ ] Backfill method
 - [ ] Update server

@@ -42,7 +42,7 @@ public class QbtDownloadData
     public int SeenComplete { get; set; }
     public bool SeqDl { get; set; }
     public long Size { get; set; }
-    public long SizeGB => Size / 1000000000;
+    public double SizeGB => Size / 1_000_000_000.0;
     public string State { get; set; }
     public bool SuperSeeding { get; set; }
     public string Tags { get; set; }
@@ -54,7 +54,7 @@ public class QbtDownloadData
     public int Uploaded { get; set; }
     public int UploadedSession { get; set; }
     public int UpSpeed { get; set; }
-    public string FullItemDescription => $"{Progress * 100:0.##}% | {NumSeeds} seeding | {SizeGB}GB | {State}";
+    public string FullItemDescription => $"{Progress * 100:0.##}% | {NumSeeds} seeding | {SizeGB:0.##}GB | {State}";
     public bool Active => State == "downloading"
                   || State == "metaDL"
                   || State == "forcedDL"
