@@ -30,6 +30,10 @@ public class VideoLibraryViewModel(
     public ICommand MoreInfoCommand => new Command<MediaEntry>(entry =>
     {
     });
+    public ICommand ItemTappedCommand => new Command<MediaEntry>(async entry =>
+    {
+        await ItemTapped(entry);
+    });
     public ICommand SendToMediaSystemCommand => new Command(async () =>
     {
         var (jobResponse, success) = await failsafeService.Fallback(

@@ -51,7 +51,7 @@ public abstract class BasePage : ContentPage
               }));
         }
     }
-    void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
+    public void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
         if (e.SelectedItem == null)
             return;
@@ -73,5 +73,29 @@ public abstract class BasePage : ContentPage
         }
 
         listView.SelectedItem = null;
+    }
+    public void OnItemSelected(object sender, TappedEventArgs e)
+    {
+        if (e.Parameter == null)
+            return;
+
+        var bar = (Grid)sender;
+        var collectionView = (CollectionView)bar.Parent.Parent;
+
+        foreach (ViewCell viewCell in collectionView.ItemsSource)
+        {
+            if (viewCell != null)
+            {
+                viewCell.View.BackgroundColor = null;
+            }
+        }
+        //var selectedViewCell = listView.TemplatedItems[e.SelectedItemIndex] as ViewCell;
+
+        //if (selectedViewCell != null)
+        //{
+        //    selectedViewCell.View.BackgroundColor = null;
+        //}
+
+        //listView.SelectedItem = null;
     }
 }

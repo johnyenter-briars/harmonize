@@ -3,6 +3,7 @@ using Harmonize.Client.Model.Media;
 using Harmonize.Model;
 using Harmonize.Service;
 using Harmonize.ViewModel;
+using Microsoft.Extensions.Logging;
 
 namespace Harmonize.Page.View;
 
@@ -11,17 +12,20 @@ public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
     private Picker _optionsPicker;
     private readonly VideoLibraryViewModel viewModel;
     private readonly MediaManager mediaManager;
+    private readonly ILogger<VideoLibraryPage> logger;
     private object? previousSender = null;
 
     public VideoLibraryPage(
         VideoLibraryViewModel viewModel,
-        MediaManager mediaManager
+        MediaManager mediaManager,
+        ILogger<VideoLibraryPage> logger
         ) : base(viewModel)
     {
         InitializeComponent();
 
         this.viewModel = viewModel;
         this.mediaManager = mediaManager;
+        this.logger = logger;
     }
     protected override async void OnAppearing()
     {
@@ -67,5 +71,30 @@ public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
 
             previousSender = sender;
         }
+    }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        //var foo = 10;
+        //var grid = (Grid)sender;
+
+        //VisualStateManager.GoToState(grid, "Tapped");
+        //Task.Delay(100); // Short delay for animation effect
+        //VisualStateManager.GoToState(grid, "Normal");
+
+        Task.Run(async () =>
+        {
+            if (sender is Grid grid)
+            {
+                var shimmer = grid.FindByName<BoxView>("ShimmerEffect");
+                if (shimmer != null)
+                {
+                    // Animate opacity for shimmer effect
+                    await shimmer.FadeTo(1, 100); // Show shimmer
+                    await Task.Delay(150); // Hold shimmer effect
+                    await shimmer.FadeTo(0, 300); // Fade it out smoothly
+                }
+            }
+        }).FireAndForget(ex => logger.LogError($"Error: {ex}"));
     }
 }

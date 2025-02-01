@@ -20,32 +20,43 @@
             Command="{Binding RefreshCommand}"
             >
             <CollectionView 
-                Grid.Row="1" 
                 IsVisible="True"
                 RemainingItemsThreshold="5"
                 RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                 ItemsSource="{Binding MediaEntries}"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
+                VerticalScrollBarVisibility="Always"
+                SelectionMode="Single"
+                HeightRequest="20"
                 >
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="harmonizeModel:MediaEntry">
-                            <components:ListElement>
-                                <Grid
+                        <components:ListElement>
+                            <Grid
                                     RowDefinitions="Auto"
                                     ColumnDefinitions="*, Auto"
                                     VerticalOptions="Center"
                                     Padding="5">
 
-                                    <Label 
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Tapped="TapGestureRecognizer_Tapped"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=ItemTappedCommand}"
+                                        CommandParameter="{Binding .}" 
+                                        />
+                                </Grid.GestureRecognizers>
+
+                                <Label 
                                         Grid.Row="0"
                                         Grid.Column="0"
                                         FontSize="14" 
                                         Text="{Binding Name}" 
                                         VerticalOptions="Center"
-                                        HorizontalOptions="Start" />
+                                        HorizontalOptions="Start"/>
 
-                                    <Button 
+                                <Button 
                                         Scale="1.5"
                                         Grid.Row="0"
                                         Grid.Column="1"
@@ -58,8 +69,8 @@
                                         CommandParameter="{Binding .}"
                                         />
 
-                                </Grid>
-                            </components:ListElement>
+                            </Grid>
+                        </components:ListElement>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
                 <CollectionView.Footer>
@@ -102,6 +113,5 @@
 
 
         </components:BottomMenu>
-
     </StackLayout>
 </pages:BasePage>

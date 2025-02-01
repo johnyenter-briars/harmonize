@@ -34,6 +34,7 @@ Good luck.
   - [ ] Paging
 - [ ] Update colors
 - [X] Hook up send to media server
+- [ ] Gb rounding in QBT
 - [ ] Authentication
 - [ ] Backfill method
 - [ ] Update server
