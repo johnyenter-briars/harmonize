@@ -2,6 +2,7 @@
 using Harmonize.Client.Model.Media;
 using Harmonize.Client.Model.Season;
 using Harmonize.Extensions;
+using Harmonize.Page.View;
 using Harmonize.Service;
 using Microsoft.Extensions.Logging;
 using System;
@@ -69,7 +70,11 @@ public class EditSeasonViewModel(
     }
     public async Task ItemTapped(MediaEntry mediaEntry)
     {
-        var foo = 10;
+        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), new Dictionary<string, object>
+        {
+            { nameof(EditMediaEntryViewModel.MediaEntryId), mediaEntry.Id },
+            { nameof(EditMediaEntryViewModel.MediaEntry), mediaEntry }
+        });
     }
 
     public ICommand RefreshCommand => new Command(async () => await Refresh());

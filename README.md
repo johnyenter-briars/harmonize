@@ -14,7 +14,7 @@ Good luck.
   - [X] Sort elements by started time
   - [X] If transfer, status of transfer
 - [ ] Media List
-  - [ ] Nice search
+  - [X] Nice search
   - [ ] Season search
   - [ ] Filter + query popup
   - [X] Delete entry
@@ -32,7 +32,7 @@ Good luck.
   - [X] Display entries in season
   - [X] Delete season
   - [ ] Paging
-  - [ ] Edit entry from within season
+  - [X] Edit entry from within season
 - [ ] Update colors
 - [X] Hook up send to media server
 - [X] Gb rounding in QBT

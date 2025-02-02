@@ -79,9 +79,15 @@ public class VideoLibraryViewModel(
     {
         skip += Limit;
 
-        var (response, success) = await FetchData(async () =>
+        var (response, success) = SearchQuery is null ?
+            await FetchData(async () =>
         {
             return await failsafeService.Fallback(async () => await harmonizeClient.GetVideoPaging(Limit, skip), null);
+        })
+            :
+            await FetchData(async () =>
+        {
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideoPaging(SearchQuery, Limit, skip), null);
         });
 
         foreach (var m in response?.Value ?? [])
@@ -91,6 +97,11 @@ public class VideoLibraryViewModel(
     }
     public ICommand OpenSearchCommand => new Command(() =>
     {
+        if (SearchBarVisible)
+        {
+            SearchQuery = null;
+        }
+
         SearchBarVisible = !SearchBarVisible;
     });
     public ICommand SearchCommand => new Command<SearchBar>(async (searchBar) =>
@@ -100,39 +111,23 @@ public class VideoLibraryViewModel(
 
         searchBar?.Unfocus();
 
-        //var (results, success) = await FetchData(async () =>
-        //{
-        //    return await failsafeService.Fallback(async () =>
-        //    {
-        //        if (PiratebayChecked)
-        //        {
-        //            return await harmonizeClient.GetPiratebaySearchResults(SearchQuery);
-        //        }
-        //        else if (Xt1337Checked)
-        //        {
-        //            return await harmonizeClient.GetXT1337SearchResults(SearchQuery);
-        //        }
-        //        else return null;
-        //    }, null);
-        //});
-
-        //if (success)
-        //{
-        //    SearchResults.Clear();
-        //    foreach (var video in results?.Value ?? [])
-        //    {
-        //        SearchResults.Add(video);
-        //    }
-        //}
+        await Refresh();
     });
     async Task Refresh()
     {
         skip = 0;
 
-        var (response, success) = await FetchData(async () =>
+        var (response, success) = SearchQuery is null ?
+            await FetchData(async () =>
         {
             return await failsafeService.Fallback(async () => await harmonizeClient.GetVideoPaging(Limit, skip), null);
+        })
+            :
+            await FetchData(async () =>
+        {
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideoPaging(SearchQuery, Limit, skip), null);
         });
+
 
         MediaEntries.Clear();
         foreach (var m in response?.Value ?? [])
