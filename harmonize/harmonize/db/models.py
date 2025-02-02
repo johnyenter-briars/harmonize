@@ -91,3 +91,4 @@ class QbtDownloadTagInfo(BaseSchema, SQLModel, table=True):
     type: MediaEntryType
     video_type: VideoType | None
     audio_type: AudioType | None
+    create_season: bool | None

@@ -38,10 +38,10 @@ async def list_video_paging(
         statement = statement.where(MediaEntry.name.like(f'%{name_sub_string}%'))  # type: ignore
 
     statement = statement.offset(skip).limit(limit)
-    media_entries = session.exec(statement).all()
+    media_entries = list(session.exec(statement).all())
 
     return BaseResponse[list[MediaEntry]](
-        message='Media Entries Found', status_code=200, value=list(media_entries)
+        message='Media Entries Found', status_code=200, value=media_entries
     )
 
 

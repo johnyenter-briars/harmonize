@@ -24,6 +24,7 @@ from harmonize.defs.qbt import QbtDownloadData
 from harmonize.file.drive import (
     get_drive_with_least_space,
     move_file_to_mounted_folders,
+    remove_file,
 )
 
 logger = logging.getLogger('harmonize')
@@ -204,7 +205,7 @@ def save_file(download: QbtDownloadData, session: Session, logger: logging.Logge
 
     logger.debug('Added media entry: %s', media_entry.id)
 
-    # remove_file(source_path)
+    remove_file(source_path)
 
 
 def save_directory_files(download: QbtDownloadData, session: Session, logger: logging.Logger):
@@ -214,11 +215,19 @@ def save_directory_files(download: QbtDownloadData, session: Session, logger: lo
         logger.error('Provided path is not a directory: %s', path)
         return
 
-    season_id = uuid.uuid4()
-    season = Season(name=download.name, id=season_id)
-    session.add(season)
+    statement = select(QbtDownloadTagInfo).where(
+        QbtDownloadTagInfo.magnet_link.ilike(download.magnet_uri)  # type: ignore
+    )
 
-    logger.info('Created season: %s', season_id)
+    tag_data = next(iter(session.exec(statement)))
+
+    season_id = None
+    if tag_data.create_season:
+        season_id = uuid.uuid4()
+        season = Season(name=download.name, id=season_id)
+        session.add(season)
+
+        logger.info('Created season: %s', season_id)
 
     chosen_drive = get_drive_with_least_space()
 
@@ -272,7 +281,7 @@ async def qbt_background_service():
                     #     save_file(download, session, logger)
                     save_file(download, session, logger)
 
-                    # await delete_download(download.hash)
+                    await delete_download(download.hash)
 
             logger.info('%s is running...', 'qbt_background_service')
             await asyncio.sleep(30)
