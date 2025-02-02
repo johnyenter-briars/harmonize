@@ -25,6 +25,7 @@ Good luck.
   - [X] Network check
 - [ ] Test + confirm QBT
   - [ ] Individual eps in a folder considered a season
+  - [ ] Add ability to tag
 - [X] Seasons backend
 - [ ] Seasons frontend
   - [X] Edit Season Name

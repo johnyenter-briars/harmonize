@@ -1,8 +1,13 @@
 from pydantic import BaseModel, Field
 
+from harmonize.db.models import AudioType, MediaEntryType, VideoType
+
 
 class AddDownloadRequest(BaseModel):
     magnet_links: list[str] = Field(alias='magnetLinks')
+    type: MediaEntryType
+    video_type: VideoType | None
+    audio_type: AudioType | None
 
 
 class PauseDownloadsRequest(BaseModel):

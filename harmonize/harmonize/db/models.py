@@ -33,6 +33,16 @@ class MediaEntryType(Enum):
     SUBTITLE = 2
 
 
+class VideoType(Enum):
+    MOVIE = 0
+    EPISODE = 1
+
+
+class AudioType(Enum):
+    SONG = 0
+    AUDIOBOOK = 1
+
+
 class MediaEntryPlaylistLink(SQLModel, table=True):
     playlist_id: uuid.UUID = Field(foreign_key='playlist.id', primary_key=True)
     media_entry_id: uuid.UUID = Field(foreign_key='mediaentry.id', primary_key=True)
@@ -63,6 +73,8 @@ class MediaEntry(BaseSchema, SQLModel, table=True):
     youtube_id: str | None
     magnet_link: str | None
     type: MediaEntryType
+    video_type: VideoType | None
+    audio_type: AudioType | None
     date_added: datetime.datetime
     cover_art_absolute_path: str | None
     thumbnail_art_absolute_path: str | None
@@ -71,3 +83,11 @@ class MediaEntry(BaseSchema, SQLModel, table=True):
     )
     season_id: uuid.UUID | None = Field(foreign_key='season.id', nullable=True)  # Foreign Key
     season: 'Season' = Relationship(back_populates='media_entries')
+
+
+class QbtDownloadTagInfo(BaseSchema, SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    magnet_link: str
+    type: MediaEntryType
+    video_type: VideoType | None
+    audio_type: AudioType | None

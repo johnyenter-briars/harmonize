@@ -13,12 +13,17 @@ from sqlmodel import Session, select
 from harmonize.config.harmonizeconfig import HARMONIZE_CONFIG
 from harmonize.const import SUPPORTED_EXTENSIONS, VIDEO_EXTENSIONS
 from harmonize.db.database import get_session_non_gen
-from harmonize.db.models import MediaElementSource, MediaEntry, MediaEntryType, Season
+from harmonize.db.models import (
+    MediaElementSource,
+    MediaEntry,
+    MediaEntryType,
+    QbtDownloadTagInfo,
+    Season,
+)
 from harmonize.defs.qbt import QbtDownloadData
 from harmonize.file.drive import (
     get_drive_with_least_space,
     move_file_to_mounted_folders,
-    remove_file,
 )
 
 logger = logging.getLogger('harmonize')
@@ -165,6 +170,12 @@ def _media_entry_exists(
 
 
 def save_file(download: QbtDownloadData, session: Session, logger: logging.Logger):
+    statement = select(QbtDownloadTagInfo).where(
+        QbtDownloadTagInfo.magnet_link.ilike(download.magnet_uri)  # type: ignore
+    )
+
+    tag_data = next(iter(session.exec(statement)))
+
     source_path = Path(download.content_path)
 
     moved_path = move_file_to_mounted_folders(source_path)
@@ -178,7 +189,9 @@ def save_file(download: QbtDownloadData, session: Session, logger: logging.Logge
         source=MediaElementSource.MAGNETLINK,
         youtube_id=None,
         magnet_link=download.magnet_uri,
-        type=MediaEntryType.VIDEO,
+        type=tag_data.type,
+        video_type=tag_data.video_type,
+        audio_type=tag_data.audio_type,
         date_added=datetime.datetime.now(datetime.UTC),
         cover_art_absolute_path=None,
         thumbnail_art_absolute_path=None,
@@ -186,11 +199,12 @@ def save_file(download: QbtDownloadData, session: Session, logger: logging.Logge
     )
 
     session.add(media_entry)
+    session.delete(tag_data)
     session.commit()
 
     logger.debug('Added media entry: %s', media_entry.id)
 
-    remove_file(source_path)
+    # remove_file(source_path)
 
 
 def save_directory_files(download: QbtDownloadData, session: Session, logger: logging.Logger):
@@ -207,6 +221,8 @@ def save_directory_files(download: QbtDownloadData, session: Session, logger: lo
     logger.info('Created season: %s', season_id)
 
     chosen_drive = get_drive_with_least_space()
+
+    foo = path.iterdir()
 
     for file in path.iterdir():
         if file.is_file() and file.suffix.lower() in SUPPORTED_EXTENSIONS:
@@ -225,6 +241,8 @@ def save_directory_files(download: QbtDownloadData, session: Session, logger: lo
                 type=MediaEntryType.VIDEO
                 if file.suffix.lower() in VIDEO_EXTENSIONS
                 else MediaEntryType.SUBTITLE,
+                video_type=None,
+                audio_type=None,
                 date_added=datetime.datetime.now(datetime.UTC),
                 cover_art_absolute_path=None,
                 thumbnail_art_absolute_path=None,
@@ -237,7 +255,7 @@ def save_directory_files(download: QbtDownloadData, session: Session, logger: lo
 
     session.commit()
     logger.info('Processed all files in directory: %s', path)
-    remove_file(path)
+    # remove_file(path)
 
 
 async def qbt_background_service():
@@ -248,12 +266,13 @@ async def qbt_background_service():
             for download in downloads:
                 if _download_finished(download) and not _media_entry_exists(download, session):
                     path = Path(download.content_path)
-                    if path.is_dir():
-                        save_directory_files(download, session, logger)
-                    else:
-                        save_file(download, session, logger)
+                    # if path.is_dir():
+                    #     save_directory_files(download, session, logger)
+                    # else:
+                    #     save_file(download, session, logger)
+                    save_file(download, session, logger)
 
-                    await delete_download(download.hash)
+                    # await delete_download(download.hash)
 
             logger.info('%s is running...', 'qbt_background_service')
             await asyncio.sleep(30)

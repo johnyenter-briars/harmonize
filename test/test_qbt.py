@@ -2,7 +2,7 @@ import requests
 
 
 def test_list_torrents(setup):
-    url = f'{setup['base_url']}/qbt/list'
+    url = f'{setup["base_url"]}/qbt/list'
 
     response = requests.get(url)
 
@@ -14,15 +14,20 @@ def test_list_torrents(setup):
 
 
 def test_add_torrent(setup):
-    url = f'{setup['base_url']}/search/piratebay/spiderman'
+    url = f'{setup["base_url"]}/search/piratebay/spiderman'
 
     response = requests.get(url)
 
     magnet_links_response = response.json()
 
-    url = f'{setup['base_url']}/qbt/add'
+    url = f'{setup["base_url"]}/qbt/add'
 
-    request_data = {'magnetLinks': [magnet_links_response['value'][1]['magnetLink']]}
+    request_data = {
+        'magnetLinks': [magnet_links_response['value'][1]['magnetLink']],
+        'type': 1,
+        'video_type': 0,
+        'audio_type': None,
+    }
 
     response = requests.post(url, json=request_data)
 
@@ -32,7 +37,7 @@ def test_add_torrent(setup):
 def test_pause_torrent(setup):
     test_add_torrent(setup)
 
-    url = f'{setup['base_url']}/qbt/list'
+    url = f'{setup["base_url"]}/qbt/list'
 
     response = requests.get(url)
 
@@ -42,7 +47,7 @@ def test_pause_torrent(setup):
 
     torrent_hash = first_torrent['hash']
 
-    url = f'{setup['base_url']}/qbt/pause'
+    url = f'{setup["base_url"]}/qbt/pause'
 
     request_data = {'hashes': [torrent_hash]}
 
@@ -54,7 +59,7 @@ def test_pause_torrent(setup):
 def test_resume_torrent(setup):
     test_add_torrent(setup)
 
-    url = f'{setup['base_url']}/qbt/list'
+    url = f'{setup["base_url"]}/qbt/list'
 
     response = requests.get(url)
 
@@ -64,7 +69,7 @@ def test_resume_torrent(setup):
 
     torrent_hash = first_torrent['hash']
 
-    url = f'{setup['base_url']}/qbt/resume'
+    url = f'{setup["base_url"]}/qbt/resume'
 
     request_data = {'hashes': [torrent_hash]}
 
@@ -76,7 +81,7 @@ def test_resume_torrent(setup):
 def test_delete_torrent(setup):
     test_add_torrent(setup)
 
-    url = f'{setup['base_url']}/qbt/list'
+    url = f'{setup["base_url"]}/qbt/list'
 
     response = requests.get(url)
 
@@ -86,7 +91,7 @@ def test_delete_torrent(setup):
 
     torrent_hash = first_torrent['hash']
 
-    url = f'{setup['base_url']}/qbt/delete'
+    url = f'{setup["base_url"]}/qbt/delete'
 
     request_data = {'hashes': [torrent_hash]}
 
