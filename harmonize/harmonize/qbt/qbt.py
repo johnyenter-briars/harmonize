@@ -24,6 +24,7 @@ from harmonize.defs.qbt import QbtDownloadData
 from harmonize.file.drive import (
     get_drive_with_least_space,
     move_file_to_mounted_folders,
+    remove_file,
 )
 
 logger = logging.getLogger('harmonize')
@@ -204,7 +205,7 @@ def save_file(download: QbtDownloadData, session: Session, logger: logging.Logge
 
     logger.debug('Added media entry: %s', media_entry.id)
 
-    # remove_file(source_path)
+    remove_file(source_path)
 
 
 def save_directory_files(download: QbtDownloadData, session: Session, logger: logging.Logger):
@@ -272,7 +273,7 @@ async def qbt_background_service():
                     #     save_file(download, session, logger)
                     save_file(download, session, logger)
 
-                    # await delete_download(download.hash)
+                    await delete_download(download.hash)
 
             logger.info('%s is running...', 'qbt_background_service')
             await asyncio.sleep(30)
