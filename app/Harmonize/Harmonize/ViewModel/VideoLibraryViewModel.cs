@@ -35,7 +35,7 @@ public class VideoLibraryViewModel(
 
         if (success)
         {
-            await alertService.ShowConfirmationAsync("Success", "Job created successfully.", "Ok");
+            await alertService.ShowAlertSnackbarAsync("Job created successfully.");
         }
     });
     private bool searchBarVisible = false;

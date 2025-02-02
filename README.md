@@ -35,7 +35,8 @@ Good luck.
   - [X] Paging
   - [X] Edit entry from within season
 - [ ] Update colors
-- [ ] Alerts should be snackbar
+- [X] Alerts should be snackbar
+- [ ] Style snackbar
 - [X] Fix paging on seasons
 - [ ] Fix paging on media entry
 - [ ] Add new properties to edit media entry

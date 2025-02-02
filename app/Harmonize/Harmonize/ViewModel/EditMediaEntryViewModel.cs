@@ -45,7 +45,7 @@ public class EditMediaEntryViewModel(
 
         if (success)
         {
-            await alertService.ShowConfirmationAsync("Success", "Job created successfully.", "Ok");
+            await alertService.ShowAlertSnackbarAsync("Job created successfully.");
         }
     });
     private ObservableCollection<MediaElementSource> sourceOptions =

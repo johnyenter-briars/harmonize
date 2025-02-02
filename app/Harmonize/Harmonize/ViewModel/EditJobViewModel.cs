@@ -90,7 +90,7 @@ public class EditJobViewModel(
 
             if (success)
             {
-                await alertService.ShowConfirmationAsync("Success", "Job canceled successfully.", "Ok");
+                await alertService.ShowAlertSnackbarAsync("Job canceled successfully.");
             }
         }
     });
