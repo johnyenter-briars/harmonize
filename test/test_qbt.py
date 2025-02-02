@@ -25,8 +25,9 @@ def test_add_torrent(setup):
     request_data = {
         'magnetLinks': [magnet_links_response['value'][1]['magnetLink']],
         'type': 1,
-        'video_type': 0,
-        'audio_type': None,
+        'videoType': 0,
+        'audioType': None,
+        'createSeason': None,
     }
 
     response = requests.post(url, json=request_data)

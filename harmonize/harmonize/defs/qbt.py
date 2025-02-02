@@ -5,9 +5,10 @@ from harmonize.db.models import AudioType, MediaEntryType, VideoType
 
 class AddDownloadRequest(BaseModel):
     magnet_links: list[str] = Field(alias='magnetLinks')
-    type: MediaEntryType
-    video_type: VideoType | None
-    audio_type: AudioType | None
+    type: MediaEntryType = Field(alias='type')
+    video_type: VideoType | None = Field(alias='videoType')
+    audio_type: AudioType | None = Field(alias='audioType')
+    create_season: bool | None = Field(alias='createSeason')
 
 
 class PauseDownloadsRequest(BaseModel):

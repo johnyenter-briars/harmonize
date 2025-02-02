@@ -39,6 +39,7 @@ async def add_torrent(
             type=request.type,
             video_type=request.video_type,
             audio_type=request.audio_type,
+            create_season=request.create_season,
         )
         session.add(tag_info)
 

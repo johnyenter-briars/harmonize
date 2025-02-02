@@ -1,7 +1,7 @@
 import logging
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
 
 from harmonize.db.database import get_session
@@ -91,9 +91,18 @@ async def get_season_details(
 
 @router.get('/', status_code=200)
 async def get_seasons(
+    limit: int = Query(10, ge=1),
+    skip: int = Query(0, ge=0),
+    name_sub_string: str | None = Query(None),
     session: Session = Depends(get_session),
 ) -> BaseResponse[list[Season]]:
-    seasons = list(session.exec(select(Season)).all())
+    statement = select(Season)
+
+    if name_sub_string:
+        statement = statement.where(MediaEntry.name.like(f'%{name_sub_string}%'))  # type: ignore
+
+    statement = statement.offset(skip).limit(limit)
+    seasons = list(session.exec(statement).all())
 
     return BaseResponse[list[Season]](
         message='Season details retrieved successfully', status_code=200, value=seasons

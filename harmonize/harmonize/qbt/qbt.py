@@ -215,11 +215,19 @@ def save_directory_files(download: QbtDownloadData, session: Session, logger: lo
         logger.error('Provided path is not a directory: %s', path)
         return
 
-    season_id = uuid.uuid4()
-    season = Season(name=download.name, id=season_id)
-    session.add(season)
+    statement = select(QbtDownloadTagInfo).where(
+        QbtDownloadTagInfo.magnet_link.ilike(download.magnet_uri)  # type: ignore
+    )
 
-    logger.info('Created season: %s', season_id)
+    tag_data = next(iter(session.exec(statement)))
+
+    season_id = None
+    if tag_data.create_season:
+        season_id = uuid.uuid4()
+        season = Season(name=download.name, id=season_id)
+        session.add(season)
+
+        logger.info('Created season: %s', season_id)
 
     chosen_drive = get_drive_with_least_space()
 
