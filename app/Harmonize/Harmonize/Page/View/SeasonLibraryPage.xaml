@@ -78,11 +78,11 @@
             <CollectionView 
                 Grid.Row="1" 
                 IsVisible="True"
-                RemainingItemsThreshold="5"
+                RemainingItemsThreshold="1"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                 ItemsSource="{Binding Seasons}"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                 VerticalScrollBarVisibility="Always"
                 SelectionMode="Single"
                 >

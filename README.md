@@ -32,10 +32,12 @@ Good luck.
   - [X] Add season
   - [X] Display entries in season
   - [X] Delete season
-  - [ ] Paging
+  - [X] Paging
   - [X] Edit entry from within season
 - [ ] Update colors
 - [ ] Alerts should be snackbar
+- [X] Fix paging on seasons
+- [ ] Fix paging on media entry
 - [ ] Add new properties to edit media entry
 - [ ] Filter by type
 - [X] Hook up send to media server
