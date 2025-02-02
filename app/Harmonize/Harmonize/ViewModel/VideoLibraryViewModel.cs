@@ -74,7 +74,6 @@ public class VideoLibraryViewModel(
     }
     const int Limit = 10;
     int skip = 0;
-
     async Task LoadMore()
     {
         skip += Limit;
@@ -82,12 +81,12 @@ public class VideoLibraryViewModel(
         var (response, success) = SearchQuery is null ?
             await FetchData(async () =>
         {
-            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideoPaging(Limit, skip), null);
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(Limit, skip), null);
         })
             :
             await FetchData(async () =>
         {
-            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideoPaging(SearchQuery, Limit, skip), null);
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(SearchQuery, Limit, skip), null);
         });
 
         foreach (var m in response?.Value ?? [])
@@ -120,12 +119,12 @@ public class VideoLibraryViewModel(
         var (response, success) = SearchQuery is null ?
             await FetchData(async () =>
         {
-            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideoPaging(Limit, skip), null);
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(Limit, skip), null);
         })
             :
             await FetchData(async () =>
         {
-            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideoPaging(SearchQuery, Limit, skip), null);
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(SearchQuery, Limit, skip), null);
         });
 
 

@@ -46,7 +46,7 @@
     </FlyoutItem>
     <FlyoutItem 
                 Title="Magnet Link Search" 
-                Icon="icons8_search_more_50.png"
+                Icon="icons8_search_50.png"
                 >
         <Tab>
             <ShellContent

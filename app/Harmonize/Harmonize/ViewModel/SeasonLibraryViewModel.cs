@@ -18,7 +18,24 @@ public class SeasonLibraryViewModel(
     AlertService alertService
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
+    public ICommand ItemTappedCommand => new Command<Season>(async season =>
+    {
+        await ItemTapped(season);
+    });
+    public ICommand LoadMoreCommand => new Command(async () => await LoadMore());
     public ICommand RefreshCommand => new Command(async () => await Refresh());
+    private bool searchBarVisible = false;
+    public bool SearchBarVisible
+    {
+        get { return searchBarVisible; }
+        set { SetProperty(ref searchBarVisible, value); }
+    }
+    private string? searchQuery;
+    public string? SearchQuery
+    {
+        get => searchQuery;
+        set => SetProperty(ref searchQuery, value);
+    }
     private Season selectedSeason;
     public Season SelectedSeason
     {
@@ -41,12 +58,59 @@ public class SeasonLibraryViewModel(
         get { return seasons; }
         set { SetProperty(ref seasons, value); }
     }
+    const int Limit = 10;
+    int skip = 0;
+    async Task LoadMore()
+    {
+        skip += Limit;
 
+        var (response, success) = SearchQuery is null ?
+            await FetchData(async () =>
+        {
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetSeasonsPaging(Limit, skip), null);
+        })
+            :
+            await FetchData(async () =>
+        {
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetSeasonsPaging(SearchQuery, Limit, skip), null);
+        });
+
+        foreach (var m in response?.Value ?? [])
+        {
+            Seasons.Add(m);
+        }
+    }
+    public ICommand OpenSearchCommand => new Command(() =>
+    {
+        if (SearchBarVisible)
+        {
+            SearchQuery = null;
+        }
+
+        SearchBarVisible = !SearchBarVisible;
+    });
+    public ICommand SearchCommand => new Command<SearchBar>(async (searchBar) =>
+    {
+        if (string.IsNullOrWhiteSpace(SearchQuery))
+            return;
+
+        searchBar?.Unfocus();
+
+        await Refresh();
+    });
     async Task Refresh()
     {
-        var (response, success) = await FetchData(async () =>
+        skip = 0;
+
+        var (response, success) = SearchQuery is null ?
+            await FetchData(async () =>
         {
-            return await failsafeService.Fallback(harmonizeClient.GetSeasons, null);
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetSeasonsPaging(Limit, skip), null);
+        })
+            :
+            await FetchData(async () =>
+        {
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetSeasonsPaging(SearchQuery, Limit, skip), null);
         });
 
         Seasons.Clear();

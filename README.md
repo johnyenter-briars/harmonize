@@ -35,6 +35,9 @@ Good luck.
   - [ ] Paging
   - [X] Edit entry from within season
 - [ ] Update colors
+- [ ] Alerts should be snackbar
+- [ ] Add new properties to edit media entry
+- [ ] Filter by type
 - [X] Hook up send to media server
 - [X] Gb rounding in QBT
 - [ ] Authentication

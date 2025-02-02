@@ -3,6 +3,8 @@ using Harmonize.Service;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Harmonize.Client.Model.QBT;
+using Microsoft.Extensions.Logging;
+using Harmonize.Client.Model.Media;
 
 namespace Harmonize.ViewModel;
 
@@ -11,7 +13,8 @@ public class MagnetLinkSearchViewModel(
     PreferenceManager preferenceManager,
     HarmonizeClient harmonizeClient,
     FailsafeService failsafeService,
-    AlertService alertService
+    AlertService alertService,
+    ILogger<MagnetLinkSearchViewModel> logger
 ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     #region Bindings
@@ -99,26 +102,61 @@ public class MagnetLinkSearchViewModel(
     });
     public async Task ItemTapped(MagnetLinkSearchResult magnetlinkSearchResult)
     {
-        bool startDownload = await alertService.ShowConfirmationAsync("Confirm", "Are you sure you want to start this download?", "Yes", "No");
+        var choice = await Application.Current.MainPage.DisplayActionSheet(
+            "Type of Entry", "Cancel", null, 
+            ["Movie", "Season", "Episode", "Song", "Audiobook"]);
 
-        if (startDownload)
+        if (choice == "Cancel") return;
+
+        var request = choice switch
         {
-            var (results, success) = await failsafeService.Fallback(async () =>
-            {
-                return await harmonizeClient.AddQbtDownload(new AddQbtDownloadsRequest
+            "Movie" => new AddQbtDownloadsRequest
                 {
-                    MagnetLinks = [magnetlinkSearchResult.MagnetLink]
-                });
-            }, null);
+                    MagnetLinks = [magnetlinkSearchResult.MagnetLink],
+                    Type = MediaEntryType.Video,
+                    VideoType = VideoType.Movie,
+                    AudioType = null,
+                    CreateSeason = null,
+                },
+            "Season" => new AddQbtDownloadsRequest
+                {
+                    MagnetLinks = [magnetlinkSearchResult.MagnetLink],
+                    Type = MediaEntryType.Video,
+                    VideoType = VideoType.Episode,
+                    CreateSeason = true,
+                    AudioType = null,
+                },
+            "Episode" => new AddQbtDownloadsRequest
+                {
+                    MagnetLinks = [magnetlinkSearchResult.MagnetLink],
+                    Type = MediaEntryType.Video,
+                    VideoType = VideoType.Episode,
+                    CreateSeason = false,
+                    AudioType = null,
+                },
+            "Song" => null,
+            "Audiobook" => null,
+            _ => null,
+        };
 
-            if (success)
-            {
-                await alertService.ShowAlertAsync("Success!", "Download added");
-            }
-            else
-            {
-                await alertService.ShowAlertAsync("Failure", results?.Message ?? "");
-            }
+        if (request is null)
+        {
+            logger.LogInformation($"Choice: {choice} not yet supported.");
+            return;
+        }
+
+        var (results, success) = await failsafeService.Fallback(async () =>
+        {
+            return await harmonizeClient.AddQbtDownload(request);
+        }, null);
+
+        if (success)
+        {
+            await alertService.ShowAlertSnackbarAsync("Download started!");
+        }
+        else
+        {
+            await alertService.ShowAlertSnackbarAsync("Failure to start download.");
         }
     }
     public override Task OnAppearingAsync()

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,10 +16,18 @@ public class AlertService
     {
         return Application.Current.MainPage.DisplayAlert(title, message, cancel);
     }
+    public Task ShowAlertSnackbarAsync(string message, string cancel = "OK", Action? action = null)
+    {
+        return Application.Current.MainPage.DisplaySnackbar(message, action, cancel);
+    }
 
     public Task<bool> ShowConfirmationAsync(string title, string message, string accept = "Yes", string cancel = "No")
     {
         return Application.Current.MainPage.DisplayAlert(title, message, accept, cancel);
+    }
+    public Task<string> ShowFooAsync(string title, string message, string accept = "Yes", string cancel = "No")
+    {
+        return Application.Current.MainPage.DisplayActionSheet("title", "acncel", "destruction", ["foo", "bar"]);
     }
 
 

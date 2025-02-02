@@ -16,12 +16,6 @@ public class HarmonizeClient
 {
     private string? hostName;
     private int? port;
-    private static readonly JsonSerializerOptions SnakeCaseOptions = new JsonSerializerOptions
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
-        WriteIndented = true,
-        Converters = { new JsonStringEnumConverter() }
-    };
     private static readonly JsonSerializerOptions CamelCaseOptions = new JsonSerializerOptions
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -54,11 +48,11 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"media/audio", HttpMethod.Get);
     }
-    public async Task<MediaEntriesResponse> GetVideoPaging(int limit, int skip = 0)
+    public async Task<MediaEntriesResponse> GetVideosPaging(int limit, int skip = 0)
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"media/video?limit={limit}&skip={skip}", HttpMethod.Get);
     }
-    public async Task<MediaEntriesResponse> GetVideoPaging(string nameSubString, int limit, int skip = 0)
+    public async Task<MediaEntriesResponse> GetVideosPaging(string nameSubString, int limit, int skip = 0)
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"media/video?limit={limit}&skip={skip}&name_sub_string={nameSubString}", HttpMethod.Get);
     }
@@ -151,9 +145,13 @@ public class HarmonizeClient
     #endregion
 
     #region Season
-    public async Task<SeasonsResponse> GetSeasons()
+    public async Task<SeasonsResponse> GetSeasonsPaging(int limit, int skip = 0)
     {
-        return await HarmonizeRequest<SeasonsResponse>($"season/", HttpMethod.Get);
+        return await HarmonizeRequest<SeasonsResponse>($"season?limit={limit}&skip={skip}", HttpMethod.Get);
+    }
+    public async Task<SeasonsResponse> GetSeasonsPaging(string nameSubString, int limit, int skip = 0)
+    {
+        return await HarmonizeRequest<SeasonsResponse>($"season?limit={limit}&skip={skip}&name_sub_string={nameSubString}", HttpMethod.Get);
     }
     public async Task<MediaEntriesResponse> GetSeasonEntries(Season season)
     {
@@ -196,7 +194,12 @@ public class HarmonizeClient
     #region QBT
     public async Task<AddQbtDownloadsResponse> AddQbtDownload(AddQbtDownloadsRequest request)
     {
-        return await HarmonizeRequest<AddQbtDownloadsRequest, AddQbtDownloadsResponse>(request, $"qbt/add", HttpMethod.Post);
+        var optionsWithIntegers = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
+        return await HarmonizeRequest<AddQbtDownloadsRequest, AddQbtDownloadsResponse>(request, $"qbt/add", HttpMethod.Post, optionsWithIntegers);
     }
     public async Task<ListQbtDownloadsResponse> GetQbtDownloads()
     {
@@ -235,14 +238,14 @@ public class HarmonizeClient
 
         return await SendRequestBytes(request);
     }
-    private async Task<TResponse> HarmonizeRequest<TRequest, TResponse>(TRequest requestObject, string path, HttpMethod httpMethod)
+    private async Task<TResponse> HarmonizeRequest<TRequest, TResponse>(TRequest requestObject, string path, HttpMethod httpMethod, JsonSerializerOptions? jsonSerializerOptions = null)
     {
         var request = new HttpRequestMessage(httpMethod, $"http://{hostName}:{port}/api/" + path);
         request.Headers.Accept.Clear();
         //request.Headers.Add("x-api-key", _apiKey);
         //request.Headers.Add("x-user-id", _userId);
 
-        var str = JsonSerializer.Serialize(requestObject, CamelCaseOptions);
+        var str = JsonSerializer.Serialize(requestObject, jsonSerializerOptions ?? CamelCaseOptions);
         request.Content = new StringContent(str, Encoding.UTF8, "application/json");
 
         return await SendRequest<TResponse>(request, CamelCaseOptions);
