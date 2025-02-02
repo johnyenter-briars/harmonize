@@ -58,6 +58,10 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"media/video?limit={limit}&skip={skip}", HttpMethod.Get);
     }
+    public async Task<MediaEntriesResponse> GetVideoPaging(string nameSubString, int limit, int skip = 0)
+    {
+        return await HarmonizeRequest<MediaEntriesResponse>($"media/video?limit={limit}&skip={skip}&name_sub_string={nameSubString}", HttpMethod.Get);
+    }
     public async Task<byte[]> GetMediaBytes(IMediaEntry mediaEntry)
     {
         return await HarmonizeRequestBytes($"stream/{mediaEntry.Id}", HttpMethod.Get);
