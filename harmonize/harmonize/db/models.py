@@ -81,8 +81,13 @@ class MediaEntry(BaseSchema, SQLModel, table=True):
     playlists: list['Playlist'] = Relationship(
         back_populates='media_entries', link_model=MediaEntryPlaylistLink
     )
-    season_id: uuid.UUID | None = Field(foreign_key='season.id', nullable=True)  # Foreign Key
+    season_id: uuid.UUID | None = Field(foreign_key='season.id', nullable=True)
     season: 'Season' = Relationship(back_populates='media_entries')
+
+    subtitle_file_id: uuid.UUID | None = Field(foreign_key='mediaentry.id', nullable=True)
+    subtitle_file: 'MediaEntry' = Relationship(
+        sa_relationship_kwargs={'remote_side': 'MediaEntry.id'}
+    )
 
 
 class QbtDownloadTagInfo(BaseSchema, SQLModel, table=True):
