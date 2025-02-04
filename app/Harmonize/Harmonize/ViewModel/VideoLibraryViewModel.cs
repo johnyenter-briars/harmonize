@@ -21,9 +21,6 @@ public class VideoLibraryViewModel(
 {
     public ICommand RefreshCommand => new Command(async () => await Refresh());
     public ICommand LoadMoreCommand => new Command(async () => await LoadMore());
-    public ICommand MoreInfoCommand => new Command<MediaEntry>(entry =>
-    {
-    });
     public ICommand ItemTappedCommand => new Command<MediaEntry>(async entry =>
     {
         await ItemTapped(entry);
@@ -38,6 +35,12 @@ public class VideoLibraryViewModel(
             await alertService.ShowAlertSnackbarAsync("Job created successfully.");
         }
     });
+    private bool outOfRecords = false;
+    public bool OutOfRecords
+    {
+        get { return outOfRecords; }
+        set { SetProperty(ref outOfRecords, value); }
+    }
     private bool searchBarVisible = false;
     public bool SearchBarVisible
     {
@@ -76,18 +79,21 @@ public class VideoLibraryViewModel(
     int skip = 0;
     async Task LoadMore()
     {
+        if (OutOfRecords) return;
+
         skip += Limit;
 
         var (response, success) = SearchQuery is null ?
-            await FetchData(async () =>
-        {
-            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(Limit, skip), null);
-        })
+            await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(Limit, skip), null)
             :
-            await FetchData(async () =>
+            await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(SearchQuery, Limit, skip), null)
+            ;
+
+        if (response?.Value is not { Count: > 0 })
         {
-            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(SearchQuery, Limit, skip), null);
-        });
+            OutOfRecords = true;
+            return;
+        }
 
         foreach (var m in response?.Value ?? [])
         {
@@ -115,6 +121,7 @@ public class VideoLibraryViewModel(
     async Task Refresh()
     {
         skip = 0;
+        OutOfRecords = false;
 
         var (response, success) = SearchQuery is null ?
             await FetchData(async () =>

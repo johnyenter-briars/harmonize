@@ -65,7 +65,7 @@
             >
             <CollectionView 
                 IsVisible="True"
-                RemainingItemsThreshold="5"
+                RemainingItemsThreshold="1"
                 RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                 ItemsSource="{Binding MediaEntries}"
                 VerticalOptions="FillAndExpand"
@@ -150,6 +150,7 @@
                         FontSize="16"
                         CornerRadius="25"
                         HeightRequest="45"
+                        Clicked="OnOpenBottomSheetClicked"
                         />
 
                 </StackLayout>

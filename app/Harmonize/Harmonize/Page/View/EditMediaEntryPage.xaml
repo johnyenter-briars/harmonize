@@ -15,7 +15,7 @@
         VerticalScrollBarVisibility="Always"
         >
         <VerticalStackLayout Spacing="10">
-            <Label Text="Job ID" FontSize="Medium" />
+            <Label Text="Id" FontSize="Medium" />
             <Entry Text="{Binding MediaEntry.Id, Mode=OneWay}" IsReadOnly="True" />
 
             <Label Text="Name" FontSize="Medium" />
@@ -40,10 +40,19 @@
             <Label Text="Type" FontSize="Medium" />
             <Entry Text="{Binding MediaEntry.Type, Mode=OneWay}" IsReadOnly="True" />
 
+            <Label Text="Video Type" FontSize="Medium" />
+            <Entry Text="{Binding MediaEntry.VideoType, Mode=OneWay}" IsReadOnly="True" />
+
+            <Label Text="Audio Type" FontSize="Medium" />
+            <Entry Text="{Binding MediaEntry.AudioType, Mode=OneWay}" IsReadOnly="True" />
+
             <Label Text="Date Added" FontSize="Medium" />
             <Entry 
                 Text="{Binding MediaEntry.DateAdded, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}"
                 IsReadOnly="True" />
+
+            <Label Text="Season Id" FontSize="Medium" />
+            <Entry Text="{Binding MediaEntry.SeasonId, Mode=OneWay}" IsReadOnly="True" />
 
             <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
                 <ImageButton 

@@ -75,6 +75,7 @@ namespace Harmonize
             builder.Services.AddSingleton<TransferListViewModel>();
             builder.Services.AddSingleton<SeasonLibraryViewModel>();
             builder.Services.AddSingleton<EditSeasonViewModel>();
+            builder.Services.AddSingleton<AddToSeasonViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();

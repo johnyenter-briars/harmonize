@@ -8,6 +8,7 @@ public class MediaEntry : IMediaEntry
     public required string Name { get; set; }
     public required string AbsolutePath { get; set; }
     public required MediaElementSource Source { get; set; }
+    [JsonPropertyName("youtubeId")]
     public required string? YouTubeId { get; set; }
     public required string? MagnetLink { get; set; }
     public required MediaEntryType Type { get; set; }
@@ -15,6 +16,7 @@ public class MediaEntry : IMediaEntry
     public required AudioType? AudioType { get; set; }
     public required DateTime DateAdded { get; set; }
     public required string? CoverArtAbsolutePath { get; set; }
+    [JsonPropertyName("thumbnailArtAbsolutePath")]
     public required string? ThumbNailArtAbsolutePath { get; set; }
     public required Guid? SeasonId { get; set; }
 }
