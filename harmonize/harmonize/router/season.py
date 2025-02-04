@@ -2,10 +2,11 @@ import logging
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import and_, select
 from sqlmodel import Session, select
 
 from harmonize.db.database import get_session
-from harmonize.db.models import MediaEntry, Season
+from harmonize.db.models import MediaEntry, MediaEntryType, Season, VideoType
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.season import (
     AssociateToSeasonRequest,
@@ -82,7 +83,15 @@ async def get_season_details(
     if not season:
         raise HTTPException(status_code=404, detail='Season not found')
 
-    media_entries = list(session.exec(select(MediaEntry).where(MediaEntry.season_id == season_id)))
+    foo = select(MediaEntry).where(
+        and_(
+            MediaEntry.season_id == season_id,  # type: ignore
+            MediaEntry.video_type == VideoType.EPISODE,  # type: ignore
+            MediaEntry.type == MediaEntryType.VIDEO,  # type: ignore
+        )
+    )
+
+    media_entries = list(session.exec(foo))
 
     return BaseResponse[list[MediaEntry]](
         message='Season details retrieved successfully', status_code=200, value=media_entries

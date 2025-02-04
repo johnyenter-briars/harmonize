@@ -1,5 +1,6 @@
 import logging
 import uuid
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
@@ -9,6 +10,7 @@ from harmonize.db.database import get_session
 from harmonize.db.models import MediaEntry, MediaEntryType
 from harmonize.defs.media import UpsertMediaEntryRequest
 from harmonize.defs.response import BaseResponse
+from harmonize.file.drive import remove_file
 
 logger = logging.getLogger('harmonize')
 router = APIRouter(prefix='/api/media')
@@ -115,6 +117,8 @@ async def delete_media_entry(
 
     if not media_entry:
         raise HTTPException(status_code=404, detail='Media entry not found')
+
+    remove_file(Path(media_entry.absolute_path))
 
     session.delete(media_entry)
     session.commit()

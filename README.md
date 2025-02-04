@@ -17,15 +17,16 @@ Good luck.
   - [X] Nice search
   - [ ] Season search
   - [ ] Filter + query popup
-  - [ ] Delete entry (delete file on disk)
+  - [X] Delete entry (delete file on disk)
   - [X] Paging
+  - [ ] Display SRT files
 - [X] Health page
   - [X] Add page
   - [X] VPN check
   - [X] Network check
-- [ ] Test + confirm QBT
-  - [ ] Individual eps in a folder considered a season
-  - [ ] Add ability to tag
+- [X] Test + confirm QBT
+  - [X] Individual eps in a folder considered a season
+  - [X] Add ability to tag
 - [X] Seasons backend
 - [ ] Seasons frontend
   - [X] Edit Season Name
