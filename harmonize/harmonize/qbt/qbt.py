@@ -213,7 +213,11 @@ def _save_file(
         QbtDownloadTagInfo.magnet_link.ilike(download.magnet_uri)  # type: ignore
     )
 
-    tag_data = next(iter(session.exec(statement)))
+    tag_data = session.exec(statement).first()
+
+    if tag_data is None:
+        logger.info('No tag data for currently running download: %s', download.name)
+        return False
 
     moved_path = move_file_to_mounted_folders(source_path)
     if moved_path is None:
@@ -242,7 +246,7 @@ def _save_file(
 
     logger.debug('Added media entry: %s', media_entry.id)
 
-    remove_file(source_path)
+    return True
 
 
 def _list_files_recursive(directory: str) -> list[Path]:
@@ -342,7 +346,11 @@ def _save_directory_files(
         QbtDownloadTagInfo.magnet_link.ilike(download.magnet_uri)  # type: ignore
     )
 
-    tag_data = next(iter(session.exec(statement)))
+    tag_data = session.exec(statement).first()
+
+    if tag_data is None:
+        logger.info('No tag data for currently running download: %s', download.name)
+        return False
 
     all_files_recursive = _list_files_recursive(source_path.absolute().as_posix())
 
@@ -387,9 +395,9 @@ async def qbt_background_service():
                     else:
                         should_delete_download = _save_file(source_path, download, session, logger)
 
-                    # if should_delete_download:
-                    #     remove_file(source_path)
-                    #     await delete_download(download.hash)
+                    if should_delete_download:
+                        remove_file(source_path)
+                        await delete_download(download.hash)
 
             logger.info('%s is running...', 'qbt_background_service')
             await asyncio.sleep(30)

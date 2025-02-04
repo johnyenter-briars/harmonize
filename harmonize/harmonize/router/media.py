@@ -45,8 +45,8 @@ async def list_video_paging(
     )
 
 
-@router.get('/video/{media_entry_id}/sub', status_code=200)
-async def get_video_sub(
+@router.get('/sub/{media_entry_id}', status_code=200)
+async def get_sub(
     media_entry_id: uuid.UUID,
     session: Session = Depends(get_session),
 ) -> BaseResponse[MediaEntry]:
@@ -55,14 +55,12 @@ async def get_video_sub(
     if entry is None:
         return BaseResponse[MediaEntry](message='Entry not found', status_code=404, value=None)
 
-    subtitle_id = entry.subtitle_file_id
+    if entry.type is not MediaEntryType.SUBTITLE:
+        return BaseResponse[MediaEntry](
+            message='Entry not subtitle type', status_code=400, value=None
+        )
 
-    if subtitle_id is None:
-        return BaseResponse[MediaEntry](message='Subtitle tot found', status_code=404, value=None)
-
-    subtitle = session.get(MediaEntry, subtitle_id)
-
-    return BaseResponse[MediaEntry](message='Media Entries Found', status_code=200, value=subtitle)
+    return BaseResponse[MediaEntry](message='Media Entries Found', status_code=200, value=entry)
 
 
 @router.get('/sub', status_code=200)
