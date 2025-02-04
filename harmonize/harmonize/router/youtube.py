@@ -24,7 +24,7 @@ from harmonize.db.database import get_session
 from harmonize.db.models import Job, JobStatus, MediaElementSource, MediaEntry, MediaEntryType
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.youtube import DownloadPlaylistArguments, DownloadVideoArguments
-from harmonize.file.drive import move_file_to_mounted_folders, remove_file
+from harmonize.file.drive import copy_file_to_mounted_folders, remove_file
 from harmonize.job.callback import start_job
 from harmonize.util.filepropety import (
     convert_webp_to_jpeg,
@@ -189,7 +189,7 @@ def _download_youtube_video(
         if album_art_path is not None:
             _inject_album_art(absolute_path, album_art_path)
 
-        moved_path = move_file_to_mounted_folders(absolute_path)
+        moved_path = copy_file_to_mounted_folders(absolute_path)
         if moved_path is None:
             msg = 'Unable to move file'
             raise Exception(msg)  # noqa: TRY002, TRY301

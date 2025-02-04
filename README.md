@@ -17,7 +17,7 @@ Good luck.
   - [X] Nice search
   - [ ] Season search
   - [ ] Filter + query popup
-  - [X] Delete entry
+  - [ ] Delete entry (delete file on disk)
   - [X] Paging
 - [X] Health page
   - [X] Add page

@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from sqlmodel import Session, select
 
 from harmonize.config.harmonizeconfig import HARMONIZE_CONFIG
-from harmonize.const import SUPPORTED_EXTENSIONS, VIDEO_EXTENSIONS
+from harmonize.const import SUBTITLE_EXTENSIONS, SUPPORTED_EXTENSIONS, VIDEO_EXTENSIONS
 from harmonize.db.database import get_session_non_gen
 from harmonize.db.models import (
     MediaElementSource,
@@ -22,8 +22,8 @@ from harmonize.db.models import (
 )
 from harmonize.defs.qbt import QbtDownloadData
 from harmonize.file.drive import (
+    copy_file_to_mounted_folders,
     get_drive_with_least_space,
-    move_file_to_mounted_folders,
     remove_file,
 )
 
@@ -177,10 +177,10 @@ def _create_media_entry(
     tag_data: QbtDownloadTagInfo,
     season_id: uuid.UUID | None,
     entry_id: uuid.UUID | None = None,
-    subtitle_id: uuid.UUID | None = None,
+    parent_id: uuid.UUID | None = None,
 ) -> MediaEntry:
     media_entry = MediaEntry(
-        name=file.name,
+        name=file.stem,
         absolute_path=moved_path.absolute().as_posix(),
         source=MediaElementSource.MAGNETLINK,
         youtube_id=None,
@@ -194,14 +194,14 @@ def _create_media_entry(
         cover_art_absolute_path=None,
         thumbnail_art_absolute_path=None,
         season_id=season_id,
-        subtitle_file_id=None,
+        parent_media_entry_id=None,
     )
 
     if entry_id is not None:
         media_entry.id = entry_id
 
-    if subtitle_id is not None:
-        media_entry.subtitle_file_id = subtitle_id
+    if parent_id is not None:
+        media_entry.parent_media_entry_id = parent_id
 
     return media_entry
 
@@ -219,7 +219,7 @@ def _save_file(
         logger.info('No tag data for currently running download: %s', download.name)
         return False
 
-    moved_path = move_file_to_mounted_folders(source_path)
+    moved_path = copy_file_to_mounted_folders(source_path)
     if moved_path is None:
         msg = 'Unable to move file'
         raise Exception(msg)  # noqa: TRY002
@@ -237,7 +237,7 @@ def _save_file(
         cover_art_absolute_path=None,
         thumbnail_art_absolute_path=None,
         season_id=None,
-        subtitle_file_id=None,
+        parent_media_entry_id=None,
     )
 
     session.add(media_entry)
@@ -253,6 +253,36 @@ def _list_files_recursive(directory: str) -> list[Path]:
     return [file for file in Path(directory).rglob('*') if file.is_file()]
 
 
+def _subtitle_match(potential_subtitle_file: Path, video_file: Path):
+    video_stem = video_file.stem
+
+    """
+    folder/foobar.mkv
+    folder/subs/foobar.srt
+    """
+    if potential_subtitle_file.stem == video_stem:
+        return True
+
+    """
+    folder/foobar.mkv
+    folder/english.srt
+    or
+    folder/foobar.mkv
+    folder/foobar.srt
+    """
+    if potential_subtitle_file.parent == video_file.parent:
+        return True
+
+    """
+    folder/foobar.mkv
+    folder/foobar/english.srt
+    """
+    if video_stem.lower() in str(potential_subtitle_file).lower():  # noqa: SIM103
+        return True
+
+    return False
+
+
 def _process_files(
     eligible_files: list[Path],
     tag_data: QbtDownloadTagInfo,
@@ -261,6 +291,8 @@ def _process_files(
     logger: logging.Logger,
 ) -> tuple[bool, str | None]:
     chosen_drive = get_drive_with_least_space()
+
+    logger.info('Chose drive: %s', chosen_drive)
 
     season_id = None
     if tag_data.create_season:
@@ -271,11 +303,25 @@ def _process_files(
         logger.info('Created season: %s', season_id)
 
     srt_matching: dict[str, list[Path]] = {}
-    for file in eligible_files:
-        if file.stem in srt_matching:
-            srt_matching[file.stem].append(file)
-        else:
-            srt_matching[file.stem] = [file]
+    for file in [file for file in eligible_files if file.suffix in VIDEO_EXTENSIONS]:
+        srt_matching[file.stem] = [file]
+
+    for potential_subtitle_file in [
+        file for file in eligible_files if file.suffix in SUBTITLE_EXTENSIONS
+    ]:
+        for key, current_files in srt_matching.items():
+            video_files = [file for file in current_files if file.suffix in VIDEO_EXTENSIONS]
+
+            if len(video_files) > 1:
+                return (
+                    False,
+                    f'Error in matching up srt files. More than one video in value list for: {key}',
+                )
+
+            video_file = video_files[0]
+
+            if _subtitle_match(potential_subtitle_file, video_file):
+                srt_matching[key].append(potential_subtitle_file)
 
     for name in srt_matching:
         files = srt_matching.get(name)
@@ -285,35 +331,12 @@ def _process_files(
         if len(files) == 1:
             file = files[0]
 
-            moved_path = move_file_to_mounted_folders(file.absolute(), chosen_drive)
+            moved_path = copy_file_to_mounted_folders(file.absolute(), chosen_drive)
             if moved_path is None:
                 return (False, f'Unable to move file: {file.absolute()}')
 
             session.add(_create_media_entry(file, moved_path, download, tag_data, season_id))
         else:
-            srt_files = [
-                file
-                for file in files
-                if file.suffix == '.srt' or file.suffix is None or file.suffix == ''
-            ]
-
-            if len(srt_files) != 1:
-                names = ', '.join([file.name for file in srt_files])
-                return (False, f'More than one srt file associated! {names}')
-
-            srt_file = srt_files[0]
-            srt_id = uuid.uuid4()
-
-            moved_path = move_file_to_mounted_folders(srt_file.absolute(), chosen_drive)
-            if moved_path is None:
-                return (False, f'Unable to move file: {srt_file.absolute()}')
-
-            srt_media_entry = _create_media_entry(
-                srt_file, moved_path, download, tag_data, season_id, entry_id=srt_id
-            )
-
-            session.add(srt_media_entry)
-
             video_files = [file for file in files if file.suffix in VIDEO_EXTENSIONS]
 
             if len(video_files) != 1:
@@ -321,16 +344,42 @@ def _process_files(
                 return (False, f'More than one video file associated! {names}')
 
             video_file = video_files[0]
+            video_file_id = uuid.uuid4()
 
-            moved_path = move_file_to_mounted_folders(video_file.absolute(), chosen_drive)
+            moved_path = copy_file_to_mounted_folders(video_file.absolute(), chosen_drive)
             if moved_path is None:
                 return (False, f'Unable to move file: {video_file.absolute()}')
 
             video_media_entry = _create_media_entry(
-                video_file, moved_path, download, tag_data, season_id, subtitle_id=srt_id
+                video_file, moved_path, download, tag_data, season_id, entry_id=video_file_id
             )
 
             session.add(video_media_entry)
+
+            logger.info(
+                'Added entry: %s, %s, %s',
+                video_media_entry.name,
+                video_media_entry.id,
+                video_media_entry.type,
+            )
+
+            for srt_file in [file for file in files if file.suffix in SUBTITLE_EXTENSIONS]:
+                moved_path = copy_file_to_mounted_folders(srt_file.absolute(), chosen_drive)
+                if moved_path is None:
+                    return (False, f'Unable to move file: {srt_file.absolute()}')
+
+                srt_media_entry = _create_media_entry(
+                    srt_file, moved_path, download, tag_data, season_id, parent_id=video_file_id
+                )
+
+                session.add(srt_media_entry)
+
+                logger.info(
+                    'Added entry: %s, %s, %s',
+                    srt_media_entry.name,
+                    srt_media_entry.id,
+                    srt_media_entry.type,
+                )
 
     return (True, None)
 
@@ -338,6 +387,8 @@ def _process_files(
 def _save_directory_files(
     source_path: Path, download: QbtDownloadData, session: Session, logger: logging.Logger
 ) -> bool:
+    logger.info('Beginning to process: %s', download.name)
+
     if not source_path.is_dir():
         logger.error('Provided path is not a directory: %s', source_path)
         return False

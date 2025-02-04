@@ -78,14 +78,17 @@ class MediaEntry(BaseSchema, SQLModel, table=True):
     date_added: datetime.datetime
     cover_art_absolute_path: str | None
     thumbnail_art_absolute_path: str | None
+
     playlists: list['Playlist'] = Relationship(
         back_populates='media_entries', link_model=MediaEntryPlaylistLink
     )
+
     season_id: uuid.UUID | None = Field(foreign_key='season.id', nullable=True)
     season: 'Season' = Relationship(back_populates='media_entries')
 
-    subtitle_file_id: uuid.UUID | None = Field(foreign_key='mediaentry.id', nullable=True)
-    subtitle_file: 'MediaEntry' = Relationship(
+    # For subtitles
+    parent_media_entry_id: uuid.UUID | None = Field(foreign_key='mediaentry.id', nullable=True)
+    parent_media_entry: 'MediaEntry' = Relationship(
         sa_relationship_kwargs={'remote_side': 'MediaEntry.id'}
     )
 

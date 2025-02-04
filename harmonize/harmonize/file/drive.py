@@ -32,7 +32,7 @@ def get_drive_with_least_space() -> Path | None:
     return least_space_drive
 
 
-def move_file_to_mounted_folders(
+def copy_file_to_mounted_folders(
     source_path: Path, chosen_drive: Path | None = None
 ) -> Path | None:
     if chosen_drive is None:
