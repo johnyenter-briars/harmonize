@@ -45,6 +45,46 @@ async def list_video_paging(
     )
 
 
+@router.get('/video/{media_entry_id}/sub', status_code=200)
+async def get_video_sub(
+    media_entry_id: uuid.UUID,
+    session: Session = Depends(get_session),
+) -> BaseResponse[MediaEntry]:
+    entry = session.get(MediaEntry, media_entry_id)
+
+    if entry is None:
+        return BaseResponse[MediaEntry](message='Entry not found', status_code=404, value=None)
+
+    subtitle_id = entry.subtitle_file_id
+
+    if subtitle_id is None:
+        return BaseResponse[MediaEntry](message='Subtitle tot found', status_code=404, value=None)
+
+    subtitle = session.get(MediaEntry, subtitle_id)
+
+    return BaseResponse[MediaEntry](message='Media Entries Found', status_code=200, value=subtitle)
+
+
+@router.get('/sub', status_code=200)
+async def list_sub_paging(
+    limit: int = Query(10, ge=1),
+    skip: int = Query(0, ge=0),
+    name_sub_string: str | None = Query(None),
+    session: Session = Depends(get_session),
+) -> BaseResponse[list[MediaEntry]]:
+    statement = select(MediaEntry).where(MediaEntry.type == MediaEntryType.SUBTITLE)
+
+    if name_sub_string:
+        statement = statement.where(MediaEntry.name.like(f'%{name_sub_string}%'))  # type: ignore
+
+    statement = statement.offset(skip).limit(limit)
+    media_entries = list(session.exec(statement).all())
+
+    return BaseResponse[list[MediaEntry]](
+        message='Media Entries Found', status_code=200, value=media_entries
+    )
+
+
 @router.put('/{media_entry_id}', status_code=200)
 async def update_media_entry(
     media_entry_id: uuid.UUID,

@@ -89,7 +89,7 @@ async def get_season_details(
     )
 
 
-@router.get('/', status_code=200)
+@router.get('', status_code=200)
 async def get_seasons(
     limit: int = Query(10, ge=1),
     skip: int = Query(0, ge=0),
@@ -99,7 +99,7 @@ async def get_seasons(
     statement = select(Season)
 
     if name_sub_string:
-        statement = statement.where(MediaEntry.name.like(f'%{name_sub_string}%'))  # type: ignore
+        statement = statement.where(Season.name.like(f'%{name_sub_string}%'))  # type: ignore
 
     statement = statement.offset(skip).limit(limit)
     seasons = list(session.exec(statement).all())
