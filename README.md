@@ -19,6 +19,7 @@ Good luck.
   - [ ] Filter + query popup
   - [ ] Filter by type
   - [X] Delete entry (delete file on disk)
+  - [ ] Deletes children
   - [X] Paging
   - [X] Display SRT files
   - [ ] subtitle rename....?
@@ -37,9 +38,11 @@ Good luck.
   - [X] Delete season
   - [X] Paging
   - [X] Edit entry from within season
-- [ ] Control
-  - [ ] Button to open up videos
+- [X] Control
+  - [X] Button to open up videos
+  - [X] Button to open up Youtube
 - [ ] Update colors
+  - [ ] Media control colors
 - [X] Alerts should be snackbar
 - [X] Style snackbar
 - [X] Fix paging on seasons
@@ -47,6 +50,7 @@ Good luck.
 - [X] Add new properties to edit media entry
 - [X] Hook up send to media server
 - [X] Gb rounding in QBT
+- [ ] Remove files from media system
 - [ ] Authentication
 - [ ] Backfill method
 - [ ] Update server

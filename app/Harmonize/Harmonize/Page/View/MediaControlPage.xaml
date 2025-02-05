@@ -12,6 +12,26 @@
     x:Class="Harmonize.Page.View.MediaControlPage"
     Title="Media Control page"
     >
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="9*,4*">
+            <Label FontSize="20"  Text="Media Control" HorizontalOptions="Start" Grid.Column="0" VerticalTextAlignment="Center"/>
+
+            <Button
+                Margin="0"
+                Scale="0.8"
+                Grid.Row="2"
+                Grid.Column="2"
+                BackgroundColor="{StaticResource Yellow100Accent}"
+                TextColor="white"
+                ImageSource="icons8_restart_50.png"
+                x:Name="powerReboot"
+                Command="{Binding RebootCommand }"
+                CommandParameter="{x:Reference powerReboot}"
+                Clicked="ScaleButton"
+            />
+        </Grid>
+    </Shell.TitleView>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -107,10 +127,10 @@
             Grid.Column="0"
             BackgroundColor="{StaticResource Yellow100Accent}"
             TextColor="white"
-            ImageSource="icons8_power_off_button_50.png"
-            x:Name="powerOff"
-            Command="{Binding PowerOffCommand }"
-            CommandParameter="{x:Reference powerOff}"
+            ImageSource="icons8_youtube_50.png"
+            x:Name="openYoutube"
+            Command="{Binding OpenYoutubeCommand }"
+            CommandParameter="{x:Reference openYoutube}"
             Clicked="ScaleButton"
         />
 
@@ -133,10 +153,10 @@
             Grid.Column="2"
             BackgroundColor="{StaticResource Yellow100Accent}"
             TextColor="white"
-            ImageSource="icons8_restart_50.png"
-            x:Name="powerReboot"
-            Command="{Binding RebootCommand }"
-            CommandParameter="{x:Reference powerReboot}"
+            ImageSource="icons8_video_50.png"
+            x:Name="videos"
+            Command="{Binding OpenVideosCommand }"
+            CommandParameter="{x:Reference videos}"
             Clicked="ScaleButton"
         />
 
