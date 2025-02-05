@@ -28,6 +28,7 @@ from harmonize.defs.qbt import QbtDownloadData
 from harmonize.file.drive import (
     copy_file_to_mounted_folders,
     get_drive_with_least_space,
+    remove_file,
 )
 from harmonize.job.callback import start_job
 
@@ -502,9 +503,9 @@ def _qbt_background_job(download: QbtDownloadData, job: Job, session: Session):
     else:
         should_delete_download = _save_file(source_path, download, session, logger)
 
-    # if should_delete_download:
-    #     delete_download_sync(download.hash)
-    #     remove_file(source_path)
+    if should_delete_download:
+        delete_download_sync(download.hash)
+        remove_file(source_path)
 
 
 async def qbt_background_service():
@@ -512,7 +513,6 @@ async def qbt_background_service():
         try:
             session: Session = get_session_non_gen()
             downloads = await list_downloads()
-            return
             for download in downloads:
                 job_key = f'QBT-{download.name}'
 

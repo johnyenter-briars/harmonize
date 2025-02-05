@@ -12,5 +12,5 @@
         "/mnt/db3",
         "/mnt/db4"
     ],
-    "enable-auth": true
+    "enable-auth": false
 }
