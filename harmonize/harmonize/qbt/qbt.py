@@ -27,6 +27,7 @@ from harmonize.defs.qbt import QbtDownloadData
 from harmonize.file.drive import (
     copy_file_to_mounted_folders,
     get_drive_with_least_space,
+    remove_file,
 )
 from harmonize.job.callback import start_job
 
@@ -318,6 +319,7 @@ def _process_files(
         season_id = uuid.uuid4()
         season = Season(name=download.name, id=season_id)
         session.add(season)
+        session.commit()
 
         logger.info('Created season: %s', season_id)
 
@@ -343,6 +345,9 @@ def _process_files(
                 srt_matching[key].append(potential_subtitle_file)
 
     for name in srt_matching:
+        tag_data = session.merge(tag_data)
+        session.refresh(tag_data)
+
         files = srt_matching.get(name)
         if files is None:
             continue
@@ -355,6 +360,7 @@ def _process_files(
                 return (False, f'Unable to move file: {file.absolute()}')
 
             session.add(_create_media_entry(file, moved_path, download, tag_data, season_id))
+            session.commit()
         else:
             video_files = [file for file in files if file.suffix in VIDEO_EXTENSIONS]
 
@@ -374,6 +380,7 @@ def _process_files(
             )
 
             session.add(video_media_entry)
+            session.commit()
 
             logger.info(
                 'Added entry: %s, %s, %s',
@@ -398,6 +405,7 @@ def _process_files(
                 )
 
                 session.add(srt_media_entry)
+                session.commit()
 
                 logger.info(
                     'Added entry: %s, %s, %s',
@@ -405,6 +413,9 @@ def _process_files(
                     srt_media_entry.id,
                     srt_media_entry.type,
                 )
+
+    session.delete(tag_data)
+    session.commit()
 
     return (True, None)
 
@@ -447,8 +458,6 @@ def _save_directory_files(
     logger.info('Error message %s', error_message)
 
     if success:
-        session.delete(tag_data)
-        session.commit()
         logger.info('Processed all files in directory: %s', source_path)
         return True
 
@@ -463,9 +472,9 @@ def _qbt_background_job(download: QbtDownloadData, job: Job, session: Session):
     else:
         should_delete_download = _save_file(source_path, download, session, logger)
 
-    # if should_delete_download:
-    #     remove_file(source_path)
-    #     await delete_download(download.hash)
+    if should_delete_download:
+        remove_file(source_path)
+        _ = delete_download(download.hash)
 
 
 async def qbt_background_service():
