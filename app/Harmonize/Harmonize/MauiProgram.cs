@@ -1,8 +1,6 @@
 ﻿using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Core.Views;
 using Harmonize.Client;
 using Harmonize.Log;
-using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
 using Harmonize.ViewModel;

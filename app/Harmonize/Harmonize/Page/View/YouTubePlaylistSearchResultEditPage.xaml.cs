@@ -1,7 +1,5 @@
 using Harmonize.ViewModel;
-using AlohaKit.Animations;
 using Harmonize.Service;
-using Harmonize.Client.Model.Youtube;
 
 namespace Harmonize.Page.View;
 

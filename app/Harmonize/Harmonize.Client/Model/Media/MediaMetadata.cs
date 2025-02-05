@@ -1,4 +1,5 @@
 ﻿namespace Harmonize.Client.Model.Media;
+
 public class MediaMetadata
 {
     public required string Title { get; set; }

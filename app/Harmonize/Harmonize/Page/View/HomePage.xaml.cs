@@ -3,6 +3,7 @@ using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
 
 namespace Harmonize.Page.View;
+
 public partial class HomePage : BasePage<HomePageViewModel>
 {
     private readonly HomePageViewModel viewModel;

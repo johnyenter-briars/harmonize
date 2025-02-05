@@ -1,9 +1,7 @@
 ﻿using Harmonize.Client;
 using Harmonize.Service;
-using Harmonize.Model;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using System.Linq;
 using Harmonize.Client.Model.Youtube;
 using Harmonize.Page.View;
 

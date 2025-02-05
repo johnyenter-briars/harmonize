@@ -3,9 +3,9 @@ using Harmonize.Kodi;
 using Harmonize.Service;
 using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Controls;
 
 namespace Harmonize.Page.View;
+
 public partial class MediaControlPage : BasePage<MediaControlViewModel>
 {
     private readonly MediaControlViewModel viewModel;

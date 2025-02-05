@@ -1,7 +1,6 @@
 ﻿using Harmonize.Client;
 using Harmonize.Client.Model.Media;
 using Harmonize.Client.Model.Season;
-using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
 using Microsoft.Extensions.Logging;
@@ -9,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
+
 public class AddToSeasonViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,

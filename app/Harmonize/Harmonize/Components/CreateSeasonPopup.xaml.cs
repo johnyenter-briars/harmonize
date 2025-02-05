@@ -2,7 +2,6 @@ using CommunityToolkit.Maui.Views;
 using Harmonize.Client;
 using Harmonize.Client.Model.Season;
 using Harmonize.Service;
-using Harmonize.ViewModel;
 
 namespace Harmonize.Components;
 

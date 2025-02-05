@@ -1,5 +1,4 @@
-﻿using Harmonize.Client.Model.Media;
-using Harmonize.Page.View;
+﻿using Harmonize.Page.View;
 using Harmonize.Service;
 
 namespace Harmonize

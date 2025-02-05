@@ -1,6 +1,5 @@
 ﻿using Harmonize.Client;
 using Harmonize.Client.Model.Youtube;
-using Harmonize.Page.View;
 using Harmonize.Service;
 using System.Windows.Input;
 
