@@ -48,6 +48,16 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"media/audio", HttpMethod.Get);
     }
+    public async Task<MediaEntriesResponse> GetSubsPaging(int limit, int skip = 0)
+    {
+        return await HarmonizeRequest<MediaEntriesResponse>($"media/sub?limit={limit}&skip={skip}", HttpMethod.Get);
+    }
+    public async Task<MediaEntriesResponse> GetSubsForVideo(IMediaEntry mediaEntry)
+    {
+        if (mediaEntry.Type != MediaEntryType.Video) throw new ArgumentException("Media entry needs to be a Video.", nameof(mediaEntry));
+
+        return await HarmonizeRequest<MediaEntriesResponse>($"media/video/{mediaEntry.Id}/sub", HttpMethod.Get);
+    }
     public async Task<MediaEntriesResponse> GetVideosPaging(int limit, int skip = 0)
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"media/video?limit={limit}&skip={skip}", HttpMethod.Get);

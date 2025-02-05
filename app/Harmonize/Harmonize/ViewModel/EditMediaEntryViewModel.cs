@@ -1,6 +1,8 @@
 ﻿using Harmonize.Client;
 using Harmonize.Client.Model.Media;
 using Harmonize.Client.Model.Transfer;
+using Harmonize.Extensions;
+using Harmonize.Page.View;
 using Harmonize.Service;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
@@ -65,6 +67,12 @@ public class EditMediaEntryViewModel(
             }
         }
     }
+    private bool listViewVisible = true;
+    public bool ListViewVisible
+    {
+        get => listViewVisible;
+        set => SetProperty(ref listViewVisible, value);
+    }
     private Guid mediaEntryId;
     public Guid MediaEntryId
     {
@@ -77,10 +85,50 @@ public class EditMediaEntryViewModel(
         get => mediaEntry;
         set => SetProperty(ref mediaEntry, value);
     }
+    private ObservableCollection<MediaEntry> subtitles = [];
+    public ObservableCollection<MediaEntry> Subtitles
+    {
+        get { return subtitles; }
+        set { SetProperty(ref subtitles, value); }
+    }
     async Task Refresh()
     {
+        if (MediaEntry.Type == MediaEntryType.Subtitle)
+        {
+            ListViewVisible = false;
+            return;
+        }
+
+        ListViewVisible = true;
+
+        var (response, success) = await FetchData(async () =>
+        {
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetSubsForVideo(MediaEntry), null);
+        });
+
+        Subtitles.Clear();
+        foreach (var m in response?.Value ?? [])
+        {
+            Subtitles.Add(m);
+        }
     }
     public override async Task OnAppearingAsync()
     {
+        Task.Run(async () =>
+        {
+            await Refresh();
+        }).FireAndForget(ex => logger.LogError($"Error: {ex}"));
+
+        await Task.CompletedTask;
+    }
+
+    internal async Task ItemTapped(MediaEntry mediaEntry)
+    {
+        //TODO: bug in navigating to the same type of page from the same type of page. Keeps the old binding. Idc rn
+        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), new Dictionary<string, object>
+        {
+            { nameof(EditMediaEntryViewModel.MediaEntryId), mediaEntry.Id },
+            { nameof(EditMediaEntryViewModel.MediaEntry), mediaEntry }
+        });
     }
 }

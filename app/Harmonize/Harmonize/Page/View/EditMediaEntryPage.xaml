@@ -9,6 +9,8 @@
     x:TypeArguments="viewModels:EditMediaEntryViewModel"
     x:DataType="viewModels:EditMediaEntryViewModel"
     x:Class="Harmonize.Page.View.EditMediaEntryPage"
+    xmlns:harmonizeModel="clr-namespace:Harmonize.Client.Model.Media;assembly=Harmonize.Client"
+    xmlns:components="clr-namespace:Harmonize.Components"
     Title="Edit Media Entry Page">
 
     <ScrollView 
@@ -53,6 +55,66 @@
 
             <Label Text="Season Id" FontSize="Medium" />
             <Entry Text="{Binding MediaEntry.SeasonId, Mode=OneWay}" IsReadOnly="True" />
+
+            <Label Text="Subtitle Files" FontSize="Medium" />
+            <ListView 
+                IsVisible="{Binding ListViewVisible}"
+                HeightRequest="120"
+                Grid.Row="1" 
+                ItemsSource="{Binding Subtitles}"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                ItemTapped="OnItemTapped"
+                RowHeight="60"
+                SeparatorVisibility="None"
+                ItemSelected="OnItemSelected"
+                >
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="harmonizeModel:MediaEntry">
+                        <ViewCell>
+                            <components:ListElement>
+                                <Grid
+                                    Scale="0.8"
+                                    RowDefinitions="Auto"
+                                    ColumnDefinitions="*, Auto"
+                                    VerticalOptions="Center"
+                                    Padding="5">
+
+                                    <Label 
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        FontSize="14" 
+                                        Text="{Binding Name}" 
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="Start" />
+
+                                    <ImageButton 
+                                        Scale="0.7"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Margin="30, 0, 30, 0"
+                                        Source="icons8_send_file_50.png"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        Clicked="ScaleButton"
+                                    >
+                                        <ImageButton.Behaviors>
+                                            <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                                        </ImageButton.Behaviors>
+                                        <ImageButton.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendEntry }"
+                                                CommandParameter="{Binding .}"
+                                                />
+                                        </ImageButton.GestureRecognizers>
+                                    </ImageButton>
+
+                                </Grid>
+                            </components:ListElement>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
             <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
                 <ImageButton 

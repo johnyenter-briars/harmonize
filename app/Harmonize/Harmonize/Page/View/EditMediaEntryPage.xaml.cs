@@ -1,3 +1,4 @@
+using Harmonize.Client.Model.Media;
 using Harmonize.Service;
 using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
@@ -24,5 +25,12 @@ public partial class EditMediaEntryPage : BasePage<EditMediaEntryViewModel>
     protected override async void OnAppearing()
     {
         await viewModel.OnAppearingAsync();
+    }
+    private async void OnItemTapped(object sender, ItemTappedEventArgs e)
+    {
+        if (e.Item is MediaEntry mediaEntry)
+        {
+            await viewModel.ItemTapped(mediaEntry);
+        }
     }
 }
