@@ -3,7 +3,7 @@ import uuid
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session, select
+from sqlmodel import Session
 
 import harmonize.config
 import harmonize.config.harmonizeconfig
@@ -25,20 +25,22 @@ router = APIRouter(prefix='/api/transfer')
 
 @router.post('/mediasystem/{media_entry_id}', status_code=201)
 async def transfer_file_mediasystem(
-    media_entry_id: str,
+    media_entry_id: uuid.UUID,
     session: Session = Depends(get_session),
 ) -> BaseResponse[Job]:
-    statement = select(MediaEntry).where(MediaEntry.id == uuid.UUID(media_entry_id))
+    media_entry = session.get(MediaEntry, media_entry_id)
 
-    media_entries = session.exec(statement).all()
-
-    if len(media_entries) == 0:
+    if media_entry is None:
         raise HTTPException(status_code=404, detail="Can't find media entry to transfer")
 
-    args: tuple[MediaEntry] = (media_entries[0],)
+    args: tuple[MediaEntry] = (media_entry,)
 
     job = await start_job(
-        f'Transfer of file: {media_entries[0].name}', _transfer_file_job, session, args
+        f'TSF-{media_entry.name}',
+        f'Transfer of file: {media_entry.name}',
+        _transfer_file_job,
+        session,
+        args,
     )
 
     return BaseResponse[Job](message='File transfer started', status_code=201, value=job)
@@ -64,6 +66,11 @@ def _transfer_file_job(
         TransferDestination.MEDIA_SYSTEM,
     )
 
+    media_entry.transferred = True
+
+    session.commit()
+    session.refresh(media_entry)
+
 
 @router.get('/mediasystem', status_code=200)
 async def current_transfers(
@@ -72,4 +79,53 @@ async def current_transfers(
     transfers = get_all_running_transfers()
     return BaseResponse[list[TransferProgress]](
         message='Transfer progresses found', status_code=200, value=transfers
+    )
+
+
+@router.post('/mediasystem/{media_entry_id}/untransfer', status_code=201)
+async def untransfer_file_mediasystem(
+    media_entry_id: uuid.UUID,
+    session: Session = Depends(get_session),
+) -> BaseResponse[Job]:
+    media_entry = session.get(MediaEntry, media_entry_id)
+
+    if media_entry is None:
+        raise HTTPException(status_code=404, detail="Can't find media entry to untransfer")
+
+    args: tuple[MediaEntry] = (media_entry,)
+
+    job = await start_job(
+        f'UTSF-{media_entry.name}',
+        f'Untransfer of file: {media_entry.name}',
+        _untransfer_file_job,
+        session,
+        args,
+    )
+
+    media_entry.transferred = False
+
+    session.commit()
+    session.refresh(media_entry)
+
+    return BaseResponse[Job](message='File transfer started', status_code=201, value=job)
+
+
+def _untransfer_file_job(
+    media_entry: MediaEntry,
+    job: Job,
+    session: Session,
+):
+    current_full_path = Path(media_entry.absolute_path)
+
+    remote_path = f'{secrets.media_system_root}/{current_full_path.name}'
+
+    transfer_file(
+        secrets.media_system_ip,
+        secrets.media_system_username,
+        secrets.media_system_password,
+        media_entry.absolute_path,
+        remote_path,
+        media_entry,
+        session,
+        TransferDestination.MEDIA_SYSTEM,
     )

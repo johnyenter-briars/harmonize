@@ -30,9 +30,10 @@ def _job_callback(job_function: Callable, args: Any, job: Job, session: Session)
 
 
 async def start_job(
-    description: str, job_function: Callable, session: Session, input_args: tuple[Any]
+    job_key: str, description: str, job_function: Callable, session: Session, input_args: tuple[Any]
 ) -> Job:
     job = Job(
+        key=job_key,
         description=description,
         status=JobStatus.RUNNING,
         started_on=datetime.datetime.now(datetime.UTC),

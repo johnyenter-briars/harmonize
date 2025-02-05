@@ -3,6 +3,7 @@ import datetime
 import logging
 import uuid
 from codecs import encode
+from operator import iand
 from pathlib import Path
 
 import aiohttp
@@ -14,6 +15,8 @@ from harmonize.config.harmonizeconfig import HARMONIZE_CONFIG
 from harmonize.const import SUBTITLE_EXTENSIONS, SUPPORTED_EXTENSIONS, VIDEO_EXTENSIONS
 from harmonize.db.database import get_session_non_gen
 from harmonize.db.models import (
+    Job,
+    JobStatus,
     MediaElementSource,
     MediaEntry,
     MediaEntryType,
@@ -25,6 +28,7 @@ from harmonize.file.drive import (
     copy_file_to_mounted_folders,
     get_drive_with_least_space,
 )
+from harmonize.job.callback import start_job
 
 logger = logging.getLogger('harmonize')
 
@@ -167,6 +171,16 @@ def _media_entry_exists(
     statement = select(MediaEntry).where(MediaEntry.magnet_link == data.magnet_uri)
     media_entries = list(session.exec(statement).all())
     return len(media_entries) > 0
+
+
+def _job_exists(
+    job_key: str,
+    session: Session,
+) -> bool:
+    jobs = list(
+        session.exec(select(Job).where(iand(Job.key == job_key, Job.status == JobStatus.RUNNING)))
+    )
+    return len(jobs) > 0
 
 
 def _create_media_entry(
@@ -442,24 +456,42 @@ def _save_directory_files(
     return False
 
 
+def _qbt_background_job(download: QbtDownloadData, job: Job, session: Session):
+    source_path = Path(download.content_path)
+    if source_path.is_dir():
+        should_delete_download = _save_directory_files(source_path, download, session, logger)
+    else:
+        should_delete_download = _save_file(source_path, download, session, logger)
+
+    # if should_delete_download:
+    #     remove_file(source_path)
+    #     await delete_download(download.hash)
+
+
 async def qbt_background_service():
     while True:
         try:
             session: Session = get_session_non_gen()
             downloads = await list_downloads()
             for download in downloads:
-                if _download_finished(download) and not _media_entry_exists(download, session):
-                    source_path = Path(download.content_path)
-                    if source_path.is_dir():
-                        should_delete_download = _save_directory_files(
-                            source_path, download, session, logger
-                        )
-                    else:
-                        should_delete_download = _save_file(source_path, download, session, logger)
+                job_key = f'QBT-{download.name}'
 
-                    # if should_delete_download:
-                    #     remove_file(source_path)
-                    #     await delete_download(download.hash)
+                if (
+                    _download_finished(download)
+                    and not _media_entry_exists(download, session)
+                    and not _job_exists(job_key, session)
+                ):
+                    args: tuple[QbtDownloadData] = (download,)
+
+                    job = await start_job(
+                        job_key,
+                        f'QBT download of: {download.name}',
+                        _qbt_background_job,
+                        session,
+                        args,
+                    )
+
+                    logger.info('Started job: %s, %s', job_key, job.id)
 
             logger.info('%s is running...', 'qbt_background_service')
             await asyncio.sleep(30)
