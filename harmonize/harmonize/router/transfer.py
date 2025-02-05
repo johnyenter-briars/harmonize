@@ -13,7 +13,11 @@ from harmonize.db.models import Job, MediaEntry
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.transferprogress import TransferDestination, TransferProgress
 from harmonize.job.callback import start_job
-from harmonize.transfer.mediasystem import get_all_running_transfers, transfer_file
+from harmonize.transfer.mediasystem import (
+    get_all_running_transfers,
+    remove_remote_file,
+    transfer_file,
+)
 
 config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
 secrets = harmonize.config.harmonizesecrets.HARMONIZE_SECRETS
@@ -102,30 +106,26 @@ async def untransfer_file_mediasystem(
         args,
     )
 
-    media_entry.transferred = False
-
-    session.commit()
-    session.refresh(media_entry)
-
     return BaseResponse[Job](message='File transfer started', status_code=201, value=job)
 
 
 def _untransfer_file_job(
     media_entry: MediaEntry,
-    job: Job,
+    _: Job,
     session: Session,
 ):
     current_full_path = Path(media_entry.absolute_path)
 
     remote_path = f'{secrets.media_system_root}/{current_full_path.name}'
 
-    transfer_file(
+    remove_remote_file(
         secrets.media_system_ip,
         secrets.media_system_username,
         secrets.media_system_password,
-        media_entry.absolute_path,
         remote_path,
-        media_entry,
-        session,
-        TransferDestination.MEDIA_SYSTEM,
     )
+
+    media_entry.transferred = False
+
+    session.commit()
+    session.refresh(media_entry)

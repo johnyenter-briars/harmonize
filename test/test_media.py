@@ -22,6 +22,15 @@ def test_list_music(setup):
     assert response.status_code == 200, f'Expected status code 200, but got {response.status_code}'
 
 
+def test_list_video(setup):
+    url = f'{setup["base_url"]}/media/video'
+
+    headers = setup['headers']
+
+    response = requests.get(url, headers=headers)
+    assert response.status_code == 200, f'Expected status code 200, but got {response.status_code}'
+
+
 def test_delete_entry(setup):
     url = f'{setup["base_url"]}/media/video'
 

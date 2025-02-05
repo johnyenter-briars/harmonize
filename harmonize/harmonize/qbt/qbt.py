@@ -8,12 +8,13 @@ from pathlib import Path
 
 import aiohttp
 import pydantic
+import requests
 from sqlalchemy.orm import Session
 from sqlmodel import Session, select
 
 from harmonize.config.harmonizeconfig import HARMONIZE_CONFIG
 from harmonize.const import SUBTITLE_EXTENSIONS, SUPPORTED_EXTENSIONS, VIDEO_EXTENSIONS
-from harmonize.db.database import get_session_non_gen
+from harmonize.db.database import get_new_session, get_session_non_gen
 from harmonize.db.models import (
     Job,
     JobStatus,
@@ -27,7 +28,6 @@ from harmonize.defs.qbt import QbtDownloadData
 from harmonize.file.drive import (
     copy_file_to_mounted_folders,
     get_drive_with_least_space,
-    remove_file,
 )
 from harmonize.job.callback import start_job
 
@@ -159,6 +159,36 @@ async def delete_download(torrent_hash: str) -> str:
     ):
         response_text = await resp.text()
         return response_text
+
+
+def delete_download_sync(torrent_hash: str) -> str:
+    qbt_domain_name = HARMONIZE_CONFIG.qbt_domain_name
+    qbt_port = HARMONIZE_CONFIG.qbt_port
+    qbt_api_version = HARMONIZE_CONFIG.qbt_version
+    url = f'http://{qbt_domain_name}:{qbt_port}/api/{qbt_api_version}/torrents/delete'
+    boundary = 'wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T'
+    headers = {'Content-type': f'multipart/form-data; boundary={boundary}'}
+    dataList = []
+
+    dataList.append('--' + boundary)
+    dataList.append('Content-Disposition: form-data; name=hashes;')
+    dataList.append('Content-Type: {}'.format('text/plain'))
+    dataList.append('')
+    dataList.append(torrent_hash)
+
+    dataList.append('--' + boundary)
+    dataList.append('Content-Disposition: form-data; name=deleteFiles;')
+    dataList.append('Content-Type: {}'.format('text/plain'))
+    dataList.append('')
+    dataList.append('false')
+
+    dataList.append('--' + boundary + '--')
+    dataList.append('')
+
+    body = '\r\n'.join(dataList)
+
+    response = requests.post(url, data=body, headers=headers)
+    return response.text
 
 
 def _download_finished(data: QbtDownloadData) -> bool:
@@ -472,9 +502,9 @@ def _qbt_background_job(download: QbtDownloadData, job: Job, session: Session):
     else:
         should_delete_download = _save_file(source_path, download, session, logger)
 
-    if should_delete_download:
-        remove_file(source_path)
-        _ = delete_download(download.hash)
+    # if should_delete_download:
+    #     delete_download_sync(download.hash)
+    #     remove_file(source_path)
 
 
 async def qbt_background_service():
@@ -482,6 +512,7 @@ async def qbt_background_service():
         try:
             session: Session = get_session_non_gen()
             downloads = await list_downloads()
+            return
             for download in downloads:
                 job_key = f'QBT-{download.name}'
 
@@ -490,20 +521,20 @@ async def qbt_background_service():
                     and not _media_entry_exists(download, session)
                     and not _job_exists(job_key, session)
                 ):
+                    process_scoped_session = get_new_session()
+
                     args: tuple[QbtDownloadData] = (download,)
 
                     job = await start_job(
                         job_key,
                         f'QBT download of: {download.name}',
                         _qbt_background_job,
-                        session,
+                        process_scoped_session,
                         args,
                     )
 
                     logger.info('Started job: %s, %s', job_key, job.id)
-
-            logger.info('%s is running...', 'qbt_background_service')
-            await asyncio.sleep(30)
+            await asyncio.sleep(5)
         except Exception as e:
             logger.exception('Error in background service: %s', str(e))
         finally:

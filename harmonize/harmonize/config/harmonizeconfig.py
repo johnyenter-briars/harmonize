@@ -17,6 +17,7 @@ class HarmonizeConfig:
     reset_db_on_launch: bool = field()
     run_transfer: bool = field()
     drives: list[str] = field()
+    enable_auth: bool = field()
 
     def __init__(self, config_file: Path):
         with config_file.open('r') as f:

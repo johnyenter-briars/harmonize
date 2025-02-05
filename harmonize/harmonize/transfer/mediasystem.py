@@ -80,6 +80,31 @@ def transfer_file(
     ssh_client.close()
 
 
+def remove_remote_file(
+    ip: str,
+    username: str,
+    password: str,
+    remote_path: str,
+) -> None:
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    ssh_client.connect(hostname=ip, username=username, password=password)
+
+    sftp = ssh_client.open_sftp()
+
+    try:
+        sftp.remove(remote_path)
+        logger.info('File removed successfully from %s', remote_path)
+    except FileNotFoundError:
+        logger.warning('File not found at %s, skipping removal.', remote_path)
+    except Exception as e:
+        logger.exception('Error removing file from remote server: %s', e)
+
+    sftp.close()
+    ssh_client.close()
+
+
 def get_running_transfer(media_entry: MediaEntry) -> TransferProgress | None:
     if media_entry.id not in _progress_dict:
         return None
