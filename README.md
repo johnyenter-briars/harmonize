@@ -17,9 +17,10 @@ Good luck.
   - [X] Nice search
   - [ ] Season search
   - [ ] Filter + query popup
+  - [ ] Filter by type
   - [X] Delete entry (delete file on disk)
   - [X] Paging
-  - [ ] Display SRT files
+  - [X] Display SRT files
 - [X] Health page
   - [X] Add page
   - [X] VPN check
@@ -28,7 +29,7 @@ Good luck.
   - [X] Individual eps in a folder considered a season
   - [X] Add ability to tag
 - [X] Seasons backend
-- [ ] Seasons frontend
+- [X] Seasons frontend
   - [X] Edit Season Name
   - [X] Add season
   - [X] Display entries in season
@@ -37,11 +38,10 @@ Good luck.
   - [X] Edit entry from within season
 - [ ] Update colors
 - [X] Alerts should be snackbar
-- [ ] Style snackbar
+- [X] Style snackbar
 - [X] Fix paging on seasons
-- [ ] Fix paging on media entry
-- [ ] Add new properties to edit media entry
-- [ ] Filter by type
+- [X] Fix paging on media entry
+- [X] Add new properties to edit media entry
 - [X] Hook up send to media server
 - [X] Gb rounding in QBT
 - [ ] Authentication
