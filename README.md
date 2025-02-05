@@ -21,6 +21,7 @@ Good luck.
   - [X] Delete entry (delete file on disk)
   - [X] Paging
   - [X] Display SRT files
+  - [ ] subtitle rename....?
 - [X] Health page
   - [X] Add page
   - [X] VPN check
@@ -36,6 +37,8 @@ Good luck.
   - [X] Delete season
   - [X] Paging
   - [X] Edit entry from within season
+- [ ] Control
+  - [ ] Button to open up videos
 - [ ] Update colors
 - [X] Alerts should be snackbar
 - [X] Style snackbar
@@ -50,6 +53,7 @@ Good luck.
 - [ ] Setup daemon
 - [ ] Setup SSL Cert + Https
 - [ ] IOS
+- [ ] Fix media system youtube
 
 ## Todos For Full Functionality
 

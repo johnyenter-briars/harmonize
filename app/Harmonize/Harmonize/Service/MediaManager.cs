@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Maui.Views;
 using Harmonize.Client;
 using Harmonize.Client.Model.Media;
-using Harmonize.Client.Model.Response;
+using Harmonize.Client.Model.Playlist;
 using Harmonize.Model;
 using Microsoft.Extensions.Logging;
 

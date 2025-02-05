@@ -1,6 +1,7 @@
 ﻿using Harmonize.Client.Model.Health;
 using Harmonize.Client.Model.Job;
 using Harmonize.Client.Model.Media;
+using Harmonize.Client.Model.Playlist;
 using Harmonize.Client.Model.QBT;
 using Harmonize.Client.Model.Response;
 using Harmonize.Client.Model.Season;
