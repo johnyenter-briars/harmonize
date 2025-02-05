@@ -1,5 +1,6 @@
 import logging
 import uuid
+from operator import iand
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -60,7 +61,9 @@ async def get_sub(
         )
 
     statement = select(MediaEntry).where(
-        MediaEntry.type == MediaEntryType.SUBTITLE and MediaEntry.parent_media_entry_id == entry.id
+        iand(
+            MediaEntry.type == MediaEntryType.SUBTITLE, MediaEntry.parent_media_entry_id == entry.id
+        )
     )
 
     subs = list(session.exec(statement))
