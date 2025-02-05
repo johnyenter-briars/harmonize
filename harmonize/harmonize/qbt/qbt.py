@@ -24,7 +24,6 @@ from harmonize.defs.qbt import QbtDownloadData
 from harmonize.file.drive import (
     copy_file_to_mounted_folders,
     get_drive_with_least_space,
-    remove_file,
 )
 
 logger = logging.getLogger('harmonize')
@@ -178,6 +177,7 @@ def _create_media_entry(
     season_id: uuid.UUID | None,
     entry_id: uuid.UUID | None = None,
     parent_id: uuid.UUID | None = None,
+    name: str | None = None,
 ) -> MediaEntry:
     media_entry = MediaEntry(
         name=file.stem,
@@ -193,6 +193,7 @@ def _create_media_entry(
         date_added=datetime.datetime.now(datetime.UTC),
         cover_art_absolute_path=None,
         thumbnail_art_absolute_path=None,
+        transferred=False,
         season_id=season_id,
         parent_media_entry_id=None,
     )
@@ -202,6 +203,9 @@ def _create_media_entry(
 
     if parent_id is not None:
         media_entry.parent_media_entry_id = parent_id
+
+    if name is not None:
+        media_entry.name = name
 
     return media_entry
 
@@ -236,6 +240,7 @@ def _save_file(
         date_added=datetime.datetime.now(datetime.UTC),
         cover_art_absolute_path=None,
         thumbnail_art_absolute_path=None,
+        transferred=False,
         season_id=None,
         parent_media_entry_id=None,
     )
@@ -369,7 +374,13 @@ def _process_files(
                     return (False, f'Unable to move file: {srt_file.absolute()}')
 
                 srt_media_entry = _create_media_entry(
-                    srt_file, moved_path, download, tag_data, season_id, parent_id=video_file_id
+                    srt_file,
+                    moved_path,
+                    download,
+                    tag_data,
+                    season_id,
+                    parent_id=video_file_id,
+                    name=f'{video_file.stem}-{srt_file.stem}',
                 )
 
                 session.add(srt_media_entry)
@@ -446,9 +457,9 @@ async def qbt_background_service():
                     else:
                         should_delete_download = _save_file(source_path, download, session, logger)
 
-                    if should_delete_download:
-                        remove_file(source_path)
-                        await delete_download(download.hash)
+                    # if should_delete_download:
+                    #     remove_file(source_path)
+                    #     await delete_download(download.hash)
 
             logger.info('%s is running...', 'qbt_background_service')
             await asyncio.sleep(30)

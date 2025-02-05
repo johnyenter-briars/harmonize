@@ -78,6 +78,7 @@ class MediaEntry(BaseSchema, SQLModel, table=True):
     date_added: datetime.datetime
     cover_art_absolute_path: str | None
     thumbnail_art_absolute_path: str | None
+    transferred: bool  # TODO: transferred to where?
 
     playlists: list['Playlist'] = Relationship(
         back_populates='media_entries', link_model=MediaEntryPlaylistLink

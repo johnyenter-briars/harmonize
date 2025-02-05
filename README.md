@@ -19,10 +19,10 @@ Good luck.
   - [ ] Filter + query popup
   - [ ] Filter by type
   - [X] Delete entry (delete file on disk)
-  - [ ] Deletes children
+  - [X] Deletes children
   - [X] Paging
   - [X] Display SRT files
-  - [ ] subtitle rename....?
+  - [X] subtitle rename....?
 - [X] Health page
   - [X] Add page
   - [X] VPN check
@@ -51,6 +51,7 @@ Good luck.
 - [X] Hook up send to media server
 - [X] Gb rounding in QBT
 - [ ] Remove files from media system
+- [ ] Qbt job doesn't lock up requests
 - [ ] Authentication
 - [ ] Backfill method
 - [ ] Update server

@@ -121,9 +121,24 @@ async def delete_media_entry(
     if not media_entry:
         raise HTTPException(status_code=404, detail='Media entry not found')
 
-    remove_file(Path(media_entry.absolute_path))
+    subs = list(
+        session.exec(
+            select(MediaEntry).where(
+                iand(
+                    MediaEntry.type == MediaEntryType.SUBTITLE,
+                    MediaEntry.parent_media_entry_id == media_entry.id,
+                )
+            )
+        )
+    )
 
+    for sub in subs:
+        remove_file(Path(sub.absolute_path))
+        session.delete(sub)
+
+    remove_file(Path(media_entry.absolute_path))
     session.delete(media_entry)
+
     session.commit()
 
     return BaseResponse[None](message='Entry deleted', status_code=200, value=None)
