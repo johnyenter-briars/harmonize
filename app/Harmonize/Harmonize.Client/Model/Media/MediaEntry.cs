@@ -18,6 +18,7 @@ public class MediaEntry : IMediaEntry
     public required string? CoverArtAbsolutePath { get; set; }
     [JsonPropertyName("thumbnailArtAbsolutePath")]
     public required string? ThumbNailArtAbsolutePath { get; set; }
+    public required bool Transferred { get; set; }
     public required Guid? SeasonId { get; set; }
 }
 [JsonConverter(typeof(JsonStringEnumConverter))]

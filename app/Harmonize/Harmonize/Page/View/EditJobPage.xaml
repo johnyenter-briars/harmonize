@@ -32,7 +32,7 @@
             IsReadOnly="True"
             Text="{Binding Job.ErrorMessage, Mode=OneWay}" 
             AutoSize="TextChanges"
-            HeightRequest="75" 
+            HeightRequest="175" 
             />
 
         <Label Text="Status" FontSize="Medium" />

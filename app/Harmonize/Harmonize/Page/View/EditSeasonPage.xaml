@@ -49,7 +49,7 @@
                                     RowDefinitions="Auto"
                                     ColumnDefinitions="*, Auto"
                                     VerticalOptions="Center"
-                                    Padding="5">
+                                    Padding="0">
 
                                 <Label 
                                         Grid.Row="0"

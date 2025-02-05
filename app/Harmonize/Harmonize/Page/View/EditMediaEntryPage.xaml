@@ -48,13 +48,16 @@
             <Label Text="Audio Type" FontSize="Medium" />
             <Entry Text="{Binding MediaEntry.AudioType, Mode=OneWay}" IsReadOnly="True" />
 
+            <Label Text="Season Id" FontSize="Medium" />
+            <Entry Text="{Binding MediaEntry.SeasonId, Mode=OneWay}" IsReadOnly="True" />
+
+            <Label Text="Transferred" FontSize="Medium" />
+            <Entry Text="{Binding MediaEntry.Transferred, Mode=OneWay}" IsReadOnly="True" />
+
             <Label Text="Date Added" FontSize="Medium" />
             <Entry 
                 Text="{Binding MediaEntry.DateAdded, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}"
                 IsReadOnly="True" />
-
-            <Label Text="Season Id" FontSize="Medium" />
-            <Entry Text="{Binding MediaEntry.SeasonId, Mode=OneWay}" IsReadOnly="True" />
 
             <Label Text="Subtitle Files" FontSize="Medium" />
             <ListView 
@@ -78,7 +81,7 @@
                                     RowDefinitions="Auto"
                                     ColumnDefinitions="*, Auto"
                                     VerticalOptions="Center"
-                                    Padding="5">
+                                    Padding="0">
 
                                     <Label 
                                         Grid.Row="0"
@@ -92,7 +95,6 @@
                                         Scale="0.7"
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Margin="30, 0, 30, 0"
                                         Source="icons8_send_file_50.png"
                                         HorizontalOptions="Center"
                                         VerticalOptions="Center"
@@ -118,7 +120,7 @@
 
             <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
                 <ImageButton 
-                    Margin="30, 0, 30, 0"
+                    Margin="20, 0, 20, 0"
                     Source="icons8_trash_26.png"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
@@ -135,7 +137,7 @@
                 </ImageButton>
 
                 <ImageButton 
-                    Margin="30, 0, 30, 0"
+                    Margin="20, 0, 20, 0"
                     Source="icons8_save_50.png"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
@@ -152,7 +154,24 @@
                 </ImageButton>
 
                 <ImageButton 
-                    Margin="30, 0, 30, 0"
+                    Margin="20, 0, 20, 0"
+                    Source="icons8_trash_26.png"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Clicked="ScaleButton"
+                >
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
+                    </ImageButton.Behaviors>
+                    <ImageButton.GestureRecognizers>
+                        <TapGestureRecognizer
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=DeleteEntry }"
+                            />
+                    </ImageButton.GestureRecognizers>
+                </ImageButton>
+
+                <ImageButton 
+                    Margin="20, 0, 20, 0"
                     Source="icons8_send_file_50.png"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
