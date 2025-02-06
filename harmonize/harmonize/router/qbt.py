@@ -35,6 +35,7 @@ async def add_torrent(
     for magnet_link in request.magnet_links:
         tag_info = QbtDownloadTagInfo(
             id=uuid.uuid4(),
+            name=request.name,
             magnet_link=magnet_link,
             type=request.type,
             video_type=request.video_type,

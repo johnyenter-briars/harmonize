@@ -5,6 +5,7 @@ import uuid
 from codecs import encode
 from operator import iand
 from pathlib import Path
+from urllib.parse import parse_qs, unquote, urlparse
 
 import aiohttp
 import pydantic
@@ -28,13 +29,28 @@ from harmonize.defs.qbt import QbtDownloadData
 from harmonize.file.drive import (
     copy_file_to_mounted_folders,
     get_drive_with_least_space,
-    remove_file,
 )
 from harmonize.job.callback import start_job
 
 logger = logging.getLogger('harmonize')
 
 _adapter = pydantic.TypeAdapter(list[QbtDownloadData])
+
+
+def normalize_magnet_link(link: str) -> str:
+    """Normalize magnet links for consistent comparison."""
+    parsed = urlparse(link.lower())  # Ensure case insensitivity
+    params = parse_qs(unquote(parsed.query))  # Decode and parse query params
+    base = parsed.scheme + '?' + parsed.netloc + parsed.path  # Normalize base URL
+    sorted_params = '&'.join(
+        f'{k}={",".join(sorted(v))}' for k, v in sorted(params.items())
+    )  # Sort params
+    return base + '?' + sorted_params
+
+
+def compare_magnet_links(link1: str, link2: str) -> bool:
+    """Compare two magnet links after normalization."""
+    return normalize_magnet_link(link1) == normalize_magnet_link(link2)
 
 
 async def list_downloads() -> list[QbtDownloadData]:
@@ -460,11 +476,12 @@ def _save_directory_files(
         logger.error('Provided path is not a directory: %s', source_path)
         return False
 
-    statement = select(QbtDownloadTagInfo).where(
-        QbtDownloadTagInfo.magnet_link.ilike(download.magnet_uri)  # type: ignore
-    )
+    results = list(session.exec(select(QbtDownloadTagInfo)))
 
-    tag_data = session.exec(statement).first()
+    tag_data = next(
+        (r for r in results if compare_magnet_links(str(r.magnet_link), str(download.magnet_uri))),
+        None,
+    )
 
     if tag_data is None:
         logger.info('No tag data for currently running download: %s', download.name)
@@ -503,9 +520,9 @@ def _qbt_background_job(download: QbtDownloadData, job: Job, session: Session):
     else:
         should_delete_download = _save_file(source_path, download, session, logger)
 
-    if should_delete_download:
-        delete_download_sync(download.hash)
-        remove_file(source_path)
+    # if should_delete_download:
+    #     delete_download_sync(download.hash)
+    #     remove_file(source_path)
 
 
 async def qbt_background_service():
@@ -534,7 +551,7 @@ async def qbt_background_service():
                     )
 
                     logger.info('Started job: %s, %s', job_key, job.id)
-            await asyncio.sleep(5)
+            await asyncio.sleep(30)
         except Exception as e:
             logger.exception('Error in background service: %s', str(e))
         finally:

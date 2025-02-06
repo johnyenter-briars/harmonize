@@ -97,6 +97,7 @@ class MediaEntry(BaseSchema, SQLModel, table=True):
 
 class QbtDownloadTagInfo(BaseSchema, SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    name: str
     magnet_link: str
     type: MediaEntryType
     video_type: VideoType | None

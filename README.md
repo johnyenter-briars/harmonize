@@ -18,6 +18,7 @@ Good luck.
   - [ ] Season search
   - [ ] Filter + query popup
   - [ ] Filter by type
+  - [ ] Order by name desc (with still paging)
   - [X] Delete entry (delete file on disk)
   - [X] Deletes children
   - [X] Paging
