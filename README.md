@@ -39,6 +39,8 @@ Good luck.
   - [X] Delete season
   - [X] Paging
   - [X] Edit entry from within season
+  - [ ] Associate to season
+  - [ ] Disssociate to season
 - [X] Control
   - [X] Button to open up videos
   - [X] Button to open up Youtube
@@ -51,9 +53,9 @@ Good luck.
 - [X] Add new properties to edit media entry
 - [X] Hook up send to media server
 - [X] Gb rounding in QBT
-- [ ] Remove files from media system
+- [X] Remove files from media system
 - [X] Qbt job doesn't lock up requests
-- [ ] Authentication
+- [X] Authentication
 - [ ] Backfill method
 - [ ] Update server
 - [ ] Setup daemon

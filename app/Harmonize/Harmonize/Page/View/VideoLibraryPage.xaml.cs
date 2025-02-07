@@ -120,4 +120,15 @@ public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
     {
         var foo = 10;
     }
+    private async void OnFilterClicked(object sender, EventArgs e)
+    {
+        if(!filterMenu.IsVisible)
+        {
+            await filterMenu.ShowAsync();
+        }
+        else
+        {
+            await filterMenu.HideAsync();
+        }
+    }
 }

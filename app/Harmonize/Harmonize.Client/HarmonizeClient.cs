@@ -7,6 +7,7 @@ using Harmonize.Client.Model.Response;
 using Harmonize.Client.Model.Season;
 using Harmonize.Client.Model.Transfer;
 using Harmonize.Client.Model.Youtube;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -17,6 +18,9 @@ public class HarmonizeClient
 {
     private string? hostName;
     private int? port;
+    private string? username;
+    private string? password;
+
     private static readonly JsonSerializerOptions CamelCaseOptions = new JsonSerializerOptions
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -42,6 +46,15 @@ public class HarmonizeClient
         this.hostName = hostName;
         return this;
     }
+    public HarmonizeClient SetCredentials(string username, string password)
+    {
+        this.username = username;
+        this.password = password;
+        var authValue = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"));
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authValue);
+        return this;
+    }
+
     #endregion
 
     #region Media
@@ -145,6 +158,11 @@ public class HarmonizeClient
     {
         var destination = transferDestination.ToString().ToLower();
         return await HarmonizeRequest<JobResponse>($"transfer/{destination}/{entry.Id}", HttpMethod.Post);
+    }
+    public async Task<JobResponse> Untransfer(TransferDestination transferDestination, IMediaEntry entry)
+    {
+        var destination = transferDestination.ToString().ToLower();
+        return await HarmonizeRequest<JobResponse>($"transfer/{destination}/{entry.Id}/untransfer", HttpMethod.Post);
     }
     #endregion
 

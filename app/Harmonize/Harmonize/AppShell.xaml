@@ -8,7 +8,7 @@
     Shell.FlyoutBehavior="Flyout"
     Shell.BackgroundColor="{StaticResource PrimaryDark}"
     FlyoutBackgroundColor="{StaticResource PrimaryDark}"
-    Shell.FlyoutWidth="250"
+    Shell.FlyoutWidth="210"
     Title="Harmonize">
 
     <FlyoutItem 

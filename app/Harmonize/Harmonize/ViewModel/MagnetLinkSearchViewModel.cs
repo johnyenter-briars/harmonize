@@ -113,6 +113,7 @@ public class MagnetLinkSearchViewModel(
             "Movie" => new AddQbtDownloadsRequest
                 {
                     MagnetLinks = [magnetlinkSearchResult.MagnetLink],
+                    Name = magnetlinkSearchResult.Name,
                     Type = MediaEntryType.Video,
                     VideoType = VideoType.Movie,
                     AudioType = null,
@@ -121,6 +122,7 @@ public class MagnetLinkSearchViewModel(
             "Season" => new AddQbtDownloadsRequest
                 {
                     MagnetLinks = [magnetlinkSearchResult.MagnetLink],
+                    Name = magnetlinkSearchResult.Name,
                     Type = MediaEntryType.Video,
                     VideoType = VideoType.Episode,
                     CreateSeason = true,
@@ -129,6 +131,7 @@ public class MagnetLinkSearchViewModel(
             "Episode" => new AddQbtDownloadsRequest
                 {
                     MagnetLinks = [magnetlinkSearchResult.MagnetLink],
+                    Name = magnetlinkSearchResult.Name,
                     Type = MediaEntryType.Video,
                     VideoType = VideoType.Episode,
                     CreateSeason = false,
