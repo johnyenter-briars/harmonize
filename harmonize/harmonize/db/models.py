@@ -1,6 +1,6 @@
 import datetime
 import uuid
-from enum import Enum
+from enum import Enum, IntEnum
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -34,7 +34,7 @@ class MediaEntryType(Enum):
     SUBTITLE = 2
 
 
-class VideoType(Enum):
+class VideoType(IntEnum):
     MOVIE = 0
     EPISODE = 1
 

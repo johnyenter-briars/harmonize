@@ -8,7 +8,7 @@ from sqlalchemy import select
 from sqlmodel import Session, select
 
 from harmonize.db.database import get_session
-from harmonize.db.models import MediaEntry, MediaEntryType
+from harmonize.db.models import MediaEntry, MediaEntryType, VideoType
 from harmonize.defs.media import UpsertMediaEntryRequest
 from harmonize.defs.response import BaseResponse
 from harmonize.file.drive import remove_file
@@ -33,12 +33,16 @@ async def list_video_paging(
     limit: int = Query(10, ge=1),
     skip: int = Query(0, ge=0),
     name_sub_string: str | None = Query(None),
+    type: list[VideoType] = Query(None),
     session: Session = Depends(get_session),
 ) -> BaseResponse[list[MediaEntry]]:
     statement = select(MediaEntry).where(MediaEntry.type == MediaEntryType.VIDEO)
 
     if name_sub_string:
         statement = statement.where(MediaEntry.name.like(f'%{name_sub_string}%'))  # type: ignore
+
+    if type:
+        statement = statement.where(MediaEntry.video_type.in_(type))  # type: ignore
 
     statement = statement.offset(skip).limit(limit)
     media_entries = list(session.exec(statement).all())
