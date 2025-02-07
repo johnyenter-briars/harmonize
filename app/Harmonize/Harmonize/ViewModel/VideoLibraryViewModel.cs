@@ -35,6 +35,45 @@ public class VideoLibraryViewModel(
             await alertService.ShowAlertSnackbarAsync("Job created successfully.");
         }
     });
+    #region Filters
+    private bool filterByMovie;
+    public bool FilterByMovie
+    {
+        get => filterByMovie;
+        set
+        {
+            if (filterByMovie != value)
+            {
+                filterByMovie = value;
+                OnPropertyChanged();
+
+                if (filterByMovie)
+                {
+                    FilterByEpisode = false;
+                }
+            }
+        }
+    }
+    private bool filterByEpisode;
+    public bool FilterByEpisode
+    {
+        get => filterByEpisode;
+        set
+        {
+            if (filterByEpisode != value)
+            {
+                filterByEpisode = value;
+                OnPropertyChanged();
+
+                if (filterByEpisode)
+                {
+                    FilterByMovie = false;
+                }
+            }
+        }
+    }
+
+    #endregion
     private bool outOfRecords = false;
     public bool OutOfRecords
     {
