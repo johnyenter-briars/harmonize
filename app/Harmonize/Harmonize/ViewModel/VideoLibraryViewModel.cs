@@ -36,39 +36,29 @@ public class VideoLibraryViewModel(
         }
     });
     #region Filters
-    private bool filterByMovie;
+    private bool filterByMovie = true;
     public bool FilterByMovie
     {
         get => filterByMovie;
         set
         {
-            if (filterByMovie != value)
+            SetProperty(ref filterByMovie, value);
+            if(!firstLoad)
             {
-                filterByMovie = value;
-                OnPropertyChanged();
-
-                if (filterByMovie)
-                {
-                    FilterByEpisode = false;
-                }
+                FetchingData = true;
             }
         }
     }
-    private bool filterByEpisode;
+    private bool filterByEpisode = true;
     public bool FilterByEpisode
     {
         get => filterByEpisode;
         set
         {
-            if (filterByEpisode != value)
+            SetProperty(ref filterByEpisode, value);
+            if(!firstLoad)
             {
-                filterByEpisode = value;
-                OnPropertyChanged();
-
-                if (filterByEpisode)
-                {
-                    FilterByMovie = false;
-                }
+                FetchingData = true;
             }
         }
     }
@@ -115,18 +105,35 @@ public class VideoLibraryViewModel(
         set { SetProperty(ref mediaEntries, value); }
     }
     const int Limit = 10;
+    bool firstLoad = true;
     int skip = 0;
     async Task LoadMore()
     {
         if (OutOfRecords) return;
 
-        skip += Limit;
+        if (firstLoad)
+        {
+            firstLoad = false;
+        }
+        else
+        {
+            skip += Limit;
+        }
 
-        var (response, success) = SearchQuery is null ?
-            await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(Limit, skip), null)
-            :
-            await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(SearchQuery, Limit, skip), null)
-            ;
+        var types = new List<VideoType>();
+
+        if (FilterByEpisode)
+        {
+            types.Add(VideoType.Episode);
+        }
+
+        if (FilterByMovie)
+        {
+            types.Add(VideoType.Movie);
+        }
+
+        var (response, success) = await failsafeService.Fallback(async () =>
+            await harmonizeClient.GetVideosPaging(Limit, skip, SearchQuery, types), null);
 
         if (response?.Value is not { Count: > 0 })
         {
@@ -162,17 +169,22 @@ public class VideoLibraryViewModel(
         skip = 0;
         OutOfRecords = false;
 
-        var (response, success) = SearchQuery is null ?
-            await FetchData(async () =>
-        {
-            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(Limit, skip), null);
-        })
-            :
-            await FetchData(async () =>
-        {
-            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(SearchQuery, Limit, skip), null);
-        });
+        var types = new List<VideoType>();
 
+        if (FilterByEpisode)
+        {
+            types.Add(VideoType.Episode);
+        }
+
+        if (FilterByMovie)
+        {
+            types.Add(VideoType.Movie);
+        }
+
+        var (response, success) = await FetchData(async () =>
+        {
+            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(Limit, skip, SearchQuery, types), null);
+        });
 
         MediaEntries.Clear();
         foreach (var m in response?.Value ?? [])
@@ -191,11 +203,6 @@ public class VideoLibraryViewModel(
 
     public override async Task OnAppearingAsync()
     {
-        Task.Run(() =>
-        {
-            FetchingData = true;
-        }).FireAndForget(ex => logger.LogError($"Error: {ex}"));
-
         await Task.CompletedTask;
     }
 }

@@ -4,7 +4,7 @@
 
 Good luck.
 
-## Todos For Audio Support Only
+## Todos For Video Support Only
 
 - [X] Delete video method
 - [X] Edit element page
@@ -15,9 +15,8 @@ Good luck.
   - [X] If transfer, status of transfer
 - [ ] Media List
   - [X] Nice search
-  - [ ] Season search
-  - [ ] Filter + query popup
-  - [ ] Filter by type
+  - [X] Filter + query popup
+  - [X] Filter by type
   - [ ] Order by name desc (with still paging)
   - [X] Delete entry (delete file on disk)
   - [X] Deletes children
@@ -44,7 +43,7 @@ Good luck.
 - [X] Control
   - [X] Button to open up videos
   - [X] Button to open up Youtube
-- [ ] Update colors
+- [ ] Update colors globally
   - [ ] Media control colors
 - [X] Alerts should be snackbar
 - [X] Style snackbar
