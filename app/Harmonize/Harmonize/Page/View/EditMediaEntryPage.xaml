@@ -6,12 +6,19 @@
     xmlns:pages="clr-namespace:Harmonize.Page"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+    xmlns:converter="clr-namespace:Harmonize.Converter"
     x:TypeArguments="viewModels:EditMediaEntryViewModel"
     x:DataType="viewModels:EditMediaEntryViewModel"
     x:Class="Harmonize.Page.View.EditMediaEntryPage"
     xmlns:harmonizeModel="clr-namespace:Harmonize.Client.Model.Media;assembly=Harmonize.Client"
     xmlns:components="clr-namespace:Harmonize.Components"
     Title="Edit Media Entry Page">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ScrollView 
         VerticalScrollBarVisibility="Always"
@@ -118,7 +125,10 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
+            <HorizontalStackLayout 
+                HorizontalOptions="CenterAndExpand"
+                Margin="0, 0, 0, 0"
+                >
                 <ImageButton 
                     Margin="20, 0, 20, 0"
                     Source="icons8_trash_26.png"
@@ -155,17 +165,19 @@
 
                 <ImageButton 
                     Margin="20, 0, 20, 0"
-                    Source="icons8_trash_26.png"
+                    Source="icons8_delete_from_cloud_50.png"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     Clicked="ScaleButton"
+                    IsEnabled="{Binding MediaEntry.Transferred}"
+                    Opacity="{Binding MediaEntry.Transferred, Converter={StaticResource BoolToOpacityConverter}}"
                 >
                     <ImageButton.Behaviors>
                         <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
                     </ImageButton.Behaviors>
                     <ImageButton.GestureRecognizers>
                         <TapGestureRecognizer
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=DeleteEntry }"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=UntransferEntry  }"
                             />
                     </ImageButton.GestureRecognizers>
                 </ImageButton>

@@ -79,41 +79,56 @@
                     <DataTemplate x:DataType="harmonizeModel:MediaEntry">
                         <components:ListElement>
                             <Grid
-                                    RowDefinitions="Auto"
-                                    ColumnDefinitions="*, Auto"
-                                    VerticalOptions="Center"
-                                    Padding="5">
+                                RowDefinitions="Auto"
+                                ColumnDefinitions="*, Auto"
+                                VerticalOptions="Center"
+                                Padding="5">
 
                                 <Grid.GestureRecognizers>
                                     <TapGestureRecognizer 
                                         Tapped="TapGestureRecognizer_Tapped"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=ItemTappedCommand}"
-                                        CommandParameter="{Binding .}" 
-                                        />
+                                        CommandParameter="{Binding .}" />
                                 </Grid.GestureRecognizers>
 
                                 <Label 
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        FontSize="14" 
-                                        Text="{Binding Name}" 
-                                        VerticalOptions="Center"
-                                        HorizontalOptions="Start"/>
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    FontSize="14" 
+                                    Text="{Binding Name}" 
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Start"/>
 
                                 <Button 
-                                        Scale="1.5"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Text="⋮"
-                                        FontSize="18"
-                                        BackgroundColor="Transparent"
-                                        VerticalOptions="Center"
-                                        Clicked="OnOpenBottomSheetClicked"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=OpenBottomSheetCommand}"
-                                        CommandParameter="{Binding .}"
-                                        />
+                                    Scale="1.5"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Text="⋮"
+                                    FontSize="18"
+                                    BackgroundColor="Transparent"
+                                    VerticalOptions="Center"
+                                    Clicked="OnOpenBottomSheetClicked"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=OpenBottomSheetCommand}"
+                                    CommandParameter="{Binding .}" />
+
+                                <ImageButton 
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Source="icons8_cloud_download_66.png"
+                                    VerticalOptions="Start"
+                                    HorizontalOptions="End"
+                                    Margin="0, 0, 0, 0"
+                                    WidthRequest="15"
+                                    HeightRequest="15"
+                                    IsVisible="{Binding Transferred}"
+                                    >
+                                    <ImageButton.Behaviors>
+                                        <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
+                                    </ImageButton.Behaviors>
+                                </ImageButton>
 
                             </Grid>
+
                         </components:ListElement>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

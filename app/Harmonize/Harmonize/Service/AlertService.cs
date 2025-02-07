@@ -8,6 +8,7 @@ namespace Harmonize.Service;
 public class AlertService
 {
     readonly Color? BackgroundColor;
+    readonly Color? TextColor;
     readonly SnackbarOptions SnackbarOptions = new();
     public AlertService()
     {
@@ -16,7 +17,13 @@ public class AlertService
             BackgroundColor = color;
         }
 
+        if (Application.Current.Resources.TryGetValue("Gray950Brush", out var colorValue2) && colorValue2 is Color color2)
+        {
+            TextColor = color2;
+        }
+
         SnackbarOptions.BackgroundColor = BackgroundColor ?? SnackbarOptions.BackgroundColor;
+        SnackbarOptions.TextColor = TextColor ?? SnackbarOptions.TextColor;
     }
     public Task ShowAlertAsync(string title, string message, string cancel = "OK")
     {

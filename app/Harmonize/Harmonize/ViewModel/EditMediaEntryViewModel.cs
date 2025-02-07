@@ -33,6 +33,18 @@ public class EditMediaEntryViewModel(
             await Shell.Current.GoToAsync("..");
         }
     });
+    public ICommand UntransferEntry => new Command<MediaEntry>(async (entry) =>
+    {
+        var (response, success) = await FetchData(async () =>
+        {
+            return await failsafeService.Fallback(async () => await harmonizeClient.Untransfer(TransferDestination.MediaSystem, MediaEntry), null);
+        });
+
+        if (response?.Success == true)
+        {
+            await alertService.ShowAlertSnackbarAsync("Removed file successfully.");
+        }
+    });
     public ICommand SaveEntry => new Command<MediaEntry>(async (entry) =>
     {
         var (response, success) = await FetchData(async () =>

@@ -20,6 +20,8 @@ public class PreferenceManager(
         KodiPort = Preferences.Default.Get(nameof(UserSettings.KodiPort), 8080),
         KodiApiUserName = Preferences.Default.Get(nameof(UserSettings.KodiApiUserName), ""),
         KodiApiPasword = Preferences.Default.Get(nameof(UserSettings.KodiApiPasword), ""),
+        HarmonizeUserName = Preferences.Default.Get(nameof(UserSettings.HarmonizeUserName), ""),
+        HarmonizePassword = Preferences.Default.Get(nameof(UserSettings.HarmonizePassword ), ""),
     };
 
     internal PreferenceManager SetUserSetttings(UserSettings userSettings)
@@ -35,16 +37,21 @@ public class PreferenceManager(
         Preferences.Default.Set(nameof(UserSettings.KodiPort), userSettings.KodiPort);
         Preferences.Default.Set(nameof(UserSettings.KodiApiUserName), userSettings.KodiApiUserName);  
         Preferences.Default.Set(nameof(UserSettings.KodiApiPasword), userSettings.KodiApiPasword);  
+        Preferences.Default.Set(nameof(UserSettings.HarmonizeUserName), userSettings.HarmonizeUserName);  
+        Preferences.Default.Set(nameof(UserSettings.HarmonizePassword), userSettings.HarmonizePassword);  
 
         harmonizeClient
             .SetPort(UserSettings.Port)
-            .SetHostName(UserSettings.DomainName);
+            .SetHostName(UserSettings.DomainName)
+            .SetCredentials(UserSettings.HarmonizeUserName, UserSettings.HarmonizePassword)
+            ;
 
         kodiClient
             .SetHostName(userSettings.KodiDomainName)
             .SetPort(userSettings.KodiPort)
             .SetUserName(userSettings.KodiApiUserName)
-            .SetPassword(userSettings.KodiApiPasword);
+            .SetPassword(userSettings.KodiApiPasword)
+            ;
 
         return this;
     }

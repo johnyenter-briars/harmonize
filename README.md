@@ -53,7 +53,7 @@ Good luck.
 - [X] Gb rounding in QBT
 - [ ] Remove files from media system
 - [X] Qbt job doesn't lock up requests
-- [ ] Authentication
+- [X] Authentication
 - [ ] Backfill method
 - [ ] Update server
 - [ ] Setup daemon

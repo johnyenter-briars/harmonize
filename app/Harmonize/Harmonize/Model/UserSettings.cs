@@ -63,5 +63,20 @@ public class UserSettings : NotifyPropertyChangedBase
         set => SetProperty(ref kodiApiPasword, value);
     }
     #endregion
+
+    #region Harmonize Api
+    private string harmonizeUserName = string.Empty;
+    public required string HarmonizeUserName
+    {
+        get => harmonizeUserName;
+        set => SetProperty(ref harmonizeUserName, value);
+    }
+    private string harmonizePassword = string.Empty;
+    public required string HarmonizePassword
+    { 
+        get => harmonizePassword;
+        set => SetProperty(ref harmonizePassword, value);
+    }
+    #endregion
 }
 

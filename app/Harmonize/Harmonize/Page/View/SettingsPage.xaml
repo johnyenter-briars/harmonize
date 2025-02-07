@@ -60,6 +60,19 @@
                            Text="{Binding UserSettings.Port}"
                            Keyboard="Numeric"
                            VerticalOptions="Center" />
+
+                    <Label Text="Username" FontSize="Medium" VerticalOptions="Center" />
+                    <Entry x:Name="Username"
+                           Placeholder="Enter username" 
+                           Text="{Binding UserSettings.HarmonizeUserName}"
+                           VerticalOptions="Center" />
+
+                    <Label Text="Password" FontSize="Medium" VerticalOptions="Center" />
+                    <Entry x:Name="Password"
+                           Placeholder="Enter password" 
+                           IsPassword="True"
+                           Text="{Binding UserSettings.HarmonizePassword}"
+                           VerticalOptions="Center" />
                 </StackLayout>
             </toolkit:Expander.Content>
         </toolkit:Expander>
