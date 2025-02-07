@@ -178,7 +178,7 @@ async def delete_download(torrent_hash: str) -> str:
         return response_text
 
 
-def delete_download_sync(torrent_hash: str) -> str:
+def delete_download_sync(torrent_hash: str, delete_files: bool = False) -> str:
     qbt_domain_name = HARMONIZE_CONFIG.qbt_domain_name
     qbt_port = HARMONIZE_CONFIG.qbt_port
     qbt_api_version = HARMONIZE_CONFIG.qbt_version
@@ -197,7 +197,10 @@ def delete_download_sync(torrent_hash: str) -> str:
     dataList.append('Content-Disposition: form-data; name=deleteFiles;')
     dataList.append('Content-Type: {}'.format('text/plain'))
     dataList.append('')
-    dataList.append('false')
+    if delete_files:
+        dataList.append('true')
+    else:
+        dataList.append('false')
 
     dataList.append('--' + boundary + '--')
     dataList.append('')
@@ -520,9 +523,8 @@ def _qbt_background_job(download: QbtDownloadData, job: Job, session: Session):
     else:
         should_delete_download = _save_file(source_path, download, session, logger)
 
-    # if should_delete_download:
-    #     delete_download_sync(download.hash)
-    #     remove_file(source_path)
+    if should_delete_download:
+        delete_download_sync(download.hash)
 
 
 async def qbt_background_service():

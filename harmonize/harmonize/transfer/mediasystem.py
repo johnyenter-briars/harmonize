@@ -3,7 +3,6 @@ import logging
 import uuid
 
 import paramiko
-from sqlmodel import Session
 
 from harmonize.db.models import MediaEntry
 from harmonize.defs.transferprogress import TransferDestination, TransferProgress
@@ -16,7 +15,6 @@ _progress_dict: dict[tuple[uuid.UUID, TransferDestination], TransferProgress] = 
 def _generate_progress_callback(
     media_entry_id: uuid.UUID,
     name: str,
-    session: Session,
     transfer_destination: TransferDestination,
 ):
     key = (media_entry_id, transfer_destination)
@@ -43,12 +41,10 @@ def transfer_file(
     password: str,
     local_path: str,
     remote_path: str,
-    media_entry: MediaEntry,
-    session: Session,
+    media_entry_name: str,
+    media_entry_id: uuid.UUID,
     transfer_destination: TransferDestination,
 ) -> None:
-    media_entry = session.merge(media_entry)
-
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
@@ -56,7 +52,7 @@ def transfer_file(
 
     sftp = ssh_client.open_sftp()
 
-    key = (media_entry.id, transfer_destination)
+    key = (media_entry_id, transfer_destination)
 
     if key in _progress_dict:
         progress_entry = _progress_dict[key]
@@ -70,7 +66,7 @@ def transfer_file(
         local_path,
         remote_path,
         callback=_generate_progress_callback(
-            media_entry.id, media_entry.name, session, transfer_destination
+            media_entry_id, media_entry_name, transfer_destination
         ),
     )
 

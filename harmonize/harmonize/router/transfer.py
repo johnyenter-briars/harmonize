@@ -8,7 +8,7 @@ from sqlmodel import Session
 import harmonize.config
 import harmonize.config.harmonizeconfig
 import harmonize.config.harmonizesecrets
-from harmonize.db.database import get_session
+from harmonize.db.database import get_new_session, get_session
 from harmonize.db.models import Job, MediaEntry
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.transferprogress import TransferDestination, TransferProgress
@@ -37,7 +37,7 @@ async def transfer_file_mediasystem(
     if media_entry is None:
         raise HTTPException(status_code=404, detail="Can't find media entry to transfer")
 
-    args: tuple[MediaEntry] = (media_entry,)
+    args: tuple[uuid.UUID] = (media_entry.id,)
 
     job = await start_job(
         f'TSF-{media_entry.name}',
@@ -51,29 +51,35 @@ async def transfer_file_mediasystem(
 
 
 def _transfer_file_job(
-    media_entry: MediaEntry,
-    job: Job,
-    session: Session,
+    media_entry_id: uuid.UUID,
+    _: Job,
+    __: Session,
 ):
-    current_full_path = Path(media_entry.absolute_path)
+    process_scoped_session = get_new_session()
+
+    media_entry_proc = process_scoped_session.get(MediaEntry, media_entry_id)
+
+    if media_entry_proc is None:
+        return
+
+    current_full_path = Path(media_entry_proc.absolute_path)
 
     remote_path = f'{secrets.media_system_root}/{current_full_path.name}'
+
+    media_entry_proc.transferred = True
+
+    process_scoped_session.commit()
 
     transfer_file(
         secrets.media_system_ip,
         secrets.media_system_username,
         secrets.media_system_password,
-        media_entry.absolute_path,
+        media_entry_proc.absolute_path,
         remote_path,
-        media_entry,
-        session,
+        media_entry_proc.name,
+        media_entry_proc.id,
         TransferDestination.MEDIA_SYSTEM,
     )
-
-    media_entry.transferred = True
-
-    session.commit()
-    session.refresh(media_entry)
 
 
 @router.get('/mediasystem', status_code=200)
@@ -96,7 +102,7 @@ async def untransfer_file_mediasystem(
     if media_entry is None:
         raise HTTPException(status_code=404, detail="Can't find media entry to untransfer")
 
-    args: tuple[MediaEntry] = (media_entry,)
+    args: tuple[uuid.UUID] = (media_entry.id,)
 
     job = await start_job(
         f'UTSF-{media_entry.name}',
@@ -110,13 +116,24 @@ async def untransfer_file_mediasystem(
 
 
 def _untransfer_file_job(
-    media_entry: MediaEntry,
+    media_entry_id: uuid.UUID,
     _: Job,
-    session: Session,
+    __: Session,
 ):
-    current_full_path = Path(media_entry.absolute_path)
+    process_scoped_session = get_new_session()
+
+    media_entry_proc = process_scoped_session.get(MediaEntry, media_entry_id)
+
+    if media_entry_proc is None:
+        return
+
+    media_entry_proc.transferred = False
+
+    current_full_path = Path(media_entry_proc.absolute_path)
 
     remote_path = f'{secrets.media_system_root}/{current_full_path.name}'
+
+    process_scoped_session.commit()
 
     remove_remote_file(
         secrets.media_system_ip,
@@ -124,8 +141,3 @@ def _untransfer_file_job(
         secrets.media_system_password,
         remote_path,
     )
-
-    media_entry.transferred = False
-
-    session.commit()
-    session.refresh(media_entry)

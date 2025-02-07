@@ -21,9 +21,6 @@ SessionLocal = sessionmaker(bind=_engine, class_=Session, autoflush=False, autoc
 
 
 def get_new_session() -> Session:
-    """
-    Returns a new session instance, ensuring each process gets its own.
-    """
     return SessionLocal()
 
 
