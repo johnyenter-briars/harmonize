@@ -19,7 +19,7 @@
             <Label FontSize="20"  Text="Video Library" HorizontalOptions="Start" Grid.Column="0" VerticalTextAlignment="Center"/>
             <ImageButton 
                 Grid.Column="1" 
-                Source="icons8_filter_50.png"
+                Source="icons8_slider_48.png"
                 Scale="0.60"
                 Clicked="OnFilterClicked"
                 >
@@ -32,6 +32,8 @@
                 Source="icons8_search_50.png"
                 Scale="0.60"
                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=OpenSearchCommand }"
+                CommandParameter="{x:Reference searchBar}"
+                Clicked="ScaleButton"
                 >
                 <ImageButton.Behaviors>
                     <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
@@ -64,9 +66,8 @@
                 HorizontalOptions="FillAndExpand"
                 x:Name="searchBar"
                 TextColor="{StaticResource OffWhite}"
-                >
+                />
 
-            </SearchBar>
         </Frame>
 
         <RefreshView 
@@ -113,6 +114,7 @@
                                     Scale="1.5"
                                     Grid.Row="0"
                                     Grid.Column="1"
+                                    Margin="0,0,5,0"
                                     Text="⋮"
                                     FontSize="18"
                                     BackgroundColor="Transparent"
@@ -136,9 +138,7 @@
                                         <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
                                     </ImageButton.Behaviors>
                                 </ImageButton>
-
                             </Grid>
-
                         </components:ListElement>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

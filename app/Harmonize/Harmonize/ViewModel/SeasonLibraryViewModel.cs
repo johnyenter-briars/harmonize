@@ -133,7 +133,7 @@ public class SeasonLibraryViewModel(
     {
         await Shell.Current.GoToAsync(nameof(EditSeasonPage), new Dictionary<string, object>
         {
-            { nameof(EditSeasonViewModel.Seaon), season }
+            { nameof(EditSeasonViewModel.Season), season }
         });
     }
 

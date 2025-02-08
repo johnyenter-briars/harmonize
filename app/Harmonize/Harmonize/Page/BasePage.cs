@@ -44,9 +44,10 @@ public abstract class BasePage : ContentPage
         if (sender is Microsoft.Maui.Controls.View view)
         {
             var currentScale = view.Scale;
+            var targetScale = currentScale * 1.1;
             view.Animate(new StoryBoard(new List<AnimationBase>
               {
-                 new ScaleToAnimation { Scale = 1.1, Duration = "150" },
+                 new ScaleToAnimation { Scale = targetScale, Duration = "150" },
                  new ScaleToAnimation { Scale = currentScale, Duration = "100" }
               }));
         }

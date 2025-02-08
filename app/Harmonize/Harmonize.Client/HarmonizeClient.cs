@@ -227,7 +227,7 @@ public class HarmonizeClient
     }
     public async Task<SeasonResponse> DisassociateToSeason(DisassociateToSeasonRequest request)
     {
-        return await HarmonizeRequest<DisassociateToSeasonRequest, SeasonResponse>(request, $"season/associate", HttpMethod.Post);
+        return await HarmonizeRequest<DisassociateToSeasonRequest, SeasonResponse>(request, $"season/disassociate", HttpMethod.Post);
     }
     //TODO: this is horrible
     public async Task<SeasonResponse> UpdateSeason(Season season, UpsertSeasonRequest request)

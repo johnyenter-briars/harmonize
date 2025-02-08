@@ -82,7 +82,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="harmonizeModel:MediaEntry">
                         <ViewCell>
-                            <components:ListElement>
+                            <components:ListElement CustomPadding="-20">
                                 <Grid
                                     Scale="0.8"
                                     RowDefinitions="Auto"
@@ -99,7 +99,8 @@
                                         HorizontalOptions="Start" />
 
                                     <ImageButton 
-                                        Scale="0.7"
+                                        Scale="0.6"
+                                        Margin="0, 0, 20, 0"
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Source="icons8_send_file_50.png"
@@ -116,6 +117,22 @@
                                                 CommandParameter="{Binding .}"
                                                 />
                                         </ImageButton.GestureRecognizers>
+                                    </ImageButton>
+
+                                    <ImageButton 
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Source="icons8_cloud_download_66.png"
+                                        VerticalOptions="Start"
+                                        HorizontalOptions="End"
+                                        Margin="0, 5, 0, 0"
+                                        WidthRequest="15"
+                                        HeightRequest="15"
+                                        IsVisible="{Binding Transferred}"
+                                        >
+                                            <ImageButton.Behaviors>
+                                                <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
+                                            </ImageButton.Behaviors>
                                     </ImageButton>
 
                                 </Grid>
