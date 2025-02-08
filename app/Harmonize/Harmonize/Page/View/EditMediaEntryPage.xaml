@@ -113,7 +113,7 @@
                                         </ImageButton.Behaviors>
                                         <ImageButton.GestureRecognizers>
                                             <TapGestureRecognizer
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendEntry }"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendSubtitleEntry  }"
                                                 CommandParameter="{Binding .}"
                                                 />
                                         </ImageButton.GestureRecognizers>
@@ -130,9 +130,9 @@
                                         HeightRequest="15"
                                         IsVisible="{Binding Transferred}"
                                         >
-                                            <ImageButton.Behaviors>
-                                                <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
-                                            </ImageButton.Behaviors>
+                                        <ImageButton.Behaviors>
+                                            <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
+                                        </ImageButton.Behaviors>
                                     </ImageButton>
 
                                 </Grid>
@@ -211,7 +211,7 @@
                     </ImageButton.Behaviors>
                     <ImageButton.GestureRecognizers>
                         <TapGestureRecognizer
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendEntry }"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendEntry }"
                         />
                     </ImageButton.GestureRecognizers>
                 </ImageButton>

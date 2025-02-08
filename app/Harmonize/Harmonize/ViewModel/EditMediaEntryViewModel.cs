@@ -53,7 +53,17 @@ public class EditMediaEntryViewModel(
             return await failsafeService.Fallback(async () => await harmonizeClient.UpdateEntry(MediaEntry, new UpsertMediaEntryRequest { Name = MediaEntry.Name }), null);
         });
     });
-    public ICommand SendEntry => new Command<MediaEntry>(async (subtitleEntry) =>
+    public ICommand SendEntry => new Command(async () =>
+    {
+        var (jobResponse, success) = await failsafeService.Fallback(
+            async () => await harmonizeClient.StartTransfer(TransferDestination.MediaSystem, MediaEntry), null);
+
+        if (success)
+        {
+            await alertService.ShowAlertSnackbarAsync("Job created successfully.");
+        }
+    });
+    public ICommand SendSubtitleEntry => new Command<MediaEntry>(async (subtitleEntry) =>
     {
         var (jobResponse, success) = await failsafeService.Fallback(
             async () => await harmonizeClient.StartTransfer(TransferDestination.MediaSystem, subtitleEntry), null);
