@@ -7,9 +7,9 @@ from harmonize.scrape import transform_torrent_data
 from harmonize.util.fetch import get
 
 
-async def piratebay_search(query) -> list[MagnetLinkSearchResult]:
+async def _piratebay_search_page(query: str, page: int) -> list[MagnetLinkSearchResult]:
     query = query.replace('+', ' ')
-    url = f'https://tpb.party/search/{query}/1/99/0'
+    url = f'https://tpb.party/search/{query}/{page}/99/0'
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'
     }
@@ -78,3 +78,19 @@ async def piratebay_search(query) -> list[MagnetLinkSearchResult]:
     return transform_torrent_data(
         magnet_links, seeders, leechers, names, downloads, sizes, date_posteds
     )
+
+
+async def piratebay_search(
+    query: str, all_pages: bool | None = None
+) -> list[MagnetLinkSearchResult]:
+    if all_pages is None or all_pages is False:
+        return await _piratebay_search_page(query, 0)
+
+    page = 1
+    all_results = []
+    while True:
+        results = await _piratebay_search_page(query, page)
+        all_results.extend(results)
+        if len(results) == 0:
+            return all_results
+        page += 1

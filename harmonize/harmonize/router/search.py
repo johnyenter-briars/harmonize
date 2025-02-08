@@ -50,7 +50,7 @@ async def search_youtube_playlist(
                     value=None,
                 )
 
-            metadata_file = YOUTUBE_PLAYLIST_SEARCH_METADATA / f'{entry['id']}.search.info.json'
+            metadata_file = YOUTUBE_PLAYLIST_SEARCH_METADATA / f'{entry["id"]}.search.info.json'
 
             async with await anyio.open_file(metadata_file, 'w') as f:
                 await f.write(json.dumps(playlist_info))
@@ -133,7 +133,7 @@ async def search_youtube_video(
 
 @router.get('/search/piratebay/{search_keywords}')
 async def search_piratebay(search_keywords: str) -> BaseResponse[list[MagnetLinkSearchResult]]:
-    results = await piratebay_search(search_keywords)
+    results = await piratebay_search(search_keywords, True)
     return BaseResponse[list[MagnetLinkSearchResult]](
         message='Success', status_code=200, value=results
     )
