@@ -19,7 +19,7 @@ from harmonize.transfer.mediasystem import (
     transfer_file,
 )
 
-config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
+config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG  # type: ignore
 secrets = harmonize.config.harmonizesecrets.HARMONIZE_SECRETS
 
 

@@ -17,6 +17,19 @@ logger = logging.getLogger('harmonize')
 router = APIRouter(prefix='/api/media')
 
 
+@router.get('/entry/{media_entry_id}', status_code=200)
+async def get_entry(
+    media_entry_id: uuid.UUID,
+    session: Session = Depends(get_session),
+) -> BaseResponse[MediaEntry]:
+    entry = session.get(MediaEntry, media_entry_id)
+
+    if entry is None:
+        return BaseResponse[MediaEntry](message='Entry not found', status_code=404, value=None)
+
+    return BaseResponse[MediaEntry](message='Media Entry Found', status_code=200, value=entry)
+
+
 @router.get('/audio', status_code=200)
 async def list_audio(
     session: Session = Depends(get_session),
