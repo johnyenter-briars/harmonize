@@ -58,7 +58,7 @@ Good luck.
 - [X] Authentication
 - [ ] Delete job
 - [ ] Delete transfer progress
-- [ ] Clicking on transfer element brings you to edit page
+- [X] Clicking on transfer element brings you to edit page
 - [ ] Delete of entry also deletes its subtitle file(s) (if present)
 - [ ] Backfill method
 - [ ] Update server

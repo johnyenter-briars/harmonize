@@ -60,7 +60,7 @@ public class HarmonizeClient
     #region Media
     public async Task<MediaEntryResponse > GetMediaEntry(Guid mediaEntryId)
     {
-        return await HarmonizeRequest<MediaEntryResponse >($"media/{mediaEntryId}", HttpMethod.Get);
+        return await HarmonizeRequest<MediaEntryResponse >($"media/entry/{mediaEntryId}", HttpMethod.Get);
     }
     public async Task<MediaEntriesResponse> GetAudio()
     {
