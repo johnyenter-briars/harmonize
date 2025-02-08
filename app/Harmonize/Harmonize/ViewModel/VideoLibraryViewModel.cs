@@ -146,7 +146,7 @@ public class VideoLibraryViewModel(
             MediaEntries.Add(m);
         }
     }
-    public ICommand OpenSearchCommand => new Command(() =>
+    public ICommand OpenSearchCommand => new Command<SearchBar>((searchBar) =>
     {
         if (SearchBarVisible)
         {
@@ -154,6 +154,15 @@ public class VideoLibraryViewModel(
         }
 
         SearchBarVisible = !SearchBarVisible;
+
+        if (SearchBarVisible)
+        {
+            searchBar?.Focus();
+        }
+        else
+        {
+            searchBar?.Unfocus();
+        }
     });
     public ICommand SearchCommand => new Command<SearchBar>(async (searchBar) =>
     {

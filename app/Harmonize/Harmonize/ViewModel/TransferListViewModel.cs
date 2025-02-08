@@ -84,9 +84,10 @@ public class TransferListViewModel(
     }
     public async Task ItemTapped(TransferProgress transferProgress)
     {
-        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), new Dictionary<string, object>
+        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), new Dictionary<string, object?>
         {
             { nameof(EditMediaEntryViewModel.MediaEntryId), transferProgress.MediaEntryId },
+            { nameof(EditMediaEntryViewModel.MediaEntry), null },
         });
     }
     public override async Task OnAppearingAsync()

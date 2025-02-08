@@ -21,19 +21,20 @@ public class EditMediaEntryViewModel(
     ILogger<EditMediaEntryViewModel> logger
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
-    public ICommand DeleteEntry => new Command<MediaEntry>(async (entry) =>
+    public ICommand DeleteEntry => new Command(async () =>
     {
-        var (response, success) = await FetchData(async () =>
+        if (await alertService.ShowConfirmationAsync("Delete Entry", $"Are you sure you want to delete entry: {MediaEntry.Name}?") == true)
         {
-            return await failsafeService.Fallback(async () => await harmonizeClient.DeleteEntry(MediaEntry), null);
-        });
+            var (response, success) = await failsafeService.Fallback(async () => await harmonizeClient.DeleteEntry(MediaEntry), null);
 
-        if (response.Success)
-        {
-            await Shell.Current.GoToAsync("..");
+            if (response?.Success == true)
+            {
+                await alertService.ShowAlertSnackbarAsync("Entry deleted.");
+                await Shell.Current.GoToAsync("..");
+            }
         }
     });
-    public ICommand UntransferEntry => new Command<MediaEntry>(async (entry) =>
+    public ICommand UntransferEntry => new Command(async () =>
     {
         var (response, success) = await FetchData(async () =>
         {
@@ -45,17 +46,17 @@ public class EditMediaEntryViewModel(
             await alertService.ShowAlertSnackbarAsync("Removed file successfully.");
         }
     });
-    public ICommand SaveEntry => new Command<MediaEntry>(async (entry) =>
+    public ICommand SaveEntry => new Command(async () =>
     {
         var (response, success) = await FetchData(async () =>
         {
             return await failsafeService.Fallback(async () => await harmonizeClient.UpdateEntry(MediaEntry, new UpsertMediaEntryRequest { Name = MediaEntry.Name }), null);
         });
     });
-    public ICommand SendEntry => new Command<MediaEntry>(async (entry) =>
+    public ICommand SendEntry => new Command<MediaEntry>(async (subtitleEntry) =>
     {
         var (jobResponse, success) = await failsafeService.Fallback(
-            async () => await harmonizeClient.StartTransfer(TransferDestination.MediaSystem, MediaEntry), null);
+            async () => await harmonizeClient.StartTransfer(TransferDestination.MediaSystem, subtitleEntry), null);
 
         if (success)
         {

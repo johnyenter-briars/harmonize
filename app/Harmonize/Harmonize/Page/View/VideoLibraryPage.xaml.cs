@@ -129,6 +129,8 @@ public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
     }
     private async void OnFilterClicked(object sender, EventArgs e)
     {
+        base.ScaleButton(sender, e);
+
         if(!filterMenu.IsVisible)
         {
             await filterMenu.ShowAsync();

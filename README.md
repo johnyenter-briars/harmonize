@@ -39,8 +39,8 @@ Good luck.
   - [X] Paging
   - [X] Edit entry from within season
   - [X] Order by added on
-  - [ ] Associate to season
-  - [ ] Disssociate to season
+  - [X] Associate to season
+  - [X] Disssociate to season
 - [X] Control
   - [X] Button to open up videos
   - [X] Button to open up Youtube
@@ -58,7 +58,8 @@ Good luck.
 - [X] Authentication
 - [ ] Delete job
 - [ ] Delete transfer progress
-- [ ] Clicking on transfer element brings you to edit page
+- [X] Opening search bar focuses bar - season + video
+- [X] Clicking on transfer element brings you to edit page
 - [ ] Delete of entry also deletes its subtitle file(s) (if present)
 - [ ] Backfill method
 - [ ] Update server

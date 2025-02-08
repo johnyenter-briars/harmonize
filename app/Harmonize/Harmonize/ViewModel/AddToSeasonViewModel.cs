@@ -14,7 +14,8 @@ public class AddToSeasonViewModel(
     PreferenceManager preferenceManager,
     FailsafeService failsafeService,
     ILogger<VideoLibraryPage> logger,
-    HarmonizeClient harmonizeClient
+    HarmonizeClient harmonizeClient,
+    AlertService alertService
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
     private MediaEntry? mediaEntry;
@@ -77,6 +78,21 @@ public class AddToSeasonViewModel(
 
     internal async Task ItemTapped(Season season)
     {
-        //TODO
+        var request = new AssociateToSeasonRequest
+        {
+            SeasonId = season.Id,
+            MediaEntryIds = [MediaEntry!.Id],
+        };
+
+        var (response, success) = await FetchData(async () =>
+        {
+            return await failsafeService.Fallback(async () => 
+                await harmonizeClient.AssociateToSeason(request), null);
+        });
+
+        if (success)
+        {
+            await alertService.ShowAlertSnackbarAsync("Added to season");
+        }
     }
 }

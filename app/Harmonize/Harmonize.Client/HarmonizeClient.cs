@@ -60,7 +60,7 @@ public class HarmonizeClient
     #region Media
     public async Task<MediaEntryResponse > GetMediaEntry(Guid mediaEntryId)
     {
-        return await HarmonizeRequest<MediaEntryResponse >($"media/{mediaEntryId}", HttpMethod.Get);
+        return await HarmonizeRequest<MediaEntryResponse >($"media/entry/{mediaEntryId}", HttpMethod.Get);
     }
     public async Task<MediaEntriesResponse> GetAudio()
     {
@@ -227,7 +227,7 @@ public class HarmonizeClient
     }
     public async Task<SeasonResponse> DisassociateToSeason(DisassociateToSeasonRequest request)
     {
-        return await HarmonizeRequest<DisassociateToSeasonRequest, SeasonResponse>(request, $"season/associate", HttpMethod.Post);
+        return await HarmonizeRequest<DisassociateToSeasonRequest, SeasonResponse>(request, $"season/disassociate", HttpMethod.Post);
     }
     //TODO: this is horrible
     public async Task<SeasonResponse> UpdateSeason(Season season, UpsertSeasonRequest request)
