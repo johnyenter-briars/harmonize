@@ -13,6 +13,24 @@
     xmlns:components="clr-namespace:Harmonize.Components"
     Title="Magnet Link Search">
 
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="9*,4*">
+            <Label FontSize="20"  Text="Magnet Link Search" HorizontalOptions="Start" Grid.Column="0" VerticalTextAlignment="Center"/>
+
+            <ImageButton 
+                Grid.Column="2" 
+                Source="icons8_search_50.png"
+                Scale="0.60"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MagnetLinkSearchViewModel}}, Path=OpenSearchCommand }"
+                Clicked="ScaleButton"
+                >
+                <ImageButton.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
+                </ImageButton.Behaviors>
+            </ImageButton>
+        </Grid>
+    </Shell.TitleView>
+
     <Grid Padding="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -20,23 +38,32 @@
         </Grid.RowDefinitions>
 
         <Grid 
+            Padding="10"
             Grid.Row="0" 
             ColumnDefinitions="*, *"
             RowDefinitions="Auto, Auto"
         >
-            <SearchBar 
+            <Frame 
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
-                Placeholder="Search YouTube"
-                SearchCommand="{Binding SearchCommand}"
-                SearchCommandParameter="{Binding ., Source={x:Reference searchBar}}"
-                Text="{Binding SearchQuery}" 
-                FontSize="18"
-                HeightRequest="40"
-                VerticalOptions="Start"
-                HorizontalOptions="FillAndExpand"
-                x:Name="searchBar"
+                BackgroundColor="{StaticResource Gray900}" 
+                BorderColor="DarkGray" 
+                CornerRadius="10" 
+                Padding="5"
+                Margin="0, 0, 0, 10"
+            >
+                <SearchBar 
+                    Placeholder="Search..."
+                    SearchCommand="{Binding SearchCommand}"
+                    SearchCommandParameter="{Binding ., Source={x:Reference searchBar}}"
+                    Text="{Binding SearchQuery}" 
+                    FontSize="18"
+                    HeightRequest="40"
+                    VerticalOptions="Start"
+                    HorizontalOptions="FillAndExpand"
+                    x:Name="searchBar"
                 />
+            </Frame>
 
             <HorizontalStackLayout
                 Grid.Row="1"

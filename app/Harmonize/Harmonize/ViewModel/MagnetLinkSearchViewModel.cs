@@ -17,6 +17,10 @@ public class MagnetLinkSearchViewModel(
     ILogger<MagnetLinkSearchViewModel> logger
 ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
 {
+    public ICommand OpenSearchCommand => new Command(() =>
+    {
+        var foo = 10;
+    });
     #region Bindings
     private string? searchQuery;
     public string? SearchQuery

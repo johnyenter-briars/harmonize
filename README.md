@@ -45,8 +45,8 @@ Good luck.
 - [X] Control
   - [X] Button to open up videos
   - [X] Button to open up Youtube
-- [ ] Update colors globally
-  - [ ] Media control colors
+- [X] Update colors globally
+  - [X] Media control colors
 - [X] Alerts should be snackbar
 - [X] Style snackbar
 - [X] Fix paging on seasons
@@ -62,12 +62,12 @@ Good luck.
 - [X] Opening search bar focuses bar - season + video
 - [X] Clicking on transfer element brings you to edit page
 - [X] Delete of entry remotely also deletes its subtitle file(s) (if present)
+- [ ] Setup SSL Cert + Https
 - [ ] Backfill method
 - [ ] Update server
 - [ ] Setup daemon
-- [ ] Setup SSL Cert + Https
+- [ ] Fix YT
 - [ ] IOS
-- [ ] Fix media system youtube
 
 ## Todos For Full Functionality
 

@@ -21,7 +21,7 @@
                 Scale="0.8"
                 Grid.Row="2"
                 Grid.Column="2"
-                BackgroundColor="{StaticResource Yellow100Accent}"
+                BackgroundColor="{StaticResource Primary}"
                 TextColor="white"
                 ImageSource="icons8_restart_50.png"
                 x:Name="powerReboot"
@@ -125,7 +125,7 @@
             Margin="25, 25, 25, 25"
             Grid.Row="2"
             Grid.Column="0"
-            BackgroundColor="{StaticResource Yellow100Accent}"
+            BackgroundColor="{StaticResource Blue100Accent}"
             TextColor="white"
             ImageSource="icons8_youtube_50.png"
             x:Name="openYoutube"
@@ -151,7 +151,7 @@
             Margin="25, 25, 25, 25"
             Grid.Row="2"
             Grid.Column="2"
-            BackgroundColor="{StaticResource Yellow100Accent}"
+            BackgroundColor="{StaticResource Blue100Accent}"
             TextColor="white"
             ImageSource="icons8_video_50.png"
             x:Name="videos"
@@ -166,8 +166,8 @@
             Margin="15, 15, 15, 15"
             MinimumWidthRequest="400"
             ValueChanged="VolumeSlider_Changed"
-            MinimumTrackColor="{StaticResource Secondary}"
-            ThumbImageSource="icons8_voice_50_pink.png"
+            MinimumTrackColor="{StaticResource PrimaryDark}"
+            ThumbImageSource="icons8_voice_50_cyan.png"
         >
         </Slider>
 
@@ -212,8 +212,8 @@
             Grid.ColumnSpan="3"
             MinimumWidthRequest="400"
             ValueChanged="SeekSlider_Changed"
-            MinimumTrackColor="{StaticResource Secondary}"
-            ThumbImageSource="icons8_music_album_50_pink.png"
+            MinimumTrackColor="{StaticResource PrimaryDark}"
+            ThumbImageSource="icons8_album_50_cyan.png"
         />
 
         <Frame

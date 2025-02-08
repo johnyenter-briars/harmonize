@@ -17,13 +17,14 @@ public class AlertService
             BackgroundColor = color;
         }
 
-        if (Application.Current.Resources.TryGetValue("Gray950Brush", out var colorValue2) && colorValue2 is Color color2)
+        if (Application.Current.Resources.TryGetValue("OffWhite", out var colorValue2) && colorValue2 is Color color2)
         {
             TextColor = color2;
         }
 
         SnackbarOptions.BackgroundColor = BackgroundColor ?? SnackbarOptions.BackgroundColor;
         SnackbarOptions.TextColor = TextColor ?? SnackbarOptions.TextColor;
+        SnackbarOptions.ActionButtonTextColor = TextColor ?? SnackbarOptions.ActionButtonTextColor;
     }
     public Task ShowAlertAsync(string title, string message, string cancel = "OK")
     {
