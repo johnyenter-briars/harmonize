@@ -13,11 +13,11 @@ Good luck.
   - [X] Bug where two identical elements show up
   - [X] Sort elements by started time
   - [X] If transfer, status of transfer
-- [ ] Media List
+- [X] Media List
   - [X] Nice search
   - [X] Filter + query popup
   - [X] Filter by type
-  - [ ] Order by name desc (with still paging)
+  - [X] Order by added on
   - [X] Delete entry (delete file on disk)
   - [X] Deletes children
   - [X] Paging
@@ -38,6 +38,7 @@ Good luck.
   - [X] Delete season
   - [X] Paging
   - [X] Edit entry from within season
+  - [X] Order by added on
   - [ ] Associate to season
   - [ ] Disssociate to season
 - [X] Control
@@ -55,6 +56,10 @@ Good luck.
 - [X] Remove files from media system
 - [X] Qbt job doesn't lock up requests
 - [X] Authentication
+- [ ] Delete job
+- [ ] Delete transfer progress
+- [ ] Clicking on transfer element brings you to edit page
+- [ ] Delete of entry also deletes its subtitle file(s) (if present)
 - [ ] Backfill method
 - [ ] Update server
 - [ ] Setup daemon

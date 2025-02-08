@@ -128,7 +128,26 @@ public class EditMediaEntryViewModel(
     {
         Task.Run(async () =>
         {
-            await Refresh();
+            if (MediaEntry == null)
+            {
+                var (response, success) = await failsafeService.Fallback(async () =>
+                    await harmonizeClient.GetMediaEntry(MediaEntryId), null);
+
+                if (success && response?.Value is not null)
+                {
+                    MediaEntry = response.Value;
+                    await Refresh();
+                }
+                else
+                {
+                    await alertService.ShowAlertAsync("Error in getting entry", response?.Message ?? "Failure to perform action");
+                }
+            }
+            else
+            {
+                await Refresh();
+            }
+
         }).FireAndForget(ex => logger.LogError($"Error: {ex}"));
 
         await Task.CompletedTask;

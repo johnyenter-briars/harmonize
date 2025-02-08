@@ -163,7 +163,7 @@
                         BackgroundColor="{StaticResource PrimaryDark}"
                         TextColor="White"
                         FontSize="16"
-                        CornerRadius="25"
+                        CornerRadius="15"
                         HeightRequest="45"
                         Clicked="OnOpenBottomSheetClicked"
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=SendToMediaSystemCommand }"
@@ -173,10 +173,24 @@
                         BackgroundColor="{StaticResource PrimaryDark}"
                         TextColor="White"
                         FontSize="16"
-                        CornerRadius="25"
+                        CornerRadius="15"
                         HeightRequest="45"
                         Clicked="OnOpenBottomSheetClicked"
                         />
+
+                    <AbsoluteLayout HorizontalOptions="FillAndExpand">
+                        <Button Text="✕"
+                            BackgroundColor="Transparent"
+                            TextColor="{StaticResource Gray500}"
+                            FontSize="14"
+                            Padding="5"
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
+                            AbsoluteLayout.LayoutFlags="PositionProportional"
+                            Clicked="OnOpenBottomSheetClicked"
+                        />
+                    </AbsoluteLayout>
 
                 </StackLayout>
             </Frame>
