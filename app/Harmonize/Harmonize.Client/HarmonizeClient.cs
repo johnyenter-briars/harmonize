@@ -58,6 +58,10 @@ public class HarmonizeClient
     #endregion
 
     #region Media
+    public async Task<MediaEntryResponse > GetMediaEntry(Guid mediaEntryId)
+    {
+        return await HarmonizeRequest<MediaEntryResponse >($"media/{mediaEntryId}", HttpMethod.Get);
+    }
     public async Task<MediaEntriesResponse> GetAudio()
     {
         return await HarmonizeRequest<MediaEntriesResponse>($"media/audio", HttpMethod.Get);
@@ -72,9 +76,36 @@ public class HarmonizeClient
 
         return await HarmonizeRequest<MediaEntriesResponse>($"media/video/{mediaEntry.Id}/sub", HttpMethod.Get);
     }
-    public async Task<MediaEntriesResponse> GetVideosPaging(int limit, int skip = 0)
+    public async Task<MediaEntriesResponse> GetVideosPaging(
+          int limit,
+          int skip = 0,
+          string? nameSubString = null,
+          IList<VideoType>? types = null
+    )
     {
-        return await HarmonizeRequest<MediaEntriesResponse>($"media/video?limit={limit}&skip={skip}", HttpMethod.Get);
+        var url = $"media/video?limit={limit}&skip={skip}";
+
+        if (nameSubString is not null)
+        {
+            url += $"&name_sub_string={nameSubString}";
+        }
+
+        if (types is not null && types.Count > 0)
+        {
+            foreach (var type in types)
+            {
+                url += $"&type={(int)type}";
+            }
+        }
+        else
+        {
+            foreach (var type in Enumerable.AsEnumerable([VideoType.Movie, VideoType.Episode]))
+            {
+                url += $"&type={(int)type}";
+            }
+        }
+
+        return await HarmonizeRequest<MediaEntriesResponse>(url, HttpMethod.Get);
     }
     public async Task<MediaEntriesResponse> GetVideosPaging(string nameSubString, int limit, int skip = 0)
     {

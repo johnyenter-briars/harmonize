@@ -4,7 +4,7 @@
 
 Good luck.
 
-## Todos For Audio Support Only
+## Todos For Video Support Only
 
 - [X] Delete video method
 - [X] Edit element page
@@ -13,12 +13,11 @@ Good luck.
   - [X] Bug where two identical elements show up
   - [X] Sort elements by started time
   - [X] If transfer, status of transfer
-- [ ] Media List
+- [X] Media List
   - [X] Nice search
-  - [ ] Season search
-  - [ ] Filter + query popup
-  - [ ] Filter by type
-  - [ ] Order by name desc (with still paging)
+  - [X] Filter + query popup
+  - [X] Filter by type
+  - [X] Order by added on
   - [X] Delete entry (delete file on disk)
   - [X] Deletes children
   - [X] Paging
@@ -39,12 +38,13 @@ Good luck.
   - [X] Delete season
   - [X] Paging
   - [X] Edit entry from within season
+  - [X] Order by added on
   - [ ] Associate to season
   - [ ] Disssociate to season
 - [X] Control
   - [X] Button to open up videos
   - [X] Button to open up Youtube
-- [ ] Update colors
+- [ ] Update colors globally
   - [ ] Media control colors
 - [X] Alerts should be snackbar
 - [X] Style snackbar
@@ -56,6 +56,10 @@ Good luck.
 - [X] Remove files from media system
 - [X] Qbt job doesn't lock up requests
 - [X] Authentication
+- [ ] Delete job
+- [ ] Delete transfer progress
+- [ ] Clicking on transfer element brings you to edit page
+- [ ] Delete of entry also deletes its subtitle file(s) (if present)
 - [ ] Backfill method
 - [ ] Update server
 - [ ] Setup daemon

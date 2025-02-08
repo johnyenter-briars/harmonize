@@ -1,4 +1,4 @@
-using AlohaKit.Animations;
+﻿using AlohaKit.Animations;
 using CommunityToolkit.Maui.Views;
 using Harmonize.Client;
 using Harmonize.Client.Model.Media;
@@ -54,7 +54,9 @@ public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
     {
         if (sender is Button button)
         {
-            if (button.Text != "Send to Media System" && button.Text != "Add to Season")
+            if (button.Text != "Send to Media System" && 
+                button.Text != "Add to Season" && 
+                button.Text != "✕")
             {
                 var currentScale = button.Scale;
                 await button.Animate(new StoryBoard(
@@ -81,6 +83,11 @@ public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
                 }
 
                 if (button.Text == "Add to Season")
+                {
+                    await bottomMenu.HideAsync();
+                }
+
+                if (button.Text == "✕")
                 {
                     await bottomMenu.HideAsync();
                 }
