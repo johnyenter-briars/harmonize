@@ -59,7 +59,7 @@ async def list_video_paging(
         statement = statement.where(MediaEntry.video_type.in_(type))  # type: ignore
 
     if transferred is not None and transferred is True:
-        statement = statement.where(MediaEntry.transferred is True)
+        statement = statement.where(MediaEntry.transferred)
 
     statement = statement.offset(skip).limit(limit)
 
