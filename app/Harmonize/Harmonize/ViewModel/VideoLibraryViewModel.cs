@@ -43,7 +43,7 @@ public class VideoLibraryViewModel(
         set
         {
             SetProperty(ref filterByMovie, value);
-            if(!firstLoad)
+            if (!firstLoad)
             {
                 FetchingData = true;
             }
@@ -56,13 +56,25 @@ public class VideoLibraryViewModel(
         set
         {
             SetProperty(ref filterByEpisode, value);
-            if(!firstLoad)
+            if (!firstLoad)
             {
                 FetchingData = true;
             }
         }
     }
-
+    private bool filterByTransferred = false;
+    public bool FilterByTransferred
+    {
+        get => filterByTransferred;
+        set
+        {
+            SetProperty(ref filterByTransferred, value);
+            if (!firstLoad)
+            {
+                FetchingData = true;
+            }
+        }
+    }
     #endregion
     private bool outOfRecords = false;
     public bool OutOfRecords
@@ -133,7 +145,7 @@ public class VideoLibraryViewModel(
         }
 
         var (response, success) = await failsafeService.Fallback(async () =>
-            await harmonizeClient.GetVideosPaging(Limit, skip, SearchQuery, types), null);
+            await harmonizeClient.GetVideosPaging(Limit, skip, SearchQuery, types, FilterByTransferred), null);
 
         if (response?.Value is not { Count: > 0 })
         {
@@ -192,7 +204,8 @@ public class VideoLibraryViewModel(
 
         var (response, success) = await FetchData(async () =>
         {
-            return await failsafeService.Fallback(async () => await harmonizeClient.GetVideosPaging(Limit, skip, SearchQuery, types), null);
+            return await failsafeService.Fallback(async () =>
+                await harmonizeClient.GetVideosPaging(Limit, skip, SearchQuery, types, FilterByTransferred), null);
         });
 
         MediaEntries.Clear();

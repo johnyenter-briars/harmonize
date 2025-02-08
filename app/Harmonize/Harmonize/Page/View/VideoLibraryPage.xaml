@@ -205,21 +205,40 @@
                 HorizontalOptions="FillAndExpand"
                 AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
                 AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional">
-                <StackLayout Spacing="8">
-                    <HorizontalStackLayout Spacing="10">
+                <Grid ColumnDefinitions="Auto, Auto"
+                    RowDefinitions="Auto, Auto"
+                    ColumnSpacing="20"
+                    RowSpacing="8">
+
+                    <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Spacing="10">
                         <CheckBox 
                             Color="{StaticResource Primary}" 
                             WidthRequest="24" 
                             HeightRequest="24"
                             IsChecked="{Binding FilterByMovie, Mode=TwoWay}" 
-                            Margin="5,0,0,0" />
+                            Margin="5,0,0,0"/>
                         <Label 
                             Text="Movie" 
                             FontSize="16"
                             TextColor="{StaticResource White}" 
                             VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-                    <HorizontalStackLayout Spacing="10">
+
+                    <HorizontalStackLayout Grid.Row="0" Grid.Column="1" Spacing="10">
+                        <CheckBox 
+                            Color="{StaticResource Primary}" 
+                            WidthRequest="24" 
+                            HeightRequest="24"
+                            IsChecked="{Binding FilterByTransferred, Mode=TwoWay}" 
+                            Margin="5,0,0,0"/>
+                        <Label 
+                            Text="Transferred" 
+                            FontSize="16"
+                            TextColor="{StaticResource White}" 
+                            VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Spacing="10">
                         <CheckBox 
                             Color="{StaticResource Primary}" 
                             WidthRequest="24" 
@@ -232,9 +251,8 @@
                             TextColor="{StaticResource White}" 
                             VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-                </StackLayout>
+                </Grid>
             </Frame>
-
         </components:BottomMenu>
     </StackLayout>
 </pages:BasePage>

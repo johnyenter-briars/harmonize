@@ -80,7 +80,8 @@ public class HarmonizeClient
           int limit,
           int skip = 0,
           string? nameSubString = null,
-          IList<VideoType>? types = null
+          IList<VideoType>? types = null,
+          bool? transferredOnly = null
     )
     {
         var url = $"media/video?limit={limit}&skip={skip}";
@@ -103,6 +104,11 @@ public class HarmonizeClient
             {
                 url += $"&type={(int)type}";
             }
+        }
+
+        if(transferredOnly is not null)
+        {
+            url += $"&transferred={transferredOnly}";
         }
 
         return await HarmonizeRequest<MediaEntriesResponse>(url, HttpMethod.Get);

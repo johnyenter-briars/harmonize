@@ -17,6 +17,7 @@ Good luck.
   - [X] Nice search
   - [X] Filter + query popup
   - [X] Filter by type
+  - [X] Filter by transferred
   - [X] Order by added on
   - [X] Delete entry (delete file on disk)
   - [X] Deletes children
@@ -56,11 +57,11 @@ Good luck.
 - [X] Remove files from media system
 - [X] Qbt job doesn't lock up requests
 - [X] Authentication
-- [ ] Delete job
-- [ ] Delete transfer progress
+- [X] Only most recent 50 jobs
+- [X] Only most recent 50 transferrs
 - [X] Opening search bar focuses bar - season + video
 - [X] Clicking on transfer element brings you to edit page
-- [ ] Delete of entry also deletes its subtitle file(s) (if present)
+- [X] Delete of entry remotely also deletes its subtitle file(s) (if present)
 - [ ] Backfill method
 - [ ] Update server
 - [ ] Setup daemon
