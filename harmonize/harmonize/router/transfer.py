@@ -66,10 +66,6 @@ def _transfer_file_job(
 
     remote_path = f'{secrets.media_system_root}/{current_full_path.name}'
 
-    media_entry_proc.transferred = True
-
-    process_scoped_session.commit()
-
     transfer_file(
         secrets.media_system_ip,
         secrets.media_system_username,
@@ -80,6 +76,10 @@ def _transfer_file_job(
         media_entry_proc.id,
         TransferDestination.MEDIA_SYSTEM,
     )
+
+    media_entry_proc.transferred = True
+
+    process_scoped_session.commit()
 
 
 @router.get('/mediasystem', status_code=200)
@@ -127,13 +127,9 @@ def _untransfer_file_job(
     if media_entry_proc is None:
         return
 
-    media_entry_proc.transferred = False
-
     current_full_path = Path(media_entry_proc.absolute_path)
 
     remote_path = f'{secrets.media_system_root}/{current_full_path.name}'
-
-    process_scoped_session.commit()
 
     remove_remote_file(
         secrets.media_system_ip,
@@ -141,3 +137,7 @@ def _untransfer_file_job(
         secrets.media_system_password,
         remote_path,
     )
+
+    media_entry_proc.transferred = False
+
+    process_scoped_session.commit()

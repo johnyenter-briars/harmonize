@@ -111,6 +111,9 @@ async def get_seasons(
         statement = statement.where(Season.name.like(f'%{name_sub_string}%'))  # type: ignore
 
     statement = statement.offset(skip).limit(limit)
+
+    statement = statement.order_by(Season.date_added.desc())  # type: ignore
+
     seasons = list(session.exec(statement).all())
 
     return BaseResponse[list[Season]](

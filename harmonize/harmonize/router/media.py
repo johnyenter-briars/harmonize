@@ -45,6 +45,9 @@ async def list_video_paging(
         statement = statement.where(MediaEntry.video_type.in_(type))  # type: ignore
 
     statement = statement.offset(skip).limit(limit)
+
+    statement = statement.order_by(MediaEntry.date_added.desc())  # type: ignore
+
     media_entries = list(session.exec(statement).all())
 
     return BaseResponse[list[MediaEntry]](
