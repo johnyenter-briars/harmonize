@@ -6,6 +6,8 @@ from harmonize.defs.magnetlink import MagnetLinkSearchResult
 from harmonize.scrape import transform_torrent_data
 from harmonize.util.fetch import get
 
+_MAX_RESULTS_TO_RETURN = 100
+
 
 async def _piratebay_search_page(query: str, page: int) -> list[MagnetLinkSearchResult]:
     query = query.replace('+', ' ')
@@ -91,6 +93,6 @@ async def piratebay_search(
     while True:
         results = await _piratebay_search_page(query, page)
         all_results.extend(results)
-        if len(results) == 0:
+        if len(results) == 0 or len(all_results) >= _MAX_RESULTS_TO_RETURN:
             return all_results
         page += 1
