@@ -1,13 +1,6 @@
-﻿using Harmonize.Client;
-using Harmonize.Service;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+﻿using Harmonize.Service;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Harmonize.ViewModel;
 

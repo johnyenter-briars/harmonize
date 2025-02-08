@@ -32,17 +32,11 @@
             IsReadOnly="True"
             Text="{Binding Job.ErrorMessage, Mode=OneWay}" 
             AutoSize="TextChanges"
-            HeightRequest="75" 
+            HeightRequest="175" 
             />
 
         <Label Text="Status" FontSize="Medium" />
         <Entry Text="{Binding Job.Status, Mode=OneWay}" IsReadOnly="True" />
-
-        <Button 
-            ImageSource="icons8_trash_50.png"
-            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditJobViewModel}}, Path=CancelJob}"
-            CommandParameter="{Binding Job}"
-            />
 
     </VerticalStackLayout>
 

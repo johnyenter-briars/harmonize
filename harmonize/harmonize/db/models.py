@@ -1,6 +1,6 @@
 import datetime
 import uuid
-from enum import Enum
+from enum import Enum, IntEnum
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -16,6 +16,7 @@ class JobStatus(Enum):
 
 class Job(BaseSchema, SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    key: str
     started_on: datetime.datetime
     description: str
     error_message: str | None
@@ -31,6 +32,16 @@ class MediaEntryType(Enum):
     AUDIO = 0
     VIDEO = 1
     SUBTITLE = 2
+
+
+class VideoType(IntEnum):
+    MOVIE = 0
+    EPISODE = 1
+
+
+class AudioType(Enum):
+    SONG = 0
+    AUDIOBOOK = 1
 
 
 class MediaEntryPlaylistLink(SQLModel, table=True):
@@ -63,11 +74,32 @@ class MediaEntry(BaseSchema, SQLModel, table=True):
     youtube_id: str | None
     magnet_link: str | None
     type: MediaEntryType
+    video_type: VideoType | None
+    audio_type: AudioType | None
     date_added: datetime.datetime
     cover_art_absolute_path: str | None
     thumbnail_art_absolute_path: str | None
+    transferred: bool  # TODO: transferred to where?
+
     playlists: list['Playlist'] = Relationship(
         back_populates='media_entries', link_model=MediaEntryPlaylistLink
     )
-    season_id: uuid.UUID | None = Field(foreign_key='season.id', nullable=True)  # Foreign Key
+
+    season_id: uuid.UUID | None = Field(foreign_key='season.id', nullable=True)
     season: 'Season' = Relationship(back_populates='media_entries')
+
+    # For subtitles
+    parent_media_entry_id: uuid.UUID | None = Field(foreign_key='mediaentry.id', nullable=True)
+    parent_media_entry: 'MediaEntry' = Relationship(
+        sa_relationship_kwargs={'remote_side': 'MediaEntry.id'}
+    )
+
+
+class QbtDownloadTagInfo(BaseSchema, SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    name: str
+    magnet_link: str
+    type: MediaEntryType
+    video_type: VideoType | None
+    audio_type: AudioType | None
+    create_season: bool | None

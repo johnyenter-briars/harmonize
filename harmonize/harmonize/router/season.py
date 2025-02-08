@@ -1,11 +1,12 @@
 import logging
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import and_, select
 from sqlmodel import Session, select
 
 from harmonize.db.database import get_session
-from harmonize.db.models import MediaEntry, Season
+from harmonize.db.models import MediaEntry, MediaEntryType, Season, VideoType
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.season import (
     AssociateToSeasonRequest,
@@ -82,18 +83,38 @@ async def get_season_details(
     if not season:
         raise HTTPException(status_code=404, detail='Season not found')
 
-    media_entries = list(session.exec(select(MediaEntry).where(MediaEntry.season_id == season_id)))
+    foo = select(MediaEntry).where(
+        and_(
+            MediaEntry.season_id == season_id,  # type: ignore
+            MediaEntry.video_type == VideoType.EPISODE,  # type: ignore
+            MediaEntry.type == MediaEntryType.VIDEO,  # type: ignore
+        )
+    )
+
+    media_entries = list(session.exec(foo))
 
     return BaseResponse[list[MediaEntry]](
         message='Season details retrieved successfully', status_code=200, value=media_entries
     )
 
 
-@router.get('/', status_code=200)
+@router.get('', status_code=200)
 async def get_seasons(
+    limit: int = Query(10, ge=1),
+    skip: int = Query(0, ge=0),
+    name_sub_string: str | None = Query(None),
     session: Session = Depends(get_session),
 ) -> BaseResponse[list[Season]]:
-    seasons = list(session.exec(select(Season)).all())
+    statement = select(Season)
+
+    if name_sub_string:
+        statement = statement.where(Season.name.like(f'%{name_sub_string}%'))  # type: ignore
+
+    statement = statement.offset(skip).limit(limit)
+
+    statement = statement.order_by(Season.date_added.desc())  # type: ignore
+
+    seasons = list(session.exec(statement).all())
 
     return BaseResponse[list[Season]](
         message='Season details retrieved successfully', status_code=200, value=seasons

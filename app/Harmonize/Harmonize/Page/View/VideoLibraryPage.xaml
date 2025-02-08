@@ -14,52 +14,132 @@
              xmlns:components="clr-namespace:Harmonize.Components"
              Title="Video Library">
 
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="9*,4*,4*">
+            <Label FontSize="20"  Text="Video Library" HorizontalOptions="Start" Grid.Column="0" VerticalTextAlignment="Center"/>
+            <ImageButton 
+                Grid.Column="1" 
+                Source="icons8_slider_48.png"
+                Scale="0.60"
+                Clicked="OnFilterClicked"
+                >
+                <ImageButton.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
+                </ImageButton.Behaviors>
+            </ImageButton>
+            <ImageButton 
+                Grid.Column="2" 
+                Source="icons8_search_50.png"
+                Scale="0.60"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=OpenSearchCommand }"
+                CommandParameter="{x:Reference searchBar}"
+                Clicked="ScaleButton"
+                >
+                <ImageButton.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
+                </ImageButton.Behaviors>
+            </ImageButton>
+        </Grid>
+    </Shell.TitleView>
+
     <StackLayout Padding="10">
+        <Frame 
+            BackgroundColor="{StaticResource Gray900}" 
+            BorderColor="DarkGray" 
+            CornerRadius="10" 
+            Padding="5"
+            IsVisible="{Binding SearchBarVisible}"
+            Margin="0, 0, 0, 10"
+            >
+
+            <SearchBar 
+                IsVisible="{Binding SearchBarVisible}"
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Placeholder="Search..."
+                SearchCommand="{Binding SearchCommand}"
+                SearchCommandParameter="{Binding ., Source={x:Reference searchBar}}"
+                Text="{Binding SearchQuery}" 
+                FontSize="18"
+                HeightRequest="40"
+                VerticalOptions="Start"
+                HorizontalOptions="FillAndExpand"
+                x:Name="searchBar"
+                TextColor="{StaticResource OffWhite}"
+                />
+
+        </Frame>
+
         <RefreshView 
             IsRefreshing="{Binding FetchingData}" 
             Command="{Binding RefreshCommand}"
             >
             <CollectionView 
-                Grid.Row="1" 
                 IsVisible="True"
-                RemainingItemsThreshold="5"
+                RemainingItemsThreshold="1"
                 RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                 ItemsSource="{Binding MediaEntries}"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
+                VerticalScrollBarVisibility="Always"
+                SelectionMode="Single"
+                HeightRequest="20"
                 >
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="harmonizeModel:MediaEntry">
-                            <components:ListElement>
-                                <Grid
-                                    RowDefinitions="Auto"
-                                    ColumnDefinitions="*, Auto"
+                        <components:ListElement>
+                            <Grid
+                                RowDefinitions="Auto"
+                                ColumnDefinitions="*, Auto"
+                                VerticalOptions="Center"
+                                Padding="5">
+
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Tapped="TapGestureRecognizer_Tapped"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=ItemTappedCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Grid.GestureRecognizers>
+
+                                <Label 
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    FontSize="14" 
+                                    Text="{Binding Name}" 
                                     VerticalOptions="Center"
-                                    Padding="5">
+                                    HorizontalOptions="Start"/>
 
-                                    <Label 
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        FontSize="14" 
-                                        Text="{Binding Name}" 
-                                        VerticalOptions="Center"
-                                        HorizontalOptions="Start" />
+                                <Button 
+                                    Scale="1.5"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Margin="0,0,5,0"
+                                    Text="⋮"
+                                    FontSize="18"
+                                    BackgroundColor="Transparent"
+                                    VerticalOptions="Center"
+                                    Clicked="OnOpenBottomSheetClicked"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=OpenBottomSheetCommand}"
+                                    CommandParameter="{Binding .}" />
 
-                                    <Button 
-                                        Scale="1.5"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Text="⋮"
-                                        FontSize="18"
-                                        BackgroundColor="Transparent"
-                                        VerticalOptions="Center"
-                                        Clicked="OnOpenBottomSheetClicked"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=OpenBottomSheetCommand}"
-                                        CommandParameter="{Binding .}"
-                                        />
-
-                                </Grid>
-                            </components:ListElement>
+                                <ImageButton 
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Source="icons8_cloud_download_66.png"
+                                    VerticalOptions="Start"
+                                    HorizontalOptions="End"
+                                    Margin="0, 0, 0, 0"
+                                    WidthRequest="15"
+                                    HeightRequest="15"
+                                    IsVisible="{Binding Transferred}"
+                                    >
+                                    <ImageButton.Behaviors>
+                                        <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
+                                    </ImageButton.Behaviors>
+                                </ImageButton>
+                            </Grid>
+                        </components:ListElement>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
                 <CollectionView.Footer>
@@ -83,7 +163,7 @@
                         BackgroundColor="{StaticResource PrimaryDark}"
                         TextColor="White"
                         FontSize="16"
-                        CornerRadius="25"
+                        CornerRadius="15"
                         HeightRequest="45"
                         Clicked="OnOpenBottomSheetClicked"
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=SendToMediaSystemCommand }"
@@ -93,15 +173,86 @@
                         BackgroundColor="{StaticResource PrimaryDark}"
                         TextColor="White"
                         FontSize="16"
-                        CornerRadius="25"
+                        CornerRadius="15"
                         HeightRequest="45"
+                        Clicked="OnOpenBottomSheetClicked"
                         />
+
+                    <AbsoluteLayout HorizontalOptions="FillAndExpand">
+                        <Button Text="✕"
+                            BackgroundColor="Transparent"
+                            TextColor="{StaticResource Gray500}"
+                            FontSize="14"
+                            Padding="5"
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
+                            AbsoluteLayout.LayoutFlags="PositionProportional"
+                            Clicked="OnOpenBottomSheetClicked"
+                        />
+                    </AbsoluteLayout>
 
                 </StackLayout>
             </Frame>
-
-
         </components:BottomMenu>
+        <components:BottomMenu x:Name="filterMenu" IsVisible="False">
+            <Frame 
+                BackgroundColor="{StaticResource Gray600}"
+                CornerRadius="16"
+                HasShadow="True"
+                Padding="15"
+                VerticalOptions="End"
+                HorizontalOptions="FillAndExpand"
+                AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
+                AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional">
+                <Grid ColumnDefinitions="Auto, Auto"
+                    RowDefinitions="Auto, Auto"
+                    ColumnSpacing="20"
+                    RowSpacing="8">
 
+                    <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Spacing="10">
+                        <CheckBox 
+                            Color="{StaticResource Primary}" 
+                            WidthRequest="24" 
+                            HeightRequest="24"
+                            IsChecked="{Binding FilterByMovie, Mode=TwoWay}" 
+                            Margin="5,0,0,0"/>
+                        <Label 
+                            Text="Movie" 
+                            FontSize="16"
+                            TextColor="{StaticResource White}" 
+                            VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Grid.Row="0" Grid.Column="1" Spacing="10">
+                        <CheckBox 
+                            Color="{StaticResource Primary}" 
+                            WidthRequest="24" 
+                            HeightRequest="24"
+                            IsChecked="{Binding FilterByTransferred, Mode=TwoWay}" 
+                            Margin="5,0,0,0"/>
+                        <Label 
+                            Text="Transferred" 
+                            FontSize="16"
+                            TextColor="{StaticResource White}" 
+                            VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Spacing="10">
+                        <CheckBox 
+                            Color="{StaticResource Primary}" 
+                            WidthRequest="24" 
+                            HeightRequest="24"
+                            IsChecked="{Binding FilterByEpisode, Mode=TwoWay}" 
+                            Margin="5,0,0,0"/>
+                        <Label 
+                            Text="Episode" 
+                            FontSize="16"
+                            TextColor="{StaticResource White}" 
+                            VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Frame>
+        </components:BottomMenu>
     </StackLayout>
 </pages:BasePage>

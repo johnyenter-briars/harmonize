@@ -1,0 +1,115 @@
+﻿<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+               xmlns:harmonizeModel="clr-namespace:Harmonize.Client.Model.Season;assembly=Harmonize.Client"
+               xmlns:model="clr-namespace:Harmonize.Model"
+               xmlns:components="clr-namespace:Harmonize.Components"
+               x:Class="Harmonize.Components.AddToSeasonPopup">
+
+    <Border BackgroundColor="{StaticResource Gray600}"
+        StrokeThickness="0"
+        Padding="0"
+        Clip="M0,0 H350 V300 H0 Z">
+
+        <Frame 
+            BackgroundColor="Transparent"
+            HasShadow="True"
+            Padding="20"
+            WidthRequest="350"
+            HeightRequest="280"
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
+
+            <VerticalStackLayout 
+                Spacing="10"
+                >
+                <Frame 
+                    BackgroundColor="{StaticResource Gray600}" 
+                    BorderColor="DarkGray" 
+                    CornerRadius="10" 
+                    Padding="5"
+                    Margin="0, 0, 0, 0"
+                    >
+                    <SearchBar 
+                        Grid.Row="0"
+                        Grid.ColumnSpan="2"
+                        Placeholder="Search..."
+                        SearchCommand="{Binding SearchCommand}"
+                        SearchCommandParameter="{Binding ., Source={x:Reference searchBar}}"
+                        Text="{Binding SearchQuery}" 
+                        FontSize="18"
+                        HeightRequest="40"
+                        VerticalOptions="Start"
+                        HorizontalOptions="FillAndExpand"
+                        TextColor="{StaticResource OffWhite}"
+                        x:Name="searchBar"
+                        Margin="0"
+                        />
+                </Frame>
+                <ListView  
+                    Margin="0"
+                    IsVisible="True"
+                    ItemsSource="{Binding Seasons}"
+                    VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalScrollBarVisibility="Always"
+                    HeightRequest="115"
+                    SeparatorVisibility="None"
+                    SelectionMode="Single"
+                    ItemTapped="OnItemTapped"
+                    ItemSelected="OnItemSelected"
+                    >
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="harmonizeModel:Season">
+                            <ViewCell>
+                                <components:ListElement>
+                                    <Grid
+                                        Scale="0.8"
+                                        RowDefinitions="Auto"
+                                        ColumnDefinitions="*, Auto"
+                                        VerticalOptions="Center"
+                                        Padding="5">
+
+                                        <Label 
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            FontSize="14" 
+                                            Text="{Binding Name}" 
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Start" />
+
+                                        <Button 
+                                            Scale="1.5"
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Text="⋮"
+                                            FontSize="18"
+                                            BackgroundColor="Transparent"
+                                            VerticalOptions="Center"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SeasonLibraryViewModel}}, Path=OpenBottomSheetCommand}"
+                                            CommandParameter="{Binding .}"
+                                        />
+
+                                    </Grid>
+                                </components:ListElement>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <HorizontalStackLayout 
+                    Spacing="10"
+                    HorizontalOptions="End">
+                    <Button Text="Cancel"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontSize="16"
+                        Clicked="Cancel_Clicked"
+                            />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Frame>
+    </Border>
+</toolkit:Popup>
+

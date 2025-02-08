@@ -98,7 +98,7 @@
                                         Grid.Row="2"
                                         Grid.Column="0"
                                         TextColor="{StaticResource Gray200}"
-                                        Text="{Binding Progress}" 
+                                        Text="{Binding ProgressFmt}" 
                                         VerticalOptions="Center"
                                     />
                                     <Label

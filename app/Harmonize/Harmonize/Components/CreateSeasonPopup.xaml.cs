@@ -2,7 +2,6 @@ using CommunityToolkit.Maui.Views;
 using Harmonize.Client;
 using Harmonize.Client.Model.Season;
 using Harmonize.Service;
-using Harmonize.ViewModel;
 
 namespace Harmonize.Components;
 
@@ -28,7 +27,7 @@ public partial class CreateSeasonPopup : Popup
     private async void Add_Clicked(object sender, EventArgs e)
     {
         var name = seasonName.Text;
-        var foo = await failsafeService.Fallback(async () => 
+        var _ = await failsafeService.Fallback(async () => 
         await harmonizeClient.CreateSeason(new UpsertSeasonRequest { 
             Name = name,
         }), null);

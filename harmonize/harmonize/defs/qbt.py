@@ -1,8 +1,17 @@
 from pydantic import BaseModel, Field
 
+from harmonize.db.models import AudioType, MediaEntryType, VideoType
+
 
 class AddDownloadRequest(BaseModel):
-    magnet_links: list[str] = Field(alias='magnetLinks')
+    magnet_links: list[str] = Field(
+        alias='magnetLinks'
+    )  # TODO: this should really only be one. We currently treat it as if it's a list of 1
+    name: str
+    type: MediaEntryType = Field(alias='type')
+    video_type: VideoType | None = Field(alias='videoType')
+    audio_type: AudioType | None = Field(alias='audioType')
+    create_season: bool | None = Field(alias='createSeason')
 
 
 class PauseDownloadsRequest(BaseModel):

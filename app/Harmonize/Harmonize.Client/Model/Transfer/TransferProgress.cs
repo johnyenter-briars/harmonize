@@ -14,5 +14,6 @@ public class TransferProgress
     public required string Name { get; set; } = string.Empty;
     public required TransferDestination Destination { get; set; }
     public required float Progress { get; set; }
+    public string ProgressFmt => $"{Progress}%";
     public required DateTime StartTime { get; set; }
 }

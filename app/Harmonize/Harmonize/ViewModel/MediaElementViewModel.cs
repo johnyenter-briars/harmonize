@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Maui.Core.Primitives;
 using CommunityToolkit.Maui.Views;
-using Harmonize.Client.Model.Response;
+using Harmonize.Client.Model.Playlist;
 using Harmonize.Model;
 using Harmonize.Service;
 using System.ComponentModel;

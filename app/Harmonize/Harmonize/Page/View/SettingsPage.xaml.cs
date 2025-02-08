@@ -1,6 +1,5 @@
 using Harmonize.ViewModel;
 using AlohaKit.Animations;
-using Microsoft.Maui.Controls;
 using Harmonize.Service;
 
 namespace Harmonize.Page.View;

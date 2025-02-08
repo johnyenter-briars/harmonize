@@ -57,7 +57,36 @@ public class KodiClient
 
         await PostRequestAsync(requestObject);
     }
+    public async Task OpenVideos()
+    {
+        var requestObject = @"
+        {
+          ""jsonrpc"": ""2.0"",
+          ""id"": 1,
+          ""method"": ""GUI.ActivateWindow"",
+          ""params"": {
+            ""window"": ""videos"",
+            ""parameters"": [""/storage/videos""]
+          }
+        }";
 
+        await PostRequestAsync(requestObject);
+    }
+    public async Task OpenYoutube()
+    {
+        var requestObject = @"
+        {
+          ""jsonrpc"": ""2.0"",
+          ""id"": 1,
+          ""method"": ""Addons.ExecuteAddon"",
+          ""params"": {
+            ""addonid"": ""plugin.video.youtube"",
+            ""params"": [""action=search""]
+          }
+        }";
+
+        await PostRequestAsync(requestObject);
+    }
     public async Task ShowOSD()
     {
         var requestObject = @"

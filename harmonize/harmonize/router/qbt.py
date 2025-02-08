@@ -1,7 +1,11 @@
 import logging
+import uuid
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlmodel import Session
 
+from harmonize.db.database import get_session
+from harmonize.db.models import QbtDownloadTagInfo
 from harmonize.defs.qbt import (
     AddDownloadRequest,
     DeleteDownloadsRequest,
@@ -24,9 +28,25 @@ async def list_torrents() -> BaseResponse[list[QbtDownloadData]]:
 
 
 @router.post('/add', status_code=201)
-async def add_torrent(request: AddDownloadRequest) -> BaseResponse[None]:
+async def add_torrent(
+    request: AddDownloadRequest,
+    session: Session = Depends(get_session),
+) -> BaseResponse[None]:
     for magnet_link in request.magnet_links:
+        tag_info = QbtDownloadTagInfo(
+            id=uuid.uuid4(),
+            name=request.name,
+            magnet_link=magnet_link,
+            type=request.type,
+            video_type=request.video_type,
+            audio_type=request.audio_type,
+            create_season=request.create_season,
+        )
+        session.add(tag_info)
+
         _ = await qbt.add_torrent(magnet_link)
+
+        session.commit()
 
     return BaseResponse[None](message='Added', status_code=201, value=None)
 

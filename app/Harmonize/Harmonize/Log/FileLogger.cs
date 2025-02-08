@@ -1,9 +1,6 @@
-﻿using System;
-using System.IO;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace Harmonize.Log;
-
 
 public class FileLogger : ILogger
 {

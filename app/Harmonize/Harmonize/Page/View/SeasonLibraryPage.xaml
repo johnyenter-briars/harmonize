@@ -13,16 +13,27 @@
              xmlns:harmonizeModel="clr-namespace:Harmonize.Client.Model.Season;assembly=Harmonize.Client"
              xmlns:components="clr-namespace:Harmonize.Components"
              Title="Season Library">
-    
+
     <Shell.TitleView>
-        <Grid ColumnDefinitions="9*,4*">
+        <Grid ColumnDefinitions="9*,4*,4*">
             <Label FontSize="20"  Text="Season Library" HorizontalOptions="Start" Grid.Column="0" VerticalTextAlignment="Center"/>
+
             <ImageButton 
                 Grid.Column="1" 
                 Source="icons8_plus_key_50.png"
                 Scale="0.75"
-                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SeasonLibraryViewModel}}, Path=SendToMediaSystemCommand }"
                 Clicked="ImageButton_Clicked"
+                >
+                <ImageButton.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
+                </ImageButton.Behaviors>
+            </ImageButton>
+
+            <ImageButton 
+                Grid.Column="2" 
+                Source="icons8_search_50.png"
+                Scale="0.60"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SeasonLibraryViewModel}}, Path=OpenSearchCommand }"
                 >
                 <ImageButton.Behaviors>
                     <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
@@ -32,32 +43,66 @@
     </Shell.TitleView>
 
     <StackLayout Padding="10">
+        <Frame 
+            BackgroundColor="{StaticResource Gray900}" 
+            BorderColor="DarkGray" 
+            CornerRadius="10" 
+            Padding="5"
+            IsVisible="{Binding SearchBarVisible}"
+            Margin="0, 0, 0, 10"
+            >
+
+            <SearchBar 
+                IsVisible="{Binding SearchBarVisible}"
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Placeholder="Search..."
+                SearchCommand="{Binding SearchCommand}"
+                SearchCommandParameter="{Binding ., Source={x:Reference searchBar}}"
+                Text="{Binding SearchQuery}" 
+                FontSize="18"
+                HeightRequest="40"
+                VerticalOptions="Start"
+                HorizontalOptions="FillAndExpand"
+                x:Name="searchBar"
+                TextColor="{StaticResource OffWhite}"
+                >
+
+            </SearchBar>
+        </Frame>
+
         <RefreshView 
             IsRefreshing="{Binding FetchingData}" 
             Command="{Binding RefreshCommand}"
             >
-            <ListView 
+            <CollectionView 
                 Grid.Row="1" 
                 IsVisible="True"
+                RemainingItemsThreshold="1"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                 ItemsSource="{Binding Seasons}"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                ItemTapped="OnItemTapped"
-                RowHeight="95"
-                SeparatorVisibility="None"
-                ItemSelected="OnItemSelected"
+                VerticalScrollBarVisibility="Always"
+                SelectionMode="Single"
                 >
-                <ListView.ItemTemplate>
+                <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="harmonizeModel:Season">
-                        <ViewCell>
-                            <components:ListElement>
-                                <Grid
+                        <components:ListElement>
+                            <Grid
                                     RowDefinitions="Auto"
                                     ColumnDefinitions="*, Auto"
                                     VerticalOptions="Center"
                                     Padding="5">
 
-                                    <Label 
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SeasonLibraryViewModel}}, Path=ItemTappedCommand}"
+                                        CommandParameter="{Binding .}" 
+                                        />
+                                </Grid.GestureRecognizers>
+
+                                <Label 
                                         Grid.Row="0"
                                         Grid.Column="0"
                                         FontSize="14" 
@@ -65,7 +110,7 @@
                                         VerticalOptions="Center"
                                         HorizontalOptions="Start" />
 
-                                    <Button 
+                                <Button 
                                         Scale="1.5"
                                         Grid.Row="0"
                                         Grid.Column="1"
@@ -78,12 +123,11 @@
                                         CommandParameter="{Binding .}"
                                         />
 
-                                </Grid>
-                            </components:ListElement>
-                        </ViewCell>
+                            </Grid>
+                        </components:ListElement>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </RefreshView>
 
         <components:BottomMenu x:Name="bottomMenu" IsVisible="False">

@@ -15,17 +15,17 @@
 
     <VerticalStackLayout Spacing="10">
         <Label Text="Season ID" FontSize="Medium" />
-        <Entry Text="{Binding Seaon.Id, Mode=OneWay}" IsReadOnly="True" />
+        <Entry Text="{Binding Season.Id, Mode=OneWay}" IsReadOnly="True" />
 
         <Label Text="Name" FontSize="Medium" />
         <Editor 
-                Text="{Binding Seaon.Name, Mode=TwoWay}"
+                Text="{Binding Season.Name, Mode=TwoWay}"
                 AutoSize="TextChanges" 
                 HeightRequest="75" />
 
         <Label Text="Date Added" FontSize="Medium" />
         <Entry 
-                Text="{Binding Seaon.DateAdded, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}"
+                Text="{Binding Season.DateAdded, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}"
                 IsReadOnly="True" />
 
         <ListView 
@@ -43,13 +43,13 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="harmonizeModel:MediaEntry">
                     <ViewCell>
-                        <components:ListElement>
+                        <components:ListElement CustomPadding="-20">
                             <Grid
                                     Scale="0.8"
                                     RowDefinitions="Auto"
                                     ColumnDefinitions="*, Auto"
                                     VerticalOptions="Center"
-                                    Padding="5">
+                                    Padding="0">
 
                                 <Label 
                                         Grid.Row="0"
@@ -59,16 +59,41 @@
                                         VerticalOptions="Center"
                                         HorizontalOptions="Start" />
 
-                                <Button 
-                                        Scale="1.5"
+                                <ImageButton 
+                                        Scale="0.6"
+                                        Margin="0, 0, 20, 0"
+                                        Source="icons8_trash_26.png"
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Text="⋮"
-                                        FontSize="18"
                                         BackgroundColor="Transparent"
-                                        VerticalOptions="Center"
+                                    Clicked="ScaleButton"
+                                >
+                                    <ImageButton.Behaviors>
+                                        <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
+                                    </ImageButton.Behaviors>
+                                    <ImageButton.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditSeasonViewModel}}, Path=RemoveFromSeason }"
+                                        CommandParameter="{Binding .}"
                                         />
+                                    </ImageButton.GestureRecognizers>
+                                </ImageButton>
 
+                                <ImageButton 
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Source="icons8_cloud_download_66.png"
+                                    VerticalOptions="Start"
+                                    HorizontalOptions="End"
+                                    Margin="0, 5, 0, 0"
+                                    WidthRequest="15"
+                                    HeightRequest="15"
+                                    IsVisible="{Binding Transferred}"
+                                    >
+                                    <ImageButton.Behaviors>
+                                        <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
+                                    </ImageButton.Behaviors>
+                                </ImageButton>
                             </Grid>
                         </components:ListElement>
                     </ViewCell>

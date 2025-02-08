@@ -1,4 +1,5 @@
 import datetime
+import logging
 import uuid
 from collections.abc import Awaitable, Callable
 from typing import Any
@@ -9,8 +10,9 @@ from sqlmodel import Session
 from harmonize.db.models import Job, JobStatus
 from harmonize.job.stoppablethread import StoppableThread
 
-Jobs: dict[uuid.UUID, tuple[StoppableThread, Job]] = {}
+logger = logging.getLogger('harmonize')
 
+Jobs: dict[uuid.UUID, tuple[StoppableThread, Job]] = {}
 
 FuncType = Callable[[Any, Any, Any], Awaitable[Any]]
 
@@ -24,15 +26,18 @@ def _job_callback(job_function: Callable, args: Any, job: Job, session: Session)
     except Exception as e:
         job.status = JobStatus.FAILED
         job.error_message = str(e)
+        logger.exception(e)
     finally:
         session.add(job)
         session.commit()
 
 
 async def start_job(
-    description: str, job_function: Callable, session: Session, input_args: tuple[Any]
+    job_key: str, description: str, job_function: Callable, session: Session, input_args: tuple[Any]
 ) -> Job:
+    # TODO: should this create a new process scoped session?
     job = Job(
+        key=job_key,
         description=description,
         status=JobStatus.RUNNING,
         started_on=datetime.datetime.now(datetime.UTC),

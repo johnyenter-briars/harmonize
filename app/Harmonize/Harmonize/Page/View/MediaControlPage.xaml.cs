@@ -3,9 +3,9 @@ using Harmonize.Kodi;
 using Harmonize.Service;
 using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Controls;
 
 namespace Harmonize.Page.View;
+
 public partial class MediaControlPage : BasePage<MediaControlViewModel>
 {
     private readonly MediaControlViewModel viewModel;
@@ -52,10 +52,11 @@ public partial class MediaControlPage : BasePage<MediaControlViewModel>
     {
         if (sender is Microsoft.Maui.Controls.View view)
         {
+            var previousScale = view.Scale;
             view.Animate(new StoryBoard(new List<AnimationBase>
               {
                  new ScaleToAnimation { Scale = 1.1, Duration = "150" },
-                 new ScaleToAnimation { Scale = 1, Duration = "100" }
+                 new ScaleToAnimation { Scale = previousScale, Duration = "100" }
               }));
         }
     }

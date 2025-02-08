@@ -8,7 +8,7 @@
     Shell.FlyoutBehavior="Flyout"
     Shell.BackgroundColor="{StaticResource PrimaryDark}"
     FlyoutBackgroundColor="{StaticResource PrimaryDark}"
-    Shell.FlyoutWidth="250"
+    Shell.FlyoutWidth="210"
     Title="Harmonize">
 
     <FlyoutItem 
@@ -46,7 +46,7 @@
     </FlyoutItem>
     <FlyoutItem 
                 Title="Magnet Link Search" 
-                Icon="icons8_search_more_50.png"
+                Icon="icons8_search_50.png"
                 >
         <Tab>
             <ShellContent

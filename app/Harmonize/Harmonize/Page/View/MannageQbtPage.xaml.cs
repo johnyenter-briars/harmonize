@@ -1,4 +1,3 @@
-using Harmonize.Client.Model.QBT;
 using Harmonize.Service;
 using Harmonize.ViewModel;
 

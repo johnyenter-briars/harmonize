@@ -4,7 +4,7 @@
 
 Good luck.
 
-## Todos For Audio Support Only
+## Todos For Video Support Only
 
 - [X] Delete video method
 - [X] Edit element page
@@ -13,31 +13,60 @@ Good luck.
   - [X] Bug where two identical elements show up
   - [X] Sort elements by started time
   - [X] If transfer, status of transfer
-- [ ] Media List
-  - [ ] Nice search
-  - [ ] Season search
-  - [ ] Filter + query popup
-  - [ ] Delete entry
-  - [ ] Paging
+- [X] Media List
+  - [X] Nice search
+  - [X] Filter + query popup
+  - [X] Filter by type
+  - [X] Filter by transferred
+  - [X] Order by added on
+  - [X] Delete entry (delete file on disk)
+  - [X] Deletes children
+  - [X] Paging
+  - [X] Display SRT files
+  - [X] subtitle rename....?
 - [X] Health page
   - [X] Add page
   - [X] VPN check
   - [X] Network check
-- [ ] Test + confirm QBT
-  - [ ] Individual eps in a folder considered a season
+- [X] Test + confirm QBT
+  - [X] Individual eps in a folder considered a season
+  - [X] Add ability to tag
 - [X] Seasons backend
-- [ ] Seasons frontend
+- [X] Seasons frontend
   - [X] Edit Season Name
   - [X] Add season
   - [X] Display entries in season
   - [X] Delete season
-  - [ ] Paging
-- [ ] Update colors
+  - [X] Paging
+  - [X] Edit entry from within season
+  - [X] Order by added on
+  - [X] Associate to season
+  - [X] Disssociate to season
+- [X] Control
+  - [X] Button to open up videos
+  - [X] Button to open up Youtube
+- [X] Update colors globally
+  - [X] Media control colors
+- [X] Alerts should be snackbar
+- [X] Style snackbar
+- [X] Fix paging on seasons
+- [X] Fix paging on media entry
+- [X] Add new properties to edit media entry
 - [X] Hook up send to media server
+- [X] Gb rounding in QBT
+- [X] Remove files from media system
+- [X] Qbt job doesn't lock up requests
+- [X] Authentication
+- [X] Only most recent 50 jobs
+- [X] Only most recent 50 transferrs
+- [X] Opening search bar focuses bar - season + video
+- [X] Clicking on transfer element brings you to edit page
+- [X] Delete of entry remotely also deletes its subtitle file(s) (if present)
+- [ ] Setup SSL Cert + Https
 - [ ] Backfill method
 - [ ] Update server
 - [ ] Setup daemon
-- [ ] Setup SSL Cert + Https
+- [ ] Fix YT
 - [ ] IOS
 
 ## Todos For Full Functionality

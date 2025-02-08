@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Maui.Core;
-using Harmonize.Client;
+﻿using Harmonize.Client;
 using Harmonize.Client.Model.Job;
 using Harmonize.Extensions;
 using Harmonize.Page.View;

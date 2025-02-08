@@ -14,20 +14,28 @@
             HasShadow="True"
             Padding="20"
             WidthRequest="350"
-            HeightRequest="185"
+            HeightRequest="195"
             VerticalOptions="Center"
             HorizontalOptions="Center">
-               
+
             <VerticalStackLayout Spacing="50">
+                <Frame 
+                    BackgroundColor="{StaticResource Gray600}" 
+                    BorderColor="DarkGray" 
+                    CornerRadius="10" 
+                    Padding="5"
+                    Margin="0, 0, 0, 0"
+                    >
+                    <Entry Placeholder="Enter season name..."
+                       BackgroundColor="{StaticResource Gray600}"
+                       TextColor="White"
+                       FontSize="16"
+                       x:Name="seasonName"/>
+                </Frame>
 
-                <Entry Placeholder="Enter season name..."
-                   BackgroundColor="{StaticResource Gray600}"
-                   TextColor="White"
-                   FontSize="16"
-                   x:Name="seasonName"/>
-
-                <HorizontalStackLayout Spacing="10"
-                                   HorizontalOptions="End">
+                <HorizontalStackLayout 
+                    Spacing="10"
+                    HorizontalOptions="End">
                     <Button Text="Cancel"
                         BackgroundColor="Transparent"
                         TextColor="White"
@@ -43,11 +51,8 @@
                         Clicked="Add_Clicked"
                             />
                 </HorizontalStackLayout>
-
             </VerticalStackLayout>
-
         </Frame>
     </Border>
-    
 </toolkit:Popup>
 

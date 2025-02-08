@@ -63,6 +63,14 @@ public class MediaControlViewModel(
             await kodiClient.PowerOff();
         }
     });
+    public ICommand OpenVideosCommand => new Command<Button>(async (Button button) =>
+    {
+        await kodiClient.OpenVideos();
+    });
+    public ICommand OpenYoutubeCommand => new Command<Button>(async (Button button) =>
+    {
+        await kodiClient.OpenYoutube();
+    });
     public ICommand RewindCommand => new Command<Button>(async (Button button) =>
     {
         await kodiClient.SetPlayerSpeed(DecSpeed());

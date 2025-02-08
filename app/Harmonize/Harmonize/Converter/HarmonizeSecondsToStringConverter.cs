@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 
 namespace Harmonize.Converter;
+
 public class HarmonizeSecondsToStringConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

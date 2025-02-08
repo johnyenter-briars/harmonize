@@ -32,8 +32,10 @@ def get_drive_with_least_space() -> Path | None:
     return least_space_drive
 
 
-def move_file_to_mounted_folders(
-    source_path: Path, chosen_drive: Path | None = None
+def copy_file_to_mounted_folders(
+    source_path: Path,
+    chosen_drive: Path | None = None,
+    new_name: str | None = None,
 ) -> Path | None:
     if chosen_drive is None:
         chosen_drive = get_drive_with_least_space()
@@ -41,7 +43,10 @@ def move_file_to_mounted_folders(
     if chosen_drive is None:
         return None
 
-    destination_path = chosen_drive / VIDEO_ROOT / source_path.name
+    if new_name is None:
+        destination_path = chosen_drive / VIDEO_ROOT / source_path.name
+    else:
+        destination_path = chosen_drive / VIDEO_ROOT / f'{new_name}{source_path.suffix}'
 
     shutil.copy2(source_path, destination_path)
 

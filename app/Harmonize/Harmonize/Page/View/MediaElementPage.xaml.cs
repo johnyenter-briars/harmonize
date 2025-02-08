@@ -1,11 +1,8 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using CommunityToolkit.Maui.Core.Primitives;
 using CommunityToolkit.Maui.Views;
-using Harmonize.Client.Model.Response;
 using Harmonize.ViewModel;
 using Microsoft.Extensions.Logging;
-using MediaManager = Harmonize.Service.MediaManager;
 
 namespace Harmonize.Page.View;
 

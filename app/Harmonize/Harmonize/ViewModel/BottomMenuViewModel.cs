@@ -1,8 +1,6 @@
 ﻿using Harmonize.Model;
 using Harmonize.Client;
-using Harmonize.Client.Model.Job;
 using Harmonize.Service;
-using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace Harmonize.ViewModel;

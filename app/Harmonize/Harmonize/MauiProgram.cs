@@ -1,8 +1,6 @@
 ﻿using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Core.Views;
 using Harmonize.Client;
 using Harmonize.Log;
-using Harmonize.Model;
 using Harmonize.Page.View;
 using Harmonize.Service;
 using Harmonize.ViewModel;
@@ -75,6 +73,7 @@ namespace Harmonize
             builder.Services.AddSingleton<TransferListViewModel>();
             builder.Services.AddSingleton<SeasonLibraryViewModel>();
             builder.Services.AddSingleton<EditSeasonViewModel>();
+            builder.Services.AddSingleton<AddToSeasonViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();

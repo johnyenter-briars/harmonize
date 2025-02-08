@@ -1,8 +1,6 @@
 using Harmonize.Client.Model.Job;
-using Harmonize.Model;
 using Harmonize.Service;
 using Harmonize.ViewModel;
-using System.Collections.ObjectModel;
 
 namespace Harmonize.Page.View;
 

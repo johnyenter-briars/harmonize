@@ -1,14 +1,10 @@
 ﻿using Harmonize.Client;
 using Harmonize.Client.Model.Transfer;
 using Harmonize.Extensions;
+using Harmonize.Page.View;
 using Harmonize.Service;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
@@ -88,9 +84,11 @@ public class TransferListViewModel(
     }
     public async Task ItemTapped(TransferProgress transferProgress)
     {
-        if (transferProgress != null)
+        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), new Dictionary<string, object?>
         {
-        }
+            { nameof(EditMediaEntryViewModel.MediaEntryId), transferProgress.MediaEntryId },
+            { nameof(EditMediaEntryViewModel.MediaEntry), null },
+        });
     }
     public override async Task OnAppearingAsync()
     {
