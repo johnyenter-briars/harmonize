@@ -278,11 +278,12 @@ def _create_media_entry(
 def _save_file(
     source_path: Path, download: QbtDownloadData, session: Session, logger: logging.Logger
 ):
-    statement = select(QbtDownloadTagInfo).where(
-        QbtDownloadTagInfo.magnet_link.ilike(download.magnet_uri)  # type: ignore
-    )
+    results = list(session.exec(select(QbtDownloadTagInfo)))
 
-    tag_data = session.exec(statement).first()
+    tag_data = next(
+        (r for r in results if compare_magnet_links(str(r.magnet_link), str(download.magnet_uri))),
+        None,
+    )
 
     if tag_data is None:
         logger.info('No tag data for currently running download: %s', download.name)
@@ -373,6 +374,7 @@ def _process_files(
 
         logger.info('Created season: %s', season_id)
 
+    # Match up srt files with their respective video files
     srt_matching: dict[str, list[Path]] = {}
     for file in [file for file in eligible_files if file.suffix in VIDEO_EXTENSIONS]:
         srt_matching[file.stem] = [file]
@@ -394,6 +396,7 @@ def _process_files(
             if _subtitle_match(potential_subtitle_file, video_file):
                 srt_matching[key].append(potential_subtitle_file)
 
+    # Process each pair of video + zero or many srt files
     for name in srt_matching:
         tag_data = session.merge(tag_data)
         session.refresh(tag_data)
@@ -412,6 +415,7 @@ def _process_files(
             session.add(_create_media_entry(file, moved_path, download, tag_data, season_id))
             session.commit()
         else:
+            # Process video first
             video_files = [file for file in files if file.suffix in VIDEO_EXTENSIONS]
 
             if len(video_files) != 1:
@@ -439,8 +443,14 @@ def _process_files(
                 video_media_entry.type,
             )
 
+            # Process related srts
             for srt_file in [file for file in files if file.suffix in SUBTITLE_EXTENSIONS]:
-                moved_path = copy_file_to_mounted_folders(srt_file.absolute(), chosen_drive)
+                srt_name = f'{video_file.stem}-{srt_file.stem}'
+
+                moved_path = copy_file_to_mounted_folders(
+                    srt_file.absolute(), chosen_drive, srt_name
+                )
+
                 if moved_path is None:
                     return (False, f'Unable to move file: {srt_file.absolute()}')
 
@@ -451,7 +461,7 @@ def _process_files(
                     tag_data,
                     season_id,
                     parent_id=video_file_id,
-                    name=f'{video_file.stem}-{srt_file.stem}',
+                    name=srt_name,
                 )
 
                 session.add(srt_media_entry)

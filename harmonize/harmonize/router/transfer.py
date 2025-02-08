@@ -1,15 +1,17 @@
 import logging
 import uuid
+from operator import iand
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session
+from sqlalchemy import select
+from sqlmodel import Session, select
 
 import harmonize.config
 import harmonize.config.harmonizeconfig
 import harmonize.config.harmonizesecrets
 from harmonize.db.database import get_new_session, get_session
-from harmonize.db.models import Job, MediaEntry
+from harmonize.db.models import Job, MediaEntry, MediaEntryType
 from harmonize.defs.response import BaseResponse
 from harmonize.defs.transferprogress import TransferDestination, TransferProgress
 from harmonize.job.callback import start_job
@@ -62,6 +64,17 @@ def _transfer_file_job(
     if media_entry_proc is None:
         return
 
+    subs = list(
+        process_scoped_session.exec(
+            select(MediaEntry).where(
+                iand(
+                    MediaEntry.type == MediaEntryType.SUBTITLE,
+                    MediaEntry.parent_media_entry_id == media_entry_id,
+                )
+            )
+        )
+    )
+
     current_full_path = Path(media_entry_proc.absolute_path)
 
     remote_path = f'{secrets.media_system_root}/{current_full_path.name}'
@@ -76,6 +89,24 @@ def _transfer_file_job(
         media_entry_proc.id,
         TransferDestination.MEDIA_SYSTEM,
     )
+
+    for sub in subs:
+        current_full_path = Path(sub.absolute_path)
+
+        remote_path = f'{secrets.media_system_root}/{current_full_path.name}'
+
+        transfer_file(
+            secrets.media_system_ip,
+            secrets.media_system_username,
+            secrets.media_system_password,
+            sub.absolute_path,
+            remote_path,
+            sub.name,
+            sub.id,
+            TransferDestination.MEDIA_SYSTEM,
+        )
+
+        sub.transferred = True
 
     media_entry_proc.transferred = True
 
@@ -127,6 +158,17 @@ def _untransfer_file_job(
     if media_entry_proc is None:
         return
 
+    subs = list(
+        process_scoped_session.exec(
+            select(MediaEntry).where(
+                iand(
+                    MediaEntry.type == MediaEntryType.SUBTITLE,
+                    MediaEntry.parent_media_entry_id == media_entry_id,
+                )
+            )
+        )
+    )
+
     current_full_path = Path(media_entry_proc.absolute_path)
 
     remote_path = f'{secrets.media_system_root}/{current_full_path.name}'
@@ -137,6 +179,20 @@ def _untransfer_file_job(
         secrets.media_system_password,
         remote_path,
     )
+
+    for sub in subs:
+        current_full_path = Path(sub.absolute_path)
+
+        remote_path = f'{secrets.media_system_root}/{current_full_path.name}'
+
+        remove_remote_file(
+            secrets.media_system_ip,
+            secrets.media_system_username,
+            secrets.media_system_password,
+            remote_path,
+        )
+
+        sub.transferred = False
 
     media_entry_proc.transferred = False
 
