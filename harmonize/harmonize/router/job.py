@@ -1,6 +1,6 @@
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
 
 from harmonize.db.database import get_session
@@ -13,9 +13,16 @@ router = APIRouter(prefix='/api')
 
 @router.get('/job')
 async def jobs(
+    limit: int = Query(50, ge=1),
+    skip: int = Query(0, ge=0),
     session: Session = Depends(get_session),
 ) -> BaseResponse[list[Job]]:
     statement = select(Job)
+
+    statement = statement.offset(skip).limit(limit)
+
+    statement = statement.order_by(Job.started_on.desc())  # type: ignore
+
     jobs = list(session.exec(statement).all())
 
     return BaseResponse[list[Job]](message='Jobs found', status_code=200, value=jobs)

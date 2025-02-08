@@ -47,6 +47,7 @@ async def list_video_paging(
     skip: int = Query(0, ge=0),
     name_sub_string: str | None = Query(None),
     type: list[VideoType] = Query(None),
+    transferred: bool | None = Query(None),
     session: Session = Depends(get_session),
 ) -> BaseResponse[list[MediaEntry]]:
     statement = select(MediaEntry).where(MediaEntry.type == MediaEntryType.VIDEO)
@@ -56,6 +57,9 @@ async def list_video_paging(
 
     if type:
         statement = statement.where(MediaEntry.video_type.in_(type))  # type: ignore
+
+    if transferred is not None and transferred is True:
+        statement = statement.where(MediaEntry.transferred is True)
 
     statement = statement.offset(skip).limit(limit)
 

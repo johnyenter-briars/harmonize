@@ -11,6 +11,8 @@ logger = logging.getLogger('harmonize')
 
 _progress_dict: dict[tuple[uuid.UUID, TransferDestination], TransferProgress] = {}
 
+_MAX_TRANSFER_HISTORY = 50
+
 
 def _generate_progress_callback(
     media_entry_id: uuid.UUID,
@@ -109,5 +111,9 @@ def get_running_transfer(media_entry: MediaEntry) -> TransferProgress | None:
 
 
 def get_all_running_transfers() -> list[TransferProgress]:
-    foo = _progress_dict.values()
-    return list(foo)
+    excess = len(_progress_dict) - _MAX_TRANSFER_HISTORY
+    if excess > 0:
+        for key in list(_progress_dict.keys())[:excess]:
+            del _progress_dict[key]
+
+    return list(_progress_dict.values())
