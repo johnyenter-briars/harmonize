@@ -63,10 +63,16 @@ Good luck.
 - [X] Clicking on transfer element brings you to edit page
 - [X] Delete of entry remotely also deletes its subtitle file(s) (if present)
 - [ ] Setup SSL Cert + Https
+  - [X] Renew cert
+  - [ ] Get validated so android trusts
+- [X] Fix YT
+- [X] Update server
+  - [X] Yay -Syu
+  - [X] Update QBT
 - [ ] Backfill method
-- [ ] Update server
+- [ ] Use du -f to check for remaining space
 - [ ] Setup daemon
-- [ ] Fix YT
+- [ ] Test
 - [ ] IOS
 
 ## Todos For Full Functionality
