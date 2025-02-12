@@ -70,7 +70,7 @@ Good luck.
   - [X] Yay -Syu
   - [X] Update QBT
 - [X] Backfill method
-- [ ] Option to delete season + all episodes (and child srt files)
+- [X] Option to delete season + all episodes (and child srt files)
 - [X] Use du -f to check for remaining space
 - [ ] Setup daemon
 - [ ] Delete backup dups 
