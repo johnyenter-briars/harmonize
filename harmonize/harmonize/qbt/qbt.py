@@ -29,6 +29,7 @@ from harmonize.defs.qbt import QbtDownloadData
 from harmonize.file.drive import (
     copy_file_to_mounted_folders,
     get_drive_with_most_space,
+    list_files_recursive,
 )
 from harmonize.job.callback import start_job
 
