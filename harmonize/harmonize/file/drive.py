@@ -9,7 +9,7 @@ config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
 
 
 def get_drive_free_space_shutil(drive: Path) -> int:
-    return shutil.disk_usage(drive).fre
+    return shutil.disk_usage(drive).free
 
 
 def get_drive_with_most_space() -> Path | None:

@@ -14,7 +14,7 @@ from harmonize.db.database import get_session
 from harmonize.db.models import MediaEntry, MediaEntryType, Playlist, Season
 from harmonize.defs.health import Drive, HealthStatus, Uptime
 from harmonize.defs.response import BaseResponse
-from harmonize.file.drive import get_folder_size_bytes
+from harmonize.file.drive import get_drive_free_space_shutil
 
 config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
 
@@ -76,7 +76,7 @@ async def status(
     download_speed_kb = (net_io_end.bytes_recv - net_io_start.bytes_recv) / (1024)
 
     drives = [
-        Drive(path=drive, space_used=round(get_folder_size_bytes(Path(drive)) / (1024**3), 2))
+        Drive(path=drive, space_used=round(get_drive_free_space_shutil(Path(drive)) / (1024**3), 2))
         for drive in config.drives
     ]
 
