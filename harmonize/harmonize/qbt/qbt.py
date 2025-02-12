@@ -28,7 +28,7 @@ from harmonize.db.models import (
 from harmonize.defs.qbt import QbtDownloadData
 from harmonize.file.drive import (
     copy_file_to_mounted_folders,
-    get_drive_with_least_space,
+    get_drive_with_most_space,
 )
 from harmonize.job.callback import start_job
 
@@ -361,7 +361,7 @@ def _process_files(
     session: Session,
     logger: logging.Logger,
 ) -> tuple[bool, str | None]:
-    chosen_drive = get_drive_with_least_space()
+    chosen_drive = get_drive_with_most_space()
 
     logger.info('Chose drive: %s', chosen_drive)
 

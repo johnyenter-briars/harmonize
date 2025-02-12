@@ -69,9 +69,11 @@ Good luck.
 - [X] Update server
   - [X] Yay -Syu
   - [X] Update QBT
-- [ ] Backfill method
-- [ ] Use du -f to check for remaining space
+- [X] Backfill method
+- [ ] Option to delete season + all episodes (and child srt files)
+- [X] Use du -f to check for remaining space
 - [ ] Setup daemon
+- [ ] Delete backup dups 
 - [ ] Test
 - [ ] IOS
 

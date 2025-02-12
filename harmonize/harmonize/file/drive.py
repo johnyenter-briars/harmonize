@@ -8,28 +8,14 @@ from harmonize.const import VIDEO_ROOT
 config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
 
 
-def get_folder_size_bytes(folder: Path) -> int:
-    total_size = 0
-    for entry in folder.iterdir():
-        if entry.is_file():
-            total_size += entry.stat().st_size
-        elif entry.is_dir():
-            total_size += get_folder_size_bytes(entry)
-    return total_size
+def get_drive_free_space_shutil(drive: Path) -> int:
+    return shutil.disk_usage(drive).fre
 
 
-def get_drive_with_least_space() -> Path | None:
+def get_drive_with_most_space() -> Path | None:
     drives = [Path(drive) for drive in config.drives]
-    folder_sizes = {drive: get_folder_size_bytes(drive) for drive in drives}
-
-    least_space_drive = None
-    least_space = float('inf')
-    for drive, size in folder_sizes.items():
-        if size < least_space:
-            least_space_drive = drive
-            least_space = size
-
-    return least_space_drive
+    least_free_drive = max(drives, key=get_drive_free_space_shutil)
+    return least_free_drive
 
 
 def copy_file_to_mounted_folders(
@@ -38,7 +24,7 @@ def copy_file_to_mounted_folders(
     new_name: str | None = None,
 ) -> Path | None:
     if chosen_drive is None:
-        chosen_drive = get_drive_with_least_space()
+        chosen_drive = get_drive_with_most_space()
 
     if chosen_drive is None:
         return None
