@@ -320,10 +320,6 @@ def _save_file(
     return True
 
 
-def _list_files_recursive(directory: str) -> list[Path]:
-    return [file for file in Path(directory).rglob('*') if file.is_file()]
-
-
 def _subtitle_match(potential_subtitle_file: Path, video_file: Path):
     video_stem = video_file.stem
 
@@ -500,7 +496,7 @@ def _save_directory_files(
         logger.info('No tag data for currently running download: %s', download.name)
         return False
 
-    all_files_recursive = _list_files_recursive(source_path.absolute().as_posix())
+    all_files_recursive = list_files_recursive(source_path.absolute().as_posix())
 
     eligible_files = [
         file

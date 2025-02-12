@@ -45,3 +45,7 @@ def remove_file(path: Path):
             path.unlink()
         elif path.is_dir():
             shutil.rmtree(path)
+
+
+def list_files_recursive(directory: str) -> list[Path]:
+    return [file for file in Path(directory).rglob('*') if file.is_file()]
