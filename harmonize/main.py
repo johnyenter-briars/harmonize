@@ -26,7 +26,6 @@ from harmonize.router import (
     season,
     stream,
     transfer,
-    youtube,
 )
 
 config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
@@ -65,7 +64,6 @@ app = FastAPI(lifespan=app_lifespan, dependencies=[Depends(get_session)])
 
 app.state.start_time = datetime.now()
 
-app.include_router(youtube.router, dependencies=[Depends(get_session)])
 app.include_router(media.router, dependencies=[Depends(get_session)])
 app.include_router(metadata.router, dependencies=[Depends(get_session)])
 app.include_router(search.router, dependencies=[Depends(get_session)])

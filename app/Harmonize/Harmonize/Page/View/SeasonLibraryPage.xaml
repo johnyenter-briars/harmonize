@@ -141,28 +141,9 @@
                 AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
                 AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional">
                 <StackLayout Spacing="12">
-                    <Button Text="Send to Media System"
-                        BackgroundColor="{StaticResource PrimaryDark}"
-                        TextColor="White"
-                        FontSize="16"
-                        CornerRadius="25"
-                        HeightRequest="45"
-                        Clicked="OnOpenBottomSheetClicked"
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SeasonLibraryViewModel}}, Path=SendToMediaSystemCommand }"
-                        />
-
-                    <Button Text="Add to Season"
-                        BackgroundColor="{StaticResource PrimaryDark}"
-                        TextColor="White"
-                        FontSize="16"
-                        CornerRadius="25"
-                        HeightRequest="45"
-                        />
-
+                    <Label>Under construction. : )</Label>
                 </StackLayout>
             </Frame>
-
-
         </components:BottomMenu>
 
     </StackLayout>

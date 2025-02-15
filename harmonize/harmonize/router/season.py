@@ -1,5 +1,7 @@
 import logging
 import uuid
+from operator import iand
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import and_, select
@@ -13,6 +15,7 @@ from harmonize.defs.season import (
     DisassociateToSeasonRequest,
     UpsertSeasonRequest,
 )
+from harmonize.file.drive import remove_file
 
 logger = logging.getLogger('harmonize')
 router = APIRouter(prefix='/api/season')
@@ -143,12 +146,42 @@ async def update_season(
 @router.delete('/{season_id}', status_code=200)
 async def delete_season(
     season_id: uuid.UUID,
+    delete_episodes: bool | None = Query(None),
     session: Session = Depends(get_session),
 ) -> BaseResponse[None]:
     season = session.get(Season, season_id)
     if not season:
         raise HTTPException(status_code=404, detail='Season not found')
 
+    if delete_episodes is not None and delete_episodes:
+        media_entries = list(
+            session.exec(
+                select(MediaEntry).where(
+                    MediaEntry.season_id == season_id,
+                )
+            )
+        )
+
+        for media_entry in media_entries:
+            subs = list(
+                session.exec(
+                    select(MediaEntry).where(
+                        iand(
+                            MediaEntry.type == MediaEntryType.SUBTITLE,
+                            MediaEntry.parent_media_entry_id == media_entry.id,
+                        )
+                    )
+                )
+            )
+
+            for sub in subs:
+                remove_file(Path(sub.absolute_path))
+                session.delete(sub)
+
+            remove_file(Path(media_entry.absolute_path))
+            session.delete(media_entry)
+
+    session.refresh(season)
     session.delete(season)
     session.commit()
 

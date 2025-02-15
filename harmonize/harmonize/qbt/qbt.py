@@ -28,7 +28,8 @@ from harmonize.db.models import (
 from harmonize.defs.qbt import QbtDownloadData
 from harmonize.file.drive import (
     copy_file_to_mounted_folders,
-    get_drive_with_least_space,
+    get_drive_with_most_space,
+    list_files_recursive,
 )
 from harmonize.job.callback import start_job
 
@@ -320,10 +321,6 @@ def _save_file(
     return True
 
 
-def _list_files_recursive(directory: str) -> list[Path]:
-    return [file for file in Path(directory).rglob('*') if file.is_file()]
-
-
 def _subtitle_match(potential_subtitle_file: Path, video_file: Path):
     video_stem = video_file.stem
 
@@ -361,7 +358,7 @@ def _process_files(
     session: Session,
     logger: logging.Logger,
 ) -> tuple[bool, str | None]:
-    chosen_drive = get_drive_with_least_space()
+    chosen_drive = get_drive_with_most_space()
 
     logger.info('Chose drive: %s', chosen_drive)
 
@@ -500,7 +497,7 @@ def _save_directory_files(
         logger.info('No tag data for currently running download: %s', download.name)
         return False
 
-    all_files_recursive = _list_files_recursive(source_path.absolute().as_posix())
+    all_files_recursive = list_files_recursive(source_path.absolute().as_posix())
 
     eligible_files = [
         file

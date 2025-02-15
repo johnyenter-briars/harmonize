@@ -240,9 +240,9 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<UpsertSeasonRequest, SeasonResponse>(request, $"season/{season.Id}", HttpMethod.Put);
     }
-    public async Task<SeasonResponse> DeleteSeason(Season season)
+    public async Task<SeasonResponse> DeleteSeason(Season season, bool deleteEpisodes)
     {
-        return await HarmonizeRequest<SeasonResponse>($"season/{season.Id}", HttpMethod.Delete);
+        return await HarmonizeRequest<SeasonResponse>($"season/{season.Id}?delete_episodes={deleteEpisodes}", HttpMethod.Delete);
     }
     #endregion
 

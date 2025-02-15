@@ -56,12 +56,14 @@ public class EditSeasonViewModel(
     {
         if (await alertService.ShowConfirmationAsync("Delete Season", $"Are you sure you want to delete season: {season.Name}?") == true)
         {
+            var deleteEpisodes = await alertService.ShowConfirmationAsync("Delete all episodes?", $"Do you want to delete all episodes in: {season.Name}?");
+
             var (response, success) = await FetchData(async () =>
             {
-                return await failsafeService.Fallback(async () => await harmonizeClient.DeleteSeason(Season), null);
+                return await failsafeService.Fallback(async () => await harmonizeClient.DeleteSeason(Season, deleteEpisodes), null);
             });
 
-            if (response.Success)
+            if (response?.Success == true)
             {
                 await Shell.Current.GoToAsync("..");
             }

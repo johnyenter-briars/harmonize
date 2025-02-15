@@ -163,7 +163,7 @@
                         BackgroundColor="{StaticResource PrimaryDark}"
                         TextColor="White"
                         FontSize="16"
-                        CornerRadius="15"
+                        CornerRadius="10"
                         HeightRequest="45"
                         Clicked="OnOpenBottomSheetClicked"
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=SendToMediaSystemCommand }"
@@ -173,7 +173,7 @@
                         BackgroundColor="{StaticResource PrimaryDark}"
                         TextColor="White"
                         FontSize="16"
-                        CornerRadius="15"
+                        CornerRadius="10"
                         HeightRequest="45"
                         Clicked="OnOpenBottomSheetClicked"
                         />
