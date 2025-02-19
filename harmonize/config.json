@@ -11,5 +11,6 @@
     "drives": [
         "/mnt/db4"
     ],
-    "enable-auth": true
+    "enable-auth": true,
+    "url-prefix": "/harmonize"
 }
