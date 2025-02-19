@@ -5,6 +5,7 @@ namespace Harmonize.Client.Model.Job;
 public class Job
 {
     public required Guid Id { get; set; }
+    public required string Key { get; set; }
     public required DateTime StartedOn { get; set; }
     public required string Description { get; set; }
     public required string? ErrorMessage { get; set; }

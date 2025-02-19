@@ -21,7 +21,9 @@ public class PreferenceManager(
         KodiApiUserName = Preferences.Default.Get(nameof(UserSettings.KodiApiUserName), ""),
         KodiApiPasword = Preferences.Default.Get(nameof(UserSettings.KodiApiPasword), ""),
         HarmonizeUserName = Preferences.Default.Get(nameof(UserSettings.HarmonizeUserName), ""),
-        HarmonizePassword = Preferences.Default.Get(nameof(UserSettings.HarmonizePassword ), ""),
+        HarmonizePassword = Preferences.Default.Get(nameof(UserSettings.HarmonizePassword), ""),
+        UrlPrefix = Preferences.Default.Get(nameof(UserSettings.UrlPrefix), ""),
+        UseHttps = Preferences.Default.Get(nameof(UserSettings.UseHttps), false),
     };
 
     internal PreferenceManager SetUserSetttings(UserSettings userSettings)
@@ -35,14 +37,18 @@ public class PreferenceManager(
         Preferences.Default.Set(nameof(UserSettings.IncludeMediaControlPage), userSettings.IncludeMediaControlPage);
         Preferences.Default.Set(nameof(UserSettings.KodiDomainName), userSettings.KodiDomainName);
         Preferences.Default.Set(nameof(UserSettings.KodiPort), userSettings.KodiPort);
-        Preferences.Default.Set(nameof(UserSettings.KodiApiUserName), userSettings.KodiApiUserName);  
-        Preferences.Default.Set(nameof(UserSettings.KodiApiPasword), userSettings.KodiApiPasword);  
-        Preferences.Default.Set(nameof(UserSettings.HarmonizeUserName), userSettings.HarmonizeUserName);  
-        Preferences.Default.Set(nameof(UserSettings.HarmonizePassword), userSettings.HarmonizePassword);  
+        Preferences.Default.Set(nameof(UserSettings.KodiApiUserName), userSettings.KodiApiUserName);
+        Preferences.Default.Set(nameof(UserSettings.KodiApiPasword), userSettings.KodiApiPasword);
+        Preferences.Default.Set(nameof(UserSettings.HarmonizeUserName), userSettings.HarmonizeUserName);
+        Preferences.Default.Set(nameof(UserSettings.HarmonizePassword), userSettings.HarmonizePassword);
+        Preferences.Default.Set(nameof(UserSettings.UrlPrefix), userSettings.UrlPrefix);
+        Preferences.Default.Set(nameof(UserSettings.UseHttps), userSettings.UseHttps);
 
         harmonizeClient
             .SetPort(UserSettings.Port)
             .SetHostName(UserSettings.DomainName)
+            .SetUrlPrefix(UserSettings.UrlPrefix)
+            .SetUseHttps(UserSettings.UseHttps)
             .SetCredentials(UserSettings.HarmonizeUserName, UserSettings.HarmonizePassword)
             ;
 

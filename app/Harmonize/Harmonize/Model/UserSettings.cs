@@ -77,6 +77,18 @@ public class UserSettings : NotifyPropertyChangedBase
         get => harmonizePassword;
         set => SetProperty(ref harmonizePassword, value);
     }
+    private string urlPrefix = string.Empty;
+    public required string UrlPrefix 
+    { 
+        get => urlPrefix;
+        set => SetProperty(ref urlPrefix, value);
+    }
+    private bool useHttps;
+    public required bool UseHttps
+    {
+        get => useHttps;
+        set => SetProperty(ref useHttps, value);
+    }
     #endregion
 }
 

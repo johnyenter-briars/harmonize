@@ -16,7 +16,9 @@ namespace Harmonize.Client;
 
 public class HarmonizeClient
 {
+    private bool useHttps = false;
     private string? hostName;
+    private string? urlPrefix;
     private int? port;
     private string? username;
     private string? password;
@@ -44,6 +46,16 @@ public class HarmonizeClient
     public HarmonizeClient SetHostName(string hostName)
     {
         this.hostName = hostName;
+        return this;
+    }
+    public HarmonizeClient SetUrlPrefix(string urlPrefix)
+    {
+        this.urlPrefix = urlPrefix;
+        return this;
+    }
+    public HarmonizeClient SetUseHttps(bool useHttps)
+    {
+        this.useHttps = useHttps;
         return this;
     }
     public HarmonizeClient SetCredentials(string username, string password)
@@ -288,28 +300,37 @@ public class HarmonizeClient
     #region BASE REQUESTS
     private async Task<TResponse> HarmonizeRequest<TResponse>(string path, HttpMethod httpMethod)
     {
-        var request = new HttpRequestMessage(httpMethod, $"http://{hostName}:{port}/api/" + path);
+        var prefix = string.IsNullOrEmpty(urlPrefix) ? "" : $"/{urlPrefix}";
+        var http = useHttps ? "https" : "http";
+        var parsedPort = useHttps ? "" : $":{port}";
+        var url = $"{http}://{hostName}{parsedPort}{prefix}/api/" + path;
+        var request = new HttpRequestMessage(httpMethod, url);
+
         request.Headers.Accept.Clear();
-        //request.Headers.Add("x-api-key", _apiKey);
-        //request.Headers.Add("x-user-id", _userId);
 
         return await SendRequest<TResponse>(request, CamelCaseOptions);
     }
     private async Task<byte[]> HarmonizeRequestBytes(string path, HttpMethod httpMethod)
     {
-        var request = new HttpRequestMessage(httpMethod, $"http://{hostName}:{port}/api/" + path);
+        var prefix = string.IsNullOrEmpty(urlPrefix) ? "" : $"/{urlPrefix}";
+        var http = useHttps ? "https" : "http";
+        var parsedPort = useHttps ? "" : $":{port}";
+        var url = $"{http}://{hostName}{parsedPort}{prefix}/api/" + path;
+        var request = new HttpRequestMessage(httpMethod, url);
+
         request.Headers.Accept.Clear();
-        //request.Headers.Add("x-api-key", _apiKey);
-        //request.Headers.Add("x-user-id", _userId);
 
         return await SendRequestBytes(request);
     }
     private async Task<TResponse> HarmonizeRequest<TRequest, TResponse>(TRequest requestObject, string path, HttpMethod httpMethod, JsonSerializerOptions? jsonSerializerOptions = null)
     {
-        var request = new HttpRequestMessage(httpMethod, $"http://{hostName}:{port}/api/" + path);
+        var prefix = string.IsNullOrEmpty(urlPrefix) ? "" : $"/{urlPrefix}";
+        var http = useHttps ? "https" : "http";
+        var parsedPort = useHttps ? "" : $":{port}";
+        var url = $"{http}://{hostName}{parsedPort}{prefix}/api/" + path;
+        var request = new HttpRequestMessage(httpMethod, url);
+
         request.Headers.Accept.Clear();
-        //request.Headers.Add("x-api-key", _apiKey);
-        //request.Headers.Add("x-user-id", _userId);
 
         var str = JsonSerializer.Serialize(requestObject, jsonSerializerOptions ?? CamelCaseOptions);
         request.Content = new StringContent(str, Encoding.UTF8, "application/json");

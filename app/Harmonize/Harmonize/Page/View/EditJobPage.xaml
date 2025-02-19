@@ -11,33 +11,64 @@
     x:Class="Harmonize.Page.View.EditJobPage"
     Title="Edit Job Page"
     >
-    <VerticalStackLayout Spacing="10">
+    <ScrollView 
+        VerticalScrollBarVisibility="Always"
+        >
+        <VerticalStackLayout Spacing="10">
 
-        <Label Text="Job ID" FontSize="Medium" />
-        <Entry Text="{Binding Job.Id, Mode=OneWay}" IsReadOnly="True" />
+            <Label Text="Job ID" FontSize="Medium" />
+            <Entry Text="{Binding Job.Id, Mode=OneWay}" IsReadOnly="True" />
 
-        <Label Text="Started On" FontSize="Medium" />
-        <Entry Text="{Binding Job.StartedOn, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}" IsReadOnly="True" />
+            <Label Text="Key" FontSize="Medium" />
+            <Editor 
+                IsReadOnly="True"
+                Text="{Binding Job.Key, Mode=OneWay}"
+                AutoSize="TextChanges"
+                HeightRequest="75" 
+                />
 
-        <Label Text="Description" FontSize="Medium" />
-        <Editor 
-            IsReadOnly="True"
-            Text="{Binding Job.Description, Mode=OneWay}" 
-            AutoSize="TextChanges"
-            HeightRequest="75" 
-            />
+            <Label Text="Started On" FontSize="Medium" />
+            <Entry Text="{Binding Job.StartedOn, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}" IsReadOnly="True" />
 
-        <Label Text="ErrorMessage" FontSize="Medium" />
-        <Editor 
-            IsReadOnly="True"
-            Text="{Binding Job.ErrorMessage, Mode=OneWay}" 
-            AutoSize="TextChanges"
-            HeightRequest="175" 
-            />
+            <Label Text="Description" FontSize="Medium" />
+            <Editor 
+                IsReadOnly="True"
+                Text="{Binding Job.Description, Mode=OneWay}" 
+                AutoSize="TextChanges"
+                HeightRequest="75" 
+                />
 
-        <Label Text="Status" FontSize="Medium" />
-        <Entry Text="{Binding Job.Status, Mode=OneWay}" IsReadOnly="True" />
+            <Label Text="ErrorMessage" FontSize="Medium" />
+            <Editor 
+                IsReadOnly="True"
+                Text="{Binding Job.ErrorMessage, Mode=OneWay}" 
+                AutoSize="TextChanges"
+                HeightRequest="175" 
+                />
 
-    </VerticalStackLayout>
+            <Label Text="Status" FontSize="Medium" />
+            <Entry Text="{Binding Job.Status, Mode=OneWay}" IsReadOnly="True" />
+
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
+                <ImageButton 
+                        Margin="50, 0, 50, 0"
+                        Source="icons8_cancel_50.png"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Clicked="ScaleButton"
+                    >
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
+                    </ImageButton.Behaviors>
+                    <ImageButton.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditJobViewModel}}, Path=CancelJob }"
+                                />
+                    </ImageButton.GestureRecognizers>
+                </ImageButton>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
 
 </pages:BasePage>
