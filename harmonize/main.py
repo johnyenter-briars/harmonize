@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from datetime import datetime
 from logging.config import dictConfig
 
+import uvicorn
 from fastapi import Depends, FastAPI
 from fastapi.responses import JSONResponse
 from starlette.requests import Request
@@ -27,8 +28,9 @@ from harmonize.router import (
     stream,
     transfer,
 )
+from harmonize.vpn.shutdown import vpn_shutdown_background_service
 
-config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
+config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG  # type: ignore
 secrets = harmonize.config.harmonizesecrets.HARMONIZE_SECRETS
 
 dictConfig(LogConfig().model_dump())
@@ -41,6 +43,7 @@ config.log_config()
 @asynccontextmanager
 async def app_lifespan(_: FastAPI):
     background_services = [qbt_background_service] if config.run_qbt else []
+    background_services.append(vpn_shutdown_background_service)
 
     tasks = []
 
@@ -99,3 +102,7 @@ if config.enable_auth:
 
 
 create_db_tables()
+
+
+if __name__ == '__main__':
+    uvicorn.run(app, host=config.harmonize_host, port=config.harmonize_port)

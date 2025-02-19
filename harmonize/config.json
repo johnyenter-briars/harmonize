@@ -1,4 +1,6 @@
 {
+    "harmonize-port": 8000,
+    "harmonize-host": "0.0.0.0",
     "run-qbt": true,
     "run-transfer": true,
     "media-root": "./media",
@@ -7,9 +9,6 @@
     "qbt-version": "v2",
     "reset-db-on-launch": false,
     "drives": [
-        "/mnt/db1",
-        "/mnt/db2",
-        "/mnt/db3",
         "/mnt/db4"
     ],
     "enable-auth": true

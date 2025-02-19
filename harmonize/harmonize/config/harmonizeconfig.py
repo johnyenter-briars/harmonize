@@ -18,6 +18,8 @@ class HarmonizeConfig:
     run_transfer: bool = field()
     drives: list[str] = field()
     enable_auth: bool = field()
+    harmonize_port: int = field()
+    harmonize_host: str = field()
 
     def __init__(self, config_file: Path):
         with config_file.open('r') as f:

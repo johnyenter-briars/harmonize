@@ -42,13 +42,12 @@ async def get_job(
     return BaseResponse[Job](message='Job found', status_code=200, value=job)
 
 
-@router.post('/job/cancel/{job_id}')
+@router.post('/job/cancel/{job_id}', status_code=201)
 async def cancel_job_req(
-    job_id: str,
+    job_id: uuid.UUID,
     session: Session = Depends(get_session),
 ) -> BaseResponse[Job]:
-    statement = select(Job).where(Job.id == uuid.UUID(job_id))
-    job = session.exec(statement).first()
+    job = session.get(Job, job_id)
 
     if job is None:
         raise HTTPException(status_code=404, detail='Job not found in database')

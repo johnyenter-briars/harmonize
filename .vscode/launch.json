@@ -30,6 +30,15 @@
                 "0.0.0.0"
             ],
             "jinja": true
+        },
+        {
+            "name": "harmonize-public2",
+            "type": "debugpy",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/harmonize",
+            "python": "${command:python.interpreterPath}",
+            "program": "main.py",
+            "jinja": true
         }
     ]
 }

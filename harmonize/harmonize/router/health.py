@@ -1,5 +1,4 @@
 import asyncio
-import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -15,6 +14,7 @@ from harmonize.db.models import MediaEntry, MediaEntryType, Playlist, Season
 from harmonize.defs.health import Drive, HealthStatus, Uptime
 from harmonize.defs.response import BaseResponse
 from harmonize.file.drive import get_drive_free_space_shutil
+from harmonize.vpn.status import vpn_status
 
 config = harmonize.config.harmonizeconfig.HARMONIZE_CONFIG
 
@@ -23,30 +23,6 @@ router = APIRouter(prefix='/api/health')
 
 # Calculate speeds
 _Interval = 1
-
-
-def _vpn_status() -> tuple[bool, str]:
-    output = subprocess.check_output(
-        'nordvpn status | grep Status',
-        shell=True,  # Let this run in the shell
-        stderr=subprocess.STDOUT,
-    )
-
-    nord_status = str(output).split(': ')[1]
-
-    country = ''
-    connected = False
-    if 'Connected' in nord_status:
-        output = subprocess.check_output(
-            'nordvpn status | grep Country',
-            shell=True,  # Let this run in the shell
-            stderr=subprocess.STDOUT,
-        )
-
-        country = str(output).split(': ')[1].replace('\\n', '').replace("'", '')
-        connected = True
-
-    return (connected, country)
 
 
 @router.get('/status')
@@ -80,7 +56,7 @@ async def status(
         for drive in config.drives
     ]
 
-    (connected, country) = _vpn_status()
+    (connected, country) = vpn_status()
 
     video_count = session.exec(
         select(func.count()).where(MediaEntry.type == MediaEntryType.VIDEO)
