@@ -63,7 +63,11 @@ async def app_lifespan(_: FastAPI):
             logger.info('Background service cancelled.')
 
 
-app = FastAPI(lifespan=app_lifespan, dependencies=[Depends(get_session)])
+app = FastAPI(
+    lifespan=app_lifespan,
+    dependencies=[Depends(get_session)],
+    root_path=config.url_prefix if config.url_prefix else '',
+)
 
 app.state.start_time = datetime.now()
 
