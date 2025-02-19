@@ -79,18 +79,22 @@ public class EditJobViewModel(
         throw new NotImplementedException();
     }
 
-    public ICommand CancelJob => new Command<Job>(async (job) =>
+    public ICommand CancelJob => new Command(async () =>
     {
-        if (job != null)
+        if (Job != null)
         {
             var (_, success) = await failsafeService.Fallback(async () =>
             {
-                return await harmonizeClient.CancelJob(job.Id);
+                return await harmonizeClient.CancelJob(Job.Id);
             }, null);
 
             if (success)
             {
                 await alertService.ShowAlertSnackbarAsync("Job canceled successfully.");
+            }
+            else
+            {
+                await alertService.ShowAlertSnackbarAsync("Failure to cancel job.");
             }
         }
     });

@@ -73,6 +73,18 @@
                            IsPassword="True"
                            Text="{Binding UserSettings.HarmonizePassword}"
                            VerticalOptions="Center" />
+
+                    <Label Text="UrlPrefix" FontSize="Medium" VerticalOptions="Center" />
+                    <Entry x:Name="UrlPrefix"
+                           Placeholder="Enter password" 
+                           Text="{Binding UserSettings.UrlPrefix}"
+                           VerticalOptions="Center" />
+
+                    <Label Text="Use Https" FontSize="Medium" VerticalOptions="Center" />
+                    <CheckBox  
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center" 
+                        IsChecked="{Binding UserSettings.UseHttps}" />
                 </StackLayout>
             </toolkit:Expander.Content>
         </toolkit:Expander>
