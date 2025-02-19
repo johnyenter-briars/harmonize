@@ -4,7 +4,6 @@ import uuid
 from collections.abc import Awaitable, Callable
 from typing import Any
 
-from fastapi import HTTPException
 from sqlmodel import Session
 
 from harmonize.db.models import Job, JobStatus
@@ -57,12 +56,12 @@ async def start_job(
     return job
 
 
-async def cancel_job(job_id: str) -> None:
-    parsed_id = uuid.UUID(job_id)
-
-    job = Jobs.get(parsed_id)
+async def cancel_job(job_id: uuid.UUID) -> None:
+    job = Jobs.get(job_id)
     if job is None:
-        raise HTTPException(status_code=404, detail='Job not available to cancel')
+        logger.info('Job: %s not available to cancel', job_id)
+        return
+
     (thread, job) = job
 
     thread.stop()
