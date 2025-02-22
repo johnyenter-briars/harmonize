@@ -34,7 +34,7 @@ def copy_file_to_mounted_folders(
     else:
         destination_path = chosen_drive / VIDEO_ROOT / f'{new_name}{source_path.suffix}'
 
-    shutil.copy2(source_path, destination_path)
+    shutil.copyfile(source_path, destination_path)
 
     return destination_path
 
