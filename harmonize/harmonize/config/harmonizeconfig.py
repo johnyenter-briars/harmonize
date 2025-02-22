@@ -21,6 +21,7 @@ class HarmonizeConfig:
     harmonize_port: int = field()
     harmonize_host: str = field()
     url_prefix: str | None = field()
+    enable_vpn_shutdown: str | None = field()
 
     def __init__(self, config_file: Path):
         with config_file.open('r') as f:

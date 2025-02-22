@@ -42,8 +42,12 @@ config.log_config()
 
 @asynccontextmanager
 async def app_lifespan(_: FastAPI):
-    background_services = [qbt_background_service] if config.run_qbt else []
-    background_services.append(vpn_shutdown_background_service)
+    background_services = []
+    if config.run_qbt:
+        background_services.append(qbt_background_service)
+
+    if config.enable_vpn_shutdown:
+        background_services.append(vpn_shutdown_background_service)
 
     tasks = []
 
