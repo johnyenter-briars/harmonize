@@ -12,5 +12,6 @@
         "/mnt/db4"
     ],
     "enable-auth": true,
-    "url-prefix": "/harmonize"
+    "url-prefix": "/harmonize",
+    "enable-vpn-shutdown": false
 }
