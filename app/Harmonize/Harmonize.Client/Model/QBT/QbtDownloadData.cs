@@ -51,7 +51,7 @@ public class QbtDownloadData
     public string Tracker { get; set; }
     public int TrackersCount { get; set; }
     public int UpLimit { get; set; }
-    public int Uploaded { get; set; }
+    public long Uploaded { get; set; }
     public int UploadedSession { get; set; }
     public int UpSpeed { get; set; }
     public string FullItemDescription => $"{Progress * 100:0.##}% | {NumSeeds} seeding | {SizeGB:0.##}GB | {State}";
