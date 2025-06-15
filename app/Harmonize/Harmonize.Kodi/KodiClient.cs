@@ -40,10 +40,17 @@ public class KodiClient
         var request = new HttpRequestMessage(HttpMethod.Post, $"http://{_hostName}:{_port}/jsonrpc");
         request.Content = requestBody;
 
-        var response = await client.SendAsync(request);
-        response.EnsureSuccessStatusCode();
+        try
+        {
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
 
-        var jsonBody = await response.Content.ReadAsStringAsync();
+            var _ = await response.Content.ReadAsStringAsync();
+        }
+        catch (Exception)
+        {
+            return;
+        }
     }
 
     public async Task PowerOff()
