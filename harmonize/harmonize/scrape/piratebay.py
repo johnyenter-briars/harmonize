@@ -34,12 +34,20 @@ async def _piratebay_search_page(query: str, page: int) -> list[MagnetLinkSearch
     all_rows = soup.find_all('tr')
     for row in all_rows:
         cells = row.find_all('td')
-        if len(cells) == 0 or len(cells) < 7:
+        if len(cells) == 0:
             continue
-        seeding = cells[5]
-        leeching = cells[6]
-        seeders.append(seeding.text)
-        leechers.append(leeching.text)
+
+        if len(cells) == 7:
+            seeding = cells[5]
+            leeching = cells[6]
+            seeders.append(seeding.text)
+            leechers.append(leeching.text)
+
+        if len(cells) == 4:
+            seeding = cells[2]
+            leeching = cells[3]
+            seeders.append(seeding.text)
+            leechers.append(leeching.text)
 
     for link in a_tags:
         b: str = link.get('href')
