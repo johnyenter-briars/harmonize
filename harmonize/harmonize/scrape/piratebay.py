@@ -37,6 +37,12 @@ async def _piratebay_search_page(query: str, page: int) -> list[MagnetLinkSearch
         if len(cells) == 0:
             continue
 
+        if len(cells) == 8:
+            seeding = cells[5]
+            leeching = cells[6]
+            seeders.append(seeding.text)
+            leechers.append(leeching.text)
+
         if len(cells) == 7:
             seeding = cells[5]
             leeching = cells[6]
@@ -76,13 +82,20 @@ async def _piratebay_search_page(query: str, page: int) -> list[MagnetLinkSearch
         sizes.append(td.text.replace('\xa0', ' '))
 
     date_pattern = r'^\d{2}-\d{2} \d{4}$'
+    date_pattern2 = r'^\d{2}-\d{2} \d{2}:\d{2}$'
+    date_pattern3 = r'^Y-day \d{2}:\d{2}$'
+
     for td in tds:
         if '-' not in td.text:
             continue
 
         replaced = td.text.replace('\xa0', ' ')
 
-        if re.match(date_pattern, replaced):
+        if (
+            re.match(date_pattern, replaced)
+            or re.match(date_pattern2, replaced)
+            or re.match(date_pattern3, replaced)
+        ):
             date_posteds.append(replaced)
 
     return transform_torrent_data(
