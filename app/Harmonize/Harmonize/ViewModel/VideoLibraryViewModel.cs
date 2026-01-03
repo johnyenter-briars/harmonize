@@ -46,7 +46,7 @@ public class VideoLibraryViewModel(
             {
                 await alertService.ShowAlertSnackbarAsync("Entry untransfered.");
 
-                await Task.Delay(1750); //Idk
+                await Task.Delay(500); //Let the bottom menu bar close
 
                 await Refresh();
             }

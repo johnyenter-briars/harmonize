@@ -77,7 +77,7 @@ public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
                     await bottomMenu.HideAsync();
                 }
 
-                if (button.Text == "Send to Media System")
+                if (button.Text == "Toggle Transfer to Media System")
                 {
                     await bottomMenu.HideAsync();
                 }
