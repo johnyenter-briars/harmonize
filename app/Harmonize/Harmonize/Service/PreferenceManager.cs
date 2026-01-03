@@ -16,6 +16,7 @@ public class PreferenceManager(
         DefaultPageOnLaunch = Preferences.Default.Get(nameof(UserSettings.DefaultPageOnLaunch), "Home"),
         ResetDatabaseOnLaunch = Preferences.Default.Get(nameof(UserSettings.ResetDatabaseOnLaunch), false),
         IncludeMediaControlPage = Preferences.Default.Get(nameof(UserSettings.IncludeMediaControlPage), false),
+        IncludeTvcControlPage = Preferences.Default.Get(nameof(UserSettings.IncludeTvcControlPage), false),
         KodiDomainName = Preferences.Default.Get(nameof(UserSettings.KodiDomainName), "127.0.0.1"),
         KodiPort = Preferences.Default.Get(nameof(UserSettings.KodiPort), 8080),
         KodiApiUserName = Preferences.Default.Get(nameof(UserSettings.KodiApiUserName), ""),
@@ -35,6 +36,7 @@ public class PreferenceManager(
         Preferences.Default.Set(nameof(UserSettings.Port), userSettings.Port);
         Preferences.Default.Set(nameof(UserSettings.ResetDatabaseOnLaunch), userSettings.ResetDatabaseOnLaunch);
         Preferences.Default.Set(nameof(UserSettings.IncludeMediaControlPage), userSettings.IncludeMediaControlPage);
+        Preferences.Default.Set(nameof(UserSettings.IncludeTvcControlPage), userSettings.IncludeTvcControlPage);
         Preferences.Default.Set(nameof(UserSettings.KodiDomainName), userSettings.KodiDomainName);
         Preferences.Default.Set(nameof(UserSettings.KodiPort), userSettings.KodiPort);
         Preferences.Default.Set(nameof(UserSettings.KodiApiUserName), userSettings.KodiApiUserName);

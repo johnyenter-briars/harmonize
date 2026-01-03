@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BasePage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Harmonize.Page.View"
+    xmlns:pages="clr-namespace:Harmonize.Page"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+    x:TypeArguments="viewModels:MediaControlViewModel"
+    x:DataType="viewModels:MediaControlViewModel"
+    xmlns:behavior="clr-namespace:Harmonize.Behavior"
+    x:Class="Harmonize.Page.View.TvcControlPage"
+    Title="TVC Control page"
+    >
+
+    <!-- Title Bar -->
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="9*,4*">
+            <Label
+                Text="TVC Control"
+                FontSize="20"
+                VerticalTextAlignment="Center"
+                HorizontalOptions="Start" />
+        </Grid>
+    </Shell.TitleView>
+
+    <!-- Main Layout -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <!-- Power Controls -->
+        <Button
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="20"
+            BackgroundColor="{StaticResource Primary}"
+            TextColor="white"
+            ImageSource="icons8_power_on_50.png"
+            x:Name="powerOn"
+            Clicked="ScaleButton" />
+
+        <Button
+            Grid.Row="0"
+            Grid.Column="2"
+            Margin="20"
+            BackgroundColor="{StaticResource Blue100Accent}"
+            TextColor="white"
+            ImageSource="icons8_hibernate_50.png"
+            x:Name="powerOff"
+            Clicked="ScaleButton" />
+
+        <!-- Volume Controls -->
+        <Button
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="20"
+            BackgroundColor="{StaticResource Primary}"
+            TextColor="white"
+            ImageSource="icons8_volume_up_50.png"
+            x:Name="volumeUp"
+            Clicked="ScaleButton" />
+
+        <Button
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="20"
+            BackgroundColor="{StaticResource Cyan200Accent}"
+            TextColor="white"
+            ImageSource="icons8_mute_50.png"
+            x:Name="mute"
+            Clicked="ScaleButton" />
+
+        <Button
+            Grid.Row="1"
+            Grid.Column="2"
+            Margin="20"
+            BackgroundColor="{StaticResource Primary}"
+            TextColor="white"
+            ImageSource="icons8_volume_down_50.png"
+            x:Name="volumeDown"
+            Clicked="ScaleButton" />
+
+        <!-- HDMI Inputs -->
+        <Button
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="25"
+            BackgroundColor="{StaticResource Blue100Accent}"
+            TextColor="white"
+            Text="HDMI 1"
+            x:Name="hdmi1"
+            Clicked="ScaleButton" />
+
+        <Button
+            Grid.Row="2"
+            Grid.Column="1"
+            Margin="25"
+            BackgroundColor="{StaticResource Blue100Accent}"
+            TextColor="white"
+            Text="HDMI 2"
+            x:Name="hdmi2"
+            Clicked="ScaleButton" />
+
+        <Button
+            Grid.Row="2"
+            Grid.Column="2"
+            Margin="25"
+            BackgroundColor="{StaticResource Blue100Accent}"
+            TextColor="white"
+            Text="HDMI 3"
+            x:Name="hdmi3"
+            Clicked="ScaleButton" />
+
+    </Grid>
+
+
+</pages:BasePage>

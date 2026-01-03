@@ -36,6 +36,12 @@ public class UserSettings : NotifyPropertyChangedBase
         get => includeMediaControlPage;
         set => SetProperty(ref includeMediaControlPage, value);
     }
+    private bool includeTvcControlPage;
+    public required bool IncludeTvcControlPage
+    {
+        get => includeTvcControlPage;
+        set => SetProperty(ref includeTvcControlPage, value);
+    }
 
     #region Kodi
     private string kodiDomainName = string.Empty;
@@ -73,13 +79,13 @@ public class UserSettings : NotifyPropertyChangedBase
     }
     private string harmonizePassword = string.Empty;
     public required string HarmonizePassword
-    { 
+    {
         get => harmonizePassword;
         set => SetProperty(ref harmonizePassword, value);
     }
     private string urlPrefix = string.Empty;
-    public required string UrlPrefix 
-    { 
+    public required string UrlPrefix
+    {
         get => urlPrefix;
         set => SetProperty(ref urlPrefix, value);
     }

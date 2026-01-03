@@ -122,6 +122,12 @@
                         HorizontalOptions="Start"
                         VerticalOptions="Center" 
                         IsChecked="{Binding UserSettings.IncludeMediaControlPage, Mode=TwoWay}" />
+
+                    <Label Text="Include TVC Control Page" FontSize="Medium" VerticalOptions="Center" />
+                    <CheckBox  
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center" 
+                        IsChecked="{Binding UserSettings.IncludeTvcControlPage, Mode=TwoWay}" />
                 </StackLayout>
             </toolkit:Expander.Content>
         </toolkit:Expander>
