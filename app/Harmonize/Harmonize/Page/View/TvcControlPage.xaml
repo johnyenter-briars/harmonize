@@ -61,7 +61,7 @@
             WidthRequest="90"
             HeightRequest="90"
             Margin="20"
-            BackgroundColor="{StaticResource SecondaryBrush}"
+            BackgroundColor="{StaticResource Cyan100Accent}"
             TextColor="white"
             ImageSource="icons8_circle_50.png"
             Command="{Binding PowerOffCommand }"
