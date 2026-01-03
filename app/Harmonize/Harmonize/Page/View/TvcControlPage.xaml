@@ -89,7 +89,8 @@
             BackgroundColor="{StaticResource Primary}"
             TextColor="white"
             ImageSource="icons8_volume_down_50.png"
-            Command="{Binding VolumeDown }"
+            Pressed="VolumeDown_Pressed"
+            Released="Volume_Released"
             x:Name="volumeUp"
             Clicked="ScaleButton" />
 
@@ -115,7 +116,8 @@
             BackgroundColor="{StaticResource Primary}"
             TextColor="white"
             ImageSource="icons8_volume_up_50.png"
-            Command="{Binding VolumeUp }"
+            Pressed="VolumeUp_Pressed"
+            Released="Volume_Released"
             x:Name="volumeDown"
             Clicked="ScaleButton" />
 
