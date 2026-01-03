@@ -9,6 +9,7 @@ using MediaManager = Harmonize.Service.MediaManager;
 using static Harmonize.Constants;
 using Harmonize.Kodi;
 using Harmonize.Components;
+using Harmonize.TVC;
 
 namespace Harmonize
 {
@@ -39,12 +40,15 @@ namespace Harmonize
             builder.Services.AddSingleton<HarmonizeClient>();
             builder.Services.AddSingleton<HarmonizeDatabase>();
             builder.Services.AddSingleton<KodiClient>();
+            builder.Services.AddSingleton<TvcClient>();
+
             builder.Services.AddSingleton((services) =>
             {
                 var kodiClient = services.GetService<KodiClient>() ?? throw new NullReferenceException(nameof(KodiClient));
+                var tvcClient = services.GetService<TvcClient>() ?? throw new NullReferenceException(nameof(TvcClient));
                 var harmonizeClient = services.GetService<HarmonizeClient>() ?? throw new NullReferenceException(nameof(HarmonizeClient));
 
-                var preferenceManager = new PreferenceManager(harmonizeClient, kodiClient);
+                var preferenceManager = new PreferenceManager(harmonizeClient, kodiClient, tvcClient);
 
                 var userSettings = preferenceManager.UserSettings;
 

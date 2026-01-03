@@ -154,6 +154,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Harmonize.Client\Harmonize.Client.csproj" />
 	  <ProjectReference Include="..\Harmonize.Kodi\Harmonize.Kodi.csproj" />
+	  <ProjectReference Include="..\Harmonize.TVC\Harmonize.TVC.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

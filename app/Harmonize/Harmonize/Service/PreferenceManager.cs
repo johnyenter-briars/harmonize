@@ -1,12 +1,14 @@
 ﻿using Harmonize.Client;
 using Harmonize.Kodi;
 using Harmonize.Model;
+using Harmonize.TVC;
 
 namespace Harmonize.Service;
 
 public class PreferenceManager(
     HarmonizeClient harmonizeClient,
-    KodiClient kodiClient
+    KodiClient kodiClient,
+    TvcClient tvcClient
     )
 {
     public UserSettings UserSettings { get; private set; } = new()
@@ -21,6 +23,8 @@ public class PreferenceManager(
         KodiPort = Preferences.Default.Get(nameof(UserSettings.KodiPort), 8080),
         KodiApiUserName = Preferences.Default.Get(nameof(UserSettings.KodiApiUserName), ""),
         KodiApiPasword = Preferences.Default.Get(nameof(UserSettings.KodiApiPasword), ""),
+        TvcDomainName = Preferences.Default.Get(nameof(UserSettings.TvcDomainName), "127.0.0.1"),
+        TvcPort = Preferences.Default.Get(nameof(UserSettings.TvcPort), 8080),
         HarmonizeUserName = Preferences.Default.Get(nameof(UserSettings.HarmonizeUserName), ""),
         HarmonizePassword = Preferences.Default.Get(nameof(UserSettings.HarmonizePassword), ""),
         UrlPrefix = Preferences.Default.Get(nameof(UserSettings.UrlPrefix), ""),
@@ -41,6 +45,8 @@ public class PreferenceManager(
         Preferences.Default.Set(nameof(UserSettings.KodiPort), userSettings.KodiPort);
         Preferences.Default.Set(nameof(UserSettings.KodiApiUserName), userSettings.KodiApiUserName);
         Preferences.Default.Set(nameof(UserSettings.KodiApiPasword), userSettings.KodiApiPasword);
+        Preferences.Default.Set(nameof(UserSettings.TvcDomainName), userSettings.TvcDomainName);
+        Preferences.Default.Set(nameof(UserSettings.TvcPort), userSettings.TvcPort);
         Preferences.Default.Set(nameof(UserSettings.HarmonizeUserName), userSettings.HarmonizeUserName);
         Preferences.Default.Set(nameof(UserSettings.HarmonizePassword), userSettings.HarmonizePassword);
         Preferences.Default.Set(nameof(UserSettings.UrlPrefix), userSettings.UrlPrefix);
@@ -59,6 +65,11 @@ public class PreferenceManager(
             .SetPort(userSettings.KodiPort)
             .SetUserName(userSettings.KodiApiUserName)
             .SetPassword(userSettings.KodiApiPasword)
+            ;
+
+        tvcClient
+            .SetHostName(userSettings.TvcDomainName)
+            .SetPort(userSettings.TvcPort)
             ;
 
         return this;

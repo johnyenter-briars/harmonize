@@ -64,7 +64,7 @@
             BackgroundColor="{StaticResource SecondaryBrush}"
             TextColor="white"
             ImageSource="icons8_circle_50.png"
-            x:Name="powerOn"
+            Command="{Binding PowerOffCommand }"
             Clicked="ScaleButton" />
 
         <Button
@@ -76,7 +76,7 @@
             BackgroundColor="{StaticResource Blue100Accent}"
             TextColor="white"
             ImageSource="icons8_vertical_line_50.png"
-            x:Name="powerOff"
+            Command="{Binding PowerOnCommand }"
             Clicked="ScaleButton" />
 
         <!-- Volume Controls -->

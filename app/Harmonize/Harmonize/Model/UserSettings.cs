@@ -70,6 +70,21 @@ public class UserSettings : NotifyPropertyChangedBase
     }
     #endregion
 
+    #region TVC
+    private string tvcDomainName = string.Empty;
+    public required string TvcDomainName
+    {
+        get => tvcDomainName;
+        set => SetProperty(ref tvcDomainName, value);
+    }
+    private int tvcPort;
+    public required int TvcPort
+    {
+        get => tvcPort;
+        set => SetProperty(ref tvcPort, value);
+    }
+    #endregion
+
     #region Harmonize Api
     private string harmonizeUserName = string.Empty;
     public required string HarmonizeUserName
