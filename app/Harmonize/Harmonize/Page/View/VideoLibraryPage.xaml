@@ -83,7 +83,6 @@
                 HorizontalOptions="FillAndExpand"
                 VerticalScrollBarVisibility="Always"
                 SelectionMode="Single"
-                HeightRequest="20"
                 >
 
                 <CollectionView.ItemTemplate>
