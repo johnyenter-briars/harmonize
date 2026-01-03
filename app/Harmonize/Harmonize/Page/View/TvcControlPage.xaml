@@ -45,7 +45,6 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
-            <RowDefinition />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -89,10 +88,17 @@
             BackgroundColor="{StaticResource Primary}"
             TextColor="white"
             ImageSource="icons8_volume_down_50.png"
-            Pressed="VolumeDown_Pressed"
-            Released="Volume_Released"
             x:Name="volumeUp"
-            Clicked="ScaleButton" />
+            >
+            <Button.GestureRecognizers>
+                <TapGestureRecognizer NumberOfTapsRequired="2"
+                                      Tapped="VolumeDownBy40_Clicked"
+                                      />
+                <TapGestureRecognizer NumberOfTapsRequired="1"
+                                      Tapped="VolumeDown_Clicked"
+                                      />
+            </Button.GestureRecognizers>
+        </Button>
 
         <Button
             Grid.Row="1"
@@ -116,10 +122,17 @@
             BackgroundColor="{StaticResource Primary}"
             TextColor="white"
             ImageSource="icons8_volume_up_50.png"
-            Pressed="VolumeUp_Pressed"
-            Released="Volume_Released"
             x:Name="volumeDown"
-            Clicked="ScaleButton" />
+            >
+            <Button.GestureRecognizers>
+                <TapGestureRecognizer NumberOfTapsRequired="2"
+                                      Tapped="VolumeUpBy40_Clicked"
+                                      />
+                <TapGestureRecognizer NumberOfTapsRequired="1"
+                                      Tapped="VolumeUp_Clicked"
+                                      />
+            </Button.GestureRecognizers>
+        </Button>
 
         <!-- HDMI Inputs -->
         <VerticalStackLayout
