@@ -54,7 +54,7 @@ public partial class VideoLibraryPage : BasePage<VideoLibraryViewModel>
     {
         if (sender is Button button)
         {
-            if (button.Text != "Send to Media System" && 
+            if (button.Text != "Toggle Transfer to Media System" && 
                 button.Text != "Add to Season" && 
                 button.Text != "✕")
             {

@@ -148,62 +148,74 @@
         </RefreshView>
 
         <components:BottomMenu x:Name="bottomMenu" IsVisible="False">
-            <Frame 
+            <Border
                 BackgroundColor="{StaticResource Gray600}"
-                CornerRadius="16"
-                HasShadow="True"
                 Padding="15"
                 VerticalOptions="End"
-                HorizontalOptions="FillAndExpand"
-                AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
-                AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional">
-                <StackLayout Spacing="12">
-                    <Button Text="Toggle Transfer to Media System"
-                        BackgroundColor="{StaticResource PrimaryDark}"
-                        TextColor="White"
-                        FontSize="16"
-                        CornerRadius="10"
-                        HeightRequest="45"
-                        Clicked="OnOpenBottomSheetClicked"
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=ToggleTransferToMediaSystem  }"
-                        />
+                AbsoluteLayout.LayoutBounds="0,1,1,AutoSize"
+                AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional"
+                >
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
 
-                    <Button Text="Add to Season"
-                        BackgroundColor="{StaticResource PrimaryDark}"
-                        TextColor="White"
-                        FontSize="16"
-                        CornerRadius="10"
-                        HeightRequest="45"
-                        Clicked="OnOpenBottomSheetClicked"
-                        />
+                <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
 
-                    <AbsoluteLayout HorizontalOptions="FillAndExpand">
-                        <Button Text="✕"
+                    <Grid>
+                        <Button
+                            Text="✕"
                             BackgroundColor="Transparent"
-                            TextColor="{StaticResource Gray500}"
-                            FontSize="14"
-                            Padding="5"
-                            WidthRequest="30"
-                            HeightRequest="30"
-                            AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize"
-                            AbsoluteLayout.LayoutFlags="PositionProportional"
-                            Clicked="OnOpenBottomSheetClicked"
-                        />
-                    </AbsoluteLayout>
+                            TextColor="{StaticResource Gray300}"
+                            FontSize="18"
+                            WidthRequest="32"
+                            HeightRequest="32"
+                            HorizontalOptions="End"
+                            VerticalOptions="Start"
+                            Padding="0"
+                            Margin="0"
+                            Clicked="OnOpenBottomSheetClicked" />
+                    </Grid>
 
-                </StackLayout>
-            </Frame>
+                    <StackLayout Grid.Row="1" Spacing="12">
+
+                        <Button
+                            Text="Toggle Transfer to Media System"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="Black"
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            CornerRadius="12"
+                            HeightRequest="48"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=ToggleTransferToMediaSystem}"
+                            Clicked="OnOpenBottomSheetClicked"
+                            />
+
+                        <Button
+                            Text="Add to Season"
+                            BackgroundColor="Transparent"
+                            TextColor="{StaticResource Primary}"
+                            FontSize="16"
+                            CornerRadius="12"
+                            HeightRequest="48"
+                            BorderColor="{StaticResource Primary}"
+                            BorderWidth="1" />
+
+                    </StackLayout>
+                </Grid>
+            </Border>
         </components:BottomMenu>
         <components:BottomMenu x:Name="filterMenu" IsVisible="False">
-            <Frame 
+            <Border 
                 BackgroundColor="{StaticResource Gray600}"
-                CornerRadius="16"
-                HasShadow="True"
                 Padding="15"
                 VerticalOptions="End"
-                HorizontalOptions="FillAndExpand"
                 AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
                 AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+
                 <Grid ColumnDefinitions="Auto, Auto"
                     RowDefinitions="Auto, Auto"
                     ColumnSpacing="20"
@@ -251,7 +263,7 @@
                             VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                 </Grid>
-            </Frame>
+            </Border>
         </components:BottomMenu>
     </StackLayout>
 </pages:BasePage>
