@@ -25,15 +25,32 @@ public class VideoLibraryViewModel(
     {
         await ItemTapped(entry);
     });
-    public ICommand SendToMediaSystemCommand => new Command(async () =>
+    public ICommand ToggleTransferToMediaSystem => new Command(async () =>
     {
-        var (jobResponse, success) = await failsafeService.Fallback(
-            async () => await harmonizeClient.StartTransfer(TransferDestination.MediaSystem, SelectedMediaEntry), null);
-
-        if (success)
+        if (!SelectedMediaEntry.Transferred)
         {
-            await alertService.ShowAlertSnackbarAsync("Job created successfully.");
+            var (jobResponse, success) = await failsafeService.Fallback(
+                async () => await harmonizeClient.StartTransfer(TransferDestination.MediaSystem, SelectedMediaEntry), null);
+
+            if (success)
+            {
+                await alertService.ShowAlertSnackbarAsync("Job created successfully.");
+            }
         }
+        else
+        {
+            var (jobResponse, success) = await failsafeService.Fallback(
+                async () => await harmonizeClient.Untransfer(TransferDestination.MediaSystem, SelectedMediaEntry), null);
+
+            if (success)
+            {
+                await alertService.ShowAlertSnackbarAsync("Entry untransfered.");
+
+                await Task.Delay(1750); //Idk
+
+                await Refresh();
+            }
+        } 
     });
     #region Filters
     private bool filterByMovie = true;

@@ -122,21 +122,21 @@
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=OpenBottomSheetCommand}"
                                     CommandParameter="{Binding .}" />
 
-                                <ImageButton 
+                                <Image
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Source="icons8_cloud_download_66.png"
-                                    VerticalOptions="Start"
-                                    HorizontalOptions="End"
-                                    Margin="0, 0, 0, 0"
                                     WidthRequest="15"
                                     HeightRequest="15"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Center"
                                     IsVisible="{Binding Transferred}"
-                                    >
-                                    <ImageButton.Behaviors>
-                                        <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
-                                    </ImageButton.Behaviors>
-                                </ImageButton>
+                                    Aspect="AspectFit">
+                                    <Image.Behaviors>
+                                        <toolkit:IconTintColorBehavior
+                                            TintColor="{StaticResource PrimaryDark}" />
+                                    </Image.Behaviors>
+                                </Image>
                             </Grid>
                         </components:ListElement>
                     </DataTemplate>
@@ -158,14 +158,14 @@
                 AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
                 AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional">
                 <StackLayout Spacing="12">
-                    <Button Text="Send to Media System"
+                    <Button Text="Toggle Transfer to Media System"
                         BackgroundColor="{StaticResource PrimaryDark}"
                         TextColor="White"
                         FontSize="16"
                         CornerRadius="10"
                         HeightRequest="45"
                         Clicked="OnOpenBottomSheetClicked"
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=SendToMediaSystemCommand }"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=ToggleTransferToMediaSystem  }"
                         />
 
                     <Button Text="Add to Season"
