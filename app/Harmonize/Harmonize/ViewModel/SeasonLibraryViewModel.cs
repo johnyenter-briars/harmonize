@@ -131,7 +131,7 @@ public class SeasonLibraryViewModel(
     }
     public async Task ItemTapped(Season season)
     {
-        await Shell.Current.GoToAsync(nameof(EditSeasonPage), new Dictionary<string, object>
+        await Shell.Current.GoToAsync(nameof(EditSeasonPage), false, new Dictionary<string, object>
         {
             { nameof(EditSeasonViewModel.Season), season }
         });

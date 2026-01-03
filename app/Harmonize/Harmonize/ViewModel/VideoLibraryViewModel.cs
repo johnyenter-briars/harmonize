@@ -216,7 +216,7 @@ public class VideoLibraryViewModel(
     }
     public async Task ItemTapped(MediaEntry mediaEntry)
     {
-        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), new Dictionary<string, object>
+        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), false, new Dictionary<string, object>
         {
             { nameof(EditMediaEntryViewModel.MediaEntryId), mediaEntry.Id },
             { nameof(EditMediaEntryViewModel.MediaEntry), mediaEntry }

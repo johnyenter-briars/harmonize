@@ -30,7 +30,7 @@ public class EditMediaEntryViewModel(
             if (response?.Success == true)
             {
                 await alertService.ShowAlertSnackbarAsync("Entry deleted.");
-                await Shell.Current.GoToAsync("..");
+                await Shell.Current.GoToAsync("..", false);
             }
         }
     });
@@ -167,7 +167,7 @@ public class EditMediaEntryViewModel(
     internal async Task ItemTapped(MediaEntry mediaEntry)
     {
         //TODO: bug in navigating to the same type of page from the same type of page. Keeps the old binding. Idc rn
-        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), new Dictionary<string, object>
+        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), false, new Dictionary<string, object>
         {
             { nameof(EditMediaEntryViewModel.MediaEntryId), mediaEntry.Id },
             { nameof(EditMediaEntryViewModel.MediaEntry), mediaEntry }

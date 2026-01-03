@@ -65,7 +65,7 @@ public class EditSeasonViewModel(
 
             if (response?.Success == true)
             {
-                await Shell.Current.GoToAsync("..");
+                await Shell.Current.GoToAsync("..", false);
             }
         }
     });
@@ -92,7 +92,7 @@ public class EditSeasonViewModel(
     }
     public async Task ItemTapped(MediaEntry mediaEntry)
     {
-        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), new Dictionary<string, object>
+        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), false, new Dictionary<string, object>
         {
             { nameof(EditMediaEntryViewModel.MediaEntryId), mediaEntry.Id },
             { nameof(EditMediaEntryViewModel.MediaEntry), mediaEntry }
