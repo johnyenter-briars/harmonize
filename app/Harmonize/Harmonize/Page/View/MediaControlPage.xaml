@@ -15,9 +15,9 @@
 
     <Shell.TitleView>
         <Grid ColumnDefinitions="9*,4*">
-            <Label 
-                Text="Media Control" 
-                FontSize="20"  
+            <Label
+                Text="Media Control"
+                FontSize="20"
                 VerticalTextAlignment="Center"
                 HorizontalOptions="Start" 
                 />
@@ -26,6 +26,7 @@
                 Margin="0"
                 Scale="0.8"
                 Grid.Row="2"
+                Grid.Column="2"
                 BackgroundColor="{StaticResource Primary}"
                 TextColor="white"
                 ImageSource="icons8_tv_50.png"

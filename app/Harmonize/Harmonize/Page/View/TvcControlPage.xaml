@@ -63,7 +63,7 @@
             Margin="20"
             BackgroundColor="{StaticResource SecondaryBrush}"
             TextColor="white"
-            ImageSource="icons8_hibernate_50.png"
+            ImageSource="icons8_circle_50.png"
             x:Name="powerOn"
             Clicked="ScaleButton" />
 
@@ -75,7 +75,7 @@
             Margin="20"
             BackgroundColor="{StaticResource Blue100Accent}"
             TextColor="white"
-            ImageSource="icons8_power_on_50.png"
+            ImageSource="icons8_vertical_line_50.png"
             x:Name="powerOff"
             Clicked="ScaleButton" />
 
@@ -88,7 +88,7 @@
             Margin="20"
             BackgroundColor="{StaticResource Primary}"
             TextColor="white"
-            ImageSource="icons8_volume_up_50.png"
+            ImageSource="icons8_volume_down_50.png"
             x:Name="volumeUp"
             Clicked="ScaleButton" />
 
@@ -112,7 +112,7 @@
             Margin="20"
             BackgroundColor="{StaticResource Primary}"
             TextColor="white"
-            ImageSource="icons8_volume_down_50.png"
+            ImageSource="icons8_volume_up_50.png"
             x:Name="volumeDown"
             Clicked="ScaleButton" />
 

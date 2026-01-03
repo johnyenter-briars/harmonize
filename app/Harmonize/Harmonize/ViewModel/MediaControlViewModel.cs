@@ -52,7 +52,7 @@ public class MediaControlViewModel(
     });
     public ICommand NavigateToTvcPage => new Command<Button>(async (Button button) =>
     {
-        await Shell.Current.GoToAsync($"//{nameof(TvcControlPage)}");
+        await Shell.Current.GoToAsync($"//TvcControl");
     });
     public ICommand PowerOffCommand => new Command<Button>(async (Button button) =>
     {
