@@ -198,7 +198,9 @@
                             CornerRadius="12"
                             HeightRequest="48"
                             BorderColor="{StaticResource Primary}"
-                            BorderWidth="1" />
+                            BorderWidth="1" 
+                            Clicked="OnOpenBottomSheetClicked"
+                            />
 
                     </StackLayout>
                 </Grid>
