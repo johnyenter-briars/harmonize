@@ -120,9 +120,8 @@ public partial class TvcControlPage : BasePage<TvcControlViewModel>
 
         if (!_volumeUpDoubleTapDetected)
         {
-            // Single tap: +1 volume
-            await AdjustVolumeBy(1);
             ScaleButton(sender, e);
+            await AdjustVolumeBy(1);
         }
     }
 
@@ -142,24 +141,23 @@ public partial class TvcControlPage : BasePage<TvcControlViewModel>
 
         if (!_volumeDownDoubleTapDetected)
         {
-            // Single tap: -1 volume
-            await AdjustVolumeBy(-1);
             ScaleButton(sender, e);
+            await AdjustVolumeBy(-1);
         }
     }
 
     private async void VolumeUpBy40_Clicked(object sender, EventArgs e)
     {
         _volumeUpDoubleTapDetected = true; // block single tap
-        await AdjustVolumeBy(40);
         ScaleButton(sender, e);
+        await AdjustVolumeBy(40);
     }
 
     private async void VolumeDownBy40_Clicked(object sender, EventArgs e)
     {
         _volumeDownDoubleTapDetected = true; // block single tap
-        await AdjustVolumeBy(-40);
         ScaleButton(sender, e);
+        await AdjustVolumeBy(-40);
     }
 
     private async Task AdjustVolumeBy(int steps)
