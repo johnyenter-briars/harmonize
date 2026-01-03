@@ -1,5 +1,13 @@
 ﻿namespace Harmonize.TVC;
 
+
+public enum HdmiInput
+{
+    One = 1,
+    Two = 2,
+    Three = 3,
+}
+
 public class TvcClient
 {
     private static readonly HttpClient client = new HttpClient();
@@ -38,6 +46,22 @@ public class TvcClient
     public async Task PowerOn()
     {
         await PostRequestAsync("power_on");
+    }
+    public async Task ToggleMute()
+    {
+        await PostRequestAsync("toggle_mute");
+    }
+    public async Task VolumeUp()
+    {
+        await PostRequestAsync("volume_up");
+    }
+    public async Task VolumeDown()
+    {
+        await PostRequestAsync("volume_down");
+    }
+    public async Task HdmiSwitch(HdmiInput hdmiInput)
+    {
+        await PostRequestAsync($"active_source/{(int)hdmiInput}");
     }
     public TvcClient UpdateSettings(string hostname, int port)
     {

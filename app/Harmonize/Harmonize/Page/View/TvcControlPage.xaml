@@ -89,6 +89,7 @@
             BackgroundColor="{StaticResource Primary}"
             TextColor="white"
             ImageSource="icons8_volume_down_50.png"
+            Command="{Binding VolumeDown }"
             x:Name="volumeUp"
             Clicked="ScaleButton" />
 
@@ -101,6 +102,7 @@
             BackgroundColor="{StaticResource Cyan200Accent}"
             TextColor="white"
             ImageSource="icons8_mute_50.png"
+            Command="{Binding ToggleMute }"
             x:Name="mute"
             Clicked="ScaleButton" />
 
@@ -113,6 +115,7 @@
             BackgroundColor="{StaticResource Primary}"
             TextColor="white"
             ImageSource="icons8_volume_up_50.png"
+            Command="{Binding VolumeUp }"
             x:Name="volumeDown"
             Clicked="ScaleButton" />
 
@@ -128,6 +131,7 @@
                 HeightRequest="90"
                 BackgroundColor="{StaticResource Blue100Accent}"
                 ImageSource="icons8_hdmi_64.png"
+                Command="{Binding Hdmi1 }"
                 x:Name="hdmi1"
                 Clicked="ScaleButton" />
 
@@ -149,6 +153,7 @@
                 HeightRequest="90"
                 BackgroundColor="{StaticResource Blue100Accent}"
                 ImageSource="icons8_hdmi_64.png"
+                Command="{Binding Hdmi2 }"
                 x:Name="hdmi2"
                 Clicked="ScaleButton" />
 
@@ -170,6 +175,7 @@
                 HeightRequest="90"
                 BackgroundColor="{StaticResource Blue100Accent}"
                 ImageSource="icons8_hdmi_64.png"
+                Command="{Binding Hdmi3 }"
                 x:Name="hdmi3"
                 Clicked="ScaleButton" />
 

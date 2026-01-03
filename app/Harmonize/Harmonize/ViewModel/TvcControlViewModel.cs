@@ -27,6 +27,30 @@ public class TvcControlViewModel(
     {
         await tvcClient.PowerOn();
     });
+    public ICommand ToggleMute => new Command(async () =>
+    {
+        await tvcClient.ToggleMute();
+    });
+    public ICommand VolumeUp => new Command(async () =>
+    {
+        await tvcClient.VolumeUp();
+    });
+    public ICommand VolumeDown => new Command(async () =>
+    {
+        await tvcClient.VolumeDown();
+    });
+    public ICommand Hdmi1 => new Command(async () =>
+    {
+        await tvcClient.HdmiSwitch(HdmiInput.One);
+    });
+    public ICommand Hdmi2 => new Command(async () =>
+    {
+        await tvcClient.HdmiSwitch(HdmiInput.Two);
+    });
+    public ICommand Hdmi3 => new Command(async () =>
+    {
+        await tvcClient.HdmiSwitch(HdmiInput.Three);
+    });
     public override Task OnAppearingAsync()
     {
         throw new NotImplementedException();
