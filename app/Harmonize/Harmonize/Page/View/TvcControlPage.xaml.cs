@@ -6,15 +6,15 @@ using Microsoft.Extensions.Logging;
 
 namespace Harmonize.Page.View;
 
-public partial class TvcControlPage : BasePage<MediaControlViewModel>
+public partial class TvcControlPage : BasePage<TvcControlViewModel>
 {
-    private readonly MediaControlViewModel viewModel;
+    private readonly TvcControlViewModel viewModel;
     readonly ILogger logger;
     private readonly MediaManager mediaManager;
     private readonly KodiClient kodiClient;
 
     public TvcControlPage(
-        MediaControlViewModel viewModel,
+        TvcControlViewModel viewModel,
         ILogger<HomePage> logger,
         MediaManager mediaManager,
         KodiClient kodiClient
