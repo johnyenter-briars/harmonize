@@ -25,15 +25,28 @@ public class VideoLibraryViewModel(
     {
         await ItemTapped(entry);
     });
-    public ICommand SendToMediaSystemCommand => new Command(async () =>
+    public ICommand ToggleTransferToMediaSystem => new Command(async () =>
     {
-        var (jobResponse, success) = await failsafeService.Fallback(
-            async () => await harmonizeClient.StartTransfer(TransferDestination.MediaSystem, SelectedMediaEntry), null);
-
-        if (success)
+        if (!SelectedMediaEntry.Transferred)
         {
-            await alertService.ShowAlertSnackbarAsync("Job created successfully.");
+            var (jobResponse, success) = await failsafeService.Fallback(
+                async () => await harmonizeClient.StartTransfer(TransferDestination.MediaSystem, SelectedMediaEntry), null);
+
+            if (success)
+            {
+                await alertService.ShowAlertSnackbarAsync("Job created successfully.");
+            }
         }
+        else
+        {
+            var (jobResponse, success) = await failsafeService.Fallback(
+                async () => await harmonizeClient.Untransfer(TransferDestination.MediaSystem, SelectedMediaEntry), null);
+
+            if (success)
+            {
+                await alertService.ShowAlertSnackbarAsync("Entry untransfered.");
+            }
+        } 
     });
     #region Filters
     private bool filterByMovie = true;
@@ -216,7 +229,7 @@ public class VideoLibraryViewModel(
     }
     public async Task ItemTapped(MediaEntry mediaEntry)
     {
-        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), new Dictionary<string, object>
+        await Shell.Current.GoToAsync(nameof(EditMediaEntryPage), false, new Dictionary<string, object>
         {
             { nameof(EditMediaEntryViewModel.MediaEntryId), mediaEntry.Id },
             { nameof(EditMediaEntryViewModel.MediaEntry), mediaEntry }

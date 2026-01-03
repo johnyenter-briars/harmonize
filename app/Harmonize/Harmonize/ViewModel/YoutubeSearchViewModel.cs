@@ -147,7 +147,7 @@ public class YouTubeSearchViewModel(
     {
         if (youTubeSearchResult != null)
         {
-            await Shell.Current.GoToAsync(nameof(YouTubeSearchResultEditPage), new Dictionary<string, object>
+            await Shell.Current.GoToAsync(nameof(YouTubeSearchResultEditPage), false, new Dictionary<string, object>
             {
                 { nameof(YouTubeSearchResultEditViewModel.YoutubeSearchResult), youTubeSearchResult }
             });
@@ -157,7 +157,7 @@ public class YouTubeSearchViewModel(
     {
         if (playlistSearchResult != null)
         {
-            await Shell.Current.GoToAsync(nameof(YouTubePlaylistSearchResultEditPage), new Dictionary<string, object>
+            await Shell.Current.GoToAsync(nameof(YouTubePlaylistSearchResultEditPage), false, new Dictionary<string, object>
             {
                 { nameof(YouTubePlaylistSearchResultEditViewModel.YoutubePlaylistSearchResult), playlistSearchResult }
             });

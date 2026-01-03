@@ -78,22 +78,22 @@
                                         />
                                     </ImageButton.GestureRecognizers>
                                 </ImageButton>
-
-                                <ImageButton 
+                                <Image
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Source="icons8_cloud_download_66.png"
-                                    VerticalOptions="Start"
-                                    HorizontalOptions="End"
-                                    Margin="0, 5, 0, 0"
                                     WidthRequest="15"
                                     HeightRequest="15"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Center"
                                     IsVisible="{Binding Transferred}"
-                                    >
-                                    <ImageButton.Behaviors>
-                                        <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
-                                    </ImageButton.Behaviors>
-                                </ImageButton>
+                                    Aspect="AspectFit">
+                                    <Image.Behaviors>
+                                        <toolkit:IconTintColorBehavior
+                                            TintColor="{StaticResource PrimaryDark}" />
+                                    </Image.Behaviors>
+                                </Image>
+
                             </Grid>
                         </components:ListElement>
                     </ViewCell>

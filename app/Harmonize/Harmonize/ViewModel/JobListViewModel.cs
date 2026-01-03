@@ -86,7 +86,7 @@ public class JobListViewModel(
     {
         if (job != null)
         {
-            await Shell.Current.GoToAsync(nameof(EditJobPage), new Dictionary<string, object>
+            await Shell.Current.GoToAsync(nameof(EditJobPage), false, new Dictionary<string, object>
             {
                 { nameof(EditJobViewModel.JobId), job.Id }
             });

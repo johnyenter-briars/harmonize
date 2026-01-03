@@ -23,6 +23,17 @@
         </Tab>
     </FlyoutItem>
     <FlyoutItem 
+                Title="TVC Control" 
+                Icon="icons8_tv_50.png"
+                >
+        <Tab>
+            <ShellContent
+                Title="TVC Control"
+                ContentTemplate="{DataTemplate view:TvcControlPage}"
+                Route="TvcControl" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem 
                 Title="Video Library" 
                 Icon="icons8_media_50.png"
                 >

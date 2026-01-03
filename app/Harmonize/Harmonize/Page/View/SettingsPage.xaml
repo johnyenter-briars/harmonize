@@ -122,6 +122,12 @@
                         HorizontalOptions="Start"
                         VerticalOptions="Center" 
                         IsChecked="{Binding UserSettings.IncludeMediaControlPage, Mode=TwoWay}" />
+
+                    <Label Text="Include TVC Control Page" FontSize="Medium" VerticalOptions="Center" />
+                    <CheckBox  
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center" 
+                        IsChecked="{Binding UserSettings.IncludeTvcControlPage, Mode=TwoWay}" />
                 </StackLayout>
             </toolkit:Expander.Content>
         </toolkit:Expander>
@@ -151,7 +157,7 @@
                     <Label Text="Port" FontSize="Medium" VerticalOptions="Center" />
                     <Entry x:Name="KodiPortEntry"
                            Placeholder="Enter the port" 
-                           Text="{Binding UserSettings.Port}"
+                           Text="{Binding UserSettings.KodiPort}"
                            Keyboard="Numeric"
                            VerticalOptions="Center" />
 
@@ -165,6 +171,39 @@
                     <Entry x:Name="KodiPassword"
                            Placeholder="Enter the pasword" 
                            Text="{Binding UserSettings.KodiApiPasword}"
+                           VerticalOptions="Center" />
+
+                </StackLayout>
+            </toolkit:Expander.Content>
+        </toolkit:Expander>
+
+        <toolkit:Expander IsExpanded="False">
+            <toolkit:Expander.Header>
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="TVC" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" />
+                    <Image Source="icons8_collapse_50.png" 
+                           Rotation="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, Path=IsExpanded, Converter={StaticResource BooleanToRotationConverter}}" 
+                           WidthRequest="24" HeightRequest="24" 
+                           VerticalOptions="Center" HorizontalOptions="End">
+                           <Image.Behaviors>
+                                <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
+                           </Image.Behaviors>
+                    </Image>
+                </Grid>
+            </toolkit:Expander.Header>
+            <toolkit:Expander.Content>
+                <StackLayout Spacing="8">
+                    <Label Text="Domain Name" FontSize="Medium" VerticalOptions="Center" />
+                    <Entry x:Name="TVCDomainNameEntry"
+                           Placeholder="Enter the domain name" 
+                           Text="{Binding UserSettings.TvcDomainName}"
+                           VerticalOptions="Center" />
+
+                    <Label Text="Port" FontSize="Medium" VerticalOptions="Center" />
+                    <Entry x:Name="TVCKodiPortEntry"
+                           Placeholder="Enter the port" 
+                           Text="{Binding UserSettings.TvcPort}"
+                           Keyboard="Numeric"
                            VerticalOptions="Center" />
 
                 </StackLayout>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks>net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
@@ -154,6 +154,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Harmonize.Client\Harmonize.Client.csproj" />
 	  <ProjectReference Include="..\Harmonize.Kodi\Harmonize.Kodi.csproj" />
+	  <ProjectReference Include="..\Harmonize.TVC\Harmonize.TVC.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -165,6 +166,9 @@
 	  </Compile>
 	  <Compile Update="Components\BottomMenu.xaml.cs">
 	    <DependentUpon>BottomMenu.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Page\View\TvcControlPage.xaml.cs">
+	    <DependentUpon>TvcControlPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Page\View\SeasonLibraryPage.xaml.cs">
 	    <DependentUpon>SeasonLibraryPage.xaml</DependentUpon>
@@ -212,6 +216,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\HealthPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Page\View\TvcControlPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\View\SeasonLibraryPage.xaml">

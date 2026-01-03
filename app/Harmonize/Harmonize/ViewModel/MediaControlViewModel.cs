@@ -1,4 +1,5 @@
 ﻿using Harmonize.Kodi;
+using Harmonize.Page.View;
 using Harmonize.Service;
 using System.Windows.Input;
 
@@ -49,12 +50,9 @@ public class MediaControlViewModel(
         currSpeed = 1;
         await kodiClient.TogglePlayPausePlayerAsync();
     });
-    public ICommand RebootCommand => new Command<Button>(async (Button button) =>
+    public ICommand NavigateToTvcPage => new Command<Button>(async (Button button) =>
     {
-        if (await alertService.ShowConfirmationAsync("Reboot confirmation", "Are you sure you want to reboot?"))
-        {
-            await kodiClient.PowerReboot();
-        }
+        await Shell.Current.GoToAsync($"//TvcControl", false);
     });
     public ICommand PowerOffCommand => new Command<Button>(async (Button button) =>
     {

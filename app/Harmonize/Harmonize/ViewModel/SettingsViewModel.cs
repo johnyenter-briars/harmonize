@@ -3,7 +3,6 @@ using Harmonize.Model;
 using Harmonize.Service;
 using System.ComponentModel;
 using System.Reflection;
-using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
 

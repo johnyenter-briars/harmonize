@@ -36,6 +36,12 @@ public class UserSettings : NotifyPropertyChangedBase
         get => includeMediaControlPage;
         set => SetProperty(ref includeMediaControlPage, value);
     }
+    private bool includeTvcControlPage;
+    public required bool IncludeTvcControlPage
+    {
+        get => includeTvcControlPage;
+        set => SetProperty(ref includeTvcControlPage, value);
+    }
 
     #region Kodi
     private string kodiDomainName = string.Empty;
@@ -64,6 +70,21 @@ public class UserSettings : NotifyPropertyChangedBase
     }
     #endregion
 
+    #region TVC
+    private string tvcDomainName = string.Empty;
+    public required string TvcDomainName
+    {
+        get => tvcDomainName;
+        set => SetProperty(ref tvcDomainName, value);
+    }
+    private int tvcPort;
+    public required int TvcPort
+    {
+        get => tvcPort;
+        set => SetProperty(ref tvcPort, value);
+    }
+    #endregion
+
     #region Harmonize Api
     private string harmonizeUserName = string.Empty;
     public required string HarmonizeUserName
@@ -73,13 +94,13 @@ public class UserSettings : NotifyPropertyChangedBase
     }
     private string harmonizePassword = string.Empty;
     public required string HarmonizePassword
-    { 
+    {
         get => harmonizePassword;
         set => SetProperty(ref harmonizePassword, value);
     }
     private string urlPrefix = string.Empty;
-    public required string UrlPrefix 
-    { 
+    public required string UrlPrefix
+    {
         get => urlPrefix;
         set => SetProperty(ref urlPrefix, value);
     }

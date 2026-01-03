@@ -32,6 +32,16 @@ namespace Harmonize
                     mediaControlPage.IsVisible = false;
                 }
             }
+
+            if (!preferenceManager.UserSettings.IncludeTvcControlPage)
+            {
+                var tvcControlPage = Items.FirstOrDefault(item => item.Title == "TVC Control");
+
+                if (tvcControlPage is not null)
+                {
+                    tvcControlPage.IsVisible = false;
+                }
+            }
         }
     }
 }
