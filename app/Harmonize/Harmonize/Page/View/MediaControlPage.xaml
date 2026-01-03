@@ -12,20 +12,25 @@
     x:Class="Harmonize.Page.View.MediaControlPage"
     Title="Media Control page"
     >
+
     <Shell.TitleView>
         <Grid ColumnDefinitions="9*,4*">
-            <Label FontSize="20"  Text="Media Control" HorizontalOptions="Start" Grid.Column="0" VerticalTextAlignment="Center"/>
+            <Label 
+                Text="Media Control" 
+                FontSize="20"  
+                VerticalTextAlignment="Center"
+                HorizontalOptions="Start" 
+                />
 
             <Button
                 Margin="0"
                 Scale="0.8"
                 Grid.Row="2"
-                Grid.Column="2"
                 BackgroundColor="{StaticResource Primary}"
                 TextColor="white"
-                ImageSource="icons8_restart_50.png"
+                ImageSource="icons8_tv_50.png"
                 x:Name="powerReboot"
-                Command="{Binding RebootCommand }"
+                Command="{Binding NavigateToTvcPage }"
                 CommandParameter="{x:Reference powerReboot}"
                 Clicked="ScaleButton"
             />

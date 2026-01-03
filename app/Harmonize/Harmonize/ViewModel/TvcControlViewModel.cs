@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace Harmonize.ViewModel;
 
-public class MediaControlViewModel(
+public class TvcControlViewModel(
     MediaManager mediaManager,
     PreferenceManager preferenceManager,
     FailsafeService failsafeService,
@@ -50,9 +50,9 @@ public class MediaControlViewModel(
         currSpeed = 1;
         await kodiClient.TogglePlayPausePlayerAsync();
     });
-    public ICommand NavigateToTvcPage => new Command<Button>(async (Button button) =>
+    public ICommand NavigateToMediaControl => new Command<Button>(async (Button button) =>
     {
-        await Shell.Current.GoToAsync($"//{nameof(TvcControlPage)}");
+        await Shell.Current.GoToAsync($"//{nameof(MediaControlPage)}");
     });
     public ICommand PowerOffCommand => new Command<Button>(async (Button button) =>
     {
