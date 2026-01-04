@@ -46,7 +46,7 @@ async def get_job(
     return BaseResponse[Job](message='Job found', status_code=200, value=job)
 
 
-@router.post('/job/cancel/{job_id}', status_code=201)
+@router.post('/job/cancel/{job_id}', status_code=200)
 async def cancel_job_req(
     job_id: uuid.UUID,
     session: Session = Depends(get_session),
