@@ -77,8 +77,8 @@ async def disassociate_media_entries(
     )
 
 
-@router.get('/{season_id}', status_code=200)
-async def get_season_details(
+@router.get('/entries/{season_id}', status_code=200)
+async def get_season_entries(
     season_id: uuid.UUID,
     session: Session = Depends(get_session),
 ) -> BaseResponse[list[MediaEntry]]:
@@ -86,7 +86,7 @@ async def get_season_details(
     if not season:
         raise HTTPException(status_code=404, detail='Season not found')
 
-    foo = select(MediaEntry).where(
+    query = select(MediaEntry).where(
         and_(
             MediaEntry.season_id == season_id,  # type: ignore
             MediaEntry.video_type == VideoType.EPISODE,  # type: ignore
@@ -94,10 +94,24 @@ async def get_season_details(
         )
     )
 
-    media_entries = list(session.exec(foo))
+    media_entries = list(session.exec(query))
 
     return BaseResponse[list[MediaEntry]](
         message='Season details retrieved successfully', status_code=200, value=media_entries
+    )
+
+
+@router.get('/{season_id}', status_code=200)
+async def get_season(
+    season_id: uuid.UUID,
+    session: Session = Depends(get_session),
+) -> BaseResponse[Season]:
+    season = session.get(Season, season_id)
+    if not season:
+        raise HTTPException(status_code=404, detail='Season not found')
+
+    return BaseResponse[Season](
+        message='Season retrieved successfully', status_code=200, value=season
     )
 
 

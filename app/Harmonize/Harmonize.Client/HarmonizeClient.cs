@@ -246,9 +246,13 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<SeasonsResponse>($"season?limit={limit}&skip={skip}&name_sub_string={nameSubString}", HttpMethod.Get);
     }
+    public async Task<MediaEntriesResponse> GetSeason(Guid seasonId)
+    {
+        return await HarmonizeRequest<MediaEntriesResponse>($"season/{seasonId}", HttpMethod.Get);
+    }
     public async Task<MediaEntriesResponse> GetSeasonEntries(Season season)
     {
-        return await HarmonizeRequest<MediaEntriesResponse>($"season/{season.Id}", HttpMethod.Get);
+        return await HarmonizeRequest<MediaEntriesResponse>($"season/entries/{season.Id}", HttpMethod.Get);
     }
     public async Task<SeasonResponse> CreateSeason(UpsertSeasonRequest request)
     {
