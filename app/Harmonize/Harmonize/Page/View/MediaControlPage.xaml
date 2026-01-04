@@ -20,29 +20,26 @@
         HorizontalOptions="Fill"
         VerticalOptions="Center">
 
-            <!-- Title Label -->
             <Label
                 Text="Media Control"
                 FontSize="20"
                 VerticalTextAlignment="Center"
-                HorizontalOptions="StartAndExpand"/>
+                HorizontalOptions="StartAndExpand"
+                />
 
-            <!-- Button -->
             <Button
-                x:Name="powerReboot"
+                x:Name="toggle"
                 VerticalOptions="Center"
                 HorizontalOptions="End"
-                Scale="0.8"
                 BackgroundColor="{StaticResource Primary}"
                 TextColor="White"
                 ImageSource="icons8_tv_50.png"
                 Command="{Binding NavigateToTvcPage}"
-                CommandParameter="{x:Reference powerReboot}"
-                Clicked="ScaleButton"/>
+                CommandParameter="{x:Reference toggle}"
+                Clicked="ScaleButton"
+                />
         </HorizontalStackLayout>
     </Shell.TitleView>
-
-
 
     <Grid>
         <Grid.RowDefinitions>

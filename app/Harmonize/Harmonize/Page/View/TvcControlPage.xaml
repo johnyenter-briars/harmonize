@@ -14,30 +14,31 @@
     >
 
     <Shell.TitleView>
-        <Grid ColumnDefinitions="9*,4*" RowDefinitions="Auto">
+        <HorizontalStackLayout
+        Padding="0"
+        Spacing="10"
+        HorizontalOptions="Fill"
+        VerticalOptions="Center">
+
             <Label
                 Text="TVC Control"
                 FontSize="20"
                 VerticalTextAlignment="Center"
-                HorizontalOptions="Start"
-                Grid.Row="0"
-                Grid.Column="0"
-            />
+                HorizontalOptions="StartAndExpand"
+                />
 
             <Button
-                Grid.Row="0"
-                Grid.Column="1"
-                Margin="0"
-                Scale="0.8"
+                x:Name="toggle"
+                VerticalOptions="Center"
+                HorizontalOptions="End"
                 BackgroundColor="{StaticResource Primary}"
                 TextColor="White"
                 ImageSource="icons8_tv_50.png"
-                x:Name="toggle"
                 Command="{Binding NavigateToMediaControl}"
                 CommandParameter="{x:Reference toggle}"
                 Clicked="ScaleButton"
-            />
-        </Grid>
+                />
+        </HorizontalStackLayout>
     </Shell.TitleView>
 
     <!-- Main Layout -->
