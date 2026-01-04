@@ -33,6 +33,7 @@
                 HorizontalOptions="End"
                 BackgroundColor="{StaticResource Primary}"
                 TextColor="White"
+                Scale="0.7"
                 ImageSource="icons8_remote_50.png"
                 Command="{Binding NavigateToMediaControl}"
                 CommandParameter="{x:Reference toggle}"

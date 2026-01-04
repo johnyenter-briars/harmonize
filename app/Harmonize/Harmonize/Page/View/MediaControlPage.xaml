@@ -33,6 +33,7 @@
                 HorizontalOptions="End"
                 BackgroundColor="{StaticResource Primary}"
                 TextColor="White"
+                Scale="0.7"
                 ImageSource="icons8_tv_50.png"
                 Command="{Binding NavigateToTvcPage}"
                 CommandParameter="{x:Reference toggle}"
