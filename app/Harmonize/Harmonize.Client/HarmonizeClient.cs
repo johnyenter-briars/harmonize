@@ -70,9 +70,9 @@ public class HarmonizeClient
     #endregion
 
     #region Media
-    public async Task<MediaEntryResponse > GetMediaEntry(Guid mediaEntryId)
+    public async Task<MediaEntryResponse> GetMediaEntry(Guid mediaEntryId)
     {
-        return await HarmonizeRequest<MediaEntryResponse >($"media/entry/{mediaEntryId}", HttpMethod.Get);
+        return await HarmonizeRequest<MediaEntryResponse>($"media/entry/{mediaEntryId}", HttpMethod.Get);
     }
     public async Task<MediaEntriesResponse> GetAudio()
     {
@@ -118,7 +118,7 @@ public class HarmonizeClient
             }
         }
 
-        if(transferredOnly is not null)
+        if (transferredOnly is not null)
         {
             url += $"&transferred={transferredOnly}";
         }
@@ -176,9 +176,9 @@ public class HarmonizeClient
     {
         var url = $"job?limit={limit}&skip={skip}";
 
-        if (keySubString  is not null)
+        if (keySubString is not null)
         {
-            url += $"&key_sub_string={keySubString  }";
+            url += $"&key_sub_string={keySubString}";
         }
 
         return await HarmonizeRequest<JobsResponse>(url, HttpMethod.Get);
@@ -246,9 +246,9 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<SeasonsResponse>($"season?limit={limit}&skip={skip}&name_sub_string={nameSubString}", HttpMethod.Get);
     }
-    public async Task<MediaEntriesResponse> GetSeason(Guid seasonId)
+    public async Task<SeasonResponse> GetSeason(Guid seasonId)
     {
-        return await HarmonizeRequest<MediaEntriesResponse>($"season/{seasonId}", HttpMethod.Get);
+        return await HarmonizeRequest<SeasonResponse>($"season/{seasonId}", HttpMethod.Get);
     }
     public async Task<MediaEntriesResponse> GetSeasonEntries(Season season)
     {

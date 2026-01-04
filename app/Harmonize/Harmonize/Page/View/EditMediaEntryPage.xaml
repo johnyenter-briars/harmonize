@@ -59,7 +59,7 @@
             <Entry Text="{Binding MediaEntry.SeasonId, Mode=OneWay}" IsReadOnly="True">
                 <Entry.GestureRecognizers>
                     <TapGestureRecognizer
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=DeleteEntry }"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=NavigateToSeason }"
                         />
                 </Entry.GestureRecognizers>
             </Entry>
