@@ -30,6 +30,7 @@ from harmonize.file.drive import (
     copy_file_to_mounted_folders,
     get_drive_with_most_space,
     list_files_recursive,
+    remove_file,
 )
 from harmonize.job.callback import start_job
 
@@ -525,13 +526,21 @@ def _save_directory_files(
 
 def _qbt_background_job(download: QbtDownloadData, job: Job, session: Session):
     source_path = Path(download.content_path)
-    if source_path.is_dir():
+
+    is_directory = source_path.is_dir()
+
+    logger.info('is_directory: %s', is_directory)
+
+    if is_directory:
         should_delete_download = _save_directory_files(source_path, download, session, logger)
     else:
         should_delete_download = _save_file(source_path, download, session, logger)
 
+    logger.info('should_delete_download: %s', should_delete_download)
+
     if should_delete_download:
         delete_download_sync(download.hash)
+        remove_file(source_path)
 
 
 async def qbt_background_service():
