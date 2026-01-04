@@ -28,3 +28,5 @@ database.db.*
 !app/Harmonize/Harmonize/Resources/Images/*.png
 
 !app/Harmonize/Harmonize/Resources/Raw
+
+.DS_Store

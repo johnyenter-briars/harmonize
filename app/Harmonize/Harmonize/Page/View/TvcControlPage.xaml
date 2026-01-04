@@ -13,27 +13,28 @@
     Title="TVC Control page"
     >
 
-    <!-- Title Bar -->
     <Shell.TitleView>
-        <Grid ColumnDefinitions="9*,4*">
+        <Grid ColumnDefinitions="9*,4*" RowDefinitions="Auto">
             <Label
                 Text="TVC Control"
                 FontSize="20"
                 VerticalTextAlignment="Center"
-                HorizontalOptions="Start" 
-                />
+                HorizontalOptions="Start"
+                Grid.Row="0"
+                Grid.Column="0"
+            />
 
             <Button
+                Grid.Row="0"
+                Grid.Column="1"
                 Margin="0"
                 Scale="0.8"
-                Grid.Row="2"
-                Grid.Column="2"
                 BackgroundColor="{StaticResource Primary}"
-                TextColor="white"
-                ImageSource="icons8_remote_50.png"
-                x:Name="powerReboot"
-                Command="{Binding NavigateToMediaControl }"
-                CommandParameter="{x:Reference powerReboot}"
+                TextColor="White"
+                ImageSource="icons8_tv_50.png"
+                x:Name="toggle"
+                Command="{Binding NavigateToMediaControl}"
+                CommandParameter="{x:Reference toggle}"
                 Clicked="ScaleButton"
             />
         </Grid>
