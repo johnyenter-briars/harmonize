@@ -391,7 +391,7 @@ def _process_files(
             video_file = video_files[0]
 
             if _subtitle_match(potential_subtitle_file, video_file):
-                srt_matching[key].append(potential_subtitle_file)
+                current_files.append(potential_subtitle_file)
 
     # Process each pair of video + zero or many srt files
     for name in srt_matching:
@@ -538,15 +538,27 @@ async def qbt_background_service():
     while True:
         try:
             session: Session = get_session_non_gen()
+
             downloads = await list_downloads()
+
             for download in downloads:
                 job_key = f'QBT-{download.name}'
 
-                if (
-                    _download_finished(download)
-                    and not _media_entry_exists(download, session)
-                    and not _job_exists(job_key, session)
-                ):
+                download_finished = _download_finished(download)
+
+                media_entry_exists = _media_entry_exists(download, session)
+
+                job_exists = _job_exists(job_key, session)
+
+                logger.info(
+                    'Evaluating job: %s. download_finished: %s, media_entry_exists: %s, job_exists: %s',
+                    job_key,
+                    download_finished,
+                    media_entry_exists,
+                    job_exists,
+                )
+
+                if download_finished and not media_entry_exists and not job_exists:
                     process_scoped_session = get_new_session()
 
                     args: tuple[QbtDownloadData] = (download,)
