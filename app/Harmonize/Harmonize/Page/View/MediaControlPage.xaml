@@ -27,7 +27,8 @@
             <Button
                 Grid.Row="0"
                 Grid.Column="1"
-                Margin="0"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
                 Scale="0.8"
                 BackgroundColor="{StaticResource Primary}"
                 TextColor="White"
