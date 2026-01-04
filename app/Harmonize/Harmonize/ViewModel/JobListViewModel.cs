@@ -61,25 +61,106 @@ public class JobListViewModel(
             }
         }
     }
+    private bool outOfRecords = false;
+    public bool OutOfRecords
+    {
+        get { return outOfRecords; }
+        set { SetProperty(ref outOfRecords, value); }
+    }
+    private bool searchBarVisible = false;
+    public bool SearchBarVisible
+    {
+        get { return searchBarVisible; }
+        set { SetProperty(ref searchBarVisible, value); }
+    }
+    private string? searchQuery;
+    public string? SearchQuery
+    {
+        get => searchQuery;
+        set => SetProperty(ref searchQuery, value);
+    }
     #endregion
 
-    public ICommand RefreshCommand => new Command(async () => await Refresh());
-    public async Task Refresh()
+    public ICommand ItemTappedCommand => new Command<Job>(async entry =>
     {
+        await ItemTapped(entry);
+    });
+    public ICommand RefreshCommand => new Command(async () => await Refresh());
+    public ICommand LoadMoreCommand => new Command(async () => await LoadMore());
+    public ICommand OpenSearchCommand => new Command<SearchBar>((searchBar) =>
+    {
+        if (SearchBarVisible)
+        {
+            SearchQuery = null;
+        }
+
+        SearchBarVisible = !SearchBarVisible;
+
+        if (SearchBarVisible)
+        {
+            searchBar?.Focus();
+        }
+        else
+        {
+            searchBar?.Unfocus();
+        }
+    });
+    public ICommand SearchCommand => new Command<SearchBar>(async (searchBar) =>
+    {
+        if (string.IsNullOrWhiteSpace(SearchQuery))
+            return;
+
+        searchBar?.Unfocus();
+
+        await Refresh();
+    });
+
+    const int Limit = 10;
+    bool firstLoad = true;
+    int skip = 0;
+
+    async Task LoadMore()
+    {
+        if (OutOfRecords) return;
+
+        if (firstLoad)
+        {
+            firstLoad = false;
+        }
+        else
+        {
+            skip += Limit;
+        }
+
+        var (response, success) = await failsafeService.Fallback(async () =>
+            await harmonizeClient.GetJobsPaging(Limit, skip, SearchQuery), null);
+
+        if (response?.Value is not { Count: > 0 })
+        {
+            OutOfRecords = true;
+            return;
+        }
+
+        foreach (var m in response?.Value ?? [])
+        {
+            Jobs.Add(m);
+        }
+    }
+    async Task Refresh()
+    {
+        skip = 0;
+        OutOfRecords = false;
+
         var (response, success) = await FetchData(async () =>
         {
-            return await failsafeService.Fallback(harmonizeClient.GetJobs, null);
+            return await failsafeService.Fallback(async () =>
+                await harmonizeClient.GetJobsPaging(Limit, skip, SearchQuery), null);
         });
 
         Jobs.Clear();
-
-        if (success)
+        foreach (var m in response?.Value ?? [])
         {
-            var jobs = (response?.Value ?? []).OrderByDescending(j => j.StartedOn);
-            foreach (var j in jobs)
-            {
-                Jobs.Add(j);
-            }
+            Jobs.Add(m);
         }
     }
     public async Task ItemTapped(Job job)
@@ -94,11 +175,6 @@ public class JobListViewModel(
     }
     public override async Task OnAppearingAsync()
     {
-        Task.Run(() =>
-        {
-            FetchingData = true;
-        }).FireAndForget(ex => logger.LogError($"Error: {ex}"));
-
         await Task.CompletedTask;
     }
 }

@@ -73,6 +73,22 @@ public class EditMediaEntryViewModel(
             await alertService.ShowAlertSnackbarAsync("Job created successfully.");
         }
     });
+    public ICommand NavigateToSeason => new Command(async () =>
+    {
+        if (MediaEntry.SeasonId is not null)
+        {
+            var (seasonResponse, success) = await failsafeService.Fallback(
+                async () => await harmonizeClient.GetSeason((Guid)MediaEntry.SeasonId), null);
+
+            if (success)
+            {
+                await Shell.Current.GoToAsync(nameof(EditSeasonPage), false, new Dictionary<string, object>
+                {
+                    { nameof(EditSeasonViewModel.Season), seasonResponse!.Value! }
+                });
+            }
+        }
+    });
     private ObservableCollection<MediaElementSource> sourceOptions =
     [
         MediaElementSource.Youtube,

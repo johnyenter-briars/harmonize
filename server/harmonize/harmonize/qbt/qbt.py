@@ -30,6 +30,7 @@ from harmonize.file.drive import (
     copy_file_to_mounted_folders,
     get_drive_with_most_space,
     list_files_recursive,
+    remove_file,
 )
 from harmonize.job.callback import start_job
 
@@ -391,7 +392,7 @@ def _process_files(
             video_file = video_files[0]
 
             if _subtitle_match(potential_subtitle_file, video_file):
-                srt_matching[key].append(potential_subtitle_file)
+                current_files.append(potential_subtitle_file)
 
     # Process each pair of video + zero or many srt files
     for name in srt_matching:
@@ -525,28 +526,48 @@ def _save_directory_files(
 
 def _qbt_background_job(download: QbtDownloadData, job: Job, session: Session):
     source_path = Path(download.content_path)
-    if source_path.is_dir():
+
+    is_directory = source_path.is_dir()
+
+    logger.info('is_directory: %s', is_directory)
+
+    if is_directory:
         should_delete_download = _save_directory_files(source_path, download, session, logger)
     else:
         should_delete_download = _save_file(source_path, download, session, logger)
 
+    logger.info('should_delete_download: %s', should_delete_download)
+
     if should_delete_download:
         delete_download_sync(download.hash)
+        remove_file(source_path)
 
 
 async def qbt_background_service():
     while True:
         try:
             session: Session = get_session_non_gen()
+
             downloads = await list_downloads()
+
             for download in downloads:
                 job_key = f'QBT-{download.name}'
 
-                if (
-                    _download_finished(download)
-                    and not _media_entry_exists(download, session)
-                    and not _job_exists(job_key, session)
-                ):
+                download_finished = _download_finished(download)
+
+                media_entry_exists = _media_entry_exists(download, session)
+
+                job_exists = _job_exists(job_key, session)
+
+                logger.info(
+                    'Evaluating job: %s. download_finished: %s, media_entry_exists: %s, job_exists: %s',
+                    job_key,
+                    download_finished,
+                    media_entry_exists,
+                    job_exists,
+                )
+
+                if download_finished and not media_entry_exists and not job_exists:
                     process_scoped_session = get_new_session()
 
                     args: tuple[QbtDownloadData] = (download,)

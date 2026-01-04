@@ -62,7 +62,11 @@ async def cancel_job(job_id: uuid.UUID) -> None:
         logger.info('Job: %s not available to cancel', job_id)
         return
 
+    logger.info('Job: %s canceling.', job_id)
+
     (thread, job) = job
 
     thread.stop()
     thread.join()
+
+    Jobs.pop(job.id)

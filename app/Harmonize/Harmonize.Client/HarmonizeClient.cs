@@ -70,9 +70,9 @@ public class HarmonizeClient
     #endregion
 
     #region Media
-    public async Task<MediaEntryResponse > GetMediaEntry(Guid mediaEntryId)
+    public async Task<MediaEntryResponse> GetMediaEntry(Guid mediaEntryId)
     {
-        return await HarmonizeRequest<MediaEntryResponse >($"media/entry/{mediaEntryId}", HttpMethod.Get);
+        return await HarmonizeRequest<MediaEntryResponse>($"media/entry/{mediaEntryId}", HttpMethod.Get);
     }
     public async Task<MediaEntriesResponse> GetAudio()
     {
@@ -118,7 +118,7 @@ public class HarmonizeClient
             }
         }
 
-        if(transferredOnly is not null)
+        if (transferredOnly is not null)
         {
             url += $"&transferred={transferredOnly}";
         }
@@ -167,6 +167,21 @@ public class HarmonizeClient
     public async Task<JobsResponse> GetJobs()
     {
         return await HarmonizeRequest<JobsResponse>($"job", HttpMethod.Get);
+    }
+    public async Task<JobsResponse> GetJobsPaging(
+          int limit,
+          int skip = 0,
+          string? keySubString = null
+    )
+    {
+        var url = $"job?limit={limit}&skip={skip}";
+
+        if (keySubString is not null)
+        {
+            url += $"&key_sub_string={keySubString}";
+        }
+
+        return await HarmonizeRequest<JobsResponse>(url, HttpMethod.Get);
     }
     public async Task<JobResponse> GetJob(Guid jobId)
     {
@@ -231,9 +246,13 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<SeasonsResponse>($"season?limit={limit}&skip={skip}&name_sub_string={nameSubString}", HttpMethod.Get);
     }
+    public async Task<SeasonResponse> GetSeason(Guid seasonId)
+    {
+        return await HarmonizeRequest<SeasonResponse>($"season/{seasonId}", HttpMethod.Get);
+    }
     public async Task<MediaEntriesResponse> GetSeasonEntries(Season season)
     {
-        return await HarmonizeRequest<MediaEntriesResponse>($"season/{season.Id}", HttpMethod.Get);
+        return await HarmonizeRequest<MediaEntriesResponse>($"season/entries/{season.Id}", HttpMethod.Get);
     }
     public async Task<SeasonResponse> CreateSeason(UpsertSeasonRequest request)
     {

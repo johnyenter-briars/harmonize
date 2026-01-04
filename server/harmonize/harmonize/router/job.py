@@ -15,9 +15,13 @@ router = APIRouter(prefix='/api')
 async def jobs(
     limit: int = Query(50, ge=1),
     skip: int = Query(0, ge=0),
+    key_sub_string: str | None = Query(None),
     session: Session = Depends(get_session),
 ) -> BaseResponse[list[Job]]:
     statement = select(Job)
+
+    if key_sub_string:
+        statement = statement.where(Job.key.like(f'%{key_sub_string}%'))  # type: ignore
 
     statement = statement.offset(skip).limit(limit)
 
@@ -42,7 +46,7 @@ async def get_job(
     return BaseResponse[Job](message='Job found', status_code=200, value=job)
 
 
-@router.post('/job/cancel/{job_id}', status_code=201)
+@router.post('/job/cancel/{job_id}', status_code=200)
 async def cancel_job_req(
     job_id: uuid.UUID,
     session: Session = Depends(get_session),
@@ -58,4 +62,6 @@ async def cancel_job_req(
 
     session.add(job)
     session.commit()
-    return BaseResponse[Job](message='Success', status_code=201, value=job)
+    session.refresh(job)
+
+    return BaseResponse[Job](message='Success', status_code=200, value=job)
