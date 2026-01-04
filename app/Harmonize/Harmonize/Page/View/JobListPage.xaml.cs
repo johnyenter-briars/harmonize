@@ -24,11 +24,17 @@ public partial class JobListPage : BasePage<JobListViewModel>
     {
         await viewModel.OnAppearingAsync();
     }
-    //private async void OnItemTapped(object sender, ItemTappedEventArgs e)
-    //{
-    //    if (e.Item is Job job)
-    //    {
-    //        await viewModel.ItemTapped(job);
-    //    }
-    //}
+    private async void OnFilterClicked(object sender, EventArgs e)
+    {
+        base.ScaleButton(sender, e);
+
+        if(!filterMenu.IsVisible)
+        {
+            await filterMenu.ShowAsync();
+        }
+        else
+        {
+            await filterMenu.HideAsync();
+        }
+    }
 }
