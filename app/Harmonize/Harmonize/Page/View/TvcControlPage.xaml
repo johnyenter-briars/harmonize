@@ -16,7 +16,7 @@
     <Shell.TitleView>
         <HorizontalStackLayout
             Padding="10,0"
-            Spacing="70"
+            Spacing="90"
             HorizontalOptions="Start"
             VerticalOptions="Center">
 
