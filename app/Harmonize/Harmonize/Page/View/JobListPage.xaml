@@ -93,7 +93,6 @@
 
                                 <Grid.GestureRecognizers>
                                     <TapGestureRecognizer 
-                                        Tapped="TapGestureRecognizer_Tapped"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:JobListViewModel}}, Path=ItemTappedCommand}"
                                         CommandParameter="{Binding .}" />
                                 </Grid.GestureRecognizers>
