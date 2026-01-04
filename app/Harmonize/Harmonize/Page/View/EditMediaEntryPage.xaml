@@ -56,13 +56,28 @@
             <Entry Text="{Binding MediaEntry.AudioType, Mode=OneWay}" IsReadOnly="True" />
 
             <Label Text="Season Id" FontSize="Medium" />
-            <Entry Text="{Binding MediaEntry.SeasonId, Mode=OneWay}" IsReadOnly="True">
-                <Entry.GestureRecognizers>
+            <HorizontalStackLayout Spacing="6">
+
+                <HorizontalStackLayout.GestureRecognizers>
                     <TapGestureRecognizer
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=NavigateToSeason }"
-                        />
-                </Entry.GestureRecognizers>
-            </Entry>
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=NavigateToSeason}" />
+                </HorizontalStackLayout.GestureRecognizers>
+
+                <Label
+                    Text="{Binding MediaEntry.SeasonId}"
+                    FontAttributes="Bold" />
+
+                <Image
+                    Source="icons8_right_arrow_60.png"
+                    WidthRequest="50"
+                    HeightRequest="30"
+                    >
+
+                    <Image.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                    </Image.Behaviors>
+                </Image>
+            </HorizontalStackLayout>
 
             <Label Text="Transferred" FontSize="Medium" />
             <Entry Text="{Binding MediaEntry.Transferred, Mode=OneWay}" IsReadOnly="True" />
