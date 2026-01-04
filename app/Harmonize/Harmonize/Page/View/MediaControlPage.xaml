@@ -15,16 +15,16 @@
 
     <Shell.TitleView>
         <HorizontalStackLayout
-        Padding="0"
-        Spacing="10"
-        HorizontalOptions="Fill"
-        VerticalOptions="Center">
+            Padding="10,0"
+            Spacing="70"
+            HorizontalOptions="Start"
+            VerticalOptions="Center">
 
             <Label
                 Text="Media Control"
                 FontSize="20"
                 VerticalTextAlignment="Center"
-                HorizontalOptions="StartAndExpand"
+                HorizontalOptions="Start"
                 />
 
             <Button
