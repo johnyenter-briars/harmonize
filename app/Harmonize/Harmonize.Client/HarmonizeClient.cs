@@ -168,6 +168,21 @@ public class HarmonizeClient
     {
         return await HarmonizeRequest<JobsResponse>($"job", HttpMethod.Get);
     }
+    public async Task<JobsResponse> GetJobsPaging(
+          int limit,
+          int skip = 0,
+          string? keySubString = null
+    )
+    {
+        var url = $"job?limit={limit}&skip={skip}";
+
+        if (keySubString  is not null)
+        {
+            url += $"&key_sub_string={keySubString  }";
+        }
+
+        return await HarmonizeRequest<JobsResponse>(url, HttpMethod.Get);
+    }
     public async Task<JobResponse> GetJob(Guid jobId)
     {
         return await HarmonizeRequest<JobResponse>($"job/{jobId}", HttpMethod.Get);

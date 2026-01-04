@@ -15,9 +15,13 @@ router = APIRouter(prefix='/api')
 async def jobs(
     limit: int = Query(50, ge=1),
     skip: int = Query(0, ge=0),
+    key_sub_string: str | None = Query(None),
     session: Session = Depends(get_session),
 ) -> BaseResponse[list[Job]]:
     statement = select(Job)
+
+    if key_sub_string:
+        statement = statement.where(Job.key.like(f'%{key_sub_string}%'))  # type: ignore
 
     statement = statement.offset(skip).limit(limit)
 

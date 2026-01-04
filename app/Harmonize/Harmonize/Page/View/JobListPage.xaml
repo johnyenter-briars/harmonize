@@ -14,106 +14,86 @@
              xmlns:components="clr-namespace:Harmonize.Components"
              Title="Job List">
 
-    <Grid Padding="0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <StackLayout Padding="10">
+        <Frame 
+            BackgroundColor="{StaticResource Gray900}" 
+            BorderColor="DarkGray" 
+            CornerRadius="10" 
+            Padding="5"
+            IsVisible="{Binding SearchBarVisible}"
+            Margin="0, 0, 0, 10"
+            >
 
-        <Grid 
-            Grid.Row="0" 
-            ColumnDefinitions="150, 75"
-            RowDefinitions="*"
-        >
-            <HorizontalStackLayout
+            <SearchBar 
+                IsVisible="{Binding SearchBarVisible}"
                 Grid.Row="0"
-                Grid.Column="0"
-                >
-                <CheckBox 
-                    Color="{StaticResource Primary}"  
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    IsChecked="{Binding OrderByName, Mode=TwoWay}" 
-                    />
-                <Label 
-                    Text="Order by Name"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    FontSize="15"
-                    />
-            </HorizontalStackLayout>
-            <HorizontalStackLayout
-                Grid.Row="1"
-                Grid.Column="1"
-                >
-                <CheckBox 
-                    Color="{StaticResource Secondary}"  
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    IsChecked="{Binding OrderByStatus, Mode=TwoWay}" 
-                    />
-                <Label 
-                    Text="Order by Percentage"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    FontSize="15"
-                    />
-            </HorizontalStackLayout>
-        </Grid>
+                Grid.ColumnSpan="2"
+                Placeholder="Search..."
+                SearchCommand="{Binding SearchCommand}"
+                SearchCommandParameter="{Binding ., Source={x:Reference searchBar}}"
+                Text="{Binding SearchQuery}" 
+                FontSize="18"
+                HeightRequest="40"
+                VerticalOptions="Start"
+                HorizontalOptions="FillAndExpand"
+                x:Name="searchBar"
+                TextColor="{StaticResource OffWhite}"
+                />
+
+        </Frame>
 
         <RefreshView 
-            Grid.Row="1"
             IsRefreshing="{Binding FetchingData}" 
-            Command="{Binding RefreshCommand}">
-            <ListView 
-                ItemTapped="OnItemTapped" 
+            Command="{Binding RefreshCommand}"
+            >
+            <CollectionView 
+                IsVisible="True"
+                RemainingItemsThreshold="1"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                 ItemsSource="{Binding Jobs}"
-                IsVisible="{Binding NotFetchingData}"
-                SeparatorVisibility="None"
-                HasUnevenRows="True"
-                RowHeight="150"
-                ItemSelected="OnItemSelected"
+                VerticalScrollBarVisibility="Always"
+                SelectionMode="Single"
                 >
-                <ListView.ItemTemplate>
+
+                <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="job:Job">
-                        <ViewCell
-                       Height="100"
-                        >
-                            <components:ListElement>
-                                <Grid
-                                    ColumnDefinitions="*, Auto"
-                                    RowDefinitions="Auto, *, *, *"
+                        <components:ListElement>
+                            <Grid
+                                ColumnDefinitions="*, Auto"
+                                RowDefinitions="Auto, *, *, *"
                                 >
-                                    <Label
-                                        Grid.Row="0"
-                                        Grid.ColumnSpan="2"
-                                        Text="{Binding Description}" 
-                                        FontAttributes="Bold" 
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.ColumnSpan="2"
+                                    Text="{Binding Description}" 
+                                    FontAttributes="Bold" 
                                     />
-                                    <BoxView
-                                        Grid.Row="1"
-                                        Grid.ColumnSpan="2"
-                                        HeightRequest="1" Color="{StaticResource Gray400}"/>
-                                    <Label
-                                        Grid.Row="2"
-                                        Grid.Column="0"
-                                        TextColor="{StaticResource Gray200}"
-                                        Text="{Binding Status}" 
-                                        VerticalOptions="Center"
+                                <BoxView
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="2"
+                                    HeightRequest="1" Color="{StaticResource Gray400}"/>
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    TextColor="{StaticResource Gray200}"
+                                    Text="{Binding Status}" 
+                                    VerticalOptions="Center"
                                     />
-                                    <Label
-                                        Grid.Row="2"
-                                        Grid.Column="1"
-                                        TextColor="{StaticResource Gray200}"
-                                        Text="{Binding StartedOn}" 
-                                        VerticalOptions="Center"
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    TextColor="{StaticResource Gray200}"
+                                    Text="{Binding StartedOn}" 
+                                    VerticalOptions="Center"
                                     />
-                                </Grid>
-                            </components:ListElement>
-                        </ViewCell>
+                            </Grid>
+                        </components:ListElement>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+                <CollectionView.Footer>
+                    <ActivityIndicator IsRunning="{Binding FetchingData}" />
+                </CollectionView.Footer>
+            </CollectionView>
         </RefreshView>
-    </Grid>
+    </StackLayout>
 </pages:BasePage>
