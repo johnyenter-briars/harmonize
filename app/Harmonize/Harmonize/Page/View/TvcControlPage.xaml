@@ -33,7 +33,7 @@
                 HorizontalOptions="End"
                 BackgroundColor="{StaticResource Primary}"
                 TextColor="White"
-                ImageSource="icons8_tv_50.png"
+                ImageSource="icons8_remote_50.png"
                 Command="{Binding NavigateToMediaControl}"
                 CommandParameter="{x:Reference toggle}"
                 Clicked="ScaleButton"
