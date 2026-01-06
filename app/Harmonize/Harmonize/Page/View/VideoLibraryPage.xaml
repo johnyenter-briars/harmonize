@@ -62,7 +62,6 @@
           RowDefinitions="Auto,*"
           BackgroundColor="{StaticResource Gray900}">
 
-        <!-- SEARCH BAR -->
         <Border
             Grid.Row="0"
             BackgroundColor="{StaticResource Gray900}"
@@ -88,7 +87,6 @@
                 BackgroundColor="{StaticResource Gray900}" />
         </Border>
 
-        <!-- LIST -->
         <RefreshView
             Grid.Row="1"
             IsRefreshing="{Binding FetchingData}"
@@ -227,6 +225,7 @@
                 </Grid>
             </Border>
         </components:BottomMenu>
+
         <components:BottomMenu x:Name="filterMenu" IsVisible="False">
             <Border 
                 BackgroundColor="{StaticResource Gray600}"
