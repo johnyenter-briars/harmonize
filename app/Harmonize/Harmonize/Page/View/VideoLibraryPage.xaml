@@ -14,45 +14,50 @@
              xmlns:components="clr-namespace:Harmonize.Components"
              Title="Video Library">
 
-    <!-- ===================== -->
-    <!-- SHELL TITLE VIEW -->
-    <!-- ===================== -->
     <Shell.TitleView>
-        <Grid ColumnDefinitions="9*,4*,4*"
-              BackgroundColor="{StaticResource Gray900}">
+        <HorizontalStackLayout
+        Padding="10,0"
+        Spacing="16"
+        HorizontalOptions="Start"
+        VerticalOptions="Center">
+
             <Label
-                Grid.Column="0"
-                Text="Video Library"
-                FontSize="20"
-                VerticalTextAlignment="Center" />
+            Text="Video Library"
+            FontSize="20"
+            VerticalTextAlignment="Center"
+            HorizontalOptions="Start"
+            TextColor="{StaticResource OffWhite}" />
 
             <ImageButton
-                Grid.Column="1"
-                Source="icons8_slider_48.png"
-                Scale="0.6"
-                Clicked="OnFilterClicked">
+            Source="icons8_slider_48.png"
+            Scale="0.6"
+            BackgroundColor="Transparent"
+            VerticalOptions="Center"
+            Clicked="OnFilterClicked">
                 <ImageButton.Behaviors>
-                    <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
+                    <toolkit:IconTintColorBehavior
+                    TintColor="{StaticResource SecondaryDarkText}" />
                 </ImageButton.Behaviors>
             </ImageButton>
 
             <ImageButton
-                Grid.Column="2"
-                Source="icons8_search_50.png"
-                Scale="0.6"
-                Command="{Binding OpenSearchCommand}"
-                CommandParameter="{x:Reference searchBar}"
-                Clicked="ScaleButton">
+            Source="icons8_search_50.png"
+            Scale="0.6"
+            BackgroundColor="Transparent"
+            VerticalOptions="Center"
+            Command="{Binding OpenSearchCommand}"
+            CommandParameter="{x:Reference searchBar}"
+            Clicked="ScaleButton">
                 <ImageButton.Behaviors>
-                    <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
+                    <toolkit:IconTintColorBehavior
+                    TintColor="{StaticResource SecondaryDarkText}" />
                 </ImageButton.Behaviors>
             </ImageButton>
-        </Grid>
+
+        </HorizontalStackLayout>
     </Shell.TitleView>
 
-    <!-- ===================== -->
-    <!-- PAGE CONTENT -->
-    <!-- ===================== -->
+
     <Grid Padding="10"
           RowDefinitions="Auto,*"
           BackgroundColor="{StaticResource Gray900}">
