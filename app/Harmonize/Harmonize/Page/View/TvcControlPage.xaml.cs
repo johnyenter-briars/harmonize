@@ -173,4 +173,33 @@ public partial class TvcControlPage : BasePage<TvcControlViewModel>
             await Task.Delay(10); // small delay to prevent flooding
         }
     }
+    private DateTime _lastTapTime;
+    private const int DoubleTapThreshold = 300; // milliseconds
+
+    private void VolumeButton_Clicked(object sender, EventArgs e)
+    {
+        var now = DateTime.Now;
+        if ((now - _lastTapTime).TotalMilliseconds <= DoubleTapThreshold)
+        {
+            // Double tap detected
+            VolumeUpBy40_Clicked(sender, e);
+            _lastTapTime = DateTime.MinValue; // reset
+        }
+        else
+        {
+            // Single tap, delay execution to check for double tap
+            _lastTapTime = now;
+            Task.Delay(DoubleTapThreshold).ContinueWith(_ =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    if ((DateTime.Now - _lastTapTime).TotalMilliseconds >= DoubleTapThreshold)
+                    {
+                        VolumeUp_Clicked(sender, e);
+                        _lastTapTime = DateTime.MinValue;
+                    }
+                });
+            });
+        }
+    }
 }

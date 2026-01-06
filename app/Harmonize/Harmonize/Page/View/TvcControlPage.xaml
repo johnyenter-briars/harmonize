@@ -126,15 +126,8 @@
             TextColor="white"
             ImageSource="icons8_volume_up_50.png"
             x:Name="volumeDown"
+            Clicked="VolumeButton_Clicked"
             >
-            <Button.GestureRecognizers>
-                <TapGestureRecognizer NumberOfTapsRequired="2"
-                                      Tapped="VolumeUpBy40_Clicked"
-                                      />
-                <TapGestureRecognizer NumberOfTapsRequired="1"
-                                      Tapped="VolumeUp_Clicked"
-                                      />
-            </Button.GestureRecognizers>
         </Button>
 
         <!-- HDMI Inputs -->
