@@ -57,7 +57,6 @@
 
             <Label Text="Season Id" FontSize="Medium" />
             <HorizontalStackLayout Spacing="6">
-
                 <HorizontalStackLayout.GestureRecognizers>
                     <TapGestureRecognizer
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=NavigateToSeason}" />
@@ -127,17 +126,13 @@
                                         Source="icons8_send_file_50.png"
                                         HorizontalOptions="Center"
                                         VerticalOptions="Center"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendSubtitleEntry  }"
+                                        CommandParameter="{Binding .}"
                                         Clicked="ScaleButton"
                                     >
                                         <ImageButton.Behaviors>
                                             <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
                                         </ImageButton.Behaviors>
-                                        <ImageButton.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendSubtitleEntry  }"
-                                                CommandParameter="{Binding .}"
-                                                />
-                                        </ImageButton.GestureRecognizers>
                                     </ImageButton>
 
                                     <ImageButton 
@@ -172,16 +167,12 @@
                     Source="icons8_trash_26.png"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=DeleteEntry }"
                     Clicked="ScaleButton"
                 >
                     <ImageButton.Behaviors>
                         <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
                     </ImageButton.Behaviors>
-                    <ImageButton.GestureRecognizers>
-                        <TapGestureRecognizer
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=DeleteEntry }"
-                            />
-                    </ImageButton.GestureRecognizers>
                 </ImageButton>
 
                 <ImageButton 
@@ -189,16 +180,12 @@
                     Source="icons8_save_50.png"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SaveEntry }"
                     Clicked="ScaleButton"
                     >
                     <ImageButton.Behaviors>
                         <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
                     </ImageButton.Behaviors>
-                    <ImageButton.GestureRecognizers>
-                        <TapGestureRecognizer
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SaveEntry }"
-                        />
-                    </ImageButton.GestureRecognizers>
                 </ImageButton>
 
                 <ImageButton 
@@ -206,6 +193,7 @@
                     Source="icons8_delete_from_cloud_50.png"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=UntransferEntry  }"
                     Clicked="ScaleButton"
                     IsEnabled="{Binding MediaEntry.Transferred}"
                     Opacity="{Binding MediaEntry.Transferred, Converter={StaticResource BoolToOpacityConverter}}"
@@ -213,11 +201,6 @@
                     <ImageButton.Behaviors>
                         <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
                     </ImageButton.Behaviors>
-                    <ImageButton.GestureRecognizers>
-                        <TapGestureRecognizer
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=UntransferEntry  }"
-                            />
-                    </ImageButton.GestureRecognizers>
                 </ImageButton>
 
                 <ImageButton 
