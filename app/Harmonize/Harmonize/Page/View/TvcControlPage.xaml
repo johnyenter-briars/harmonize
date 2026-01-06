@@ -92,15 +92,8 @@
             TextColor="white"
             ImageSource="icons8_volume_down_50.png"
             x:Name="volumeUp"
+            Clicked="VolumeDownButton_Clicked"
             >
-            <Button.GestureRecognizers>
-                <TapGestureRecognizer NumberOfTapsRequired="2"
-                                      Tapped="VolumeDownBy40_Clicked"
-                                      />
-                <TapGestureRecognizer NumberOfTapsRequired="1"
-                                      Tapped="VolumeDown_Clicked"
-                                      />
-            </Button.GestureRecognizers>
         </Button>
 
         <Button
@@ -126,7 +119,7 @@
             TextColor="white"
             ImageSource="icons8_volume_up_50.png"
             x:Name="volumeDown"
-            Clicked="VolumeButton_Clicked"
+            Clicked="VolumeUpButton_Clicked"
             >
         </Button>
 
