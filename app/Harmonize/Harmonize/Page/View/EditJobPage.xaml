@@ -56,15 +56,11 @@
                         HorizontalOptions="Center"
                         VerticalOptions="Center"
                         Clicked="ScaleButton"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditJobViewModel}}, Path=CancelJob }"
                     >
                     <ImageButton.Behaviors>
                         <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
                     </ImageButton.Behaviors>
-                    <ImageButton.GestureRecognizers>
-                        <TapGestureRecognizer
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditJobViewModel}}, Path=CancelJob }"
-                                />
-                    </ImageButton.GestureRecognizers>
                 </ImageButton>
             </HorizontalStackLayout>
 
