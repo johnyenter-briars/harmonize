@@ -225,16 +225,12 @@
                     Source="icons8_send_file_50.png"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendEntry }"
                     Clicked="ScaleButton"
                     >
                     <ImageButton.Behaviors>
                         <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
                     </ImageButton.Behaviors>
-                    <ImageButton.GestureRecognizers>
-                        <TapGestureRecognizer
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendEntry }"
-                        />
-                    </ImageButton.GestureRecognizers>
                 </ImageButton>
             </HorizontalStackLayout>
         </VerticalStackLayout>
