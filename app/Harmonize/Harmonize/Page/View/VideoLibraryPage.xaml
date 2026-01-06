@@ -98,7 +98,7 @@
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
                 BackgroundColor="{StaticResource Gray900}"
-                IsOpaque="True">
+                >
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="harmonizeModel:MediaEntry">
@@ -283,5 +283,5 @@
                 </Grid>
             </Border>
         </components:BottomMenu>
-        </StackLayout>
+    </Grid>
 </pages:BasePage>
