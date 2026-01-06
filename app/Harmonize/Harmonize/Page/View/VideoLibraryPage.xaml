@@ -14,27 +14,35 @@
              xmlns:components="clr-namespace:Harmonize.Components"
              Title="Video Library">
 
+    <!-- ===================== -->
+    <!-- SHELL TITLE VIEW -->
+    <!-- ===================== -->
     <Shell.TitleView>
-        <Grid ColumnDefinitions="9*,4*,4*">
-            <Label FontSize="20"  Text="Video Library" HorizontalOptions="Start" Grid.Column="0" VerticalTextAlignment="Center"/>
-            <ImageButton 
-                Grid.Column="1" 
+        <Grid ColumnDefinitions="9*,4*,4*"
+              BackgroundColor="{StaticResource Gray900}">
+            <Label
+                Grid.Column="0"
+                Text="Video Library"
+                FontSize="20"
+                VerticalTextAlignment="Center" />
+
+            <ImageButton
+                Grid.Column="1"
                 Source="icons8_slider_48.png"
-                Scale="0.60"
-                Clicked="OnFilterClicked"
-                >
+                Scale="0.6"
+                Clicked="OnFilterClicked">
                 <ImageButton.Behaviors>
                     <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
                 </ImageButton.Behaviors>
             </ImageButton>
-            <ImageButton 
-                Grid.Column="2" 
+
+            <ImageButton
+                Grid.Column="2"
                 Source="icons8_search_50.png"
-                Scale="0.60"
-                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=OpenSearchCommand }"
+                Scale="0.6"
+                Command="{Binding OpenSearchCommand}"
                 CommandParameter="{x:Reference searchBar}"
-                Clicked="ScaleButton"
-                >
+                Clicked="ScaleButton">
                 <ImageButton.Behaviors>
                     <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
                 </ImageButton.Behaviors>
@@ -42,108 +50,116 @@
         </Grid>
     </Shell.TitleView>
 
-    <StackLayout Padding="10">
-        <Frame 
-            BackgroundColor="{StaticResource Gray900}" 
-            BorderColor="DarkGray" 
-            CornerRadius="10" 
-            Padding="5"
-            IsVisible="{Binding SearchBarVisible}"
-            Margin="0, 0, 0, 10"
-            >
+    <!-- ===================== -->
+    <!-- PAGE CONTENT -->
+    <!-- ===================== -->
+    <Grid Padding="10"
+          RowDefinitions="Auto,*"
+          BackgroundColor="{StaticResource Gray900}">
 
-            <SearchBar 
-                IsVisible="{Binding SearchBarVisible}"
-                Grid.Row="0"
-                Grid.ColumnSpan="2"
+        <!-- SEARCH BAR -->
+        <Border
+            Grid.Row="0"
+            BackgroundColor="{StaticResource Gray900}"
+            Stroke="DarkGray"
+            StrokeThickness="1"
+            Padding="5"
+            Margin="0,0,0,10"
+            IsVisible="{Binding SearchBarVisible}">
+
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10"/>
+            </Border.StrokeShape>
+
+            <SearchBar
+                x:Name="searchBar"
                 Placeholder="Search..."
+                Text="{Binding SearchQuery}"
                 SearchCommand="{Binding SearchCommand}"
                 SearchCommandParameter="{Binding ., Source={x:Reference searchBar}}"
-                Text="{Binding SearchQuery}" 
                 FontSize="18"
                 HeightRequest="40"
-                VerticalOptions="Start"
-                HorizontalOptions="FillAndExpand"
-                x:Name="searchBar"
                 TextColor="{StaticResource OffWhite}"
-                />
+                BackgroundColor="{StaticResource Gray900}" />
+        </Border>
 
-        </Frame>
-
-        <RefreshView 
-            IsRefreshing="{Binding FetchingData}" 
+        <!-- LIST -->
+        <RefreshView
+            Grid.Row="1"
+            IsRefreshing="{Binding FetchingData}"
             Command="{Binding RefreshCommand}"
-            >
-            <CollectionView 
-                IsVisible="True"
+            BackgroundColor="{StaticResource Gray900}">
+
+            <CollectionView
+                ItemsSource="{Binding MediaEntries}"
+                SelectionMode="Single"
                 RemainingItemsThreshold="1"
                 RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
-                ItemsSource="{Binding MediaEntries}"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                VerticalScrollBarVisibility="Always"
-                SelectionMode="Single"
-                >
+                BackgroundColor="{StaticResource Gray900}"
+                IsOpaque="True">
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="harmonizeModel:MediaEntry">
-                        <components:ListElement>
+                        <components:ListElement
+                            BackgroundColor="{StaticResource Gray900}"
+                            Opacity="1">
+
                             <Grid
-                                RowDefinitions="Auto"
-                                ColumnDefinitions="*, Auto"
-                                VerticalOptions="Center"
-                                Padding="5">
+                                ColumnDefinitions="*,Auto"
+                                Padding="8"
+                                VerticalOptions="Center">
 
                                 <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        Tapped="TapGestureRecognizer_Tapped"
+                                    <TapGestureRecognizer
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=ItemTappedCommand}"
-                                        CommandParameter="{Binding .}" />
+                                        CommandParameter="{Binding .}"
+                                        Tapped="TapGestureRecognizer_Tapped" />
                                 </Grid.GestureRecognizers>
 
-                                <Label 
-                                    Grid.Row="0"
+                                <Label
                                     Grid.Column="0"
-                                    FontSize="14" 
-                                    Text="{Binding Name}" 
+                                    Text="{Binding Name}"
+                                    FontSize="14"
                                     VerticalOptions="Center"
-                                    HorizontalOptions="Start"/>
+                                    TextColor="{StaticResource OffWhite}" />
 
-                                <Button 
-                                    Scale="1.5"
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Margin="0,0,5,0"
-                                    Text="⋮"
-                                    FontSize="18"
-                                    BackgroundColor="Transparent"
-                                    VerticalOptions="Center"
-                                    Clicked="OnOpenBottomSheetClicked"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=OpenBottomSheetCommand}"
-                                    CommandParameter="{Binding .}" />
+                                <Grid Grid.Column="1"
+                                      ColumnDefinitions="Auto,Auto"
+                                      VerticalOptions="Center">
 
-                                <Image
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Source="icons8_cloud_download_66.png"
-                                    WidthRequest="15"
-                                    HeightRequest="15"
-                                    HorizontalOptions="End"
-                                    VerticalOptions="Center"
-                                    IsVisible="{Binding Transferred}"
-                                    Aspect="AspectFit">
-                                    <Image.Behaviors>
-                                        <toolkit:IconTintColorBehavior
-                                            TintColor="{StaticResource PrimaryDark}" />
-                                    </Image.Behaviors>
-                                </Image>
+                                    <Button
+                                        Text="⋮"
+                                        FontSize="18"
+                                        Scale="1.5"
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:VideoLibraryViewModel}}, Path=OpenBottomSheetCommand}"
+                                        CommandParameter="{Binding .}"
+                                        Clicked="OnOpenBottomSheetClicked" />
+
+                                    <Image
+                                        Grid.Column="1"
+                                        Source="icons8_cloud_download_66.png"
+                                        WidthRequest="15"
+                                        HeightRequest="15"
+                                        IsVisible="{Binding Transferred}">
+                                        <Image.Behaviors>
+                                            <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                                        </Image.Behaviors>
+                                    </Image>
+                                </Grid>
                             </Grid>
                         </components:ListElement>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
+
                 <CollectionView.Footer>
-                    <ActivityIndicator IsRunning="{Binding FetchingData}" />
+                    <ActivityIndicator
+                        IsRunning="{Binding FetchingData}"
+                        Color="{StaticResource Primary}" />
                 </CollectionView.Footer>
+
             </CollectionView>
         </RefreshView>
 
@@ -267,5 +283,5 @@
                 </Grid>
             </Border>
         </components:BottomMenu>
-    </StackLayout>
+        </StackLayout>
 </pages:BasePage>
