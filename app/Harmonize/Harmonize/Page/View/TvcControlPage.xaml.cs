@@ -173,4 +173,60 @@ public partial class TvcControlPage : BasePage<TvcControlViewModel>
             await Task.Delay(10); // small delay to prevent flooding
         }
     }
+    private DateTime _lastTapTimeVolUp;
+    private const int DoubleTapThreshold = 300; // milliseconds
+
+    private void VolumeUpButton_Clicked(object sender, EventArgs e)
+    {
+        var now = DateTime.Now;
+        if ((now - _lastTapTimeVolUp).TotalMilliseconds <= DoubleTapThreshold)
+        {
+            // Double tap detected
+            VolumeUpBy40_Clicked(sender, e);
+            _lastTapTimeVolUp = DateTime.MinValue; // reset
+        }
+        else
+        {
+            // Single tap, delay execution to check for double tap
+            _lastTapTimeVolUp = now;
+            Task.Delay(DoubleTapThreshold).ContinueWith(_ =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    if ((DateTime.Now - _lastTapTimeVolUp).TotalMilliseconds >= DoubleTapThreshold)
+                    {
+                        VolumeUp_Clicked(sender, e);
+                        _lastTapTimeVolUp = DateTime.MinValue;
+                    }
+                });
+            });
+        }
+    }
+    private DateTime _lastTapTimeVolDown;
+    private void VolumeDownButton_Clicked(object sender, EventArgs e)
+    {
+        var now = DateTime.Now;
+        if ((now - _lastTapTimeVolDown).TotalMilliseconds <= DoubleTapThreshold)
+        {
+            // Double tap detected
+            VolumeDownBy40_Clicked(sender, e);
+            _lastTapTimeVolDown = DateTime.MinValue; // reset
+        }
+        else
+        {
+            // Single tap, delay execution to check for double tap
+            _lastTapTimeVolDown = now;
+            Task.Delay(DoubleTapThreshold).ContinueWith(_ =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    if ((DateTime.Now - _lastTapTimeVolDown).TotalMilliseconds >= DoubleTapThreshold)
+                    {
+                        VolumeDown_Clicked(sender, e);
+                        _lastTapTimeVolDown = DateTime.MinValue;
+                    }
+                });
+            });
+        }
+    }
 }

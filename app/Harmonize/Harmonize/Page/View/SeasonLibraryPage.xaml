@@ -1,150 +1,168 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <pages:BasePage 
-             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:views="clr-namespace:Harmonize.Page.View"
-             xmlns:pages="clr-namespace:Harmonize.Page"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
-             x:TypeArguments="viewModels:SeasonLibraryViewModel"
-             x:DataType="viewModels:SeasonLibraryViewModel"
-             x:Class="Harmonize.Page.View.SeasonLibraryPage"
-             xmlns:model="clr-namespace:Harmonize.Model"
-             xmlns:harmonizeModel="clr-namespace:Harmonize.Client.Model.Season;assembly=Harmonize.Client"
-             xmlns:components="clr-namespace:Harmonize.Components"
-             Title="Season Library">
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Harmonize.Page.View"
+    xmlns:pages="clr-namespace:Harmonize.Page"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:Harmonize.ViewModel"
+    xmlns:model="clr-namespace:Harmonize.Model"
+    xmlns:harmonizeModel="clr-namespace:Harmonize.Client.Model.Season;assembly=Harmonize.Client"
+    xmlns:components="clr-namespace:Harmonize.Components"
+    x:TypeArguments="viewModels:SeasonLibraryViewModel"
+    x:DataType="viewModels:SeasonLibraryViewModel"
+    x:Class="Harmonize.Page.View.SeasonLibraryPage"
+    Title="Season Library">
 
     <Shell.TitleView>
-        <Grid ColumnDefinitions="9*,4*,4*">
-            <Label FontSize="20"  Text="Season Library" HorizontalOptions="Start" Grid.Column="0" VerticalTextAlignment="Center"/>
+        <HorizontalStackLayout
+            Padding="10,0"
+            Spacing="16"
+            HorizontalOptions="Start"
+            VerticalOptions="Center">
 
-            <ImageButton 
-                Grid.Column="1" 
+            <Label
+                Text="Season Library"
+                FontSize="20"
+                VerticalTextAlignment="Center"
+                TextColor="{StaticResource OffWhite}" />
+
+            <ImageButton
                 Source="icons8_plus_key_50.png"
                 Scale="0.75"
-                Clicked="ImageButton_Clicked"
-                >
+                BackgroundColor="Transparent"
+                VerticalOptions="Center"
+                Clicked="ImageButton_Clicked">
                 <ImageButton.Behaviors>
-                    <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
+                    <toolkit:IconTintColorBehavior
+                        TintColor="{StaticResource SecondaryDarkText}" />
                 </ImageButton.Behaviors>
             </ImageButton>
 
-            <ImageButton 
-                Grid.Column="2" 
+            <ImageButton
                 Source="icons8_search_50.png"
-                Scale="0.60"
-                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SeasonLibraryViewModel}}, Path=OpenSearchCommand }"
-                >
+                Scale="0.6"
+                BackgroundColor="Transparent"
+                VerticalOptions="Center"
+                Command="{Binding OpenSearchCommand}">
                 <ImageButton.Behaviors>
-                    <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
+                    <toolkit:IconTintColorBehavior
+                        TintColor="{StaticResource SecondaryDarkText}" />
                 </ImageButton.Behaviors>
             </ImageButton>
-        </Grid>
+
+        </HorizontalStackLayout>
     </Shell.TitleView>
 
-    <StackLayout Padding="10">
-        <Frame 
-            BackgroundColor="{StaticResource Gray900}" 
-            BorderColor="DarkGray" 
-            CornerRadius="10" 
-            Padding="5"
-            IsVisible="{Binding SearchBarVisible}"
-            Margin="0, 0, 0, 10"
-            >
+    <Grid
+        Padding="10"
+        RowDefinitions="Auto,*"
+        BackgroundColor="{StaticResource Gray900}">
 
-            <SearchBar 
-                IsVisible="{Binding SearchBarVisible}"
-                Grid.Row="0"
-                Grid.ColumnSpan="2"
+        <Border
+            Grid.Row="0"
+            BackgroundColor="{StaticResource Gray900}"
+            Stroke="DarkGray"
+            StrokeThickness="1"
+            Padding="5"
+            Margin="0,0,0,10"
+            IsVisible="{Binding SearchBarVisible}">
+
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10"/>
+            </Border.StrokeShape>
+
+            <SearchBar
+                x:Name="searchBar"
                 Placeholder="Search..."
+                Text="{Binding SearchQuery}"
                 SearchCommand="{Binding SearchCommand}"
                 SearchCommandParameter="{Binding ., Source={x:Reference searchBar}}"
-                Text="{Binding SearchQuery}" 
                 FontSize="18"
                 HeightRequest="40"
-                VerticalOptions="Start"
-                HorizontalOptions="FillAndExpand"
-                x:Name="searchBar"
                 TextColor="{StaticResource OffWhite}"
-                >
+                BackgroundColor="{StaticResource Gray900}" />
+        </Border>
 
-            </SearchBar>
-        </Frame>
-
-        <RefreshView 
-            IsRefreshing="{Binding FetchingData}" 
+        <RefreshView
+            Grid.Row="1"
+            IsRefreshing="{Binding FetchingData}"
             Command="{Binding RefreshCommand}"
-            >
-            <CollectionView 
-                Grid.Row="1" 
-                IsVisible="True"
+            BackgroundColor="{StaticResource Gray900}">
+
+            <CollectionView
+                ItemsSource="{Binding Seasons}"
+                SelectionMode="Single"
                 RemainingItemsThreshold="1"
                 RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
-                ItemsSource="{Binding Seasons}"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                VerticalScrollBarVisibility="Always"
-                SelectionMode="Single"
-                >
+                BackgroundColor="{StaticResource Gray900}">
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="harmonizeModel:Season">
-                        <components:ListElement>
+                        <components:ListElement
+                            BackgroundColor="{StaticResource Gray900}"
+                            Opacity="1">
+
                             <Grid
-                                    RowDefinitions="Auto"
-                                    ColumnDefinitions="*, Auto"
-                                    VerticalOptions="Center"
-                                    Padding="5">
+                                ColumnDefinitions="*,Auto"
+                                Padding="8"
+                                VerticalOptions="Center">
 
                                 <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer 
+                                    <TapGestureRecognizer
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SeasonLibraryViewModel}}, Path=ItemTappedCommand}"
-                                        CommandParameter="{Binding .}" 
-                                        />
+                                        CommandParameter="{Binding .}" />
                                 </Grid.GestureRecognizers>
 
-                                <Label 
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        FontSize="14" 
-                                        Text="{Binding Name}" 
-                                        VerticalOptions="Center"
-                                        HorizontalOptions="Start" />
+                                <Label
+                                    Grid.Column="0"
+                                    Text="{Binding Name}"
+                                    FontSize="14"
+                                    VerticalOptions="Center"
+                                    TextColor="{StaticResource OffWhite}" />
 
-                                <Button 
-                                        Scale="1.5"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Text="⋮"
-                                        FontSize="18"
-                                        BackgroundColor="Transparent"
-                                        VerticalOptions="Center"
-                                        Clicked="OnOpenBottomSheetClicked"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SeasonLibraryViewModel}}, Path=OpenBottomSheetCommand}"
-                                        CommandParameter="{Binding .}"
-                                        />
-
+                                <Button
+                                    Grid.Column="1"
+                                    Text="⋮"
+                                    FontSize="18"
+                                    Scale="1.5"
+                                    BackgroundColor="Transparent"
+                                    VerticalOptions="Center"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:SeasonLibraryViewModel}}, Path=OpenBottomSheetCommand}"
+                                    CommandParameter="{Binding .}"
+                                    Clicked="OnOpenBottomSheetClicked" />
                             </Grid>
                         </components:ListElement>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
+
             </CollectionView>
         </RefreshView>
 
-        <components:BottomMenu x:Name="bottomMenu" IsVisible="False">
-            <Frame 
+        <components:BottomMenu
+            x:Name="bottomMenu"
+            IsVisible="False">
+
+            <Border
                 BackgroundColor="{StaticResource Gray600}"
-                CornerRadius="16"
-                HasShadow="True"
                 Padding="15"
                 VerticalOptions="End"
-                HorizontalOptions="FillAndExpand"
-                AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
-                AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional">
+                AbsoluteLayout.LayoutBounds="0,1,1,AutoSize"
+                AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="16"/>
+                </Border.StrokeShape>
+
                 <StackLayout Spacing="12">
-                    <Label>Under construction. : )</Label>
+                    <Label Text="Under construction. : )" />
                 </StackLayout>
-            </Frame>
+
+            </Border>
         </components:BottomMenu>
 
-    </StackLayout>
+    </Grid>
 </pages:BasePage>
+

@@ -13,30 +13,33 @@
     Title="TVC Control page"
     >
 
-    <!-- Title Bar -->
     <Shell.TitleView>
-        <Grid ColumnDefinitions="9*,4*">
+        <HorizontalStackLayout
+            Padding="10,0"
+            Spacing="90"
+            HorizontalOptions="Start"
+            VerticalOptions="Center">
+
             <Label
                 Text="TVC Control"
                 FontSize="20"
                 VerticalTextAlignment="Center"
-                HorizontalOptions="Start" 
+                HorizontalOptions="Start"
                 />
 
             <Button
-                Margin="0"
-                Scale="0.8"
-                Grid.Row="2"
-                Grid.Column="2"
+                x:Name="toggle"
+                VerticalOptions="Center"
+                HorizontalOptions="End"
                 BackgroundColor="{StaticResource Primary}"
-                TextColor="white"
+                TextColor="White"
+                Scale="0.7"
                 ImageSource="icons8_remote_50.png"
-                x:Name="powerReboot"
-                Command="{Binding NavigateToMediaControl }"
-                CommandParameter="{x:Reference powerReboot}"
+                Command="{Binding NavigateToMediaControl}"
+                CommandParameter="{x:Reference toggle}"
                 Clicked="ScaleButton"
-            />
-        </Grid>
+                />
+        </HorizontalStackLayout>
     </Shell.TitleView>
 
     <!-- Main Layout -->
@@ -89,15 +92,8 @@
             TextColor="white"
             ImageSource="icons8_volume_down_50.png"
             x:Name="volumeUp"
+            Clicked="VolumeDownButton_Clicked"
             >
-            <Button.GestureRecognizers>
-                <TapGestureRecognizer NumberOfTapsRequired="2"
-                                      Tapped="VolumeDownBy40_Clicked"
-                                      />
-                <TapGestureRecognizer NumberOfTapsRequired="1"
-                                      Tapped="VolumeDown_Clicked"
-                                      />
-            </Button.GestureRecognizers>
         </Button>
 
         <Button
@@ -123,15 +119,8 @@
             TextColor="white"
             ImageSource="icons8_volume_up_50.png"
             x:Name="volumeDown"
+            Clicked="VolumeUpButton_Clicked"
             >
-            <Button.GestureRecognizers>
-                <TapGestureRecognizer NumberOfTapsRequired="2"
-                                      Tapped="VolumeUpBy40_Clicked"
-                                      />
-                <TapGestureRecognizer NumberOfTapsRequired="1"
-                                      Tapped="VolumeUp_Clicked"
-                                      />
-            </Button.GestureRecognizers>
         </Button>
 
         <!-- HDMI Inputs -->

@@ -66,17 +66,13 @@
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         BackgroundColor="Transparent"
-                                    Clicked="ScaleButton"
+                                        Clicked="ScaleButton"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditSeasonViewModel}}, Path=RemoveFromSeason }"
+                                        CommandParameter="{Binding .}"
                                 >
                                     <ImageButton.Behaviors>
                                         <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
                                     </ImageButton.Behaviors>
-                                    <ImageButton.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditSeasonViewModel}}, Path=RemoveFromSeason }"
-                                        CommandParameter="{Binding .}"
-                                        />
-                                    </ImageButton.GestureRecognizers>
                                 </ImageButton>
                                 <Image
                                     Grid.Row="0"
@@ -108,15 +104,11 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     Clicked="ScaleButton"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditSeasonViewModel}}, Path=DeleteSeason }"
                 >
                 <ImageButton.Behaviors>
                     <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
                 </ImageButton.Behaviors>
-                <ImageButton.GestureRecognizers>
-                    <TapGestureRecognizer
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditSeasonViewModel}}, Path=DeleteSeason }"
-                            />
-                </ImageButton.GestureRecognizers>
             </ImageButton>
 
             <ImageButton 
@@ -125,15 +117,11 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     Clicked="ScaleButton"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditSeasonViewModel}}, Path=SaveSeason }"
                     >
                 <ImageButton.Behaviors>
                     <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
                 </ImageButton.Behaviors>
-                <ImageButton.GestureRecognizers>
-                    <TapGestureRecognizer
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditSeasonViewModel}}, Path=SaveSeason }"
-                        />
-                </ImageButton.GestureRecognizers>
             </ImageButton>
         </HorizontalStackLayout>
     </VerticalStackLayout>

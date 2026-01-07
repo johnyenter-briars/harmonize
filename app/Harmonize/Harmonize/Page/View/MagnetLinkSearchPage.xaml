@@ -14,21 +14,32 @@
     Title="Magnet Link Search">
 
     <Shell.TitleView>
-        <Grid ColumnDefinitions="9*,4*">
-            <Label FontSize="20"  Text="Magnet Link Search" HorizontalOptions="Start" Grid.Column="0" VerticalTextAlignment="Center"/>
+        <HorizontalStackLayout
+            Padding="10,0"
+            Spacing="16"
+            HorizontalOptions="Start"
+            VerticalOptions="Center">
 
-            <ImageButton 
-                Grid.Column="2" 
+            <Label
+                Text="Magnet Link Search"
+                FontSize="20"
+                VerticalTextAlignment="Center"
+                TextColor="{StaticResource OffWhite}" />
+
+            <ImageButton
                 Source="icons8_search_50.png"
-                Scale="0.60"
-                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MagnetLinkSearchViewModel}}, Path=OpenSearchCommand }"
-                Clicked="ScaleButton"
-                >
+                Scale="0.6"
+                BackgroundColor="Transparent"
+                VerticalOptions="Center"
+                Command="{Binding OpenSearchCommand}"
+                Clicked="ScaleButton">
                 <ImageButton.Behaviors>
-                    <toolkit:IconTintColorBehavior TintColor="{StaticResource SecondaryDarkText}" />
+                    <toolkit:IconTintColorBehavior
+                        TintColor="{StaticResource SecondaryDarkText}" />
                 </ImageButton.Behaviors>
             </ImageButton>
-        </Grid>
+
+        </HorizontalStackLayout>
     </Shell.TitleView>
 
     <Grid Padding="0">
@@ -38,21 +49,26 @@
         </Grid.RowDefinitions>
 
         <Grid 
+            Grid.Row="0"
             Padding="10"
-            Grid.Row="0" 
-            ColumnDefinitions="*, *"
-            RowDefinitions="Auto, Auto"
-        >
-            <Frame 
+            ColumnDefinitions="*,*"
+            RowDefinitions="Auto,Auto">
+
+            <Border
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
-                BackgroundColor="{StaticResource Gray900}" 
-                BorderColor="DarkGray" 
-                CornerRadius="10" 
+                BackgroundColor="{StaticResource Gray900}"
+                Stroke="DarkGray"
+                StrokeThickness="1"
                 Padding="5"
-                Margin="0, 0, 0, 10"
-            >
+                Margin="0,0,0,10">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10"/>
+                </Border.StrokeShape>
+
                 <SearchBar 
+                    x:Name="searchBar"
                     Placeholder="Search..."
                     SearchCommand="{Binding SearchCommand}"
                     SearchCommandParameter="{Binding ., Source={x:Reference searchBar}}"
@@ -61,98 +77,99 @@
                     HeightRequest="40"
                     VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand"
-                    x:Name="searchBar"
-                />
-            </Frame>
+                    BackgroundColor="{StaticResource Gray900}" />
+            </Border>
 
             <HorizontalStackLayout
                 Grid.Row="1"
                 Grid.Column="0"
-                >
+                Spacing="6"
+                VerticalOptions="Center">
+
                 <CheckBox 
-                    Color="{StaticResource PrimaryDark}"  
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    IsChecked="{Binding PiratebayChecked, Mode=TwoWay}" 
-                    />
+                    Color="{StaticResource PrimaryDark}"
+                    IsChecked="{Binding PiratebayChecked, Mode=TwoWay}" />
+
                 <Label 
                     Text="Piratebay"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
                     FontSize="20"
-                    />
+                    VerticalOptions="Center" />
             </HorizontalStackLayout>
+
             <HorizontalStackLayout
                 Grid.Row="1"
                 Grid.Column="1"
-                >
+                Spacing="6"
+                VerticalOptions="Center">
+
                 <CheckBox 
-                    Color="{StaticResource SecondaryDark}"  
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    IsChecked="{Binding Xt1337Checked, Mode=TwoWay}" 
-                    />
+                    Color="{StaticResource SecondaryDark}"
+                    IsChecked="{Binding Xt1337Checked, Mode=TwoWay}" />
+
                 <Label 
                     Text="xt1337"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
                     FontSize="20"
-                    />
+                    VerticalOptions="Center" />
             </HorizontalStackLayout>
+
         </Grid>
 
         <ActivityIndicator
-            Grid.Row="1" 
+            Grid.Row="1"
             IsVisible="{Binding FetchingData}"
             IsRunning="{Binding FetchingData}"
             Color="{StaticResource Primary}"
-            Scale="0.7"
-        />
+            Scale="0.7" />
 
         <ListView 
-            Grid.Row="1" 
+            Grid.Row="1"
             ItemsSource="{Binding SearchResults}" 
             VerticalOptions="FillAndExpand"
-            ItemSelected="OnItemSelected"
             IsVisible="{Binding NotFetchingData}"
+            ItemSelected="OnItemSelected"
             ItemTapped="OnItemTapped"
             SeparatorVisibility="None"
-            HasUnevenRows="True"
-            >
+            HasUnevenRows="True">
+
             <ListView.ItemTemplate>
-                <DataTemplate 
-                    x:DataType="qbt:MagnetLinkSearchResult">
+                <DataTemplate x:DataType="qbt:MagnetLinkSearchResult">
                     <ViewCell>
-                        <components:ListElement>
-                            <Grid 
-                                    ColumnDefinitions="*, Auto"
-                                    RowDefinitions="Auto, Auto, Auto"
-                                    >
+                        <components:ListElement
+                            BackgroundColor="{StaticResource Gray900}"
+                            Opacity="1">
+
+                            <Grid
+                                ColumnDefinitions="*,Auto"
+                                RowDefinitions="Auto,Auto,Auto"
+                                Padding="8">
+
                                 <Label
-                                        Grid.Row="0"
-                                        Grid.ColumnSpan="2"
-                                        Text="{Binding Name}" 
-                                        FontAttributes="Bold" 
-                                        LineBreakMode="WordWrap"
-                                    />
+                                    Grid.Row="0"
+                                    Grid.ColumnSpan="2"
+                                    Text="{Binding Name}"
+                                    FontAttributes="Bold"
+                                    LineBreakMode="WordWrap" />
+
                                 <BoxView
-                                        Grid.Row="1"
-                                        Grid.ColumnSpan="2"
-                                        HeightRequest="1" Color="{StaticResource Gray400}"/>
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="2"
+                                    HeightRequest="1"
+                                    Color="{StaticResource Gray400}" />
+
                                 <Label
-                                        Grid.Row="2"
-                                        Grid.ColumnSpan="2"
-                                        TextColor="{StaticResource Gray200}"
-                                        Text="{Binding FullItem}" 
-                                        VerticalOptions="Center"
-                                        FontSize="13"
-                                        />
+                                    Grid.Row="2"
+                                    Grid.ColumnSpan="2"
+                                    Text="{Binding FullItem}"
+                                    FontSize="13"
+                                    TextColor="{StaticResource Gray200}" />
                             </Grid>
+
                         </components:ListElement>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
     </Grid>
 
 </pages:BasePage>

@@ -114,16 +114,12 @@
                                             HorizontalOptions="Center"
                                             VerticalOptions="Center"
                                             Clicked="ScaleButton"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ManageQbtViewModel}}, Path=DeleteDownload}"
+                                            CommandParameter="{Binding}"
                                         >
                                             <ImageButton.Behaviors>
                                                 <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
                                             </ImageButton.Behaviors>
-                                            <ImageButton.GestureRecognizers>
-                                                <TapGestureRecognizer
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ManageQbtViewModel}}, Path=DeleteDownload}"
-                                                    CommandParameter="{Binding}"
-                                                />
-                                            </ImageButton.GestureRecognizers>
                                         </ImageButton>
 
                                         <ImageButton 
@@ -134,16 +130,12 @@
                                             HorizontalOptions="Center"
                                             VerticalOptions="Center"
                                             Clicked="ScaleButton"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ManageQbtViewModel}}, Path=PlayPauseDownload }"
+                                            CommandParameter="{Binding}"
                                         >
                                             <ImageButton.Behaviors>
                                                 <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
                                             </ImageButton.Behaviors>
-                                            <ImageButton.GestureRecognizers>
-                                                <TapGestureRecognizer
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ManageQbtViewModel}}, Path=PlayPauseDownload }"
-                                                    CommandParameter="{Binding}"
-                                                />
-                                            </ImageButton.GestureRecognizers>
                                         </ImageButton>
                                     </HorizontalStackLayout>
                                 </Grid>
