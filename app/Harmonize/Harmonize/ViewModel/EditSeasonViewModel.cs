@@ -79,16 +79,17 @@ public class EditSeasonViewModel(
     async Task Refresh()
     {
         var (response, success) = await FetchData(async () =>
-        {
-            return await failsafeService.Fallback(async () => await harmonizeClient.GetSeasonEntries(Season), null);
-        });
+            await failsafeService.Fallback(async () => await harmonizeClient.GetSeasonEntries(Season), null)
+        );
 
-        MediaEntries.Clear();
-        var entries = (response?.Value ?? []).OrderBy(e => e.Name);
-        foreach (var m in entries)
+        var sorted = (response?.Value ?? [])
+            .OrderBy(e => e.Name)
+            .ToList();
+
+        await MainThread.InvokeOnMainThreadAsync(() =>
         {
-            MediaEntries.Add(m);
-        }
+            MediaEntries = new ObservableCollection<MediaEntry>(sorted);
+        });
     }
     public async Task ItemTapped(MediaEntry mediaEntry)
     {
