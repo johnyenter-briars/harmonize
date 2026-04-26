@@ -17,8 +17,20 @@ Content should be free and open. I dream of this future, naive as it is.
 
 ### Incomplete Feature List
 
-### Video
-- [ ] Play on mobile + rotate
+### User Experience 
+- [ ] Multiple file un-transfer
+  - [ ] Clear all or maybe a multi select?
+- [ ] Instant media system play remotly
+- [ ] Within context of 'edit video' - should have an 'add season' button
+- [ ] Remove un-needed information on the edit video form
+- [ ] Bug in text input in remote control on android
+- [ ] Smart front-end caching
+- [ ] Unified stream / search audio or video
+- [ ] Global access to 'currently playing media element'
+- [ ] Storage space + management
+- [ ] 'Discover' page
+- [ ] Enhanced metadata tagging
+- [ ] Support manual import 
 
 ### Audio
 - [ ] Play on mobile + rotate
@@ -27,11 +39,5 @@ Content should be free and open. I dream of this future, naive as it is.
 - [ ] Playlist management
 - [ ] Similar search / manage as video
 
-### User Experience 
-- [ ] Smart front-end caching
-- [ ] Unified stream / search audio or video
-- [ ] Global access to 'currently playing media element'
-- [ ] Storage space + management
-- [ ] 'Discover' page
-- [ ] Enhanced metadata tagging
-- [ ] Support manual import 
+### Video
+- [ ] Play on mobile + rotate
