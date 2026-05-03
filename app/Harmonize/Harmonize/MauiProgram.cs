@@ -36,6 +36,7 @@ namespace Harmonize
 
             builder.Services.AddSingleton<AlertService>();
             builder.Services.AddSingleton<FailsafeService>();
+            builder.Services.AddSingleton<RecentSeasonManager>();
 
             builder.Services.AddSingleton<HarmonizeClient>();
             builder.Services.AddSingleton<HarmonizeDatabase>();

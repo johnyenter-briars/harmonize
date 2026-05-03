@@ -32,7 +32,7 @@ public partial class AddToSeasonPopup : Popup
         {
             Task.Delay(200).ContinueWith(_ => MainThread.BeginInvokeOnMainThread(() =>
             {
-                this.viewModel.MediaEntry = mediaEntry;
+                this.viewModel.Initialize(mediaEntry);
 
                 searchBar?.Focus();
             }));

@@ -10,14 +10,14 @@
     <Border BackgroundColor="{StaticResource Gray600}"
         StrokeThickness="0"
         Padding="0"
-        Clip="M0,0 H350 V300 H0 Z">
+        Clip="M0,0 H380 V430 H0 Z">
 
         <Frame 
             BackgroundColor="Transparent"
             HasShadow="True"
             Padding="20"
-            WidthRequest="350"
-            HeightRequest="280"
+            WidthRequest="380"
+            HeightRequest="410"
             VerticalOptions="Center"
             HorizontalOptions="Center">
 
@@ -47,6 +47,51 @@
                         Margin="0"
                         />
                 </Frame>
+                <Label
+                    Text="Recent Seasons"
+                    IsVisible="{Binding RecentSeasonsVisible}"
+                    FontAttributes="Bold"
+                    FontSize="16" />
+                <ListView
+                    Margin="0"
+                    IsVisible="{Binding RecentSeasonsVisible}"
+                    ItemsSource="{Binding RecentSeasons}"
+                    VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalScrollBarVisibility="Always"
+                    HeightRequest="100"
+                    SeparatorVisibility="None"
+                    SelectionMode="Single"
+                    ItemTapped="OnItemTapped"
+                    ItemSelected="OnItemSelected">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="harmonizeModel:Season">
+                            <ViewCell>
+                                <components:ListElement>
+                                    <Grid
+                                        Scale="0.8"
+                                        RowDefinitions="Auto"
+                                        ColumnDefinitions="*"
+                                        VerticalOptions="Center"
+                                        Padding="5">
+
+                                        <Label 
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            FontSize="14" 
+                                            Text="{Binding Name}" 
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Start" />
+                                    </Grid>
+                                </components:ListElement>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Label
+                    Text="Search Results"
+                    FontAttributes="Bold"
+                    FontSize="16" />
                 <ListView  
                     Margin="0"
                     IsVisible="True"
