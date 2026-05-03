@@ -117,6 +117,10 @@ public class VideoLibraryViewModel(
     {
         SelectedMediaEntry = entry;
     });
+    public ICommand OpenBulkUntransferCommand => new Command(async () =>
+    {
+        await Shell.Current.GoToAsync(nameof(BulkUntransferPage), false);
+    });
     private List<string> options = ["foo", "bar"];
     public List<string> Options
     {

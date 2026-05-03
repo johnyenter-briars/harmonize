@@ -54,6 +54,18 @@
                 </ImageButton.Behaviors>
             </ImageButton>
 
+            <Button
+            Text="Bulk"
+            BackgroundColor="Transparent"
+            BorderColor="{StaticResource Primary}"
+            BorderWidth="1"
+            TextColor="{StaticResource OffWhite}"
+            CornerRadius="10"
+            HeightRequest="34"
+            Padding="12,0"
+            VerticalOptions="Center"
+            Command="{Binding OpenBulkUntransferCommand}" />
+
         </HorizontalStackLayout>
     </Shell.TitleView>
 
