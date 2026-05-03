@@ -20,204 +20,207 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <ScrollView 
-        VerticalScrollBarVisibility="Always"
-        >
-        <VerticalStackLayout Spacing="10">
-            <Label Text="Id" FontSize="Medium" />
-            <Entry Text="{Binding MediaEntry.Id, Mode=OneWay}" IsReadOnly="True" />
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView 
+            Grid.Row="0"
+            VerticalScrollBarVisibility="Always">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Name" FontSize="Medium" />
+                <Editor 
+                    Text="{Binding MediaEntry.Name, Mode=TwoWay}"
+                    AutoSize="TextChanges" 
+                    HeightRequest="75" />
 
-            <Label Text="Name" FontSize="Medium" />
-            <Editor 
-                Text="{Binding MediaEntry.Name, Mode=TwoWay}"
-                AutoSize="TextChanges" 
-                HeightRequest="75" />
+                <Label Text="Absolute Path" FontSize="Medium" />
+                <Editor 
+                    Text="{Binding MediaEntry.AbsolutePath, Mode=OneWay}"
+                    IsReadOnly="True" 
+                    AutoSize="TextChanges" 
+                    HeightRequest="75" />
 
-            <Label Text="Absolute Path" FontSize="Medium" />
-            <Editor 
-                Text="{Binding MediaEntry.AbsolutePath, Mode=OneWay}"
-                IsReadOnly="True" 
-                AutoSize="TextChanges" 
-                HeightRequest="75" />
+                <Label Text="Season Id" FontSize="Medium" />
+                <HorizontalStackLayout Spacing="6">
+                    <!--TODO: this breaks on IOS-->
+                    <HorizontalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=NavigateToSeason}" />
+                    </HorizontalStackLayout.GestureRecognizers>
 
-            <Label Text="Source" FontSize="Medium" />
-            <Entry Text="{Binding MediaEntry.Source, Mode=OneWay}" IsReadOnly="True" />
+                    <Label
+                        Text="{Binding MediaEntry.SeasonId}"
+                        FontAttributes="Bold" />
 
-            <Label Text="YouTube ID" FontSize="Medium" />
-            <Entry Text="{Binding MediaEntry.YouTubeId, Mode=OneWay}" IsReadOnly="True" />
+                    <Image
+                        Source="icons8_right_arrow_60.png"
+                        WidthRequest="50"
+                        HeightRequest="30"
+                        >
 
-            <Label Text="Type" FontSize="Medium" />
-            <Entry Text="{Binding MediaEntry.Type, Mode=OneWay}" IsReadOnly="True" />
+                        <Image.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                        </Image.Behaviors>
+                    </Image>
+                </HorizontalStackLayout>
 
-            <Label Text="Video Type" FontSize="Medium" />
-            <Entry Text="{Binding MediaEntry.VideoType, Mode=OneWay}" IsReadOnly="True" />
+                <Label Text="Id" FontSize="Medium" />
+                <Entry Text="{Binding MediaEntry.Id, Mode=OneWay}" IsReadOnly="True" />
 
-            <Label Text="Audio Type" FontSize="Medium" />
-            <Entry Text="{Binding MediaEntry.AudioType, Mode=OneWay}" IsReadOnly="True" />
+                <Label Text="Source" FontSize="Medium" />
+                <Entry Text="{Binding MediaEntry.Source, Mode=OneWay}" IsReadOnly="True" />
 
-            <Label Text="Season Id" FontSize="Medium" />
-            <HorizontalStackLayout Spacing="6">
-                <!--TODO: this breaks on IOS-->
-                <HorizontalStackLayout.GestureRecognizers>
-                    <TapGestureRecognizer
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=NavigateToSeason}" />
-                </HorizontalStackLayout.GestureRecognizers>
+                <Label Text="YouTube ID" FontSize="Medium" />
+                <Entry Text="{Binding MediaEntry.YouTubeId, Mode=OneWay}" IsReadOnly="True" />
 
-                <Label
-                    Text="{Binding MediaEntry.SeasonId}"
-                    FontAttributes="Bold" />
+                <Label Text="Type" FontSize="Medium" />
+                <Entry Text="{Binding MediaEntry.Type, Mode=OneWay}" IsReadOnly="True" />
 
-                <Image
-                    Source="icons8_right_arrow_60.png"
-                    WidthRequest="50"
-                    HeightRequest="30"
+                <Label Text="Video Type" FontSize="Medium" />
+                <Entry Text="{Binding MediaEntry.VideoType, Mode=OneWay}" IsReadOnly="True" />
+
+                <Label Text="Audio Type" FontSize="Medium" />
+                <Entry Text="{Binding MediaEntry.AudioType, Mode=OneWay}" IsReadOnly="True" />
+
+                <Label Text="Transferred" FontSize="Medium" />
+                <Entry Text="{Binding MediaEntry.Transferred, Mode=OneWay}" IsReadOnly="True" />
+
+                <Label Text="Date Added" FontSize="Medium" />
+                <Entry 
+                    Text="{Binding MediaEntry.DateAdded, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}"
+                    IsReadOnly="True" />
+
+                <Label Text="Subtitle Files" FontSize="Medium" />
+                <ListView 
+                    IsVisible="{Binding ListViewVisible}"
+                    HeightRequest="120"
+                    Grid.Row="1" 
+                    ItemsSource="{Binding Subtitles}"
+                    VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand"
+                    ItemTapped="OnItemTapped"
+                    RowHeight="60"
+                    SeparatorVisibility="None"
+                    ItemSelected="OnItemSelected"
                     >
-
-                    <Image.Behaviors>
-                        <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
-                    </Image.Behaviors>
-                </Image>
-            </HorizontalStackLayout>
-
-            <Label Text="Transferred" FontSize="Medium" />
-            <Entry Text="{Binding MediaEntry.Transferred, Mode=OneWay}" IsReadOnly="True" />
-
-            <Label Text="Date Added" FontSize="Medium" />
-            <Entry 
-                Text="{Binding MediaEntry.DateAdded, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', Mode=OneWay}"
-                IsReadOnly="True" />
-
-            <Label Text="Subtitle Files" FontSize="Medium" />
-            <ListView 
-                IsVisible="{Binding ListViewVisible}"
-                HeightRequest="120"
-                Grid.Row="1" 
-                ItemsSource="{Binding Subtitles}"
-                VerticalOptions="FillAndExpand"
-                HorizontalOptions="FillAndExpand"
-                ItemTapped="OnItemTapped"
-                RowHeight="60"
-                SeparatorVisibility="None"
-                ItemSelected="OnItemSelected"
-                >
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="harmonizeModel:MediaEntry">
-                        <ViewCell>
-                            <components:ListElement CustomPadding="-20">
-                                <Grid
-                                    Scale="0.8"
-                                    RowDefinitions="Auto"
-                                    ColumnDefinitions="*, Auto"
-                                    VerticalOptions="Center"
-                                    Padding="0">
-
-                                    <Label 
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        FontSize="14" 
-                                        Text="{Binding Name}" 
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="harmonizeModel:MediaEntry">
+                            <ViewCell>
+                                <components:ListElement CustomPadding="-20">
+                                    <Grid
+                                        Scale="0.8"
+                                        RowDefinitions="Auto"
+                                        ColumnDefinitions="*, Auto"
                                         VerticalOptions="Center"
-                                        HorizontalOptions="Start" />
+                                        Padding="0">
 
-                                    <ImageButton 
-                                        Scale="0.6"
-                                        Margin="0, 0, 20, 0"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Source="icons8_send_file_50.png"
-                                        HorizontalOptions="Center"
-                                        VerticalOptions="Center"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendSubtitleEntry  }"
-                                        CommandParameter="{Binding .}"
-                                        Clicked="ScaleButton"
-                                    >
-                                        <ImageButton.Behaviors>
-                                            <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
-                                        </ImageButton.Behaviors>
-                                    </ImageButton>
+                                        <Label 
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            FontSize="14" 
+                                            Text="{Binding Name}" 
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Start" />
 
-                                    <ImageButton 
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Source="icons8_cloud_download_66.png"
-                                        VerticalOptions="Start"
-                                        HorizontalOptions="End"
-                                        Margin="0, 5, 0, 0"
-                                        WidthRequest="15"
-                                        HeightRequest="15"
-                                        IsVisible="{Binding Transferred}"
+                                        <ImageButton 
+                                            Scale="0.6"
+                                            Margin="0, 0, 20, 0"
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Source="icons8_send_file_50.png"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendSubtitleEntry  }"
+                                            CommandParameter="{Binding .}"
+                                            Clicked="ScaleButton"
                                         >
-                                        <ImageButton.Behaviors>
-                                            <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
-                                        </ImageButton.Behaviors>
-                                    </ImageButton>
+                                            <ImageButton.Behaviors>
+                                                <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                                            </ImageButton.Behaviors>
+                                        </ImageButton>
 
-                                </Grid>
-                            </components:ListElement>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                                        <ImageButton 
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Source="icons8_cloud_download_66.png"
+                                            VerticalOptions="Start"
+                                            HorizontalOptions="End"
+                                            Margin="0, 5, 0, 0"
+                                            WidthRequest="15"
+                                            HeightRequest="15"
+                                            IsVisible="{Binding Transferred}"
+                                            >
+                                            <ImageButton.Behaviors>
+                                                <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
+                                            </ImageButton.Behaviors>
+                                        </ImageButton>
 
-            <HorizontalStackLayout 
-                HorizontalOptions="CenterAndExpand"
-                Margin="0, 0, 0, 0"
+                                    </Grid>
+                                </components:ListElement>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <HorizontalStackLayout 
+            Grid.Row="1"
+            HorizontalOptions="CenterAndExpand"
+            Margin="0, 0, 0, 0"
+            Padding="0,10,0,10">
+            <ImageButton 
+                Margin="20, 0, 20, 0"
+                Source="icons8_trash_26.png"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=DeleteEntry }"
+                Clicked="ScaleButton"
+            >
+                <ImageButton.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
+                </ImageButton.Behaviors>
+            </ImageButton>
+
+            <ImageButton 
+                Margin="20, 0, 20, 0"
+                Source="icons8_save_50.png"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SaveEntry }"
+                Clicked="ScaleButton"
                 >
-                <ImageButton 
-                    Margin="20, 0, 20, 0"
-                    Source="icons8_trash_26.png"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=DeleteEntry }"
-                    Clicked="ScaleButton"
+                <ImageButton.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                </ImageButton.Behaviors>
+            </ImageButton>
+
+            <ImageButton 
+                Margin="20, 0, 20, 0"
+                Source="icons8_delete_from_cloud_50.png"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=UntransferEntry  }"
+                Clicked="ScaleButton"
+                IsEnabled="{Binding MediaEntry.Transferred}"
+                Opacity="{Binding MediaEntry.Transferred, Converter={StaticResource BoolToOpacityConverter}}"
+            >
+                <ImageButton.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
+                </ImageButton.Behaviors>
+            </ImageButton>
+
+            <ImageButton 
+                Margin="20, 0, 20, 0"
+                Source="icons8_send_file_50.png"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendEntry }"
+                Clicked="ScaleButton"
                 >
-                    <ImageButton.Behaviors>
-                        <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
-                    </ImageButton.Behaviors>
-                </ImageButton>
-
-                <ImageButton 
-                    Margin="20, 0, 20, 0"
-                    Source="icons8_save_50.png"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SaveEntry }"
-                    Clicked="ScaleButton"
-                    >
-                    <ImageButton.Behaviors>
-                        <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
-                    </ImageButton.Behaviors>
-                </ImageButton>
-
-                <ImageButton 
-                    Margin="20, 0, 20, 0"
-                    Source="icons8_delete_from_cloud_50.png"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=UntransferEntry  }"
-                    Clicked="ScaleButton"
-                    IsEnabled="{Binding MediaEntry.Transferred}"
-                    Opacity="{Binding MediaEntry.Transferred, Converter={StaticResource BoolToOpacityConverter}}"
-                >
-                    <ImageButton.Behaviors>
-                        <toolkit:IconTintColorBehavior TintColor="{StaticResource Delete}" />
-                    </ImageButton.Behaviors>
-                </ImageButton>
-
-                <ImageButton 
-                    Margin="20, 0, 20, 0"
-                    Source="icons8_send_file_50.png"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendEntry }"
-                    Clicked="ScaleButton"
-                    >
-                    <ImageButton.Behaviors>
-                        <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
-                    </ImageButton.Behaviors>
-                </ImageButton>
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+                <ImageButton.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                </ImageButton.Behaviors>
+            </ImageButton>
+        </HorizontalStackLayout>
+    </Grid>
 </pages:BasePage>
 
