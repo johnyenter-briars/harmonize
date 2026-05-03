@@ -2,6 +2,7 @@
 using Harmonize.Client.Model.Media;
 using Harmonize.Client.Model.Transfer;
 using Harmonize.Extensions;
+using Harmonize.Kodi;
 using Harmonize.Page.View;
 using Harmonize.Service;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,7 @@ public class EditMediaEntryViewModel(
     PreferenceManager preferenceManager,
     FailsafeService failsafeService,
     HarmonizeClient harmonizeClient,
+    KodiClient kodiClient,
     AlertService alertService,
     ILogger<EditMediaEntryViewModel> logger
     ) : BaseViewModel(mediaManager, preferenceManager, failsafeService)
@@ -62,6 +64,19 @@ public class EditMediaEntryViewModel(
         {
             await alertService.ShowAlertSnackbarAsync("Job created successfully.");
         }
+    });
+    public ICommand PlayInKodi => new Command(async () =>
+    {
+        var fileName = Path.GetFileName(MediaEntry.AbsolutePath);
+
+        if (string.IsNullOrWhiteSpace(fileName))
+        {
+            await alertService.ShowAlertAsync("Unable to play file", "No valid file name was found for this entry.");
+            return;
+        }
+
+        await kodiClient.PlayFile(fileName);
+        await alertService.ShowAlertSnackbarAsync("Sent to Kodi.");
     });
     public ICommand SendSubtitleEntry => new Command<MediaEntry>(async (subtitleEntry) =>
     {

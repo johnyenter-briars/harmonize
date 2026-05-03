@@ -315,17 +315,19 @@ public class KodiClient
     }
     public async Task PlayFile(string fileName)
     {
-        var requestObject = $@"
-        {{
-            ""jsonrpc"": ""2.0"",
-            ""id"": 1,
-            ""method"": ""Player.Open"",
-            ""params"": {{
-                ""item"": {{
-                    ""file"": ""/storage/videos/{fileName}""
-                }}
-            }}
-        }}";
+        var requestObject = System.Text.Json.JsonSerializer.Serialize(new
+        {
+            jsonrpc = "2.0",
+            id = 1,
+            method = "Player.Open",
+            @params = new
+            {
+                item = new
+                {
+                    file = $"/storage/videos/{fileName}"
+                }
+            }
+        });
 
         await PostRequestAsync(requestObject);
     }

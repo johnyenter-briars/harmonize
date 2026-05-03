@@ -171,9 +171,10 @@
             Grid.Row="1"
             HorizontalOptions="CenterAndExpand"
             Margin="0, 0, 0, 0"
-            Padding="0,10,0,10">
+            Padding="8,10,8,10"
+            Spacing="12">
             <ImageButton 
-                Margin="20, 0, 20, 0"
+                Margin="4, 0"
                 Source="icons8_trash_26.png"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
@@ -186,7 +187,7 @@
             </ImageButton>
 
             <ImageButton 
-                Margin="20, 0, 20, 0"
+                Margin="4, 0"
                 Source="icons8_save_50.png"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
@@ -199,7 +200,7 @@
             </ImageButton>
 
             <ImageButton 
-                Margin="20, 0, 20, 0"
+                Margin="4, 0"
                 Source="icons8_delete_from_cloud_50.png"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
@@ -214,11 +215,24 @@
             </ImageButton>
 
             <ImageButton 
-                Margin="20, 0, 20, 0"
+                Margin="4, 0"
                 Source="icons8_send_file_50.png"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=SendEntry }"
+                Clicked="ScaleButton"
+                >
+                <ImageButton.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
+                </ImageButton.Behaviors>
+            </ImageButton>
+
+            <ImageButton 
+                Margin="4, 0"
+                Source="icons8_play_50.png"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=PlayInKodi }"
                 Clicked="ScaleButton"
                 >
                 <ImageButton.Behaviors>

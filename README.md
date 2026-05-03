@@ -18,7 +18,6 @@ Content should be free and open. I dream of this future, naive as it is.
 ### Incomplete Feature List
 
 ### User Experience 
-- [ ] Instant media system play remotly
 - [ ] Bug in text input in remote control on android
 - [ ] Smart front-end caching
 - [ ] Unified stream / search audio or video
