@@ -18,8 +18,6 @@ Content should be free and open. I dream of this future, naive as it is.
 ### Incomplete Feature List
 
 ### User Experience 
-- [ ] Multiple file un-transfer
-  - [ ] Clear all or maybe a multi select?
 - [ ] Instant media system play remotly
 - [ ] Within context of 'edit video' - should have an 'add season' button
 - [ ] Remove un-needed information on the edit video form

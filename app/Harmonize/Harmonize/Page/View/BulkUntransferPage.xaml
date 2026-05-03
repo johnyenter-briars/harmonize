@@ -26,16 +26,6 @@
             </Border.StrokeShape>
 
             <VerticalStackLayout Spacing="12">
-                <Label
-                    Text="Choose the transferred files you want to untransfer."
-                    FontSize="18"
-                    TextColor="{StaticResource OffWhite}" />
-
-                <Label
-                    Text="Nothing is pre-selected. Use Select All if you want the full list."
-                    FontSize="13"
-                    TextColor="{StaticResource Gray200}" />
-
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                     <Button
                         Grid.Column="0"
