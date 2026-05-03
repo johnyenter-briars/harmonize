@@ -76,7 +76,7 @@ public class EditMediaEntryViewModel(
         }
 
         await kodiClient.PlayFile(fileName);
-        await alertService.ShowAlertSnackbarAsync("Sent to Kodi.");
+        await alertService.ShowAlertSnackbarAsync("Playing.");
     });
     public ICommand SendSubtitleEntry => new Command<MediaEntry>(async (subtitleEntry) =>
     {

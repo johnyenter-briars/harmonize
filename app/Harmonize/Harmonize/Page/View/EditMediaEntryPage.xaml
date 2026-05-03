@@ -234,6 +234,8 @@
                 VerticalOptions="Center"
                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditMediaEntryViewModel}}, Path=PlayInKodi }"
                 Clicked="ScaleButton"
+                IsEnabled="{Binding MediaEntry.Transferred}"
+                Opacity="{Binding MediaEntry.Transferred, Converter={StaticResource BoolToOpacityConverter}}"
                 >
                 <ImageButton.Behaviors>
                     <toolkit:IconTintColorBehavior TintColor="{StaticResource PrimaryDark}" />
