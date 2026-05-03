@@ -86,12 +86,17 @@ public class AddToSeasonViewModel(
 
         var (response, success) = await FetchData(async () =>
         {
-            return await failsafeService.Fallback(async () => 
+            return await failsafeService.Fallback(async () =>
                 await harmonizeClient.AssociateToSeason(request), null);
         });
 
         if (success)
         {
+            if (MediaEntry is not null)
+            {
+                MediaEntry.SeasonId = season.Id;
+            }
+
             await alertService.ShowAlertSnackbarAsync("Added to season");
         }
     }

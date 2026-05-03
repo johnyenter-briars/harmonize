@@ -30,3 +30,5 @@ database.db.*
 !app/Harmonize/Harmonize/Resources/Raw
 
 .DS_Store
+
+.dotnet/
