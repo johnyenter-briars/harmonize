@@ -36,6 +36,7 @@ namespace Harmonize
 
             builder.Services.AddSingleton<AlertService>();
             builder.Services.AddSingleton<FailsafeService>();
+            builder.Services.AddSingleton<RecentSeasonManager>();
 
             builder.Services.AddSingleton<HarmonizeClient>();
             builder.Services.AddSingleton<HarmonizeDatabase>();
@@ -79,6 +80,7 @@ namespace Harmonize
             builder.Services.AddSingleton<EditSeasonViewModel>();
             builder.Services.AddSingleton<AddToSeasonViewModel>();
             builder.Services.AddSingleton<TvcControlViewModel>();
+            builder.Services.AddSingleton<BulkUntransferViewModel>();
 
             builder.Services.AddSingleton<MediaElementPage>();
             builder.Services.AddSingleton<SettingsPage>();
@@ -101,6 +103,7 @@ namespace Harmonize
             builder.Services.AddSingleton<CreateSeasonPopup>();
             builder.Services.AddSingleton<EditSeasonPage>();
             builder.Services.AddSingleton<TvcControlPage>();
+            builder.Services.AddSingleton<BulkUntransferPage>();
 
             builder.Services.AddSingleton<MediaManager>();
 

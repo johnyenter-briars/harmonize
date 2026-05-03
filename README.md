@@ -17,8 +17,15 @@ Content should be free and open. I dream of this future, naive as it is.
 
 ### Incomplete Feature List
 
-### Video
-- [ ] Play on mobile + rotate
+### User Experience 
+- [ ] Bug in text input in remote control on android
+- [ ] Smart front-end caching
+- [ ] Unified stream / search audio or video
+- [ ] Global access to 'currently playing media element'
+- [ ] Storage space + management
+- [ ] 'Discover' page
+- [ ] Enhanced metadata tagging
+- [ ] Support manual import 
 
 ### Audio
 - [ ] Play on mobile + rotate
@@ -27,11 +34,5 @@ Content should be free and open. I dream of this future, naive as it is.
 - [ ] Playlist management
 - [ ] Similar search / manage as video
 
-### User Experience 
-- [ ] Smart front-end caching
-- [ ] Unified stream / search audio or video
-- [ ] Global access to 'currently playing media element'
-- [ ] Storage space + management
-- [ ] 'Discover' page
-- [ ] Enhanced metadata tagging
-- [ ] Support manual import 
+### Video
+- [ ] Play on mobile + rotate

@@ -154,7 +154,7 @@ public class QbtDownloadData
     public long Uploaded { get; set; }
 
     [JsonPropertyName("uploaded_session")]
-    public int UploadedSession { get; set; }
+    public long UploadedSession { get; set; }
 
     [JsonPropertyName("upspeed")]
     public int UpSpeed { get; set; }

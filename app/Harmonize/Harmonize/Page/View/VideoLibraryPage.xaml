@@ -16,42 +16,55 @@
 
     <Shell.TitleView>
         <HorizontalStackLayout
-        Padding="10,0"
-        Spacing="16"
+        Padding="0,0"
+        Spacing="0"
         HorizontalOptions="Start"
         VerticalOptions="Center">
 
             <Label
-            Text="Video Library"
-            FontSize="20"
-            VerticalTextAlignment="Center"
-            HorizontalOptions="Start"
-            TextColor="{StaticResource OffWhite}" />
+                Text="Video Library"
+                FontSize="20"
+                VerticalTextAlignment="Center"
+                HorizontalOptions="Start"
+                TextColor="{StaticResource OffWhite}" />
 
-            <ImageButton
-            Source="icons8_slider_48.png"
-            Scale="0.6"
-            BackgroundColor="Transparent"
-            VerticalOptions="Center"
-            Clicked="OnFilterClicked">
-                <ImageButton.Behaviors>
-                    <toolkit:IconTintColorBehavior
-                    TintColor="{StaticResource SecondaryDarkText}" />
-                </ImageButton.Behaviors>
+                <ImageButton
+                Source="icons8_slider_48.png"
+                Scale="0.6"
+                BackgroundColor="Transparent"
+                VerticalOptions="Center"
+                Clicked="OnFilterClicked">
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior
+                        TintColor="{StaticResource SecondaryDarkText}" />
+                    </ImageButton.Behaviors>
             </ImageButton>
 
             <ImageButton
-            Source="icons8_search_50.png"
-            Scale="0.6"
-            BackgroundColor="Transparent"
-            VerticalOptions="Center"
-            Command="{Binding OpenSearchCommand}"
-            CommandParameter="{x:Reference searchBar}"
-            Clicked="ScaleButton">
-                <ImageButton.Behaviors>
-                    <toolkit:IconTintColorBehavior
-                    TintColor="{StaticResource SecondaryDarkText}" />
-                </ImageButton.Behaviors>
+                Source="icons8_search_50.png"
+                Scale="0.6"
+                BackgroundColor="Transparent"
+                VerticalOptions="Center"
+                Command="{Binding OpenSearchCommand}"
+                CommandParameter="{x:Reference searchBar}"
+                Clicked="ScaleButton">
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior
+                        TintColor="{StaticResource SecondaryDarkText}" />
+                    </ImageButton.Behaviors>
+            </ImageButton>
+
+            <ImageButton
+                Source="icons8_edit_property_50.png"
+                Scale="0.6"
+                BackgroundColor="Transparent"
+                VerticalOptions="Center"
+                Command="{Binding OpenBulkUntransferCommand}" 
+                Clicked="ScaleButton">
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior
+                        TintColor="{StaticResource SecondaryDarkText}" />
+                    </ImageButton.Behaviors>
             </ImageButton>
 
         </HorizontalStackLayout>

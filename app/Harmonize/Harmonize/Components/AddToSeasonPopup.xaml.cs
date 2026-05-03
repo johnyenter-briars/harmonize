@@ -32,7 +32,7 @@ public partial class AddToSeasonPopup : Popup
         {
             Task.Delay(200).ContinueWith(_ => MainThread.BeginInvokeOnMainThread(() =>
             {
-                this.viewModel.MediaEntry = mediaEntry;
+                this.viewModel.Initialize(mediaEntry);
 
                 searchBar?.Focus();
             }));
@@ -50,6 +50,9 @@ public partial class AddToSeasonPopup : Popup
         if (e.Item is Season season)
         {
             await viewModel.ItemTapped(season);
+            viewModel.SearchQuery = null;
+            viewModel.Seasons.Clear();
+            await CloseAsync();
         }
     }
     public void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
