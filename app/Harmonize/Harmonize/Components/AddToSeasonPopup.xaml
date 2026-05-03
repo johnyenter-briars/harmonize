@@ -60,6 +60,7 @@
                     HorizontalOptions="FillAndExpand"
                     VerticalScrollBarVisibility="Always"
                     HeightRequest="100"
+                    RowHeight="72"
                     SeparatorVisibility="None"
                     SelectionMode="Single"
                     ItemTapped="OnItemTapped"
@@ -69,7 +70,6 @@
                             <ViewCell>
                                 <components:ListElement>
                                     <Grid
-                                        Scale="0.8"
                                         RowDefinitions="Auto"
                                         ColumnDefinitions="*"
                                         VerticalOptions="Center"
@@ -80,8 +80,11 @@
                                             Grid.Column="0"
                                             FontSize="14" 
                                             Text="{Binding Name}" 
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="1"
                                             VerticalOptions="Center"
-                                            HorizontalOptions="Start" />
+                                            VerticalTextAlignment="Center"
+                                            HorizontalOptions="FillAndExpand" />
                                     </Grid>
                                 </components:ListElement>
                             </ViewCell>
@@ -100,6 +103,7 @@
                     HorizontalOptions="FillAndExpand"
                     VerticalScrollBarVisibility="Always"
                     HeightRequest="115"
+                    RowHeight="72"
                     SeparatorVisibility="None"
                     SelectionMode="Single"
                     ItemTapped="OnItemTapped"
@@ -110,7 +114,6 @@
                             <ViewCell>
                                 <components:ListElement>
                                     <Grid
-                                        Scale="0.8"
                                         RowDefinitions="Auto"
                                         ColumnDefinitions="*, Auto"
                                         VerticalOptions="Center"
@@ -121,8 +124,11 @@
                                             Grid.Column="0"
                                             FontSize="14" 
                                             Text="{Binding Name}" 
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="1"
                                             VerticalOptions="Center"
-                                            HorizontalOptions="Start" />
+                                            VerticalTextAlignment="Center"
+                                            HorizontalOptions="FillAndExpand" />
 
                                         <Button 
                                             Scale="1.5"
